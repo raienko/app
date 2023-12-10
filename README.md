@@ -44,3 +44,8 @@ Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [ ] Text
 - [ ] Modal / Bottom Sheet
 - [ ] Date/time picker
+- [ ] Deep Links
+- [ ] Deferred Links
+- [ ] Dynamic Links
+- [ ] Sharing
+- [ ] in-app purchases
