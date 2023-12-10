@@ -7,7 +7,15 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start --reset-cache",
-    "test": "jest"
+    "test": "jest",
+    "android:aab": "(cd android && ./gradlew bundleRelease)",
+    "android:apk": "(cd android && ./gradlew assembleRelease)",
+    "android:clean": "(cd android && ./gradlew clean)",
+    "ios:ipa": "",
+    "ios:app": "",
+    "ios:clean": "",
+    "pods:install": "(cd ios && pod install)",
+    "pods:clean": "(cd ios && rm -rf Pods && rm -rf Podfile.lock)"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.21.0",
