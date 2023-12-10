@@ -40,3 +40,7 @@ Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [ ] documentation
 - [ ] keyboard handling
 - [ ] PWA support
+- [ ] Button
+- [ ] Text
+- [ ] Modal / Bottom Sheet
+- [ ] Date/time picker
