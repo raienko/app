@@ -1,7 +1,7 @@
 import React from 'react';
 import {env, typography} from '~/src/constants';
 import {Screen, Text} from '~/src/components';
-import {system} from '~/src/features';
+import {navigation, system} from '~/src/features';
 
 export default function Home(): React.JSX.Element {
   const darkMode = system.useDarkMode();
@@ -12,7 +12,11 @@ export default function Home(): React.JSX.Element {
         value={env.appName}
         onPress={() => system.setDarkMode(!darkMode)}
       />
-      <Text style={typography.body} value={env.appId} />
+      <Text
+        style={typography.body}
+        value={env.appId}
+        onPress={() => navigation.navigate('Settings')}
+      />
     </Screen>
   );
 }
