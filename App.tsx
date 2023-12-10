@@ -7,6 +7,7 @@
 
 import React from 'react';
 import type {PropsWithChildren} from 'react';
+import {env} from './src/constants';
 import {
   SafeAreaView,
   ScrollView,
@@ -72,6 +73,7 @@ function App(): React.JSX.Element {
         contentInsetAdjustmentBehavior="automatic"
         style={backgroundStyle}>
         <Header />
+        <Section title={env.appName} />
         <View
           style={{
             backgroundColor: isDarkMode ? Colors.black : Colors.white,
