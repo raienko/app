@@ -1,4 +1,8 @@
 import {AppRegistry} from 'react-native';
+
+import {setupStatusBar} from '~/src/components/StatusBar';
+setupStatusBar();
+
 import Root from '~/src/root';
 import {name} from './package.json';
 // Web support:
