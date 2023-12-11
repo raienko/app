@@ -1,0 +1,13 @@
+{
+  "raw": "{{text}}",
+  "home": {
+    "welcome": "Вітаю!",
+    "settings": "Налаштування"
+  },
+  "settings": {
+    "title": "Налаштування"
+  },
+  "general": {
+    "back": "Назад"
+  }
+}

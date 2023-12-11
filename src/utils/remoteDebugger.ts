@@ -1,5 +1,5 @@
 import {NativeModules, DevSettings} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import storage from '@react-native-async-storage/async-storage';
 import {isWeb} from './helpers';
 
 const storageKey = '@RNDS/isDebuggingRemotely';
@@ -9,17 +9,14 @@ const enableRemoteDebugger = async () => {
     debug: 'Debug JS Remotely',
   };
 
-  const isDebuggingRemotelyString = await AsyncStorage.getItem(storageKey);
+  const isDebuggingRemotelyString = await storage.getItem(storageKey);
   let isDebuggingRemotely = isDebuggingRemotelyString === 'true';
   DevSettings?.addMenuItem?.(
     isDebuggingRemotely ? message.stop : message.debug,
     async () => {
       isDebuggingRemotely = !isDebuggingRemotely;
 
-      await AsyncStorage.setItem(
-        storageKey,
-        JSON.stringify(isDebuggingRemotely),
-      );
+      await storage.setItem(storageKey, JSON.stringify(isDebuggingRemotely));
       NativeModules.DevSettings.setIsDebuggingRemotely(isDebuggingRemotely);
     },
   );

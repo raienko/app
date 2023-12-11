@@ -1,20 +1,21 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {env, typography} from '~/src/constants';
+import Router from '~/src/features/navigation/Router';
+import StoreProvider from '~/src/features/store/StoreProvider';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import {StyleSheet} from 'react-native';
 
 export default function App(): React.JSX.Element {
   return (
-    <View style={styles.wrapper}>
-      <Text style={typography.h1}>{env.appName}</Text>
-      <Text style={typography.body}>{env.appId}</Text>
-    </View>
+    <GestureHandlerRootView style={styles.wrapper}>
+      <StoreProvider>
+        <Router />
+      </StoreProvider>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

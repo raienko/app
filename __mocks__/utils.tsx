@@ -1,9 +1,9 @@
 import React from 'react';
-import {it} from '@jest/globals';
-import renderer from 'react-test-renderer';
+import 'react-native';
+import {render} from '@testing-library/react-native';
 
 export const smokeTest = (Component: any, params?: any) => {
-  it(`${Component?.name} renders correctly`, () => {
-    renderer.create(<Component {...params} />);
+  test(`${Component?.name} renders correctly`, () => {
+    render(<Component {...params} />);
   });
 };

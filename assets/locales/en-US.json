@@ -1,0 +1,13 @@
+{
+  "raw": "{{text}}",
+  "home": {
+    "welcome": "Welcome!",
+    "settings": "Settings"
+  },
+  "settings": {
+    "title": "Settings"
+  },
+  "general": {
+    "back": "Back"
+  }
+}
