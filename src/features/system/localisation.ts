@@ -14,7 +14,7 @@ const locales = {
   uk: require('~/assets/locales/uk-UA.json'),
 };
 
-LocaleConfig.locales.en = LocaleConfig.locales[''];
+LocaleConfig.locales.en = LocaleConfig.locales?.[''];
 LocaleConfig.locales.en.dayNamesShort = [
   'Su',
   'Mo',
