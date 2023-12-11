@@ -3,7 +3,6 @@ import '@testing-library/jest-native/extend-expect';
 export * from './utils.tsx';
 
 // React Navigation mock
-import 'react-native-gesture-handler/jestSetup';
 jest.mock('react-native-reanimated', () => {
   const Reanimated = require('react-native-reanimated/mock');
   Reanimated.default.call = () => {};
