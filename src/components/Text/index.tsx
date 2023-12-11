@@ -7,12 +7,14 @@ import {
 import {colors, typography} from '~/src/constants';
 import {system} from '~/src/features';
 import {TranslationKey} from '~/src/features/system/localisation';
+import {TypographyTypes} from '~/src/constants/typography.ts';
 
 export interface TextProps extends RNTextProps {
   text?: TranslationKey;
   value?: string | number;
   style?: any;
   textAlign?: TextStyle['textAlign'];
+  type?: TypographyTypes;
 }
 
 export default function Text({
@@ -20,12 +22,13 @@ export default function Text({
   value,
   style,
   children,
+  type = 'body',
   ...rest
 }: TextProps) {
   const darkMode = system.useDarkMode();
   const color = darkMode ? colors.textDark : colors.textLight;
-  const appearance = [{color, ...typography.body}].concat(style);
-  const currentLanguage = system.useCurrentLanguage();
+  const appearance = [{color, ...typography[type]}].concat(style);
+  system.useCurrentLanguage();
   return (
     // @ts-ignore
     <RNText

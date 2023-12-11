@@ -1,20 +1,28 @@
 import React from 'react';
-import {env, typography} from '~/src/constants';
-import {Screen, Text} from '~/src/components';
-import {navigation, system} from '~/src/features';
+import {env} from '~/src/constants';
+import {
+  Text,
+  Screen,
+  Header,
+  DarkModeSwitcher,
+  LanguageSwitcher,
+} from '~/src/components';
+import {navigation} from '~/src/features';
 
 export default function Home(): React.JSX.Element {
-  const darkMode = system.useDarkMode();
   return (
-    <Screen>
+    <Screen
+      header={
+        <Header
+          left={<DarkModeSwitcher />}
+          title={['raw', {text: env.appName}]}
+          subtitle={['raw', {text: env.appId}]}
+          right={<LanguageSwitcher />}
+        />
+      }>
+      <Text text="home.welcome" />
       <Text
-        style={typography.h1}
-        value={env.appName}
-        onPress={() => system.setDarkMode(!darkMode)}
-      />
-      <Text
-        style={typography.body}
-        value={env.appId}
+        text="home.settings"
         onPress={() => navigation.navigate('Settings')}
       />
     </Screen>

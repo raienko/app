@@ -6,10 +6,10 @@ import {navigation} from '~/src/features';
 export default function Settings(): React.JSX.Element {
   return (
     <Screen>
-      <Text style={typography.h1} value="Settings" />
+      <Text style={typography.h1} text="settings.title" />
       <Text
         style={typography.body}
-        value="Back"
+        text="general.back"
         onPress={() => navigation.goBack()}
       />
     </Screen>
