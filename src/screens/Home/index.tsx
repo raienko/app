@@ -20,9 +20,10 @@ export default function Home(): React.JSX.Element {
           right={<LanguageSwitcher />}
         />
       }>
-      <Text text="home.welcome" />
+      <Text text="home.welcome" type="h1" />
       <Text
         text="home.settings"
+        type="h4"
         onPress={() => navigation.navigate('Settings')}
       />
     </Screen>

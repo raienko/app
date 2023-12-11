@@ -2,6 +2,7 @@ import React from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {colors} from '~/src/constants';
 import {system} from '~/src/features';
+import {screenHeight, screenWidth, isWeb} from '~/src/utils';
 
 export type ScreenProps = {
   children?: React.ReactNode;
@@ -17,7 +18,8 @@ export default function Screen({
   const darkMode = system.useDarkMode();
   const backgroundColor = darkMode ? colors.primaryDark : colors.primaryLight;
   return (
-    <View style={[styles.wrapper, {backgroundColor}]}>
+    <View
+      style={[isWeb ? styles.wrapperFixed : styles.wrapper, {backgroundColor}]}>
       {header}
       <ScrollView
         style={styles.container}
@@ -33,9 +35,11 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
   },
-  container: {
-    flex: 1,
+  wrapperFixed: {
+    height: screenHeight,
+    width: screenWidth,
   },
+  container: {},
   content: {
     alignItems: 'center',
     justifyContent: 'center',

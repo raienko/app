@@ -10,8 +10,9 @@ export const isWindows = Platform.OS === 'windows';
 
 export const isMacos = Platform.OS === 'macos';
 
-export const {width: screenWidth, height: screenHeight} =
-  Dimensions.get('screen');
+export const {width: screenWidth, height: screenHeight} = Dimensions.get(
+  isWeb ? 'window' : 'screen',
+);
 
 export const isLandscape = screenWidth > screenHeight;
 
