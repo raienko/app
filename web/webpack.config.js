@@ -75,6 +75,7 @@ module.exports = argv => {
     resolve: {
       alias: {
         'react-native-config': 'react-native-web-config',
+        'react-native-svg': 'react-native-svg-web',
       },
       extensions: [
         '.web.js',

@@ -6,6 +6,8 @@ import {
   Header,
   DarkModeSwitcher,
   LanguageSwitcher,
+  Calendar,
+  Button,
 } from '~/src/components';
 import {navigation} from '~/src/features';
 
@@ -21,9 +23,9 @@ export default function Home(): React.JSX.Element {
         />
       }>
       <Text text="home.welcome" type="h1" />
-      <Text
+      <Calendar />
+      <Button
         text="home.settings"
-        type="h4"
         onPress={() => navigation.navigate('Settings')}
       />
     </Screen>
