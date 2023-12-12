@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
 import {colors} from '~/src/constants';
 import {system} from '~/src/features';
-import {viewport, isDesktop} from '~/src/utils';
+import {viewport, isWeb} from '~/src/utils';
 
 export type ScreenProps = {
   children?: React.ReactNode;
@@ -21,10 +21,7 @@ export default function Screen({
   const backgroundColor = darkMode ? colors.primaryDark : colors.primaryLight;
   return (
     <View
-      style={[
-        isDesktop ? styles.wrapperFixed : styles.wrapper,
-        {backgroundColor},
-      ]}>
+      style={[isWeb ? styles.wrapperFixed : styles.wrapper, {backgroundColor}]}>
       {header}
       <ScrollView
         style={styles.container}
