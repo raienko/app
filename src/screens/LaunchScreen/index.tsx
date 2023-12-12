@@ -1,25 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import animation from '~/assets/lottie/launchAnimation.json';
 import {LottieAnimation} from '~/src/components';
-import {rem} from '~/src/utils';
+import {rem, useEventBus, eventBus} from '~/src/utils';
 import {colors} from '~/src/constants';
+import {system} from '~/src/features';
 
-let ref = React.createRef<(value: boolean) => any>();
+const event = 'SET_LAUNCH_SCREEN_HIDDEN';
 
-const animationDuration = 2000;
+export const showSplashScreen = () => eventBus.dispatch(event, false);
 
-export const showSplashScreen = () => ref.current?.(false);
-
-export const hideSplashScreen = () => ref.current?.(true);
+export const hideSplashScreen = () => eventBus.dispatch(event, true);
 
 export default function LaunchScreen(): React.ReactNode {
   const [hidden, setHidden] = useState(false);
-
-  useEffect(() => {
-    // @ts-ignore
-    ref.current = (value: boolean) => setHidden(value);
-  }, []);
+  useEventBus(event, setHidden);
 
   if (hidden) {
     return null;
