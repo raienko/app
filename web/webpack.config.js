@@ -76,6 +76,7 @@ module.exports = argv => {
       alias: {
         'react-native-config': 'react-native-web-config',
         'react-native-svg': 'react-native-svg-web',
+        'lottie-react-native': 'react-native-web-lottie',
       },
       extensions: [
         '.web.js',
