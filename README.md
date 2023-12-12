@@ -3,10 +3,10 @@
 Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-to-a-react-native-project-in-2023-4m4l)
 
 ## Features
-- [ ] web support 
-- [ ] absolute imports 
-- [ ] navigation
-- [ ] state management
+- [x] web support 
+- [x] absolute imports 
+- [x] navigation
+- [x] state management
 - [ ] custom fonts
 - [ ] vector icons
 - [ ] firebase: remote config
@@ -15,14 +15,14 @@ Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [ ] firebase: database
 - [ ] firebase: auth
 - [ ] push notifications
-- [ ] calendar
+- [x] calendar
 - [ ] video player
 - [ ] audio player
 - [ ] webview with bridge
 - [ ] chat
 - [ ] video calls
 - [ ] permissions management
-- [ ] dark mode
+- [x] dark mode
 - [ ] localisation
 - [ ] debugging
 - [ ] e2e testing
@@ -40,8 +40,8 @@ Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [ ] documentation
 - [ ] keyboard handling
 - [ ] PWA support
-- [ ] Button
-- [ ] Text
+- [X] Button
+- [X] Text
 - [ ] Modal / Bottom Sheet
 - [ ] Date/time picker
 - [ ] Deep Links
@@ -49,4 +49,4 @@ Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [ ] Dynamic Links
 - [ ] Sharing
 - [ ] in-app purchases
-- [ ] splash screen
+- [X] splash screen

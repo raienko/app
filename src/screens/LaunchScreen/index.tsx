@@ -32,7 +32,7 @@ export default function LaunchScreen(): React.ReactNode {
   );
 }
 
-const animationSize = isDesktop ? 200 : rem(300);
+const animationSize = isDesktop ? 200 : rem(200);
 
 const styles = StyleSheet.create({
   wrapper: {

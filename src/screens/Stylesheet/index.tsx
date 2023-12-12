@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Text,
+  Icon,
   Header,
   Button,
   Screen,
@@ -58,6 +59,9 @@ export default function Stylesheet(): React.JSX.Element {
         autoPlay
         loop
       />
+      <Icon name="home" type="FontAwesome" size={sizes.iconLarge} />
+      <Icon name="home" type="Feather" size={sizes.iconMedium} />
+      <Icon name="home" type="Ionicons" size={sizes.iconSmall} />
     </Screen>
   );
 }

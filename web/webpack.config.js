@@ -57,6 +57,10 @@ const fileLoaderConfiguration = {
       options: {
         name: '[name].[ext]',
         outputPath: 'fonts/',
+        include: path.resolve(
+          __dirname,
+          'node_modules/react-native-vector-icons',
+        ),
       },
     },
   ],
