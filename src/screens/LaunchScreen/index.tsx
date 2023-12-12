@@ -4,7 +4,6 @@ import animation from '~/assets/lottie/launchAnimation.json';
 import {LottieAnimation} from '~/src/components';
 import {rem, useEventBus, eventBus} from '~/src/utils';
 import {colors} from '~/src/constants';
-import {system} from '~/src/features';
 
 const event = 'SET_LAUNCH_SCREEN_HIDDEN';
 

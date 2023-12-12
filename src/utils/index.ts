@@ -1,3 +1,3 @@
 import './remoteDebugger.ts';
-export * from './eventBus.ts';
+export * from './eventBus';
 export * from './helpers';
