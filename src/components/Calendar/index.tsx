@@ -4,7 +4,7 @@ import {
   CalendarProps as RNCalendarProps,
 } from 'react-native-calendars';
 import {Direction, Theme} from 'react-native-calendars/src/types';
-import {colors, fonts, sizes} from '~/src/constants';
+import {colors, fonts, sizes, typography} from '~/src/constants';
 import {system} from '~/src/features';
 import {StyleSheet} from 'react-native';
 import {isWeb, rem} from '~/src/utils';
@@ -27,8 +27,11 @@ export default function Calendar({...rest}: CalendarProps) {
     dayTextColor: color,
     monthTextColor: color,
     textDayFontFamily: fonts.primary,
+    textDayFontSize: typography.body.fontSize,
     textMonthFontFamily: fonts.primary,
+    textMonthFontSize: typography.h4.fontSize,
     textDayHeaderFontFamily: fonts.primary,
+    textDayHeaderFontSize: typography.h5.fontSize,
     todayTextColor: colors.accentA,
     selectedDayTextColor: colors.textDark,
   };

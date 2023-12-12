@@ -11,10 +11,13 @@ import {
 } from '~/src/components';
 import {navigation} from '~/src/features';
 import animation from '~/assets/lottie/launchAnimation.json';
+import {StyleSheet} from 'react-native';
+import {sizes} from '~/src/constants';
 
 export default function Stylesheet(): React.JSX.Element {
   return (
     <Screen
+      style={styles.wrapper}
       header={
         <Header
           left={
@@ -58,3 +61,9 @@ export default function Stylesheet(): React.JSX.Element {
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  wrapper: {
+    rowGap: sizes.offsetS,
+  },
+});
