@@ -2,12 +2,17 @@
   "raw": "{{text}}",
   "home": {
     "welcome": "Welcome!",
-    "settings": "Settings"
+    "settings": "Settings",
+    "stylesheet": "Stylesheet"
   },
   "settings": {
     "title": "Settings"
   },
   "general": {
     "back": "Back"
+  },
+  "stylesheet": {
+    "title": "Stylesheet",
+    "subtitle": "components"
   }
 }

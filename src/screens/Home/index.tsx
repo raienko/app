@@ -22,11 +22,13 @@ export default function Home(): React.JSX.Element {
           right={<LanguageSwitcher />}
         />
       }>
-      <Text text="home.welcome" type="h1" />
-      <Calendar />
       <Button
         text="home.settings"
         onPress={() => navigation.navigate('Settings')}
+      />
+      <Button
+        text="home.stylesheet"
+        onPress={() => navigation.navigate('Stylesheet')}
       />
     </Screen>
   );

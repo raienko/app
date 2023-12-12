@@ -17,7 +17,7 @@ const proportionsSchema: {[key in ButtonSize]: any} = {
     maxHeight: 48,
   },
   small: {
-    height: rem(32),
+    height: rem(isWeb ? 15 : 32),
     borderRadius: sizes.uiRadius,
     paddingHorizontal: sizes.offsetS,
   },

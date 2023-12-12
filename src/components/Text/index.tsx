@@ -7,7 +7,7 @@ import {
 import {colors, typography} from '~/src/constants';
 import {system} from '~/src/features';
 import {TranslationKey} from '~/src/features/system/localisation';
-import {TypographyTypes} from '~/src/constants/typography.ts';
+import {TypographyTypes} from '~/src/constants/typography';
 
 export interface TextProps extends RNTextProps {
   text?: TranslationKey;
