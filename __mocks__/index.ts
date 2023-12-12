@@ -12,10 +12,6 @@ jest.mock('react-native-reanimated', () => {
 
 jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
-jest.mock('react-native-safe-area-context', () => ({
-  useSafeAreaInsets: () => ({}),
-}));
-
 jest.mock('@react-navigation/native', () => ({
   useRoute: () => ({
     params: {},

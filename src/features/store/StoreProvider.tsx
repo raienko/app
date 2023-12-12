@@ -2,7 +2,7 @@ import React, {ReactNode} from 'react';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import {persistStore} from 'redux-persist';
-import store from './index';
+import store from './';
 
 export const persistor = persistStore(store);
 

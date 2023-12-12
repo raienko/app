@@ -9,7 +9,7 @@ const enableRemoteDebugger = async () => {
     debug: 'Debug JS Remotely',
   };
 
-  const isDebuggingRemotelyString = await storage.getItem(storageKey);
+  const isDebuggingRemotelyString = await storage.getItem?.(storageKey);
   let isDebuggingRemotely = isDebuggingRemotelyString === 'true';
   DevSettings?.addMenuItem?.(
     isDebuggingRemotely ? message.stop : message.debug,
