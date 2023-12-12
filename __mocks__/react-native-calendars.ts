@@ -1,8 +1,6 @@
-export default {
-  Calendar: () => null,
-};
+export const Calendar = () => null;
 
-const LocaleConfig = {
+export const LocaleConfig = {
   locales: {
     '': {
       dayNames: [],
@@ -12,5 +10,3 @@ const LocaleConfig = {
     },
   },
 };
-
-export {LocaleConfig};

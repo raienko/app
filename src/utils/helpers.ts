@@ -28,3 +28,6 @@ export const vh = (size = 0): number => Math.floor((screenHeight / 100) * size);
 
 export const rem = (size = 0): number =>
   Math.floor((base / magicNumber) * size);
+
+// @ts-ignore
+export const isJest = !!process.env.JEST_WORKER_ID;
