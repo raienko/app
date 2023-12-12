@@ -2,12 +2,12 @@ import React from 'react';
 import {env} from '~/src/constants';
 import {
   Text,
-  Screen,
   Header,
+  Button,
+  Screen,
+  Calendar,
   DarkModeSwitcher,
   LanguageSwitcher,
-  Calendar,
-  Button,
 } from '~/src/components';
 import {navigation} from '~/src/features';
 
