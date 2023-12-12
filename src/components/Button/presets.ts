@@ -1,4 +1,4 @@
-import {rem, isWeb} from '~/src/utils';
+import {rem, isDesktop} from '~/src/utils';
 import {colors, sizes} from '~/src/constants';
 import {TextStyle, ViewStyle} from 'react-native';
 
@@ -11,19 +11,19 @@ export type ButtonPreset = {
 
 const proportionsSchema: {[key in ButtonSize]: any} = {
   large: {
-    width: rem(isWeb ? 280 : 343),
+    width: rem(isDesktop ? 280 : 343),
     height: rem(48),
     borderRadius: sizes.uiRadius,
     maxHeight: 48,
   },
   small: {
-    height: rem(isWeb ? 15 : 32),
+    height: rem(isDesktop ? 15 : 32),
     borderRadius: sizes.uiRadius,
     paddingHorizontal: sizes.offsetS,
   },
   medium: {
     minWidth: rem(90),
-    height: rem(isWeb ? 20 : 40),
+    height: rem(isDesktop ? 20 : 40),
     borderRadius: sizes.uiRadius,
     paddingHorizontal: sizes.offsetS,
   },

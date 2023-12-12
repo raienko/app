@@ -10,24 +10,26 @@ export const isWindows = Platform.OS === 'windows';
 
 export const isMacos = Platform.OS === 'macos';
 
-export const {width: screenWidth, height: screenHeight} = Dimensions.get(
-  isWeb ? 'window' : 'screen',
-);
+// @ts-ignore
+export const isJest = !!process.env.JEST_WORKER_ID;
 
-export const isLandscape = screenWidth > screenHeight;
+export const viewport = Dimensions.get(isWeb ? 'window' : 'screen');
+
+export const isDesktop = viewport.width > 768;
+
+export const isLandscape = viewport.width > viewport.height;
 
 export const isPortrait = !isLandscape;
 
-const base = isLandscape ? screenHeight : screenWidth;
+const base = isLandscape ? viewport.height : viewport.width;
 
 const magicNumber = 375;
 
-export const vw = (size = 0): number => Math.floor((screenWidth / 100) * size);
+export const vw = (size = 0): number =>
+  Math.floor((viewport.width / 100) * size);
 
-export const vh = (size = 0): number => Math.floor((screenHeight / 100) * size);
+export const vh = (size = 0): number =>
+  Math.floor((viewport.height / 100) * size);
 
 export const rem = (size = 0): number =>
   Math.floor((base / magicNumber) * size);
-
-// @ts-ignore
-export const isJest = !!process.env.JEST_WORKER_ID;

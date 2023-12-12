@@ -1,4 +1,4 @@
-import {rem, isWeb} from '~/src/utils/helpers';
+import {rem, isDesktop} from '~/src/utils/helpers';
 
 export default {
   iconSmall: rem(16),
@@ -8,5 +8,5 @@ export default {
   offsetS: rem(8),
   offsetM: rem(16),
   offsetL: rem(32),
-  uiRadius: isWeb ? 8 : rem(8),
+  uiRadius: isDesktop ? 8 : rem(8),
 };

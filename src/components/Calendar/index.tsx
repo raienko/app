@@ -7,7 +7,7 @@ import {Direction, Theme} from 'react-native-calendars/src/types';
 import {colors, fonts, sizes, typography} from '~/src/constants';
 import {system} from '~/src/features';
 import {StyleSheet} from 'react-native';
-import {isWeb, rem} from '~/src/utils';
+import {isDesktop, rem} from '~/src/utils';
 import icons from '~/assets/icons';
 
 export interface CalendarProps extends RNCalendarProps {
@@ -57,7 +57,7 @@ export default function Calendar({...rest}: CalendarProps) {
 
 const styles = StyleSheet.create({
   wrapper: {
-    width: rem(isWeb ? 150 : 343),
+    width: rem(isDesktop ? 150 : 343),
     borderWidth: 1,
     borderRadius: sizes.uiRadius,
     borderColor: colors.accentC,

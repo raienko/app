@@ -1,5 +1,5 @@
 import {TextStyle} from 'react-native';
-import {rem, isWeb} from '~/src/utils/helpers.ts';
+import {rem, isDesktop} from '~/src/utils/helpers.ts';
 
 export type Typography = Pick<TextStyle, 'fontSize'>;
 export type TypographyTypes =
@@ -16,28 +16,28 @@ const typography: {
   [key in TypographyTypes]: Typography;
 } = {
   h1: {
-    fontSize: isWeb ? 31 : rem(31),
+    fontSize: isDesktop ? 31 : rem(31),
   },
   h2: {
-    fontSize: isWeb ? 25 : rem(25),
+    fontSize: isDesktop ? 25 : rem(25),
   },
   h3: {
-    fontSize: isWeb ? 19 : rem(19),
+    fontSize: isDesktop ? 19 : rem(19),
   },
   h4: {
-    fontSize: isWeb ? 17 : rem(17),
+    fontSize: isDesktop ? 17 : rem(17),
   },
   h5: {
-    fontSize: isWeb ? 14 : rem(14),
+    fontSize: isDesktop ? 14 : rem(14),
   },
   body: {
-    fontSize: isWeb ? 14 : rem(14),
+    fontSize: isDesktop ? 14 : rem(14),
   },
   button: {
-    fontSize: isWeb ? 14 : rem(14),
+    fontSize: isDesktop ? 14 : rem(14),
   },
   caption: {
-    fontSize: isWeb ? 11 : rem(11),
+    fontSize: isDesktop ? 11 : rem(11),
   },
 };
 

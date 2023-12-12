@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import animation from '~/assets/lottie/launchAnimation.json';
 import {LottieAnimation} from '~/src/components';
-import {rem, useEventBus, eventBus} from '~/src/utils';
+import {rem, useEventBus, eventBus, isDesktop} from '~/src/utils';
 import {colors} from '~/src/constants';
 
 const event = 'SET_LAUNCH_SCREEN_HIDDEN';
@@ -32,6 +32,8 @@ export default function LaunchScreen(): React.ReactNode {
   );
 }
 
+const animationSize = isDesktop ? 200 : rem(300);
+
 const styles = StyleSheet.create({
   wrapper: {
     ...StyleSheet.absoluteFillObject,
@@ -43,7 +45,7 @@ const styles = StyleSheet.create({
     pointerEvents: 'none',
   },
   animation: {
-    width: rem(300),
-    height: rem(300),
+    width: animationSize,
+    height: animationSize,
   },
 });
