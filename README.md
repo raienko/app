@@ -49,3 +49,4 @@ Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [ ] Dynamic Links
 - [ ] Sharing
 - [ ] in-app purchases
+- [ ] splash screen
