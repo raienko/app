@@ -1,15 +1,16 @@
 import React from 'react';
-import {env} from '~/src/constants';
 import {
   Text,
   Header,
   Button,
   Screen,
   Calendar,
+  LottieAnimation,
   DarkModeSwitcher,
   LanguageSwitcher,
 } from '~/src/components';
 import {navigation} from '~/src/features';
+import animation from '~/assets/lottie/launchAnimation.json';
 
 export default function Stylesheet(): React.JSX.Element {
   return (
@@ -48,6 +49,12 @@ export default function Stylesheet(): React.JSX.Element {
       <Button value="Large" size="large" />
       <Button value="Medium" size="medium" />
       <Button value="Small" size="small" />
+      <LottieAnimation
+        style={{width: 100, height: 100}}
+        source={animation}
+        autoPlay
+        loop
+      />
     </Screen>
   );
 }
