@@ -1,3 +1,4 @@
+// @ts-nocheck
 import MaterialCommunityIcons from 'react-native-vector-icons/Fonts/MaterialCommunityIcons.ttf';
 import MaterialIcons from 'react-native-vector-icons/Fonts/MaterialIcons.ttf';
 import FontAwesome from 'react-native-vector-icons/Fonts/FontAwesome.ttf';
@@ -32,5 +33,3 @@ if (style.styleSheet) {
 }
 
 document.head.appendChild(style);
-
-console.log(fontStyles);
