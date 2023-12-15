@@ -10,7 +10,9 @@
 - fastlane scripts for [Android](./Android) and [iOS](./iOS) written by devs and stays in repository
 - CI/CD service should set up environment and trigger necessary scripts
 
-Such implementation allows us to be pretty much independent - developers
+Such implementation allows us to be pretty much independent:
+- we can easily change CI/CD service
+- most configurations in a single codebase
 
 ## Service Accounts
 CI/CD service will need account to access repository, Google and Apple services, 
