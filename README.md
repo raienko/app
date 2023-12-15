@@ -27,8 +27,8 @@ Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [ ] debugging
 - [ ] e2e testing
 - [ ] fastlane setup
-- [ ] [environments](./env/Readme.md)
-- [ ] [fastlane + CI/CD setup](./fastlane/documentation.md)
+- [ ] [environments](./env/index.md)
+- [ ] [fastlane + CI/CD setup](./fastlane/index.md)
 - [ ] PR template
 - [ ] code analyser
 - [ ] in-app messaging

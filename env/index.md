@@ -1,9 +1,15 @@
-[⬅️ Back](README.md)
+[⬅️ Back](../README.md)
 
 ## Multiple environments support ##
 
-Project should be able to change request URLs, secret keys, name, etc.
-It allows us to switch between `dev`, `stage`, `prod` environments
+Project is able to change: request URLs, secret keys, app name, app id, etc. just in few seconds.
+So we can switch between `dev`, `stage`, `prod` environments for example
+
+### To switch environments ###
+- ```yarn env:dev``` or
+- ```yarn env:stage``` or
+- ```yarn env:prod```, etc.
+- and `re-build` app
 
 ### Libraries
 - [react-native-config](https://www.npmjs.com/package/react-native-config)
@@ -11,7 +17,7 @@ It allows us to switch between `dev`, `stage`, `prod` environments
     - variables can be used in native code
   - pros:
     - complex setup
-    - configs can't be changed in runtime 
+    - configs can't be changed in runtime
 - [react-native-dotenv](https://www.npmjs.com/package/react-native-dotenv)
   - cons:
     - simple setup
@@ -35,16 +41,19 @@ needs to be
   - 📁 `dev`
     - env
     - google-services.json
+    - google-service-key.json
     - GoogleService-Info.plist
     - release.keystore
   - 📁 `prod`
     - env
     - google-services.json
+    - google-service-key.json
     - GoogleService-Info.plist
     - release.keystore
   - 📁 `staging`
     - env
     - google-services.json
+    - google-service-key.json
     - GoogleService-Info.plist
     - release.keystore
 
@@ -54,9 +63,3 @@ Don't forget to add following lines to the `.gitignore`
 .env
 env/
 ```
-
-### To switch environments ###
-- ```yarn env:dev``` or
-- ```yarn env:stage``` or
-- ```yarn env:prod```, etc.
-- and `re-build` app
