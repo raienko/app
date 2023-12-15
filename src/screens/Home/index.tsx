@@ -1,11 +1,9 @@
 import React from 'react';
 import {env} from '~/src/constants';
 import {
-  Text,
   Header,
   Button,
   Screen,
-  Calendar,
   DarkModeSwitcher,
   LanguageSwitcher,
 } from '~/src/components';
