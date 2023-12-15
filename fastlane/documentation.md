@@ -6,6 +6,12 @@
 - fastlane scripts allows to: build, deploy and update apps
 - we use [service accounts](#service-accounts) for security reasons
 
+## General schema
+- fastlane scripts for [Android](./Android) and [iOS](./iOS) written by devs and stays in repository
+- CI/CD service should setup environment and trigger necessary scripts
+
+Such implementation allows us to be pretty much independent - developers
+
 ## Service Accounts
 ### Android
 - create service account
@@ -14,6 +20,18 @@
 - create service account
 - setup environment variable
 
-## Bitrise
+## Environment variables
+After steps above completed you should be able to fill
+all these keys in `.env` file with valid data
 
-## Circle CI
+| key                      | description   |
+|--------------------------|---------------|
+| ANDROID_SIGNING_ALIAS    |               |
+| ANDROID_SIGNING_PASSWORD |               |
+| DEVELOPMENT_TEAM         |               |
+| APP_STORE_ID             |               |
+| IOS_CREDS_REPO           |               |
+| MATCH_PASSWORD           |               |
+| IOS_API_ID               |               |
+| IOS_API_KEY              |               |
+| IOS_API_ISSUER           |               |
