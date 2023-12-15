@@ -6,11 +6,15 @@ export const initialState: {
   offline: boolean;
   currentLanguage?: string;
   lastUsedLanguage?: string;
+  keyboardHeight: number;
+  remoteConfig: object;
 } = {
   darkMode: false,
   offline: false,
   currentLanguage: undefined,
   lastUsedLanguage: undefined,
+  keyboardHeight: 0,
+  remoteConfig: {},
 };
 
 const slice = createSlice({
@@ -26,6 +30,18 @@ const slice = createSlice({
     ) {
       state.lastUsedLanguage = action.payload;
       state.currentLanguage = action.payload;
+    },
+    setKeyboardHeight: (
+      state,
+      action: PayloadAction<typeof initialState.keyboardHeight>,
+    ) => {
+      state.keyboardHeight = action.payload;
+    },
+    setRemoteConfig: (
+      state,
+      action: PayloadAction<typeof initialState.remoteConfig>,
+    ) => {
+      state.remoteConfig = action.payload;
     },
   },
 });
