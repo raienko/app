@@ -8,7 +8,7 @@
 
 ## General schema
 - fastlane scripts for [Android](./Android) and [iOS](./iOS) written by devs and stays in repository
-- CI/CD service should setup environment and trigger necessary scripts
+- CI/CD service should set up environment and trigger necessary scripts
 
 Such implementation allows us to be pretty much independent - developers
 
@@ -19,6 +19,7 @@ fetch env configs, etc.
 ### Android
 - create service account
 - add configuration file for pipeline
+
 ### Apple
 - create service account
 - setup environment variable
