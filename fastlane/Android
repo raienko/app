@@ -1,0 +1,58 @@
+ANDROID_PATH='./android/app'
+INTERNAL=ENV['INTERNAL_BUILD'] == 'true'
+APP_ID=ENV['APP_ID']
+
+private_lane :setBuildNumberAndroid  do |options|
+  increment_version_code(
+    version_code: options[:build_number],
+    app_project_dir: ANDROID_PATH
+  )
+end
+
+private_lane :incrementBuildNumberAndroid  do |options|
+  increment_version_code(app_project_dir: ANDROID_PATH)
+end
+
+private_lane :incrementPatchVersionAndroid  do |options|
+  increment_version_name(app_project_dir: ANDROID_PATH, bump_type: 'patch')
+end
+
+private_lane :incrementMinorVersionAndroid  do |options|
+  increment_version_name(app_project_dir: ANDROID_PATH, bump_type: 'minor')
+end
+
+private_lane :incrementMajorVersionAndroid  do |options|
+  increment_version_name(app_project_dir: ANDROID_PATH, bump_type: 'major')
+end
+
+private_lane :prepareAndroid  do |options|
+    gradle(
+      task: "clean",
+      project_dir: "./android"
+    )
+end
+
+private_lane :buildAndroid  do |options|
+    gradle(
+      tasks: ["assembleRelease", "bundleRelease"],
+      project_dir: "./android"
+    )
+end
+
+private_lane :uploadAndroid  do |options|
+    upload_to_play_store(
+        track: 'internal',
+        package_name: APP_ID,
+        skip_upload_apk: true,
+        release_status: 'draft',
+        json_key: 'google-service-key.json',
+        aab: "#{ANDROID_PATH}/build/outputs/bundle/release/app-release.aab"
+    )
+    next
+end
+
+desc "prepare, build and deploy Android"
+lane :android  do |options|
+    buildAndroid
+    uploadAndroid
+end

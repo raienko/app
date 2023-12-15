@@ -1,0 +1,2 @@
+gem 'fastlane-plugin-android_versioning'
+gem 'fastlane-plugin-versioning'
