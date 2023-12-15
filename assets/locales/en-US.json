@@ -13,6 +13,8 @@
   },
   "stylesheet": {
     "title": "Stylesheet",
-    "subtitle": "components"
+    "subtitle": "components",
+    "input": "Input",
+    "error": "Some error text"
   }
 }

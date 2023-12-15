@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Text,
   Icon,
+  Input,
   Header,
   Button,
   Screen,
@@ -54,6 +55,12 @@ export default function Stylesheet(): React.JSX.Element {
       <Button value="Medium" size="medium" />
       <Button value="Small" size="small" />
       <LottieAnimation style={styles.lottie} source={animation} autoPlay loop />
+      <Input value="some input text" label="stylesheet.input" />
+      <Input
+        label="stylesheet.input"
+        error="stylesheet.error"
+        placeholder="stylesheet.input"
+      />
       <Icon name="home" type="FontAwesome" size={sizes.iconLarge} />
       <Icon name="home" type="Feather" size={sizes.iconMedium} />
       <Icon name="home" type="Ionicons" size={sizes.iconSmall} />
