@@ -13,6 +13,9 @@
 Such implementation allows us to be pretty much independent - developers
 
 ## Service Accounts
+CI/CD service will need account to access repository, Google and Apple services, 
+fetch env configs, etc.
+
 ### Android
 - create service account
 - add configuration file for pipeline
