@@ -1,6 +1,7 @@
 import React from 'react';
 import {env} from '~/src/constants';
 import {
+  AppInfo,
   Header,
   Button,
   Screen,
@@ -28,6 +29,7 @@ export default function Home(): React.JSX.Element {
         text="home.stylesheet"
         onPress={() => navigation.navigate('Stylesheet')}
       />
+      <AppInfo />
     </Screen>
   );
 }
