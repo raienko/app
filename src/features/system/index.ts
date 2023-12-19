@@ -1,3 +1,4 @@
 export * from './appearance';
 export * from './localisation';
-export * from './keyboard.ts';
+export * from './keyboard';
+export * from './remoteConfig';

@@ -7,6 +7,7 @@ import {useReloadOnWindowChange} from '~/src/utils';
 export default function System(): React.JSX.Element {
   system.useLocalisation();
   system.useKeyboardListener();
+  system.useRemoteConfigSetup();
   useReloadOnWindowChange();
 
   return (
