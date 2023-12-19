@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {AppState} from 'react-native';
-import RemoteConfig from '@react-native-firebase/remote-config';
+import {RemoteConfig} from '~/src/features/firebase';
 import slice from './slice';
 import store, {useStoreSelector} from '../store';
 
