@@ -1,4 +1,6 @@
 import Config from 'react-native-config';
+import * as Firebase from 'firebase/app';
+import * as RemoteConfig from 'firebase/remote-config';
 
 const config = {
   apiKey: `${Config.FIREBASE_API_KEY}`,
@@ -10,4 +12,11 @@ const config = {
   messagingSenderId: `${Config.FIREBASE_MESSAGING_SENDER_ID}`,
 };
 
-export const RemoteConfig = () => {};
+const app = Firebase.initializeApp(config);
+const remoteConfig = RemoteConfig.getRemoteConfig(app);
+
+export const fetchRemoteConfig = async (defaultConfig: any) => {
+  remoteConfig.defaultConfig = defaultConfig;
+  await RemoteConfig.fetchAndActivate(remoteConfig);
+  return RemoteConfig.getAll(remoteConfig);
+};
