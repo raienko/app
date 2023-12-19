@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {AppState} from 'react-native';
-import {fetchRemoteConfig} from '~/src/features/firebase';
+import {firebase} from '~/src/features';
 import slice from './slice';
 import store, {useStoreSelector} from '../store';
 
@@ -14,7 +14,7 @@ const setupRemoteConfig = () => {
     return;
   }
 
-  return fetchRemoteConfig(defaultConfig).then(config => {
+  return firebase.fetchRemoteConfig(defaultConfig).then(config => {
     const data: {[key: string]: any} = {};
 
     Object.entries(config).forEach($ => {
