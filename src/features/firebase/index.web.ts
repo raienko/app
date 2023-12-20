@@ -1,9 +1,9 @@
-import RemoteConfig from 'firebase/remote-config';
+import * as RemoteConfig from '@firebase/remote-config';
 import {app} from './config.web.ts';
 
-// const remoteConfig = RemoteConfig.getRemoteConfig(app);
+const remoteConfig = RemoteConfig.getRemoteConfig(app);
 
 export const fetchRemoteConfig = async () => {
-  // await RemoteConfig.fetchAndActivate(remoteConfig);
-  // return RemoteConfig.getAll(remoteConfig);
+  await RemoteConfig.fetchAndActivate(remoteConfig);
+  return RemoteConfig.getAll(remoteConfig);
 };

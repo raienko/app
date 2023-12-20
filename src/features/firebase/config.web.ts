@@ -1,7 +1,8 @@
 import Config from 'react-native-config';
-import {initializeApp} from 'firebase/app';
+import {FirebaseOptions, initializeApp} from '@firebase/app';
 
-const config = {
+const config: FirebaseOptions = {
+  appId: `${Config.FIREBASE_APP_ID}`,
   apiKey: `${Config.FIREBASE_API_KEY}`,
   projectId: `${Config.FIREBASE_PROJECT_ID}`,
   databaseURL: `${Config.FIREBASE_DB_URL}`,
@@ -11,4 +12,4 @@ const config = {
   messagingSenderId: `${Config.FIREBASE_MESSAGING_SENDER_ID}`,
 };
 
-// export const app = initializeApp(config);
+export const app = initializeApp(config);
