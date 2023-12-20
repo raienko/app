@@ -8,6 +8,7 @@ runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [x] navigation
 - [x] state management
 - [ ] custom fonts
+- [ ] handle keyboard
 - [x] vector icons
 - [x] firebase: remote config
 - [x] firebase: crashlytics
