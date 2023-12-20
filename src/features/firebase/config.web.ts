@@ -1,4 +1,5 @@
 import Config from 'react-native-config';
+// @ts-ignore
 import {FirebaseOptions, initializeApp} from '@firebase/app';
 
 const config: FirebaseOptions = {
