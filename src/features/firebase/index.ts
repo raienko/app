@@ -4,7 +4,7 @@ import {Firebase} from './types.ts';
 
 export const firebase: Firebase = {
   fetchRemoteConfig: (defaultConfig: any) =>
-    RemoteConfig()
+    RemoteConfig?.()
       .setDefaults(defaultConfig)
       .then(() => RemoteConfig().fetch(0))
       .then(() => RemoteConfig().activate())

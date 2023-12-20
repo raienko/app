@@ -1,4 +1,4 @@
-import { logger } from './index';
+import {logger} from './index';
 
 describe('Testing logger:', () => {
   it('smoke test', () => {

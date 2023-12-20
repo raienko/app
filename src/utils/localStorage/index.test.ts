@@ -1,5 +1,5 @@
-import '__mocks__';
-import { localStorage } from './index';
+import '~/__mocks__';
+import {localStorage} from './index';
 
 const testData = {
   key: 'test_local_storage',
