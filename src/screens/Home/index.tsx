@@ -8,7 +8,7 @@ import {
   DarkModeSwitcher,
   LanguageSwitcher,
 } from '~/src/components';
-import {navigation} from '~/src/features';
+import {navigation, firebase} from '~/src/features';
 
 export default function Home(): React.JSX.Element {
   return (
@@ -23,7 +23,10 @@ export default function Home(): React.JSX.Element {
       }>
       <Button
         text="home.settings"
-        onPress={() => navigation.navigate('Settings')}
+        onPress={() => {
+          navigation.navigate('Settings');
+          return firebase.logEvent('button_pressed');
+        }}
       />
       <Button
         text="home.stylesheet"

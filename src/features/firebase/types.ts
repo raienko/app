@@ -4,4 +4,5 @@ export interface Firebase {
   fetchRemoteConfig(
     defaultConfig: any,
   ): Promise<FirebaseRemoteConfigTypes.ConfigValues>;
+  logEvent(eventName: string, data?: any): Promise<any>;
 }
