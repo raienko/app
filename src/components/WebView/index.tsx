@@ -13,7 +13,7 @@ import {
   WEBVIEW_EVENT_TYPES,
 } from './types';
 
-interface WebViewProps extends RNWebViewProps {
+interface WebViewProps extends Omit<RNWebViewProps, 'source'> {
   uri?: string;
 }
 
