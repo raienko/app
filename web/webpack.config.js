@@ -66,6 +66,16 @@ const fileLoaderConfiguration = {
   ],
 };
 
+const webViewConfiguration = {
+  test: /postMock.html$/,
+  use: {
+    loader: 'file-loader',
+    options: {
+      name: '[name].[ext]',
+    },
+  },
+};
+
 module.exports = argv => {
   return {
     entry: path.resolve(appDirectory, 'index'),
@@ -81,6 +91,7 @@ module.exports = argv => {
         'react-native-config': 'react-native-web-config',
         'react-native-svg': 'react-native-svg-web',
         'lottie-react-native': 'react-native-web-lottie',
+        'react-native-webview': 'react-native-web-webview',
       },
       extensions: [
         '.web.js',
@@ -99,6 +110,7 @@ module.exports = argv => {
         babelLoaderConfiguration,
         imageLoaderConfiguration,
         fileLoaderConfiguration,
+        webViewConfiguration,
       ],
     },
     plugins: [

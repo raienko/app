@@ -23,7 +23,7 @@ runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [ ] video calls
 - [ ] permissions management
 - [x] dark mode
-- [ ] localisation
+- [x] localisation
 - [ ] debugging
 - [ ] e2e testing
 - [ ] fastlane setup

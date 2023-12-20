@@ -11,3 +11,4 @@ export {default as LanguageSwitcher} from './LanguageSwitcher';
 export {default as Screen} from './Screen';
 export {default as StatusBar} from './StatusBar';
 export {default as Text} from './Text';
+export {default as WebView} from './WebView';

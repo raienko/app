@@ -6,6 +6,7 @@ import {
   Header,
   Button,
   Screen,
+  WebView,
   Calendar,
   LottieAnimation,
   DarkModeSwitcher,
@@ -64,6 +65,7 @@ export default function Stylesheet(): React.JSX.Element {
       <Icon name="home" type="FontAwesome" size={sizes.iconLarge} />
       <Icon name="home" type="Feather" size={sizes.iconMedium} />
       <Icon name="home" type="Ionicons" size={sizes.iconSmall} />
+      <WebView uri={'https://www.wikipedia.org/'} style={styles.webview} />
     </Screen>
   );
 }
@@ -75,5 +77,10 @@ const styles = StyleSheet.create({
   lottie: {
     width: 100,
     height: 100,
+  },
+  webview: {
+    width: 300,
+    height: 300,
+    borderWidth: 1,
   },
 });
