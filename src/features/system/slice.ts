@@ -8,6 +8,11 @@ export const initialState: {
   lastUsedLanguage?: string;
   keyboardHeight: number;
   remoteConfig: object;
+  permissions: {
+    camera?: string;
+    location?: string;
+    notifications?: string;
+  };
 } = {
   darkMode: false,
   offline: false,
@@ -15,6 +20,7 @@ export const initialState: {
   lastUsedLanguage: undefined,
   keyboardHeight: 0,
   remoteConfig: {},
+  permissions: {},
 };
 
 const slice = createSlice({
@@ -42,6 +48,15 @@ const slice = createSlice({
       action: PayloadAction<typeof initialState.remoteConfig>,
     ) => {
       state.remoteConfig = action.payload;
+    },
+    setPermission: (
+      state,
+      action: PayloadAction<{
+        type: 'camera' | 'notifications' | 'location';
+        permission: string;
+      }>,
+    ) => {
+      state.permissions[action.payload.type] = action.payload.permission;
     },
   },
 });
