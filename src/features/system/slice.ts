@@ -1,5 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {persistSlice} from '~/src/features/store/persistConfig';
+import {PermissionTypes} from '~/src/features/system/permissions';
 
 export const initialState: {
   darkMode: boolean;
@@ -8,11 +9,7 @@ export const initialState: {
   lastUsedLanguage?: string;
   keyboardHeight: number;
   remoteConfig: object;
-  permissions: {
-    camera?: string;
-    location?: string;
-    notifications?: string;
-  };
+  permissions: {[key in PermissionTypes]?: string};
 } = {
   darkMode: false,
   offline: false,
@@ -52,7 +49,7 @@ const slice = createSlice({
     setPermission: (
       state,
       action: PayloadAction<{
-        type: 'camera' | 'notifications' | 'location';
+        type: PermissionTypes;
         permission: string;
       }>,
     ) => {

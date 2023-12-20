@@ -3,13 +3,15 @@ import {AppState} from 'react-native';
 import slice from './slice';
 import store, {useStoreSelector} from '~/src/features/store';
 
+export type PermissionTypes = 'camera' | 'location' | 'notifications';
+
 const checkPermissions = () => {
   if (AppState.currentState !== 'active') {
     return;
   }
 };
 
-export const setPermission = (type: any, permission: string) =>
+export const setPermission = (type: PermissionTypes, permission: string) =>
   store.dispatch(
     slice.actions.setPermission({
       permission,

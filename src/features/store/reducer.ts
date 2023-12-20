@@ -3,11 +3,9 @@ import {persistReducer} from 'redux-persist';
 import persistConfig from './persistConfig';
 
 import {reducer as system} from '~/src/features/system/slice';
-import {reducer as permissions} from '~/src/features/permissions/slice';
 
 const reducers = {
   system,
-  permissions,
 };
 
 const reducer = combineReducers(reducers);
