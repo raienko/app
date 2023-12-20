@@ -74,4 +74,4 @@ android/app/google-services.json
 /env
 
 # web
-web/dist
+#web/dist
