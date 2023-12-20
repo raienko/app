@@ -8,9 +8,9 @@ runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [x] navigation
 - [x] state management
 - [ ] custom fonts
-- [ ] vector icons
-- [ ] firebase: remote config
-- [ ] firebase: crashlytics
+- [x] vector icons
+- [x] firebase: remote config
+- [x] firebase: crashlytics
 - [ ] firebase: messaging
 - [ ] firebase: database
 - [ ] firebase: auth
@@ -18,7 +18,7 @@ runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [x] calendar
 - [ ] video player
 - [ ] audio player
-- [ ] webview with bridge
+- [x] webview with bridge
 - [ ] chat
 - [ ] video calls
 - [ ] permissions management
@@ -26,18 +26,18 @@ runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [x] localisation
 - [ ] debugging
 - [ ] e2e testing
-- [ ] fastlane setup
-- [ ] [environments](./env/index.md)
+- [x] fastlane setup
+- [x] [environments](./env/index.md)
 - [ ] [fastlane + CI/CD setup](./fastlane/index.md)
 - [ ] PR template
 - [ ] code analyser
 - [ ] in-app messaging
 - [ ] update required
-- [ ] splashscreen
+- [x] splashscreen
 - [ ] icons generation / update
 - [ ] animations
 - [ ] carousel
-- [ ] event bus
+- [x] event bus
 - [ ] documentation
 - [ ] keyboard handling
 - [ ] PWA support
