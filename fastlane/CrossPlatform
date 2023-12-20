@@ -1,0 +1,40 @@
+desc "prepare, build and deploy both"
+lane :deploy do |options|
+  android
+  ios
+end
+
+desc "Set BUILD number        0.0.0(X)"
+lane :setBuildNumber do |options|
+  setBuildNumberAndroid build_number: options[:build_number]
+  setBuildNumberIOS build_number: options[:build_number]
+  git_commit(path: ".", message: "BUILD number set", skip_git_hooks: true)
+end
+
+desc "Increment BUILD number  0.0.0(X)"
+lane :incrementBuildNumber do |options|
+  incrementBuildNumberAndroid
+  incrementBuildNumberIOS
+  git_commit(path: ".", message: "BUILD number bump", skip_git_hooks: true)
+end
+
+desc "Increment PATCH version 0.0.X(0)"
+lane :incrementPatchVersion do |options|
+  incrementPatchVersionAndroid
+  incrementPatchVersionIOS
+  git_commit(path: ".", message: "PATCH version bump", skip_git_hooks: true)
+end
+
+desc "Increment MINOR version 0.X.0(0)"
+lane :incrementMinorVersion do |options|
+  incrementMinorVersionAndroid
+  incrementMinorVersionIOS
+  git_commit(path: ".", message: "MINOR version bump", skip_git_hooks: true)
+end
+
+desc "Increment MAJOR version X.0.0(0)"
+lane :incrementMajorVersion do |options|
+  incrementMajorVersionAndroid
+  incrementMajorVersionIOS
+  git_commit(path: ".", message: "MAJOR version bump", skip_git_hooks: true)
+end

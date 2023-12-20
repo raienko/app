@@ -12,7 +12,7 @@ const babelConfig = require('../babel.config');
 
 // Babel loader configuration
 const babelLoaderConfiguration = {
-  test: /\.(tsx|jsx|ts|js)?$/,
+  test: /\.(tsx|jsx|ts|js|cjs)?$/,
   exclude: [
     {
       and: [
@@ -91,6 +91,7 @@ module.exports = argv => {
         '.jsx',
         '.web.tsx',
         '.tsx',
+        '.cjs',
       ],
     },
     module: {

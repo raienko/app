@@ -1,16 +1,23 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {persistSlice} from '~/src/features/store/persistConfig';
+import {PermissionTypes} from '~/src/features/system/permissions';
 
 export const initialState: {
   darkMode: boolean;
   offline: boolean;
   currentLanguage?: string;
   lastUsedLanguage?: string;
+  keyboardHeight: number;
+  remoteConfig: object;
+  permissions: {[key in PermissionTypes]?: string};
 } = {
   darkMode: false,
   offline: false,
   currentLanguage: undefined,
   lastUsedLanguage: undefined,
+  keyboardHeight: 0,
+  remoteConfig: {},
+  permissions: {},
 };
 
 const slice = createSlice({
@@ -26,6 +33,27 @@ const slice = createSlice({
     ) {
       state.lastUsedLanguage = action.payload;
       state.currentLanguage = action.payload;
+    },
+    setKeyboardHeight: (
+      state,
+      action: PayloadAction<typeof initialState.keyboardHeight>,
+    ) => {
+      state.keyboardHeight = action.payload;
+    },
+    setRemoteConfig: (
+      state,
+      action: PayloadAction<typeof initialState.remoteConfig>,
+    ) => {
+      state.remoteConfig = action.payload;
+    },
+    setPermission: (
+      state,
+      action: PayloadAction<{
+        type: PermissionTypes;
+        permission: string;
+      }>,
+    ) => {
+      state.permissions[action.payload.type] = action.payload.permission;
     },
   },
 });

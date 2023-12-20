@@ -1,4 +1,9 @@
-import {AppRegistry} from 'react-native';
+import {AppRegistry, LogBox} from 'react-native';
+
+LogBox.ignoreLogs([
+  'Calling synchronous methods on native modules',
+  'Remote debugger is in a background',
+]);
 
 import {setupStatusBar} from '~/src/components/StatusBar';
 setupStatusBar();

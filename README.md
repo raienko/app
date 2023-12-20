@@ -1,6 +1,6 @@
 # React Native App
 
-Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-to-a-react-native-project-in-2023-4m4l)
+runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-to-a-react-native-project-in-2023-4m4l)
 
 ## Features
 - [x] web support 
@@ -27,7 +27,8 @@ Runs on iOS, android and [web](https://dev.to/mikehamilton00/adding-web-support-
 - [ ] debugging
 - [ ] e2e testing
 - [ ] fastlane setup
-- [ ] CI/CD setup
+- [ ] [environments](./env/index.md)
+- [ ] [fastlane + CI/CD setup](./fastlane/index.md)
 - [ ] PR template
 - [ ] code analyser
 - [ ] in-app messaging

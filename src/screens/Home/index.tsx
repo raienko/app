@@ -1,11 +1,10 @@
 import React from 'react';
 import {env} from '~/src/constants';
 import {
-  Text,
+  AppInfo,
   Header,
   Button,
   Screen,
-  Calendar,
   DarkModeSwitcher,
   LanguageSwitcher,
 } from '~/src/components';
@@ -30,6 +29,7 @@ export default function Home(): React.JSX.Element {
         text="home.stylesheet"
         onPress={() => navigation.navigate('Stylesheet')}
       />
+      <AppInfo />
     </Screen>
   );
 }
