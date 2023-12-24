@@ -8,9 +8,10 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [x] navigation
 - [x] state management
 - [x] [custom fonts](./assets/fonts/index.md)
-- [ ] handle keyboard
-- [x] vector icons
-- [x] firebase: remote config
+- [x] [handle keyboard](./src/features/system/keyboard.ts) and [add extra space](./src/components/SpaceForKeyboard/index.tsx) if needed
+- [x] [vector icons](https://github.com/oblador/react-native-vector-icons) with [web support](./src/utils/webtools/fonts.ts)
+- [x] [firebase](./src/features/firebase) integration
+- [ ] [remote config](./src/features/system/remoteConfig.ts)
 - [x] firebase: crashlytics
 - [ ] firebase: messaging
 - [ ] firebase: database
