@@ -7,7 +7,7 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [x] absolute imports 
 - [x] navigation
 - [x] state management
-- [ ] custom fonts
+- [ ] [custom fonts](./assets/fonts/index.md)
 - [ ] handle keyboard
 - [x] vector icons
 - [x] firebase: remote config

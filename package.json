@@ -15,7 +15,8 @@
     "web": "webpack-dev-server --config ./web/webpack.config.js --mode development",
     "web:build": "webpack --config ./web/webpack.config.js --mode production",
     "fastlane:install": "bundle install",
-    "test": "jest --silent"
+    "test": "jest --silent",
+    "fonts:link": "npx react-native-asset"
   },
   "dependencies": {
     "@dotlottie/react-player": "1.6.6",

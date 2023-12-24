@@ -1,4 +1,4 @@
 export default {
-  primary: 'Arial',
+  primary: 'Volia-Black',
   secondary: 'Arial',
 };

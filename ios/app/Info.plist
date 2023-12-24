@@ -32,7 +32,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
@@ -54,6 +54,7 @@
 		<string>Octicons.ttf</string>
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
+		<string>Volja-Black.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
