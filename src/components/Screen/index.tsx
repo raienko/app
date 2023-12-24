@@ -3,6 +3,7 @@ import {StyleSheet, View, ScrollView} from 'react-native';
 import {colors} from '~/src/constants';
 import {system} from '~/src/features';
 import {viewport, isWeb} from '~/src/utils';
+import {SpaceForKeyboard} from '~/src/components';
 
 export type ScreenProps = {
   children?: React.ReactNode;
@@ -28,6 +29,7 @@ export default function Screen({
         contentContainerStyle={[styles.content, style]}>
         {children}
       </ScrollView>
+      <SpaceForKeyboard />
       {footer}
     </View>
   );
