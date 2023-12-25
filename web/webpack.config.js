@@ -1,7 +1,9 @@
 const path = require('path');
+const fs = require('fs');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const appDirectory = path.resolve(__dirname, '../');
 
 // Web config
@@ -30,7 +32,10 @@ const babelLoaderConfiguration = {
     options: {
       cacheDirectory: true,
       // Presets and plugins imported from main babel.config.js in root dir
-      presets: babelConfig.presets,
+      presets: [
+        ...babelConfig.presets,
+        {plugins: ['@babel/plugin-proposal-class-properties']},
+      ],
       plugins: ['react-native-web', ...(babelConfig.plugins || [])],
     },
   },
@@ -130,7 +135,44 @@ module.exports = argv => {
 
       // web env support
       ReactNativeWebConfig(envFilePath),
+
+      // skia
+      new (class CopySkiaPlugin {
+        apply(compiler) {
+          compiler.hooks.thisCompilation.tap('AddSkiaPlugin', compilation => {
+            compilation.hooks.processAssets.tapPromise(
+              {
+                name: 'copy-skia',
+                stage:
+                  compiler.webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+              },
+              async () => {
+                const src = require.resolve(
+                  'canvaskit-wasm/bin/full/canvaskit.wasm',
+                );
+                if (compilation.getAsset(src)) {
+                  // Skip emitting the asset again because it's immutable
+                  return;
+                }
+                compilation.emitAsset(
+                  '/canvaskit.wasm',
+                  new webpack.sources.RawSource(
+                    await fs.promises.readFile(src),
+                  ),
+                );
+              },
+            );
+          });
+        }
+      })(),
+      new NodePolyfillPlugin(),
     ],
+    externals: {
+      ...argv?.externals,
+      'react-native-reanimated': "require('react-native-reanimated')",
+      'react-native-reanimated/package.json':
+        "require('react-native-reanimated/package.json')",
+    },
     optimization: {
       // Split into vendor and main js files
       splitChunks: {

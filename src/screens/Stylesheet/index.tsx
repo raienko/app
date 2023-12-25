@@ -8,6 +8,7 @@ import {
   Screen,
   WebView,
   Calendar,
+  SkiaExample,
   LottieAnimation,
   DarkModeSwitcher,
   LanguageSwitcher,
@@ -66,6 +67,7 @@ export default function Stylesheet(): React.JSX.Element {
       <Icon name="home" type="Feather" size={sizes.iconMedium} />
       <Icon name="home" type="Ionicons" size={sizes.iconSmall} />
       <WebView uri={'https://www.wikipedia.org/'} style={styles.webview} />
+      <SkiaExample />
     </Screen>
   );
 }
