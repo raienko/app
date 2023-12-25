@@ -31,8 +31,7 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [x] fastlane setup
 - [x] [environments](./env/index.md)
 - [ ] [fastlane + CI/CD setup](./fastlane/index.md)
-- [ ] PR template
-- [ ] code analyser
+- [ ] [PR template](./pull_request_template.md)
 - [ ] in-app messaging
 - [ ] update required
 - [x] splashscreen
