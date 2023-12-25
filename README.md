@@ -6,7 +6,7 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [x] web support 
 - [x] absolute imports 
 - [x] navigation
-- [x] state management
+- [x] state management using redux
 - [x] [custom fonts](./assets/fonts/index.md)
 - [x] [handle keyboard](./src/features/system/keyboard.ts) and [add extra space](./src/components/SpaceForKeyboard/index.tsx) if needed
 - [x] [vector icons](https://github.com/oblador/react-native-vector-icons) with [web support](./src/utils/webtools/fonts.ts)
@@ -20,7 +20,7 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [x] calendar
 - [ ] video player
 - [ ] audio player
-- [x] webview with bridge
+- [x] [webview](src/components/WebView/index.tsx) with [event bridge](src/components/WebView/index.md)
 - [ ] chat
 - [ ] video calls
 - [ ] permissions management
