@@ -11,7 +11,7 @@ type CarouselProps = {
 };
 
 export default function Carousel({
-  width = rem(100),
+  width = rem(350),
   height = rem(100),
   ...rest
 }: CarouselProps) {

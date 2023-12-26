@@ -27,7 +27,17 @@
     "animations_title": "Animations",
     "animations_description": "Few animation examples: using lottie file and third party libraries",
     "inputs_title": "Inputs",
-    "inputs_description": "Few input examples"
+    "inputs_description": "Few input examples",
+    "icons_title": "Icons",
+    "icons_description": "Vector icons from predefined sets",
+    "webview_title": "WebView",
+    "webview_description": "Allows to view html content inside the app",
+    "share_title": "Sharing",
+    "share_description": "Tools to share data or copy to clipboard",
+    "carousel_title": "Carousel",
+    "carousel_description": "Basic carousel component",
+    "bottom_sheet_title": "BottomSheet",
+    "bottom_sheet_description": "Basic bottom sheet component"
   },
   "share": {
     "web_error_title": "Share not available",

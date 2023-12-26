@@ -20,7 +20,7 @@ import {navigation} from '~/src/features';
 import animation from '~/assets/lottie/launchAnimation.json';
 import {StyleSheet} from 'react-native';
 import {sizes} from '~/src/constants';
-import {copyToClipboard, share} from '~/src/utils';
+import {copyToClipboard, rem, share} from '~/src/utils';
 import {hideBottomSheet, showBottomSheet} from '~/src/components/BottomSheet';
 
 export default function Stylesheet(): React.JSX.Element {
@@ -108,23 +108,43 @@ export default function Stylesheet(): React.JSX.Element {
           placeholder="stylesheet.input"
         />
       </Section>
-      <Icon name="home" type="FontAwesome" size={sizes.iconLarge} />
-      <Icon name="home" type="Feather" size={sizes.iconMedium} />
-      <Icon name="home" type="Ionicons" size={sizes.iconSmall} />
-      <WebView uri={'https://www.wikipedia.org/'} style={styles.webview} />
-      <Button
-        text="general.share"
-        onPress={() => share({title: 'Hello', message: 'World'})}
-      />
-      <Button
-        text="general.copy"
-        onPress={() => copyToClipboard('Hello World!')}
-      />
-      <Carousel />
-      <Button
-        value="Show bottom sheet"
-        onPress={() => showBottomSheet('test_bottom_sheet')}
-      />
+      <Section
+        title="stylesheet.icons_title"
+        description="stylesheet.icons_description">
+        <Icon name="home" type="FontAwesome" size={sizes.iconLarge} />
+        <Icon name="home" type="Feather" size={sizes.iconMedium} />
+        <Icon name="home" type="Ionicons" size={sizes.iconSmall} />
+      </Section>
+      <Section
+        title="stylesheet.webview_title"
+        description="stylesheet.webview_description">
+        <WebView uri={'https://www.wikipedia.org/'} style={styles.webview} />
+      </Section>
+      <Section
+        title="stylesheet.share_title"
+        description="stylesheet.share_description">
+        <Button
+          text="general.share"
+          onPress={() => share({title: 'Hello', message: 'World'})}
+        />
+        <Button
+          text="general.copy"
+          onPress={() => copyToClipboard('Hello World!')}
+        />
+      </Section>
+      <Section
+        title="stylesheet.carousel_title"
+        description="stylesheet.carousel_description">
+        <Carousel />
+      </Section>
+      <Section
+        title="stylesheet.bottom_sheet_title"
+        description="stylesheet.bottom_sheet_description">
+        <Button
+          value="Show bottom sheet"
+          onPress={() => showBottomSheet('test_bottom_sheet')}
+        />
+      </Section>
     </Screen>
   );
 }
@@ -134,12 +154,10 @@ const styles = StyleSheet.create({
     rowGap: sizes.offsetS,
   },
   lottie: {
-    width: 100,
-    height: 100,
+    width: rem(150),
+    height: rem(150),
   },
   webview: {
-    width: 300,
-    height: 300,
-    borderWidth: 1,
+    minHeight: rem(150),
   },
 });
