@@ -7,8 +7,10 @@ export default {
     const messageText = translate(message);
 
     if (isWeb) {
+      const bothAvailable = !!(title && message);
+      const text = bothAvailable ? `${titleText}\n${messageText}` : messageText;
       // @ts-ignore
-      return window.alert(messageText);
+      return window.alert(text);
     }
 
     return Alert.alert(titleText, messageText);

@@ -9,12 +9,18 @@
     "title": "Settings"
   },
   "general": {
-    "back": "Back"
+    "back": "Back",
+    "share": "Share",
+    "copy": "Copy"
   },
   "stylesheet": {
     "title": "Stylesheet",
     "subtitle": "components",
     "input": "Input",
     "error": "Some error text"
+  },
+  "share": {
+    "web_error_title": "Share not available",
+    "web_error_message": "Can be shared only over HTTPS"
   }
 }

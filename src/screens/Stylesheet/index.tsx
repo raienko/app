@@ -16,6 +16,7 @@ import {navigation} from '~/src/features';
 import animation from '~/assets/lottie/launchAnimation.json';
 import {StyleSheet} from 'react-native';
 import {sizes} from '~/src/constants';
+import {copyToClipboard, share} from '~/src/utils';
 
 export default function Stylesheet(): React.JSX.Element {
   return (
@@ -66,6 +67,14 @@ export default function Stylesheet(): React.JSX.Element {
       <Icon name="home" type="Feather" size={sizes.iconMedium} />
       <Icon name="home" type="Ionicons" size={sizes.iconSmall} />
       <WebView uri={'https://www.wikipedia.org/'} style={styles.webview} />
+      <Button
+        text="general.share"
+        onPress={() => share({title: 'Hello', message: 'World'})}
+      />
+      <Button
+        text="general.copy"
+        onPress={() => copyToClipboard('Hello World!')}
+      />
     </Screen>
   );
 }

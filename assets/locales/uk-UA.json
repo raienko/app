@@ -9,12 +9,18 @@
     "title": "Налаштування"
   },
   "general": {
-    "back": "Назад"
+    "back": "Назад",
+    "share": "Поділитись",
+    "copy": "Скопіювати"
   },
   "stylesheet": {
     "title": "Стайлшит",
     "subtitle": "компоненти",
     "input": "Поле вводу",
     "error": "Текст помилки"
+  },
+  "share": {
+    "web_error_title": "Поділитись не вийшло",
+    "web_error_message": "Ця функція доступна лише через HTTPS"
   }
 }

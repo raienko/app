@@ -63,3 +63,45 @@ Don't forget to add following lines to the `.gitignore`
 .env
 env/
 ```
+
+## Environment variables
+After steps above completed you should be able to fill
+all these keys in `.env` file with valid data
+
+### General variables
+| key              | description |
+|------------------|-------------|
+| APP_NAME         |             |
+| APP_ID           |             |
+| BASE_URL         |             |
+| API_KEY          |             |
+| DEFAULT_LANGUAGE |             |
+
+### Android specific:
+| key                          | description |
+|------------------------------|-------------|
+| ANDROID_SIGNING_ALIAS        |             |
+| ANDROID_SIGNING_PASSWORD     |             |
+
+### iOS specific:
+| key                          | description |
+|------------------------------|-------------|
+| DEVELOPMENT_TEAM             |             |
+| APP_STORE_ID                 |             |
+| IOS_CREDS_REPO               |             |
+| MATCH_PASSWORD               |             |
+| IOS_API_ID                   |             |
+| IOS_API_KEY                  |             |
+| IOS_API_ISSUER               |             |
+
+### Web specific:
+| key                          | description |
+|------------------------------|-------------|
+| FIREBASE_API_KEY             |             |
+| FIREBASE_AUTH_DOMAIN         |             |
+| FIREBASE_DB_URL              |             |
+| FIREBASE_PROJECT_ID          |             |
+| FIREBASE_STORAGE_BUCKET      |             |
+| FIREBASE_MESSAGING_SENDER_ID |             |
+| FIREBASE_APP_ID              |             |
+| FIREBASE_MEASUREMENT_ID      |             |
