@@ -14,16 +14,16 @@ const proportionsSchema: {[key in ButtonSize]: any} = {
     width: rem(isDesktop ? 280 : 343),
     height: rem(48),
     borderRadius: sizes.uiRadius,
-    maxHeight: 48,
   },
-  small: {
-    height: rem(isDesktop ? 15 : 32),
+  medium: {
+    width: rem(160),
+    height: rem(isDesktop ? 30 : 40),
     borderRadius: sizes.uiRadius,
     paddingHorizontal: sizes.offsetS,
   },
-  medium: {
-    minWidth: rem(90),
-    height: rem(isDesktop ? 20 : 40),
+  small: {
+    width: rem(isDesktop ? 70 : 90),
+    height: rem(isDesktop ? 15 : 32),
     borderRadius: sizes.uiRadius,
     paddingHorizontal: sizes.offsetS,
   },
