@@ -36,7 +36,7 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [ ] update required
 - [x] splashscreen
 - [ ] icons generation / update
-- [ ] animations
+- [x] animations
 - [ ] carousel
 - [x] event bus
 - [ ] documentation

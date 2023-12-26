@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   Text,
   Icon,
@@ -8,10 +8,12 @@ import {
   Screen,
   WebView,
   Calendar,
+  Carousel,
   LottieAnimation,
   DarkModeSwitcher,
   LanguageSwitcher,
 } from '~/src/components';
+import * as Animatable from 'react-native-animatable';
 import {navigation} from '~/src/features';
 import animation from '~/assets/lottie/launchAnimation.json';
 import {StyleSheet} from 'react-native';
@@ -19,6 +21,7 @@ import {sizes} from '~/src/constants';
 import {copyToClipboard, share} from '~/src/utils';
 
 export default function Stylesheet(): React.JSX.Element {
+  const animatable = useRef<Animatable.View>(null);
   return (
     <Screen
       style={styles.wrapper}
@@ -75,6 +78,13 @@ export default function Stylesheet(): React.JSX.Element {
         text="general.copy"
         onPress={() => copyToClipboard('Hello World!')}
       />
+      <Animatable.View ref={animatable}>
+        <Button
+          value="Animation example"
+          onPress={() => animatable.current?.bounce?.(3000)}
+        />
+      </Animatable.View>
+      <Carousel />
     </Screen>
   );
 }

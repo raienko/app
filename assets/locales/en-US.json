@@ -21,6 +21,6 @@
   },
   "share": {
     "web_error_title": "Share not available",
-    "web_error_message": "Can be shared only over HTTPS"
+    "web_error_message": "May be browser or HTTPS restriction"
   }
 }
