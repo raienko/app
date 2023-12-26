@@ -16,5 +16,6 @@
     "subtitle": "components",
     "input": "Input",
     "error": "Some error text"
-  }
+  },
+  "skia_error": "Skia component failed to render"
 }

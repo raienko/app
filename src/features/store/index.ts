@@ -2,9 +2,7 @@ import {configureStore} from '@reduxjs/toolkit';
 import {createLogger} from 'redux-logger';
 import reducer from './reducer';
 import {TypedUseSelectorHook, useSelector} from 'react-redux';
-
-const devMode = true;
-const isEmulator = true;
+import {devMode, isEmulator} from '~/src/utils';
 
 const store = configureStore({
   reducer,
