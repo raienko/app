@@ -10,7 +10,7 @@ module.exports = {
       },
     ],
     'inline-react-svg',
-    '@babel/plugin-proposal-export-namespace-from',
     'react-native-reanimated/plugin',
+    '@babel/plugin-proposal-export-namespace-from',
   ],
 };

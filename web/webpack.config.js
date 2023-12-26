@@ -32,10 +32,7 @@ const babelLoaderConfiguration = {
     options: {
       cacheDirectory: true,
       // Presets and plugins imported from main babel.config.js in root dir
-      presets: [
-        ...babelConfig.presets,
-        {plugins: ['@babel/plugin-proposal-class-properties']},
-      ],
+      presets: babelConfig.presets,
       plugins: ['react-native-web', ...(babelConfig.plugins || [])],
     },
   },
