@@ -49,6 +49,6 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [ ] Deep Links
 - [ ] Deferred Links
 - [ ] Dynamic Links
-- [ ] Sharing
+- [x] Sharing
 - [ ] in-app purchases
 - [X] splash screen
