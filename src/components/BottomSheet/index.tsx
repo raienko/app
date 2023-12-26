@@ -28,7 +28,7 @@ export default function BottomSheet({
   style,
   children,
   index = 0,
-  height = vh(80),
+  height = vh(30),
 }: BottomSheetProps) {
   const bottomSheetRef = useRef<RNBottomSheet>(null);
   const darkMode = system.useDarkMode();
@@ -43,6 +43,7 @@ export default function BottomSheet({
     ? colors.secondaryDark
     : colors.secondaryLight;
   const appearance = [styles.container].concat(style);
+  const duration = (height / vh(100)) * 1000;
 
   return (
     <RNBottomSheet
@@ -50,6 +51,9 @@ export default function BottomSheet({
       onClose={() => hideBottomSheet(id)}
       ref={bottomSheetRef}
       snapPoints={[1, height]}
+      animationConfigs={{
+        duration,
+      }}
       backgroundStyle={{backgroundColor}}
       style={[styles.wrapper, !index && styles.hidden]}>
       <View style={appearance}>{children}</View>
