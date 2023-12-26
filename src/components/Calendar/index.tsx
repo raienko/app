@@ -58,6 +58,7 @@ export default function Calendar({...rest}: CalendarProps) {
 const styles = StyleSheet.create({
   wrapper: {
     width: rem(isDesktop ? 150 : 343),
+    height: rem(isDesktop ? 150 : 360),
     borderWidth: 1,
     borderRadius: sizes.uiRadius,
     borderColor: colors.accentC,

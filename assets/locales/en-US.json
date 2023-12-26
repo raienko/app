@@ -17,7 +17,17 @@
     "title": "Stylesheet",
     "subtitle": "components",
     "input": "Input",
-    "error": "Some error text"
+    "error": "Some error text",
+    "typography_title": "Typography",
+    "typography_description": "Predefined text styles. All text variations in the app",
+    "calendar_title": "Calendar",
+    "calendar_description": "Basic calendar component can be customized to show or pick date",
+    "button_title": "Button",
+    "button_description": "Different size and type variations",
+    "animations_title": "Animations",
+    "animations_description": "Few animation examples: using lottie file and third party libraries",
+    "inputs_title": "Inputs",
+    "inputs_description": "Few input examples"
   },
   "share": {
     "web_error_title": "Share not available",
