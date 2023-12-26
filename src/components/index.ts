@@ -1,5 +1,6 @@
 export {default as AppInfo} from './AppInfo';
 export {default as Button} from './Button';
+export {default as BottomSheet} from './BottomSheet';
 export {default as Calendar} from './Calendar';
 export {default as Carousel} from './Carousel';
 export {default as DarkModeSwitcher} from './DarkModeSwitcher';

@@ -1,0 +1,73 @@
+import React from 'react';
+import {View, StyleSheet} from 'react-native';
+import RNBottomSheet from '@gorhom/bottom-sheet';
+import {useRef} from 'react';
+import {eventBus, useEventBus, vh} from '~/src/utils';
+import {system} from '~/src/features';
+import {colors, sizes} from '~/src/constants';
+
+type BottomSheetProps = {
+  id: string;
+  style?: any;
+  index?: number;
+  children?: React.ReactNode;
+  height?: number;
+};
+
+const getBottomSheetEventKey = (id: string) => `TOGGLE_BOTTOM_SHEET_${id}`;
+
+const toggleBottomSheet = (id: string, value: boolean) =>
+  eventBus.dispatch(getBottomSheetEventKey(id), value);
+
+export const showBottomSheet = (id: string) => toggleBottomSheet(id, true);
+
+export const hideBottomSheet = (id: string) => toggleBottomSheet(id, false);
+
+export default function BottomSheet({
+  id,
+  style,
+  children,
+  index = 0,
+  height = vh(80),
+}: BottomSheetProps) {
+  const bottomSheetRef = useRef<RNBottomSheet>(null);
+  const darkMode = system.useDarkMode();
+
+  const toggle = (value: boolean) =>
+    bottomSheetRef.current?.snapToIndex(value ? 1 : 0);
+
+  const eventKey = getBottomSheetEventKey(id);
+  useEventBus(eventKey, toggle);
+
+  const backgroundColor = darkMode
+    ? colors.secondaryDark
+    : colors.secondaryLight;
+  const appearance = [styles.container].concat(style);
+
+  return (
+    <RNBottomSheet
+      index={index}
+      onClose={() => hideBottomSheet(id)}
+      ref={bottomSheetRef}
+      snapPoints={[1, height]}
+      backgroundStyle={{backgroundColor}}
+      style={[styles.wrapper, !index && styles.hidden]}>
+      <View style={appearance}>{children}</View>
+    </RNBottomSheet>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    overflow: 'hidden',
+  },
+  container: {
+    flex: 1,
+    padding: sizes.offsetM,
+  },
+  hidden: {
+    opacity: 0,
+    pointerEvents: 'box-none',
+  },
+});
