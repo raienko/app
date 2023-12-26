@@ -9,11 +9,13 @@ export type ScreenProps = {
   children?: React.ReactNode;
   header?: React.ReactNode;
   footer?: React.ReactNode;
+  overlay?: React.ReactNode;
   style?: any;
 };
 
 export default function Screen({
   children,
+  overlay,
   header,
   footer,
   style,
@@ -31,6 +33,7 @@ export default function Screen({
       </ScrollView>
       <SpaceForKeyboard />
       {footer}
+      <View style={styles.overlay}>{overlay}</View>
     </View>
   );
 }
@@ -47,5 +50,10 @@ const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    pointerEvents: 'box-none',
+    zIndex: 1,
   },
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import {
   Text,
   Icon,
@@ -8,20 +8,33 @@ import {
   Screen,
   WebView,
   Calendar,
+  Carousel,
+  BottomSheet,
   LottieAnimation,
   DarkModeSwitcher,
   LanguageSwitcher,
 } from '~/src/components';
+import * as Animatable from 'react-native-animatable';
 import {navigation} from '~/src/features';
 import animation from '~/assets/lottie/launchAnimation.json';
 import {StyleSheet} from 'react-native';
 import {sizes} from '~/src/constants';
 import {copyToClipboard, share} from '~/src/utils';
+import {hideBottomSheet, showBottomSheet} from '~/src/components/BottomSheet';
 
 export default function Stylesheet(): React.JSX.Element {
+  const animatable = useRef<Animatable.View>(null);
   return (
     <Screen
       style={styles.wrapper}
+      overlay={
+        <BottomSheet id="test_bottom_sheet">
+          <Button
+            value="Hide bottom sheet"
+            onPress={() => hideBottomSheet('test_bottom_sheet')}
+          />
+        </BottomSheet>
+      }
       header={
         <Header
           left={
@@ -74,6 +87,17 @@ export default function Stylesheet(): React.JSX.Element {
       <Button
         text="general.copy"
         onPress={() => copyToClipboard('Hello World!')}
+      />
+      <Animatable.View ref={animatable}>
+        <Button
+          value="Animation example"
+          onPress={() => animatable.current?.bounce?.(3000)}
+        />
+      </Animatable.View>
+      <Carousel />
+      <Button
+        value="Show bottom sheet"
+        onPress={() => showBottomSheet('test_bottom_sheet')}
       />
     </Screen>
   );
