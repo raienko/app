@@ -2,7 +2,8 @@ import React from 'react';
 import RNCarousel from 'react-native-reanimated-carousel';
 import {rem} from '~/src/utils';
 import Text from '~/src/components/Text';
-import {Button, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
+import Button from '~/src/components/Button';
 import {sizes} from '~/src/constants';
 
 type CarouselProps = {
@@ -26,8 +27,10 @@ export default function Carousel({
 
   return (
     <>
-      <Button title="NEXT" onPress={() => ref.current?.next?.()} />
-      <Button title="PREV" onPress={() => ref.current?.prev?.()} />
+      <View style={styles.controls}>
+        <Button value="⬅️" onPress={() => ref.current?.prev?.()} size="small" />
+        <Button value="➡️" onPress={() => ref.current?.next?.()} size="small" />
+      </View>
       <RNCarousel
         ref={ref}
         loop
@@ -53,5 +56,10 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  controls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-around',
   },
 });
