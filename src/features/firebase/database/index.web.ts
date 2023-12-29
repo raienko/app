@@ -26,10 +26,16 @@ export const useDatabase = (path: string, callback?: (value?: any) => any) => {
     };
   }, []);
 
+  const read = async (key?: string) => {
+    const snapshot = await Database.get(ref);
+    const data = parseDatabaseSnapshot(snapshot);
+    return key ? data?.[key] : data;
+  };
+
   return {
     value,
     create: async () => false,
-    read: async () => false,
+    read,
     update: async () => false,
     delete: async () => false,
   };

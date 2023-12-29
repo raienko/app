@@ -125,7 +125,7 @@ module.exports = argv => {
 
       // Defines __DEV__ and process.env as not being null
       new webpack.DefinePlugin({
-        __DEV__: argv.mode !== 'production' || true,
+        __DEV__: `${argv.mode !== 'production'}`,
         process: {env: {}},
       }),
 
