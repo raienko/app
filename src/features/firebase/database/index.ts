@@ -22,11 +22,18 @@ export const useDatabase = (path: string, callback?: (data?: any) => void) => {
     };
   }, []);
 
+  const write = async (key: string, value: any) => ref.update({[key]: value});
+
+  const read = async (key?: string) =>
+    ref.once('value', snapshot => {
+      const data = parseDatabaseSnapshot(snapshot);
+      return key ? data?.[key] : data;
+    });
+
   return {
     value,
-    create: async () => false,
-    read: async () => false,
-    update: async () => false,
-    delete: async () => false,
+    read,
+    write,
+    delete: async (key: string) => write(key, null),
   };
 };
