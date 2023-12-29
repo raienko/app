@@ -11,8 +11,12 @@ export default function System(): React.JSX.Element {
   system.usePermissionsCheck();
   useReloadOnWindowChange();
 
-  firebase.useFirestoreCollection('test', (data: any) =>
-    console.log('DATA:', data),
+  firebase.useFirestore('test', (data: any) =>
+    console.log('Firestore example:', data),
+  );
+
+  firebase.useDatabase('test', (data: any) =>
+    console.log('FireDatabase example:', data),
   );
 
   return (
