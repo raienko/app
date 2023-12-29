@@ -25,18 +25,19 @@ const fetchRemoteConfig = async () => {
 const logEvent = (eventName: string, data: any) =>
   Analytics.logEvent(analytics, eventName, data);
 
-const useFirestoreCollection = (
-  path: string,
-  callback?: (data: any) => any,
-) => {
+const useFirestore = (path: string, callback?: (data: any) => any) => {
   const collection = Firestore.collection(firestore, path);
   const [value, setValue] = useState<any>();
 
-  const read = async () => {
+  const read = async (id?: string) => {
     return Firestore.getDocs(collection).then(
       (snapshot: Firestore.QuerySnapshot) => {
         const docs = parseCollectionSnapshot(snapshot);
         setValue(docs);
+        if (id) {
+          return docs.find(i => i.id === id);
+        }
+
         return docs;
       },
     );
@@ -63,20 +64,18 @@ const useFirestoreCollection = (
 
   return {
     value,
-    create: () => {},
-    read: () => {},
-    update: () => {},
-    delete: () => {},
+    create: (doc: any) => {},
+    read,
+    update: (id: string, changes: object) => {},
+    delete: (id: string) => {},
   };
 };
-const useFirestoreDocument = (path: string) => firestore.doc(path);
 
 const useDatabase = (path: string) => Database.ref(database, path);
 
 export const firebase: Firebase = {
-  useFirestoreCollection,
-  useFirestoreDocument,
   fetchRemoteConfig,
+  useFirestore,
   useDatabase,
   logEvent,
 };

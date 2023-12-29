@@ -2,10 +2,10 @@ import {FirebaseRemoteConfigTypes} from '@react-native-firebase/remote-config';
 
 type Crud<T> = {
   value: T;
-  create: () => any;
-  read: () => any;
-  update: () => any;
-  delete: () => any;
+  create: (doc: any) => Promise<any>;
+  read: (id?: string) => Promise<any>;
+  update: (id: string, changes?: object) => Promise<any>;
+  delete: (id: string) => any;
 };
 
 export interface Firebase {
@@ -13,10 +13,6 @@ export interface Firebase {
     defaultConfig: any,
   ): Promise<FirebaseRemoteConfigTypes.ConfigValues>;
   logEvent(eventName: string, data?: any): Promise<any>;
-  useFirestoreCollection(
-    path: string,
-    callback?: (data: any) => any,
-  ): Crud<any>;
-  useFirestoreDocument(path: string, callback?: (data: any) => any): Crud<any>;
+  useFirestore(path: string, callback?: (data: any) => any): Crud<any>;
   useDatabase(path: string, callback?: (data: any) => any): Crud<any>;
 }

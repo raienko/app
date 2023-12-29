@@ -17,17 +17,17 @@ const fetchRemoteConfig = (defaultConfig: any) =>
 const logEvent = (eventName: string, data: any) =>
   Analytics().logEvent(eventName, data);
 
-const useFirestoreCollection = (
-  path: string,
-  callback?: (value?: any) => false,
-) => {
+const useFirestore = (path: string, callback?: (value?: any) => void) => {
   const ref = Firestore?.().collection(path);
   const [value, setValue] = useState<any>(undefined);
 
-  const read = async () => {
+  const read = async (id?: string) => {
     return ref?.get().then(snapshot => {
       const docs = parseCollectionSnapshot(snapshot);
       setValue(docs);
+      if (id) {
+        return docs.find(i => i.id === id);
+      }
       return docs;
     });
   };
@@ -39,7 +39,7 @@ const useFirestoreCollection = (
     if (callback) {
       listener = ref?.onSnapshot(snapshot => {
         const docs = parseCollectionSnapshot(snapshot);
-        callback(docs);
+        callback?.(docs);
       });
     }
 
@@ -50,21 +50,10 @@ const useFirestoreCollection = (
 
   return {
     value,
-    create: () => false,
-    read: () => false,
-    update: () => false,
-    delete: () => false,
-  };
-};
-
-const useFirestoreDocument = () => {
-  const value = 10;
-  return {
-    value,
-    create: () => false,
-    read: () => false,
-    update: () => false,
-    delete: () => false,
+    create: (document: any) => false,
+    read: (id?: string) => false,
+    update: (id: string, changes: any) => false,
+    delete: id => false,
   };
 };
 
@@ -72,17 +61,16 @@ const useDatabase = (path: string, callback?: (d: any) => false) => {
   const value = Database?.().ref(path);
   return {
     value,
-    create: () => false,
-    read: () => false,
-    update: () => false,
-    delete: () => false,
+    create: async () => false,
+    read: async () => false,
+    update: async () => false,
+    delete: async () => false,
   };
 };
 
 export const firebase: Firebase = {
-  useFirestoreCollection,
-  useFirestoreDocument,
   fetchRemoteConfig,
+  useFirestore,
   useDatabase,
   logEvent,
 };
