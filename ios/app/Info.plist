@@ -74,5 +74,8 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<!-- 🚨 PERMISSIONS: keep ONLY necessary 🚨 -->
+	<key>NSCameraUsageDescription</key>
+    <string>App needs camera access for this action</string>
 </dict>
 </plist>
