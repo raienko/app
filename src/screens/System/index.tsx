@@ -31,6 +31,14 @@ export default function System(): React.JSX.Element {
         onPress={() => firestore.write('3g3T0XlesUUcp1PRPD0w', {test: 2})}
       />
       <Button
+        title="Firestore create X"
+        onPress={() => firestore.create({id: 'x', test: 2})}
+      />
+      <Button
+        title="Firestore remove X"
+        onPress={() => firestore.remove('x')}
+      />
+      <Button
         title="Database write 1"
         onPress={() => database.write('test', 1)}
       />

@@ -43,7 +43,12 @@ export const useFirestore = (path: string, callback?: (data: any) => any) => {
   }, []);
 
   const create = async (data: any) => {
-    const doc = await Firestore.setDoc(path, data);
+    if (data?.id) {
+      const doc = Firestore.doc(firestore, path, data.id);
+      return Firestore.setDoc(doc, data).then(() => data.id);
+    }
+
+    const doc = await Firestore.addDoc(collection, data);
     return doc.id;
   };
 

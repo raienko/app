@@ -40,7 +40,17 @@ export const useFirestore = (
 
   const remove = (id: string) => ref?.doc(id).delete();
 
-  const create = (doc: any) => ref?.add(doc);
+  const create = (doc: any) => {
+    const id = doc?.id;
+    if (id) {
+      return ref
+        ?.doc(id)
+        .set(doc)
+        .then(() => id);
+    }
+
+    return ref?.add(doc).then(r => r.id);
+  };
 
   return {
     value,
