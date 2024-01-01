@@ -1,3 +1,5 @@
+import {isWeb} from '../helpers.ts';
+
 const stylesheet = {
   warning: 'background: #ff0; padding: 5px; color: #000;',
   success: 'background: #3bbd79; padding: 5px; color: #fff;',
@@ -14,7 +16,7 @@ class Logger {
 
   styledLog = (style: string, ...data: any[]) => {
     // @ts-ignore
-    if (!global.__DEV__) {
+    if (!global.__DEV__ && !isWeb) {
       return null;
     }
     const options = [];

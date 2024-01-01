@@ -92,6 +92,7 @@ module.exports = argv => {
         'react-native-svg': 'react-native-svg-web',
         'lottie-react-native': 'react-native-web-lottie',
         'react-native-webview': 'react-native-web-webview',
+        'react-native-permissions': '/',
         'react-native-share': '/',
       },
       extensions: [
@@ -125,7 +126,7 @@ module.exports = argv => {
 
       // Defines __DEV__ and process.env as not being null
       new webpack.DefinePlugin({
-        __DEV__: argv.mode !== 'production' || true,
+        __DEV__: `${argv.mode !== 'production'}`,
         process: {env: {}},
       }),
 
