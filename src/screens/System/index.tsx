@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Button} from 'react-native';
 import {system, firebase} from '~/src/features';
 import {StatusBar} from '~/src/components';
 import {useReloadOnWindowChange, logger} from '~/src/utils';
@@ -11,15 +11,33 @@ export default function System(): React.JSX.Element {
   system.usePermissionsCheck();
   useReloadOnWindowChange();
 
-  firebase.useFirestore('test', (data: any) => logger.info('Firestore:', data));
+  const firestore = firebase.useFirestore('test', (data: any) =>
+    logger.info('Firestore:', data),
+  );
 
-  firebase.useDatabase('test', (data: any) =>
+  const database = firebase.useDatabase('test', (data: any) =>
     logger.info('FireDatabase:', data),
   );
 
   return (
     <View style={styles.wrapper}>
       <StatusBar />
+      <Button
+        title="Firestore write 1"
+        onPress={() => firestore.write('3g3T0XlesUUcp1PRPD0w', {test: 1})}
+      />
+      <Button
+        title="Firestore write 2"
+        onPress={() => firestore.write('3g3T0XlesUUcp1PRPD0w', {test: 2})}
+      />
+      <Button
+        title="Database write 1"
+        onPress={() => database.write('test', 1)}
+      />
+      <Button
+        title="Database write 2"
+        onPress={() => database.write('test', 2)}
+      />
     </View>
   );
 }
@@ -27,6 +45,8 @@ export default function System(): React.JSX.Element {
 const styles = StyleSheet.create({
   wrapper: {
     ...StyleSheet.absoluteFillObject,
-    pointerEvents: 'box-none',
+    // pointerEvents: 'box-none',
+    backgroundColor: 'white',
+    paddingTop: 100,
   },
 });

@@ -42,11 +42,26 @@ export const useFirestore = (path: string, callback?: (data: any) => any) => {
     };
   }, []);
 
+  const create = async (data: any) => {
+    const doc = await Firestore.setDoc(path, data);
+    return doc.id;
+  };
+
+  const write = async (id: string, changes: object) => {
+    const doc = await Firestore.doc(path, id);
+    return Firestore.updateDoc(doc, changes);
+  };
+
+  const remove = async (id: string) => {
+    const doc = Firestore.doc(firestore, path, id);
+    return Firestore.deleteDoc(doc);
+  };
+
   return {
     value,
-    create: async (doc: any) => !!doc,
+    create,
     read,
-    update: async (id: string, changes: object) => !!changes,
-    delete: async (id: string) => !!id,
+    write,
+    remove,
   };
 };

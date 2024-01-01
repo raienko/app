@@ -36,11 +36,17 @@ export const useFirestore = (
     };
   }, []);
 
+  const write = (id: string, changes: object) => ref?.doc(id).update(changes);
+
+  const remove = (id: string) => ref?.doc(id).delete();
+
+  const create = (doc: any) => ref?.add(doc);
+
   return {
     value,
-    create: async (document: any) => !!document,
+    create,
     read,
-    update: async (id: string, changes: any) => !!changes,
-    delete: async (id: string) => !!id,
+    write,
+    remove,
   };
 };
