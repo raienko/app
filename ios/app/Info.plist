@@ -31,6 +31,8 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>App needs camera access for this action</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
 	<key>UIAppFonts</key>
@@ -74,8 +76,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<!-- 🚨 PERMISSIONS: keep ONLY necessary 🚨 -->
-	<key>NSCameraUsageDescription</key>
-    <string>App needs camera access for this action</string>
 </dict>
 </plist>
