@@ -53,7 +53,7 @@ export const useFirestore = (path: string, callback?: (data: any) => any) => {
   };
 
   const remove = async (id: string) => {
-    const doc = Firestore.doc(collection, path, id);
+    const doc = Firestore.doc(collection, id);
     return Firestore.deleteDoc(doc);
   };
 
