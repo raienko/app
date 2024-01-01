@@ -10,7 +10,7 @@ export const useDatabase = (path: string, callback?: (data?: any) => void) => {
     let listener: any;
 
     if (callback) {
-      listener = ref.on('value', snapshot => {
+      listener = ref.on?.('value', snapshot => {
         const data = parseDatabaseSnapshot(snapshot);
         callback(data);
         setValue(data);
