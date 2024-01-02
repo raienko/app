@@ -7,17 +7,21 @@ export type GradientProps = {
   radial?: boolean;
   colorList: Color[];
   angle?: number;
+  style?: any;
 };
 
 export default function Gradient({
   radial,
   colorList = [],
   angle = 0,
+  style,
   ...rest
 }: GradientProps) {
   const Background = radial ? RadialGradient : LinearGradient;
+  const appearance = [styles.wrapper].concat(style);
   return (
-    <View style={styles.wrapper}>
+    <View style={appearance}>
+      {/*@ts-ignore */}
       <Background colorList={colorList} angle={angle} {...rest} />
     </View>
   );
