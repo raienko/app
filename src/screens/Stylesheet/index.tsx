@@ -9,6 +9,7 @@ import {
   Section,
   WebView,
   Calendar,
+  Gradient,
   Carousel,
   BottomSheet,
   LottieAnimation,
