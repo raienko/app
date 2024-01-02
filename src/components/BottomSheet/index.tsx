@@ -33,17 +33,17 @@ export default function BottomSheet({
   const [visible, setVisible] = useState(false);
   const bottomSheetRef = useRef<RNBottomSheet>(null);
   const darkMode = system.useDarkMode();
+  const duration = (height / vh(100)) * 1000;
 
   const toggle = async (value: boolean) => {
-    const delay = 500;
     if (!value) {
       bottomSheetRef.current?.close();
-      await wait(delay);
+      await wait(duration);
       return setVisible(value);
     }
 
     setVisible(value);
-    await wait(delay);
+    await wait(300);
     return bottomSheetRef.current?.snapToIndex(1);
   };
 
@@ -54,15 +54,15 @@ export default function BottomSheet({
     ? colors.secondaryDark
     : colors.secondaryLight;
   const appearance = [styles.container].concat(style);
-  const duration = (height / vh(100)) * 1000;
 
   return (
     <Modal
-      style={{flex: 1}}
+      transparent
       visible={visible}
       animationType="fade"
-      onRequestClose={() => hideBottomSheet(id)}
-      transparent>
+      statusBarTranslucent
+      style={styles.wrapper}
+      onRequestClose={() => hideBottomSheet(id)}>
       <Pressable style={styles.fade} onPress={() => hideBottomSheet(id)} />
       <RNBottomSheet
         index={index}
@@ -71,8 +71,7 @@ export default function BottomSheet({
         animationConfigs={{
           duration,
         }}
-        backgroundStyle={{backgroundColor}}
-        style={[styles.wrapper, !index && styles.hidden]}>
+        backgroundStyle={{backgroundColor}}>
         <View style={appearance}>{children}</View>
       </RNBottomSheet>
     </Modal>
