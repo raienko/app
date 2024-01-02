@@ -4,12 +4,14 @@ import BottomSheet, {hideBottomSheet, showBottomSheet} from '../BottomSheet';
 import RNUIDatepicker from 'react-native-ui-datepicker';
 import {system} from '~/src/features';
 import {colors, typography} from '~/src/constants';
-import {rem} from '~/src/utils';
+import {rem, isWeb} from '~/src/utils';
 
 export type DateTimePickerProps = {
   children?: React.ReactNode;
   id?: string;
 };
+
+const height = rem(isWeb ? 200 : 350);
 
 export default function DateTimePicker({
   children,
@@ -41,7 +43,7 @@ export default function DateTimePicker({
         <Pressable style={styles.wrapper} onPress={showPicker}>
           {children}
         </Pressable>
-        <BottomSheet height={rem(300)} id={id}>
+        <BottomSheet height={height} id={id}>
           {renderCalendar()}
         </BottomSheet>
       </>
