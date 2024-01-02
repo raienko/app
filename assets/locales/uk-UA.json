@@ -11,7 +11,9 @@
   "general": {
     "back": "Назад",
     "share": "Поділитись",
-    "copy": "Скопіювати"
+    "copy": "Скопіювати",
+    "popup_submit": "Прийняти",
+    "popup_cancel": "Скасувати"
   },
   "stylesheet": {
     "title": "Стайлшит",
@@ -37,7 +39,11 @@
     "carousel_title": "Карусель",
     "carousel_description": "Базовий компонент каруселі",
     "bottom_sheet_title": "Ботомшит",
-    "bottom_sheet_description": "Базовий компонент ботомшиту"
+    "bottom_sheet_description": "Базовий компонент ботомшиту",
+    "popup_title": "Попап",
+    "popup_description": "Базовий попап",
+    "datetime_picker_title": "Дейт/тай-мпікер",
+    "datetime_picker_description": "Базовий компонент пікера"
   },
   "share": {
     "web_error_title": "Поділитись не вийшло",

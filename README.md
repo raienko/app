@@ -31,7 +31,7 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [x] fastlane setup
 - [x] [environments](./env/index.md)
 - [ ] [fastlane + CI/CD setup](./fastlane/index.md)
-- [ ] [PR template](./pull_request_template.md)
+- [x] [PR template](./pull_request_template.md)
 - [ ] in-app messaging
 - [ ] update required
 - [x] splashscreen
@@ -44,8 +44,8 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [ ] PWA support
 - [X] Button
 - [X] Text
-- [ ] Modal / Bottom Sheet
-- [ ] Date/time picker
+- [X] Modal / Bottom Sheet
+- [X] Date/time picker
 - [ ] Deep Links
 - [ ] Deferred Links
 - [ ] Dynamic Links

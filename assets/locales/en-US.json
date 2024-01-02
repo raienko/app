@@ -11,7 +11,9 @@
   "general": {
     "back": "Back",
     "share": "Share",
-    "copy": "Copy"
+    "copy": "Copy",
+    "popup_submit": "Submit",
+    "popup_cancel": "Cancel"
   },
   "stylesheet": {
     "title": "Stylesheet",
@@ -37,7 +39,11 @@
     "carousel_title": "Carousel",
     "carousel_description": "Basic carousel component",
     "bottom_sheet_title": "BottomSheet",
-    "bottom_sheet_description": "Basic bottom sheet component"
+    "bottom_sheet_description": "Basic bottom sheet component",
+    "popup_title": "Popup",
+    "popup_description": "Basic popup component",
+    "datetime_picker_title": "Date time picker",
+    "datetime_picker_description": "Pick date or time"
   },
   "share": {
     "web_error_title": "Share not available",

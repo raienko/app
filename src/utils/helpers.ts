@@ -33,3 +33,7 @@ export const vh = (size = 0): number =>
 
 export const rem = (size = 0): number =>
   Math.floor((base / magicNumber) * size);
+
+export const wait = (timeout = 0): Promise<boolean> => {
+  return new Promise(resolve => setTimeout(() => resolve(true), timeout));
+};

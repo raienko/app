@@ -7,8 +7,8 @@ import Button from '~/src/components/Button';
 import {sizes} from '~/src/constants';
 
 type CarouselProps = {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 };
 
 export default function Carousel({
@@ -17,9 +17,9 @@ export default function Carousel({
   ...rest
 }: CarouselProps) {
   const data = [...new Array(6).keys()];
-  const ref = React.useRef<typeof RNCarousel>(null);
+  const ref = React.useRef<{prev: () => void; next: () => void}>(null);
 
-  const renderSlide = ({index}) => (
+  const renderSlide = ({index}: any) => (
     <View style={styles.slide}>
       <Text style={{textAlign: 'center'}} value={`SLIDE_${index}`} />
     </View>
@@ -32,6 +32,7 @@ export default function Carousel({
         <Button value="➡️" onPress={() => ref.current?.next?.()} size="small" />
       </View>
       <RNCarousel
+        //@ts-ignore
         ref={ref}
         loop
         autoPlay

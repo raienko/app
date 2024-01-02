@@ -3,6 +3,7 @@ import {
   Text,
   Icon,
   Input,
+  Popup,
   Header,
   Button,
   Screen,
@@ -11,6 +12,7 @@ import {
   Calendar,
   Carousel,
   BottomSheet,
+  DateTimePicker,
   LottieAnimation,
   DarkModeSwitcher,
   LanguageSwitcher,
@@ -22,20 +24,13 @@ import {StyleSheet} from 'react-native';
 import {sizes} from '~/src/constants';
 import {copyToClipboard, rem, share} from '~/src/utils';
 import {hideBottomSheet, showBottomSheet} from '~/src/components/BottomSheet';
+import {hidePopup, showPopup} from '~/src/components/Popup';
 
 export default function Stylesheet(): React.JSX.Element {
   const animatable = useRef<Animatable.View>(null);
   return (
     <Screen
       style={styles.wrapper}
-      overlay={
-        <BottomSheet id="test_bottom_sheet">
-          <Button
-            value="Hide bottom sheet"
-            onPress={() => hideBottomSheet('test_bottom_sheet')}
-          />
-        </BottomSheet>
-      }
       header={
         <Header
           left={
@@ -144,6 +139,32 @@ export default function Stylesheet(): React.JSX.Element {
           value="Show bottom sheet"
           onPress={() => showBottomSheet('test_bottom_sheet')}
         />
+        <BottomSheet id="test_bottom_sheet">
+          <Button
+            value="Hide bottom sheet"
+            onPress={() => hideBottomSheet('test_bottom_sheet')}
+          />
+        </BottomSheet>
+      </Section>
+      <Section
+        title="stylesheet.popup_title"
+        description="stylesheet.popup_description">
+        <Button value="Show popup" onPress={() => showPopup('test_popup')} />
+        <Popup
+          id="test_popup"
+          title="stylesheet.popup_title"
+          subtitle="stylesheet.popup_description"
+          onSubmit={() => hidePopup('test_popup')}
+          onCancel={() => hidePopup('test_popup')}
+        />
+      </Section>
+      <Section
+        title="stylesheet.datetime_picker_title"
+        description="stylesheet.datetime_picker_description">
+        <DateTimePicker />
+        <DateTimePicker id="date_time_picker">
+          <Button value="modal" />
+        </DateTimePicker>
       </Section>
     </Screen>
   );

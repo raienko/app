@@ -1,8 +1,8 @@
 import React from 'react';
+import {StyleSheet} from 'react-native';
 import Router from '~/src/features/navigation/Router';
 import StoreProvider from '~/src/features/store/StoreProvider';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
-import {StyleSheet} from 'react-native';
 import {LaunchScreen} from '~/src/screens';
 
 export default function App(): React.JSX.Element {
