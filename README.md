@@ -44,8 +44,8 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [ ] PWA support
 - [X] Button
 - [X] Text
-- [ ] Modal / Bottom Sheet
-- [ ] Date/time picker
+- [X] Modal / Bottom Sheet
+- [X] Date/time picker
 - [ ] Deep Links
 - [ ] Deferred Links
 - [ ] Dynamic Links
