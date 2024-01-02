@@ -1,8 +1,8 @@
-import React from 'react';
-import {View, StyleSheet} from 'react-native';
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import React, {useState} from 'react';
+import {View, StyleSheet, Modal, Pressable} from 'react-native';
+import RNBottomSheet from '@gorhom/bottom-sheet';
 import {useRef} from 'react';
-import {eventBus, useEventBus, vh} from '~/src/utils';
+import {eventBus, useEventBus, vh, wait} from '~/src/utils';
 import {system} from '~/src/features';
 import {colors, sizes} from '~/src/constants';
 
@@ -30,13 +30,22 @@ export default function BottomSheet({
   index = 0,
   height = vh(30),
 }: BottomSheetProps) {
-  const bottomSheetRef = useRef<BottomSheetModal>(null);
+  const [visible, setVisible] = useState(false);
+  const bottomSheetRef = useRef<RNBottomSheet>(null);
   const darkMode = system.useDarkMode();
 
-  const toggle = (value: boolean) =>
-    value
-      ? bottomSheetRef.current?.present()
-      : bottomSheetRef.current?.dismiss();
+  const toggle = async (value: boolean) => {
+    const delay = 500;
+    if (!value) {
+      bottomSheetRef.current?.close();
+      await wait(delay);
+      return setVisible(value);
+    }
+
+    setVisible(value);
+    await wait(delay);
+    return bottomSheetRef.current?.snapToIndex(1);
+  };
 
   const eventKey = getBottomSheetEventKey(id);
   useEventBus(eventKey, toggle);
@@ -48,18 +57,25 @@ export default function BottomSheet({
   const duration = (height / vh(100)) * 1000;
 
   return (
-    <BottomSheetModal
-      index={index}
-      ref={bottomSheetRef}
-      onClose={() => hideBottomSheet(id)}
-      snapPoints={[1, height]}
-      animationConfigs={{
-        duration,
-      }}
-      backgroundStyle={{backgroundColor}}
-      style={[styles.wrapper, !index && styles.hidden]}>
-      <View style={appearance}>{children}</View>
-    </BottomSheetModal>
+    <Modal
+      style={{flex: 1}}
+      visible={visible}
+      animationType="fade"
+      onRequestClose={() => hideBottomSheet(id)}
+      transparent>
+      <Pressable style={styles.fade} onPress={() => hideBottomSheet(id)} />
+      <RNBottomSheet
+        index={index}
+        ref={bottomSheetRef}
+        snapPoints={[1, height]}
+        animationConfigs={{
+          duration,
+        }}
+        backgroundStyle={{backgroundColor}}
+        style={[styles.wrapper, !index && styles.hidden]}>
+        <View style={appearance}>{children}</View>
+      </RNBottomSheet>
+    </Modal>
   );
 }
 
@@ -72,6 +88,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: sizes.offsetM,
+  },
+  fade: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: colors.fade,
   },
   hidden: {
     opacity: 0,
