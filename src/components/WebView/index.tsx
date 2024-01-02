@@ -59,6 +59,7 @@ export default function WebView({uri, ...rest}: WebViewProps) {
 
   return (
     <RNWebView
+      style={{width: '100%', height: 150}}
       {...rest}
       ref={ref}
       source={{uri}}

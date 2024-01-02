@@ -23,7 +23,7 @@ import {navigation} from '~/src/features';
 import animation from '~/assets/lottie/launchAnimation.json';
 import {StyleSheet} from 'react-native';
 import {sizes} from '~/src/constants';
-import {copyToClipboard, rem, share} from '~/src/utils';
+import {copyToClipboard, share} from '~/src/utils';
 import {hideBottomSheet, showBottomSheet} from '~/src/components/BottomSheet';
 import {hidePopup, showPopup} from '~/src/components/Popup';
 
@@ -81,12 +81,7 @@ export default function Stylesheet(): React.JSX.Element {
       <Section
         title="stylesheet.animations_title"
         description="stylesheet.animations_description">
-        <LottieAnimation
-          style={styles.lottie}
-          source={animation}
-          autoPlay
-          loop
-        />
+        <LottieAnimation source={animation} autoPlay loop />
         <Animatable.View ref={animatable}>
           <Button
             value="Press for demo"
@@ -114,7 +109,7 @@ export default function Stylesheet(): React.JSX.Element {
       <Section
         title="stylesheet.webview_title"
         description="stylesheet.webview_description">
-        <WebView uri={'https://www.wikipedia.org/'} style={styles.webview} />
+        <WebView uri={'https://www.wikipedia.org/'} />
       </Section>
       <Section
         title="stylesheet.share_title"
@@ -175,12 +170,5 @@ export default function Stylesheet(): React.JSX.Element {
 const styles = StyleSheet.create({
   wrapper: {
     rowGap: sizes.offsetS,
-  },
-  lottie: {
-    width: rem(150),
-    height: rem(150),
-  },
-  webview: {
-    minHeight: rem(150),
   },
 });
