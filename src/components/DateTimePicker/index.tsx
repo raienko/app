@@ -19,6 +19,9 @@ export default function DateTimePicker({
 }: DateTimePickerProps) {
   const darkMode = system.useDarkMode();
   const color = darkMode ? colors.textDark : colors.textLight;
+  const backgroundColor = darkMode
+    ? colors.secondaryDark
+    : colors.secondaryLight;
   const theme = {
     calendarTextStyle: {
       ...typography.button,
@@ -31,6 +34,11 @@ export default function DateTimePicker({
     selectedTextStyle: {color: colors.textDark},
     selectedItemColor: colors.accentA,
     headerButtonColor: colors.accentA,
+    yearContainerStyle: {backgroundColor},
+    monthContainerStyle: {backgroundColor},
+    weekDaysContainerStyle: {backgroundColor},
+    timePickerContainerStyle: {backgroundColor},
+    todayContainerStyle: {backgroundColor},
   };
 
   const renderCalendar = () => <RNUIDatepicker {...theme} />;
