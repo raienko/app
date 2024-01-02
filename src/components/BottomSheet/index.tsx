@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
-import RNBottomSheet from '@gorhom/bottom-sheet';
+import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {useRef} from 'react';
 import {eventBus, useEventBus, vh} from '~/src/utils';
 import {system} from '~/src/features';
@@ -30,11 +30,13 @@ export default function BottomSheet({
   index = 0,
   height = vh(30),
 }: BottomSheetProps) {
-  const bottomSheetRef = useRef<RNBottomSheet>(null);
+  const bottomSheetRef = useRef<BottomSheetModal>(null);
   const darkMode = system.useDarkMode();
 
   const toggle = (value: boolean) =>
-    bottomSheetRef.current?.snapToIndex(value ? 1 : 0);
+    value
+      ? bottomSheetRef.current?.present()
+      : bottomSheetRef.current?.dismiss();
 
   const eventKey = getBottomSheetEventKey(id);
   useEventBus(eventKey, toggle);
@@ -46,7 +48,7 @@ export default function BottomSheet({
   const duration = (height / vh(100)) * 1000;
 
   return (
-    <RNBottomSheet
+    <BottomSheetModal
       index={index}
       ref={bottomSheetRef}
       onClose={() => hideBottomSheet(id)}
@@ -57,7 +59,7 @@ export default function BottomSheet({
       backgroundStyle={{backgroundColor}}
       style={[styles.wrapper, !index && styles.hidden]}>
       <View style={appearance}>{children}</View>
-    </RNBottomSheet>
+    </BottomSheetModal>
   );
 }
 
