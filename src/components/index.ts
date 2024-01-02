@@ -12,6 +12,7 @@ export {default as Icon} from './Icon';
 export {default as If} from './If';
 export {default as Input} from './Input';
 export {default as LottieAnimation} from './LottieAnimation';
+export {default as Popup} from './Popup';
 export {default as LanguageSwitcher} from './LanguageSwitcher';
 export {default as Screen} from './Screen';
 export {default as Section} from './Section';
