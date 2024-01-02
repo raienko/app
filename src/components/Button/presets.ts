@@ -52,7 +52,7 @@ const appearanceSchema: {
   tertiary: {
     wrapper: {
       borderWidth: 1,
-      borderColor: colors.accentC,
+      borderColor: 'transparent',
     },
     text: {
       color: colors.accentD,
