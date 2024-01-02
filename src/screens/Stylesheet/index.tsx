@@ -11,6 +11,7 @@ import {
   WebView,
   Calendar,
   Carousel,
+  ProgressBar,
   BottomSheet,
   DateTimePicker,
   LottieAnimation,
@@ -166,6 +167,7 @@ export default function Stylesheet(): React.JSX.Element {
           <Button value="modal" />
         </DateTimePicker>
       </Section>
+      <ProgressBar progress={10} />
     </Screen>
   );
 }
