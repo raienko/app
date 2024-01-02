@@ -48,8 +48,8 @@ export default function BottomSheet({
   return (
     <RNBottomSheet
       index={index}
-      onClose={() => hideBottomSheet(id)}
       ref={bottomSheetRef}
+      onClose={() => hideBottomSheet(id)}
       snapPoints={[1, height]}
       animationConfigs={{
         duration,
@@ -64,6 +64,7 @@ export default function BottomSheet({
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
+    zIndex: 1,
     overflow: 'hidden',
   },
   container: {

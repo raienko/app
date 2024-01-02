@@ -9,9 +9,9 @@ import {
   Section,
   WebView,
   Calendar,
-  Gradient,
   Carousel,
   BottomSheet,
+  DateTimePicker,
   LottieAnimation,
   DarkModeSwitcher,
   LanguageSwitcher,
@@ -145,6 +145,14 @@ export default function Stylesheet(): React.JSX.Element {
           value="Show bottom sheet"
           onPress={() => showBottomSheet('test_bottom_sheet')}
         />
+      </Section>
+      <Section
+        title="stylesheet.datetime_picker_title"
+        description="stylesheet.datetime_picker_description">
+        <DateTimePicker />
+        <DateTimePicker id="date_time_picker">
+          <Button value="modal" />
+        </DateTimePicker>
       </Section>
     </Screen>
   );

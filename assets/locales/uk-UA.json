@@ -37,7 +37,9 @@
     "carousel_title": "Карусель",
     "carousel_description": "Базовий компонент каруселі",
     "bottom_sheet_title": "Ботомшит",
-    "bottom_sheet_description": "Базовий компонент ботомшиту"
+    "bottom_sheet_description": "Базовий компонент ботомшиту",
+    "datetime_picker_title": "Дейт/тай-мпікер",
+    "datetime_picker_description": "Базовий компонент пікера"
   },
   "share": {
     "web_error_title": "Поділитись не вийшло",
