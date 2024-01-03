@@ -20,7 +20,7 @@
     "detox:build:android:debug": "detox build --configuration android.emu.debug",
     "detox:build:ios:debug": "detox build --configuration ios.sim.debug",
     "detox:test:android:debug": "detox test --configuration android.emu.debug --debug-synchronization 1000",
-    "detox:test:ios:debug": "detox test --configuration ios.sim.debug--debug-synchronization 1000"
+    "detox:test:ios:debug": "detox test --configuration ios.sim.debug --debug-synchronization 1000"
   },
   "dependencies": {
     "@dotlottie/react-player": "1.6.6",
