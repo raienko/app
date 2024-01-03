@@ -43,6 +43,7 @@ export default function DateTimePicker({
 
   const renderCalendar = () => <RNUIDatepicker {...theme} />;
   const showPicker = () => showBottomSheet(id);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const hidePicker = () => hideBottomSheet(id);
 
   if (children) {

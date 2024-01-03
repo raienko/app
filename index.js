@@ -1,3 +1,4 @@
+import React from 'react';
 import {AppRegistry, LogBox} from 'react-native';
 
 LogBox.ignoreLogs([
