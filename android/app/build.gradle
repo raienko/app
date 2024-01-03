@@ -25,6 +25,8 @@ android {
         versionCode 1
         versionName "0.0.1"
         resValue "string", "build_config_package", "com.app"
+        testBuildType System.getProperty('testBuildType', 'debug')
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     signingConfigs {
         debug {
@@ -50,9 +52,19 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+
+    configurations.all {
+        resolutionStrategy {
+            force 'androidx.test:core:1.5.0'
+        }
+    }
 }
 
 dependencies {
+    androidTestImplementation('com.wix:detox:+') {
+        exclude module: "protobuf-lite"
+    }
+    implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation("com.facebook.react:react-android")
     implementation("com.facebook.react:flipper-integration")
 

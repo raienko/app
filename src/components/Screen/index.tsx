@@ -4,6 +4,7 @@ import {colors} from '~/src/constants';
 import {system} from '~/src/features';
 import {viewport, isWeb} from '~/src/utils';
 import {SpaceForKeyboard} from '~/src/components';
+import {useRoute} from '@react-navigation/native';
 
 export type ScreenProps = {
   children?: React.ReactNode;
@@ -22,8 +23,10 @@ export default function Screen({
 }: ScreenProps): React.JSX.Element {
   const darkMode = system.useDarkMode();
   const backgroundColor = darkMode ? colors.primaryDark : colors.primaryLight;
+  const route = useRoute();
   return (
     <View
+      testID={route.name}
       style={[isWeb ? styles.wrapperFixed : styles.wrapper, {backgroundColor}]}>
       {header}
       <ScrollView
