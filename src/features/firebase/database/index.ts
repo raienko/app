@@ -22,7 +22,7 @@ export const useDatabase = (path: string, callback?: (data?: any) => void) => {
     };
   }, []);
 
-  const write = async (key: string, value: any) => ref.update({[key]: value});
+  const write = async (key: string, data: any) => ref.update({[key]: data});
 
   const read = async (key?: string) =>
     ref.once('value', snapshot => {

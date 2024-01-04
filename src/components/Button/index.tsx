@@ -4,6 +4,7 @@ import Text from '../Text';
 import {ButtonSize, ButtonType, getButtonPreset} from './presets';
 import typography from '~/src/constants/typography';
 import {TranslationKey} from '~/src/features/system/localisation';
+import {extendChildrenWith} from '~/src/utils';
 
 export interface ButtonProps extends PressableProps {
   text?: TranslationKey;
@@ -11,6 +12,7 @@ export interface ButtonProps extends PressableProps {
   style?: any;
   size?: ButtonSize;
   type?: ButtonType;
+  children?: React.ReactNode;
 }
 
 export default function Button({
@@ -26,6 +28,10 @@ export default function Button({
   const wrapperStyle = [styles.wrapper, preset.wrapper].concat(style);
   const textStyle = [styles.text, preset.text];
 
+  const elements = extendChildrenWith(rest?.children, {
+    color: preset.text?.color,
+  });
+
   return (
     <Pressable style={wrapperStyle} {...rest}>
       <Text
@@ -35,6 +41,7 @@ export default function Button({
         style={textStyle}
         selectable={false}
       />
+      {elements}
     </Pressable>
   );
 }

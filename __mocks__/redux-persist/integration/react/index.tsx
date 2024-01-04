@@ -1,3 +1,3 @@
-const PersistGate = ({children}: any) => null;
+const PersistGate = ({}: any) => null;
 
 export {PersistGate};

@@ -10,6 +10,7 @@ export default {
       const bothAvailable = !!(title && message);
       const text = bothAvailable ? `${titleText}\n${messageText}` : messageText;
       // @ts-ignore
+      // eslint-disable-next-line no-alert
       return window.alert(text);
     }
 

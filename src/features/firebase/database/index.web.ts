@@ -32,8 +32,8 @@ export const useDatabase = (path: string, callback?: (value?: any) => any) => {
     return key ? data?.[key] : data;
   };
 
-  const write = async (key: string, value: any) =>
-    Database.update(ref, {[key]: value});
+  const write = async (key: string, data: any) =>
+    Database.update(ref, {[key]: data});
 
   return {
     value,

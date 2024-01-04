@@ -1,11 +1,23 @@
 import React from 'react';
-import {Screen, Header, Button} from '~/src/components';
+import {Screen, Header, Button, Icon} from '~/src/components';
 import {navigation} from '~/src/features';
 
 export default function Settings(): React.JSX.Element {
   return (
-    <Screen header={<Header title="settings.title" />}>
-      <Button text="general.back" onPress={() => navigation.goBack()} />
-    </Screen>
+    <Screen
+      header={
+        <Header
+          left={
+            <Button
+              size="round"
+              type="secondary"
+              onPress={() => navigation.goBack()}>
+              <Icon name="chevron-left" />
+            </Button>
+          }
+          title="settings.title"
+        />
+      }
+    />
   );
 }

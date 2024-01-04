@@ -21,7 +21,7 @@ export default function Carousel({
 
   const renderSlide = ({index}: any) => (
     <View style={styles.slide}>
-      <Text style={{textAlign: 'center'}} value={`SLIDE_${index}`} />
+      <Text textAlign="center" value={`SLIDE_${index}`} />
     </View>
   );
 

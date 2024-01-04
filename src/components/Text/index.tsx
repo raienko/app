@@ -29,6 +29,11 @@ export default function Text({
   const color = darkMode ? colors.textDark : colors.textLight;
   const appearance = [{color, ...typography[type]}].concat(style);
   system.useCurrentLanguage();
+
+  if (!text && typeof value === 'undefined') {
+    return null;
+  }
+
   return (
     // @ts-ignore
     <RNText

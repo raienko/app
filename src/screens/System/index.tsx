@@ -14,7 +14,7 @@ export default function System(): React.JSX.Element {
   firebase.useDatabase('test', (data: any) => logger.info('Database:', data));
 
   return (
-    <View style={styles.wrapper}>
+    <View style={styles.wrapper} testID="System">
       <StatusBar />
     </View>
   );

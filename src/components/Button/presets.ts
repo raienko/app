@@ -2,7 +2,7 @@ import {rem, isDesktop} from '~/src/utils';
 import {colors, sizes} from '~/src/constants';
 import {TextStyle, ViewStyle} from 'react-native';
 
-export type ButtonSize = 'small' | 'medium' | 'large';
+export type ButtonSize = 'small' | 'medium' | 'large' | 'round';
 export type ButtonType = 'primary' | 'secondary' | 'tertiary';
 export type ButtonPreset = {
   wrapper: any;
@@ -14,6 +14,7 @@ const proportionsSchema: {[key in ButtonSize]: any} = {
     width: rem(isDesktop ? 280 : 343),
     height: rem(48),
     borderRadius: sizes.uiRadius,
+    paddingHorizontal: sizes.offsetS,
   },
   medium: {
     width: rem(160),
@@ -26,6 +27,12 @@ const proportionsSchema: {[key in ButtonSize]: any} = {
     height: rem(isDesktop ? 15 : 32),
     borderRadius: sizes.uiRadius,
     paddingHorizontal: sizes.offsetS,
+  },
+  round: {
+    width: rem(isDesktop ? 30 : 40),
+    height: rem(isDesktop ? 30 : 40),
+    borderRadius: rem(isDesktop ? 15 : 20),
+    borderWidth: 0,
   },
 };
 
@@ -52,7 +59,7 @@ const appearanceSchema: {
   tertiary: {
     wrapper: {
       borderWidth: 1,
-      borderColor: colors.accentC,
+      borderColor: 'transparent',
     },
     text: {
       color: colors.accentD,
@@ -68,8 +75,8 @@ export const getButtonPreset = (
   const appearance = appearanceSchema[type];
   return {
     wrapper: {
-      ...proportions,
       ...appearance.wrapper,
+      ...proportions,
     },
     text: {
       ...appearance.text,

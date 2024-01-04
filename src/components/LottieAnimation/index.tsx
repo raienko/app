@@ -4,5 +4,6 @@ import LottieView, {LottieViewProps} from 'lottie-react-native';
 interface LottieAnimationProps extends LottieViewProps {}
 
 export default function LottieAnimation(props: LottieAnimationProps) {
-  return <LottieView {...props} />;
+  const defaultSize = {width: 100, height: 100};
+  return <LottieView style={defaultSize} {...props} />;
 }

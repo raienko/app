@@ -2,12 +2,12 @@ import {useEffect} from 'react';
 import {AppState} from 'react-native';
 import slice from './slice';
 import store, {useStoreSelector} from '~/src/features/store';
-import Permissions, {Permission} from 'react-native-permissions';
+import Permissions from 'react-native-permissions';
 import {isIOS, isWeb} from '~/src/utils';
 
 export type PermissionTypes = 'camera' | 'location' | 'notifications';
 
-const permissions: {[key in PermissionTypes]: Permission} = {
+const permissions: any = {
   camera: isIOS
     ? Permissions?.PERMISSIONS.IOS.CAMERA
     : Permissions?.PERMISSIONS.ANDROID.CAMERA,
@@ -43,12 +43,13 @@ export const usePermissionsCheck = () => {
   }, []);
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const checkPermission = (permission: any) => {
   if (isWeb) {
     // @ts-ignore
     return navigator.permissions
       .query({name: permission})
-      .then(result => result.state);
+      .then((result: any) => result.state);
   }
 
   return Permissions.check(permission);
