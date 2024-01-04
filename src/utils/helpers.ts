@@ -1,3 +1,4 @@
+import React from 'react';
 import {Platform, Dimensions} from 'react-native';
 
 export const isIOS = Platform.OS === 'ios';
@@ -36,4 +37,14 @@ export const rem = (size = 0): number =>
 
 export const wait = (timeout = 0): Promise<boolean> => {
   return new Promise(resolve => setTimeout(() => resolve(true), timeout));
+};
+
+export const extendChildrenWith = (children: any, props: any) => {
+  if (!!children && !children?.length) {
+    return React.cloneElement(children, props);
+  }
+
+  return React.Children.map(children, child =>
+    React.cloneElement(child, props),
+  );
 };
