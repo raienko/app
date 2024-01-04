@@ -60,6 +60,7 @@ export default function WebView({uri, ...rest}: WebViewProps) {
   const defaultSize = {width: '100%', height: 150};
   return (
     <RNWebView
+      // @ts-ignore
       style={defaultSize}
       {...rest}
       ref={ref}
