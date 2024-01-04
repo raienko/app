@@ -1,9 +1,10 @@
 import React from 'react';
 import {env} from '~/src/constants';
-import {AppInfo, Header, Button, Screen, Icon} from '~/src/components';
-import {navigation, firebase} from '~/src/features';
+import {AppInfo, Header, Button, Screen, Icon, Text} from '~/src/components';
+import {navigation, firebase, system} from '~/src/features';
 
 export default function Home(): React.JSX.Element {
+  const updateRequired = system.useUpdateRequired();
   return (
     <Screen
       header={
@@ -27,6 +28,7 @@ export default function Home(): React.JSX.Element {
         text="home.stylesheet"
         onPress={() => navigation.navigate('Stylesheet')}
       />
+      <Text value={`Update required: ${updateRequired}`} />
       <AppInfo />
     </Screen>
   );

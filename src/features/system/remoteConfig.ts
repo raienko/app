@@ -3,6 +3,7 @@ import {AppState} from 'react-native';
 import {firebase} from '~/src/features';
 import slice from './slice';
 import store, {useStoreSelector} from '../store';
+import {getAppVersion} from '~/src/utils';
 
 const defaultConfig = {}; // used when failed to fetch remote config
 
@@ -61,4 +62,26 @@ export const useRemoteConfigValue = (key: string) => {
 export const getRemoteConfigValue = (key: string) => {
   const remoteConfig = getRemoteConfig();
   return remoteConfig?.[key];
+};
+
+export const useUpdateRequired = () => {
+  const currentVersion = getAppVersion();
+  const minimalRequiredVersion = useRemoteConfigValue('minimalRequiredVersion');
+  const parseVersion = (version: string) => version?.split('.')?.map(i => +i);
+  const current = parseVersion(currentVersion);
+  const minimal = parseVersion(minimalRequiredVersion);
+
+  if (!minimalRequiredVersion) {
+    return false;
+  }
+
+  if (minimal[0] !== current[0]) {
+    return minimal[0] > current[0];
+  }
+
+  if (minimal[1] !== current[1]) {
+    return minimal[1] > current[1];
+  }
+
+  return minimal[2] > current[2];
 };

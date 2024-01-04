@@ -26,14 +26,14 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [ ] permissions management
 - [x] dark mode
 - [x] localisation
-- [ ] debugging
-- [ ] e2e testing
+- [x] debugging
+- [x] e2e testing
 - [x] fastlane setup
 - [x] [environments](./env/index.md)
 - [ ] [fastlane + CI/CD setup](./fastlane/index.md)
 - [x] [PR template](./pull_request_template.md)
 - [ ] in-app messaging
-- [ ] update required
+- [x] update required
 - [x] splashscreen
 - [ ] icons generation / update
 - [x] animations
