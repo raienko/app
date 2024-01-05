@@ -74,8 +74,9 @@ all these keys in `.env` file with valid data
 | APP_NAME         |             |
 | APP_ID           |             |
 | BASE_URL         |             |
-| API_KEY          |             |
 | DEFAULT_LANGUAGE |             |
+| API_KEY          |             |
+| GOOGLE_MAPS_KEY  |             |
 
 ### Android specific:
 | key                          | description |

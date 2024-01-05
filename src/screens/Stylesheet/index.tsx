@@ -17,6 +17,7 @@ import {
   LottieAnimation,
   DarkModeSwitcher,
   LanguageSwitcher,
+  Map,
 } from '~/src/components';
 import * as Animatable from 'react-native-animatable';
 import {navigation} from '~/src/features';
@@ -163,6 +164,7 @@ export default function Stylesheet(): React.JSX.Element {
         </DateTimePicker>
       </Section>
       <ProgressBar progress={10} />
+      <Map />
     </Screen>
   );
 }

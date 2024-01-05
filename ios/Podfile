@@ -27,6 +27,8 @@ if linkage != nil
 end
 
 target 'app' do
+  pod 'react-native-google-maps', :path => '../node_modules/react-native-maps'
+
   config = use_native_modules!
 
   use_frameworks! :linkage => :static

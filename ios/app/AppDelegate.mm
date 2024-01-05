@@ -1,6 +1,8 @@
 #import "AppDelegate.h"
 #import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
+#import "RNCConfig.h"
+#import <GoogleMaps/GoogleMaps.h>
 
 @implementation AppDelegate
 
@@ -8,6 +10,7 @@
 {
   self.moduleName = @"app";
   self.initialProps = @{};
+  [GMSServices provideAPIKey:[RNCConfig envFor:@"GOOGLE_MAPS_KEY"]];
   [FIRApp configure];
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];

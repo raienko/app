@@ -1,6 +1,10 @@
+# General
 APP_NAME='App'
 APP_ID='com.app'
 DEFAULT_LANGUAGE='en'
+BASE_URL='https://google.com'
+API_KEY='123'
+GOOGLE_MAPS_KEY='asd123'
 
 # Android
 ANDROID_SIGNING_ALIAS='android'
