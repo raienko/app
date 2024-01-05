@@ -115,7 +115,7 @@ export const requestNotificationsPermission = async (): Promise<any> => {
 const formatPermissionStatus = (status: any): PermissionStatus => {
   const text = `${status}`.toLowerCase();
 
-  if (!status) {
+  if (!status || status === 'prompt') {
     return 'not_requested';
   }
 
