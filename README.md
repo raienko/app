@@ -49,7 +49,7 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [ ] Deep Links
 - [ ] Deferred Links
 - [ ] Dynamic Links
-- [x] Sharing
+- [X] Sharing
 - [ ] in-app purchases
 - [X] splash screen
-- [ ] Maps
+- [X] Maps

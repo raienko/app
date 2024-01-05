@@ -1,25 +1,24 @@
 import {useEffect} from 'react';
-import {AppState} from 'react-native';
+import {AppState, Linking} from 'react-native';
 import slice from './slice';
 import store, {useStoreSelector} from '~/src/features/store';
 import Permissions from 'react-native-permissions';
 import {isIOS, isWeb} from '~/src/utils';
 
-export type PermissionTypes = 'camera' | 'location' | 'notifications';
+export type PermissionTypes = 'camera' | 'notifications';
+export type PermissionStatus = 'granted' | 'blocked' | 'not_requested';
 
-const permissions: any = {
-  camera: isIOS
-    ? Permissions?.PERMISSIONS.IOS.CAMERA
-    : Permissions?.PERMISSIONS.ANDROID.CAMERA,
-  location: Permissions?.PERMISSIONS.IOS.LOCATION_WHEN_IN_USE,
-  notifications: 'notifications',
-};
+const cameraPermission = isIOS
+  ? Permissions?.PERMISSIONS.IOS.CAMERA
+  : Permissions?.PERMISSIONS.ANDROID.CAMERA;
 
 const checkPermissions = () => {
   if (AppState.currentState !== 'active') {
     return;
   }
+
   checkCameraPermission();
+  checkNotificationsPermission();
 };
 
 export const setPermission = (type: PermissionTypes, permission: string) =>
@@ -43,28 +42,88 @@ export const usePermissionsCheck = () => {
   }, []);
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const checkPermission = (permission: any) => {
+export const checkCameraPermission = async (): Promise<PermissionStatus> => {
+  let permission: PermissionStatus;
+
   if (isWeb) {
     // @ts-ignore
-    return navigator.permissions
-      .query({name: permission})
-      .then((result: any) => result.state);
-  }
-
-  return Permissions.check(permission);
-};
-
-export const checkCameraPermission = async () => {
-  console.log('Permissions check...');
-  if (isWeb) {
-    // @ts-ignore
-    return navigator.permissions
+    permission = await navigator.permissions
       .query({name: 'camera'})
-      .then((result: any) => result.state)
-      .then((perm: any) => console.log('Web Camera: ', perm));
+      .then((result: any) => formatPermissionStatus(result.state));
+  } else {
+    permission = await Permissions.check(cameraPermission).then(
+      formatPermissionStatus,
+    );
   }
-  return Permissions.check(permissions.camera).then(permission =>
-    console.log('CAMERA: ', permission),
-  );
+
+  setPermission('camera', permission);
+  return permission;
 };
+
+export const requestCameraPermission = async () => {
+  const permission = await checkCameraPermission();
+
+  if (permission === 'blocked') {
+    return openAppSettings();
+  }
+
+  if (isWeb) {
+    // @ts-ignore
+    return navigator.permissions
+      .request({name: 'camera'})
+      .then((result: any) => formatPermissionStatus(result.state));
+  }
+
+  return Permissions.request(cameraPermission).then(formatPermissionStatus);
+};
+
+export const checkNotificationsPermission =
+  async (): Promise<PermissionStatus> => {
+    let permission;
+
+    if (isWeb) {
+      // @ts-ignore
+      permission = await navigator.permissions
+        .query({name: 'notifications'})
+        .then((result: any) => formatPermissionStatus(result.state));
+    } else {
+      permission = await Permissions.checkNotifications().then(response =>
+        formatPermissionStatus(response.status),
+      );
+    }
+
+    setPermission('notifications', permission);
+    return permission;
+  };
+
+export const requestNotificationsPermission = async (): Promise<any> => {
+  const permission = await checkNotificationsPermission();
+  if (permission === 'blocked') {
+    return openAppSettings();
+  }
+
+  if (isWeb) {
+    // @ts-ignore
+    return navigator.permissions
+      .request({name: 'notifications'})
+      .then((result: any) => formatPermissionStatus(result.state));
+  }
+
+  return Permissions.requestNotifications(['alert', 'badge', 'sound']);
+};
+
+const formatPermissionStatus = (status: any): PermissionStatus => {
+  const text = `${status}`.toLowerCase();
+
+  if (!status) {
+    return 'not_requested';
+  }
+
+  if (text === 'granted' || 'limited') {
+    return 'granted';
+  }
+
+  return 'blocked';
+};
+
+export const openAppSettings = () => Linking.openSettings();

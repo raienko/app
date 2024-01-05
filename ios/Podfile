@@ -16,6 +16,7 @@ prepare_react_native_project!
 # 🚨 PERMISSIONS: keep ONLY necessary 🚨
 setup_permissions([
   'Camera',
+  'Notifications'
 ])
 
 flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
