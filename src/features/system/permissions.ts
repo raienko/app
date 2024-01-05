@@ -70,6 +70,10 @@ export const requestCameraPermission = async () => {
     return openAppSettings();
   }
 
+  if (permission === 'granted') {
+    return true;
+  }
+
   if (isWeb) {
     // @ts-ignore
     return navigator.mediaDevices
@@ -103,6 +107,10 @@ export const requestNotificationsPermission = async (): Promise<any> => {
   const permission = await checkNotificationsPermission();
   if (permission === 'blocked') {
     return openAppSettings();
+  }
+
+  if (permission === 'granted') {
+    return true;
   }
 
   if (isWeb) {
