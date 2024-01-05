@@ -32,6 +32,9 @@ export const setPermission = (type: PermissionTypes, permission: string) =>
 export const usePermission = (type: any) =>
   useStoreSelector(state => state.system.permissions[type]);
 
+export const usePermissions = () =>
+  useStoreSelector(state => state.system.permissions);
+
 export const usePermissionsCheck = () => {
   useEffect(() => {
     const listener = AppState.addEventListener('change', checkPermissions);
@@ -69,9 +72,9 @@ export const requestCameraPermission = async () => {
 
   if (isWeb) {
     // @ts-ignore
-    return navigator.permissions
-      .request({name: 'camera'})
-      .then((result: any) => formatPermissionStatus(result.state));
+    return navigator.mediaDevices
+      .getUserMedia({video: true})
+      .then(checkCameraPermission);
   }
 
   return Permissions.request(cameraPermission).then(formatPermissionStatus);
@@ -104,9 +107,7 @@ export const requestNotificationsPermission = async (): Promise<any> => {
 
   if (isWeb) {
     // @ts-ignore
-    return navigator.permissions
-      .request({name: 'notifications'})
-      .then((result: any) => formatPermissionStatus(result.state));
+    return Notification.requestPermission().then(checkNotificationsPermission);
   }
 
   return Permissions.requestNotifications(['alert', 'badge', 'sound']);

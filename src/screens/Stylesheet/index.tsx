@@ -1,5 +1,6 @@
 import React, {useRef} from 'react';
 import {
+  Map,
   Text,
   Icon,
   Input,
@@ -17,10 +18,9 @@ import {
   LottieAnimation,
   DarkModeSwitcher,
   LanguageSwitcher,
-  Map,
 } from '~/src/components';
 import * as Animatable from 'react-native-animatable';
-import {navigation} from '~/src/features';
+import {navigation, system} from '~/src/features';
 import animation from '~/assets/lottie/launchAnimation.json';
 import {StyleSheet} from 'react-native';
 import {sizes} from '~/src/constants';
@@ -30,6 +30,7 @@ import {hidePopup, showPopup} from '~/src/components/Popup';
 
 export default function Stylesheet(): React.JSX.Element {
   const animatable = useRef<Animatable.View>(null);
+  const permissions = system.usePermissions();
   return (
     <Screen
       style={styles.wrapper}
@@ -165,6 +166,14 @@ export default function Stylesheet(): React.JSX.Element {
       </Section>
       <ProgressBar progress={10} />
       <Map />
+      <Button
+        value={`Camera permission:${permissions.camera}`}
+        onPress={() => system.requestCameraPermission()}
+      />
+      <Button
+        value={`Notifications permission:${permissions.notifications}`}
+        onPress={() => system.requestNotificationsPermission()}
+      />
     </Screen>
   );
 }
