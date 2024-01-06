@@ -48,5 +48,10 @@
   "share": {
     "web_error_title": "Поділитись не вийшло",
     "web_error_message": "Ця функція доступна лише через HTTPS"
+  },
+  "image_picker": {
+    "camera": "Камера",
+    "gallery": "Галерея",
+    "cancel": "Відмінити"
   }
 }

@@ -40,6 +40,7 @@ export default function Button({
         type="button"
         style={textStyle}
         selectable={false}
+        textAlign="center"
       />
       {elements}
     </Pressable>

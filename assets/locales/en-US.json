@@ -48,5 +48,10 @@
   "share": {
     "web_error_title": "Share not available",
     "web_error_message": "May be browser or HTTPS restriction"
+  },
+  "image_picker": {
+    "camera": "Camera",
+    "gallery": "Gallery",
+    "cancel": "Cancel"
   }
 }

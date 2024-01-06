@@ -10,6 +10,7 @@ export {default as Gradient} from './Gradient';
 export {default as Header} from './Header';
 export {default as Icon} from './Icon';
 export {default as If} from './If';
+export {default as ImagePicker} from './ImagePicker';
 export {default as Input} from './Input';
 export {default as LottieAnimation} from './LottieAnimation';
 export {default as Map} from './Map';
