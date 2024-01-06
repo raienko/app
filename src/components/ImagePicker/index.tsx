@@ -66,7 +66,19 @@ export default function ImagePicker({
       await system.requestCameraPermission();
     }
 
-    return picker?.({...options}).then(handleFilePicked);
+    return picker?.({
+      ...options,
+      smartAlbums: [
+        'Generic',
+        'Panoramas',
+        'Favorites',
+        'UserLibrary',
+        'PhotoStream',
+        'Screenshots',
+        'RecentlyAdded',
+        'SelfPortraits',
+      ],
+    }).then(handleFilePicked);
   };
 
   const handlePickerPress = () => {
