@@ -56,6 +56,8 @@ export default function ImagePicker({
   };
 
   const openPicker = async (type: 'camera' | 'gallery') => {
+    close();
+
     const permissionGranted = permissions[type] === 'granted';
     const picker =
       type === 'camera' ? CropPicker?.openCamera : CropPicker?.openPicker;

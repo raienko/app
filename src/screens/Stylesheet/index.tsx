@@ -32,7 +32,7 @@ import {hidePopup, showPopup} from '~/src/components/Popup';
 export default function Stylesheet(): React.JSX.Element {
   const animatable = useRef<Animatable.View>(null);
   const permissions = system.usePermissions();
-  const [image, setImage] = useState();
+  const [image, setImage] = useState<any>();
   return (
     <Screen
       style={styles.wrapper}
@@ -191,5 +191,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: 200,
     borderWidth: 1,
+    backgroundColor: 'yellow',
   },
 });
