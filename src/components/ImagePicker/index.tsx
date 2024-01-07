@@ -5,6 +5,7 @@ import CropPicker, {Image, Options} from 'react-native-image-crop-picker';
 import Button from '../Button';
 import If from '../If';
 import {system} from '~/src/features';
+import {isWeb} from '~/src/utils';
 
 export type Media = {
   uri: string;
@@ -41,7 +42,7 @@ export default function ImagePicker({
   const permissions = system.usePermissions();
   const close = () => hideBottomSheet(id);
 
-  const handleFilePicked = (file?: Image) => {
+  const handleFilePicked = async (file?: Image) => {
     if (!file) {
       return onChange?.();
     }
@@ -63,7 +64,11 @@ export default function ImagePicker({
       type === 'camera' ? CropPicker?.openCamera : CropPicker?.openPicker;
 
     if (!permissionGranted) {
-      await system.requestCameraPermission();
+      if (type === 'camera') {
+        return system.requestCameraPermission();
+      } else {
+        return system.requestGalleryPermission();
+      }
     }
 
     return picker?.({
@@ -82,6 +87,27 @@ export default function ImagePicker({
   };
 
   const handlePickerPress = () => {
+    if (isWeb) {
+      // @ts-ignore
+      const options = {
+        types: [
+          {
+            description: 'Images',
+            accept: {
+              'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
+            },
+          },
+        ],
+        excludeAcceptAllOption: true,
+        multiple: false,
+      };
+
+      // @ts-ignore
+      return window
+        .showOpenFilePicker(options)
+        .then((data: any[]) => onChange?.(data[0]));
+    }
+
     if (mode) {
       return openPicker(mode);
     }

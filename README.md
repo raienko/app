@@ -53,3 +53,4 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [ ] in-app purchases
 - [X] splash screen
 - [X] Maps
+- [ ] expo ?

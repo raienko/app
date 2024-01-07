@@ -5,7 +5,7 @@ import store, {useStoreSelector} from '~/src/features/store';
 import Permissions from 'react-native-permissions';
 import {isIOS, isWeb} from '~/src/utils';
 
-export type PermissionTypes = 'camera' | 'notifications';
+export type PermissionTypes = 'camera' | 'notifications' | 'gallery';
 export type PermissionStatus = 'granted' | 'blocked' | 'not_requested';
 
 const cameraPermission = isIOS
@@ -18,6 +18,7 @@ const checkPermissions = () => {
   }
 
   checkCameraPermission();
+  checkGalleryPermission();
   checkNotificationsPermission();
 };
 
@@ -136,3 +137,39 @@ const formatPermissionStatus = (status: any): PermissionStatus => {
 };
 
 export const openAppSettings = () => Linking.openSettings();
+
+const galleryPermissions = isIOS
+  ? [Permissions?.PERMISSIONS?.IOS?.PHOTO_LIBRARY]
+  : [
+      Permissions?.PERMISSIONS?.ANDROID?.READ_MEDIA_IMAGES,
+      Permissions?.PERMISSIONS?.ANDROID?.WRITE_EXTERNAL_STORAGE,
+      Permissions?.PERMISSIONS?.ANDROID?.READ_EXTERNAL_STORAGE,
+    ];
+
+export const checkGalleryPermission = async () => {
+  let permission: PermissionStatus;
+
+  if (isWeb) {
+    permission = 'granted';
+  } else {
+    permission = await Permissions.checkMultiple(galleryPermissions).then(
+      formatPermissionStatus,
+    );
+  }
+
+  setPermission('gallery', permission);
+  return permission;
+};
+
+export const requestGalleryPermission = async () => {
+  const permission = await checkGalleryPermission();
+  if (permission === 'blocked') {
+    return openAppSettings();
+  }
+
+  if (permission === 'granted') {
+    return true;
+  }
+
+  return Permissions.requestMultiple(galleryPermissions);
+};
