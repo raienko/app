@@ -4,7 +4,7 @@ import {useRoute} from '@react-navigation/native';
 import {colors} from '~/src/constants';
 import * as system from '~/src/features/system';
 import {viewport, isWeb} from '~/src/utils';
-import {SpaceForKeyboard} from '~/src/components';
+import SpaceForKeyboard from '~/src/components/SpaceForKeyboard';
 
 export type ScreenProps = {
   children?: React.ReactNode;

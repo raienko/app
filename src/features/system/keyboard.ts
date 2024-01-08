@@ -1,8 +1,8 @@
 import {useEffect} from 'react';
 import {Keyboard} from 'react-native';
-import {isIOS} from '~/src/utils';
-import slice from './slice';
+import {isIOS} from '~/src/utils/helpers';
 import store, {useStoreSelector} from '../store';
+import slice from './slice';
 
 const setKeyboardHeight = (height = 0) =>
   store.dispatch(slice.actions.setKeyboardHeight(height));
