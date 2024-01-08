@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, View, ScrollView} from 'react-native';
+import {useRoute} from '@react-navigation/native';
 import {colors} from '~/src/constants';
-import {system} from '~/src/features';
+import * as system from '~/src/features/system';
 import {viewport, isWeb} from '~/src/utils';
 import {SpaceForKeyboard} from '~/src/components';
-import {useRoute} from '@react-navigation/native';
 
 export type ScreenProps = {
   children?: React.ReactNode;

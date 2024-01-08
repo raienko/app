@@ -1,12 +1,11 @@
 import React from 'react';
 import {Pressable} from 'react-native';
 import BottomSheet, {hideBottomSheet, showBottomSheet} from '../BottomSheet';
-import CropPicker, {Image, Options} from 'react-native-image-crop-picker';
 import * as Picker from 'expo-image-picker';
 import Button from '../Button';
 import If from '../If';
-import {system} from '~/src/features';
-import {isWeb} from '~/src/utils';
+import * as system from '~/src/features/system';
+import {wait} from '~/src/utils';
 
 export type Media = {
   uri: string;
@@ -16,12 +15,12 @@ export type Media = {
   name: string;
 };
 
-const getFileName = (file: Image) => {
-  const path = file?.path || '';
+const getFileName = (file: Picker.ImagePickerAsset) => {
+  const path = file?.uri || '';
   const parts = path.split('/');
   const name = parts.pop();
   const timestamp = Date.now();
-  const altName = `${timestamp}.${file.mime}`;
+  const altName = `${timestamp}.${file.mimeType}`;
   return name || altName;
 };
 
@@ -30,7 +29,7 @@ export type ImagePickerProps = {
   onChange?: (media?: Media) => any;
   id?: string;
   mode?: 'camera' | 'gallery';
-  options?: Options;
+  options?: Picker.ImagePickerOptions;
 };
 
 export default function ImagePicker({
@@ -41,75 +40,48 @@ export default function ImagePicker({
   id = 'image_picker',
 }: ImagePickerProps) {
   const permissions = system.usePermissions();
-  const close = () => hideBottomSheet(id);
+  const close = async () => {
+    hideBottomSheet(id);
+    return wait(300);
+  };
 
-  const handleFilePicked = async (file?: Image) => {
+  const handleFilePicked = async (file?: Picker.ImagePickerAsset) => {
     if (!file) {
       return onChange?.();
     }
 
     return onChange?.({
-      uri: file?.path,
-      type: file?.mime,
+      uri: file?.uri,
       width: file?.width,
       height: file?.height,
       name: getFileName(file),
+      type: file?.mimeType || 'png',
     });
   };
 
   const openPicker = async (type: 'camera' | 'gallery') => {
-    close();
+    await close();
 
-    const permissionGranted = permissions[type] === 'granted';
-    const picker =
-      type === 'camera' ? CropPicker?.openCamera : CropPicker?.openPicker;
-
-    if (!permissionGranted) {
-      if (type === 'camera') {
-        return system.requestCameraPermission();
-      } else {
-        return system.requestGalleryPermission();
+    if (type) {
+      const permissionGranted = permissions[type] === 'granted';
+      if (!permissionGranted) {
+        if (type === 'camera') {
+          return system.requestCameraPermission();
+        } else {
+          return system.requestGalleryPermission();
+        }
       }
     }
 
-    return picker?.({
-      ...options,
-      smartAlbums: [
-        'Generic',
-        'Panoramas',
-        'Favorites',
-        'UserLibrary',
-        'PhotoStream',
-        'Screenshots',
-        'RecentlyAdded',
-        'SelfPortraits',
-      ],
-    }).then(handleFilePicked);
+    const picker =
+      type === 'camera'
+        ? Picker.launchCameraAsync
+        : Picker.launchImageLibraryAsync;
+
+    return picker({...options}).then(res => handleFilePicked(res.assets?.[0]));
   };
 
   const handlePickerPress = () => {
-    return Picker.launchImageLibraryAsync().then(data => onChange?.(data));
-    if (isWeb) {
-      // @ts-ignore
-      const options = {
-        types: [
-          {
-            description: 'Images',
-            accept: {
-              'image/*': ['.png', '.gif', '.jpeg', '.jpg'],
-            },
-          },
-        ],
-        excludeAcceptAllOption: true,
-        multiple: false,
-      };
-
-      // @ts-ignore
-      return window
-        .showOpenFilePicker(options)
-        .then((data: any[]) => onChange?.(data[0]));
-    }
-
     if (mode) {
       return openPicker(mode);
     }
