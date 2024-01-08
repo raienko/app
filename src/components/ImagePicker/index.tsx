@@ -5,7 +5,7 @@ import * as Picker from 'expo-image-picker';
 import Button from '../Button';
 import If from '../If';
 import * as system from '~/src/features/system';
-import {wait} from '~/src/utils';
+import {wait, isWeb} from '~/src/utils';
 
 export type Media = {
   uri: string;
@@ -82,6 +82,10 @@ export default function ImagePicker({
   };
 
   const handlePickerPress = () => {
+    if (isWeb) {
+      return openPicker('gallery');
+    }
+
     if (mode) {
       return openPicker(mode);
     }
