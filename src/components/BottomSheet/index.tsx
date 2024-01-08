@@ -86,6 +86,8 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    alignItems: 'center',
+    rowGap: sizes.offsetS,
     padding: sizes.offsetM,
   },
   fade: {

@@ -92,6 +92,8 @@ module.exports = argv => {
         'react-native-svg': 'react-native-svg-web',
         'lottie-react-native': 'react-native-web-lottie',
         'react-native-webview': 'react-native-web-webview',
+        'react-native-maps': 'react-native-web-maps',
+        'react-native-image-crop-picker': '/',
         'react-native-permissions': '/',
         'react-native-share': '/',
       },

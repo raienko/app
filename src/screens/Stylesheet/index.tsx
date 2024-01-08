@@ -1,5 +1,6 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {
+  Map,
   Text,
   Icon,
   Input,
@@ -12,6 +13,7 @@ import {
   Calendar,
   Carousel,
   ProgressBar,
+  ImagePicker,
   BottomSheet,
   DateTimePicker,
   LottieAnimation,
@@ -19,9 +21,9 @@ import {
   LanguageSwitcher,
 } from '~/src/components';
 import * as Animatable from 'react-native-animatable';
-import {navigation} from '~/src/features';
+import {navigation, system} from '~/src/features';
 import animation from '~/assets/lottie/launchAnimation.json';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Image} from 'react-native';
 import {sizes} from '~/src/constants';
 import {copyToClipboard, share} from '~/src/utils';
 import {hideBottomSheet, showBottomSheet} from '~/src/components/BottomSheet';
@@ -29,6 +31,8 @@ import {hidePopup, showPopup} from '~/src/components/Popup';
 
 export default function Stylesheet(): React.JSX.Element {
   const animatable = useRef<Animatable.View>(null);
+  const permissions = system.usePermissions();
+  const [image, setImage] = useState<any>();
   return (
     <Screen
       style={styles.wrapper}
@@ -163,6 +167,18 @@ export default function Stylesheet(): React.JSX.Element {
         </DateTimePicker>
       </Section>
       <ProgressBar progress={10} />
+      <Map />
+      <ImagePicker onChange={setImage}>
+        <Image source={image} style={styles.box} />
+      </ImagePicker>
+      <Button
+        value={`Camera permission:${permissions.camera}`}
+        onPress={() => system.requestCameraPermission()}
+      />
+      <Button
+        value={`Notifications permission:${permissions.notifications}`}
+        onPress={() => system.requestNotificationsPermission()}
+      />
     </Screen>
   );
 }
@@ -170,5 +186,11 @@ export default function Stylesheet(): React.JSX.Element {
 const styles = StyleSheet.create({
   wrapper: {
     rowGap: sizes.offsetS,
+  },
+  box: {
+    width: 200,
+    height: 200,
+    borderWidth: 1,
+    backgroundColor: 'yellow',
   },
 });

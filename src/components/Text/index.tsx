@@ -23,11 +23,12 @@ export default function Text({
   style,
   children,
   type = 'body',
+  textAlign,
   ...rest
 }: TextProps) {
   const darkMode = system.useDarkMode();
   const color = darkMode ? colors.textDark : colors.textLight;
-  const appearance = [{color, ...typography[type]}].concat(style);
+  const appearance = [{color, textAlign, ...typography[type]}].concat(style);
   system.useCurrentLanguage();
 
   if (!text && typeof value === 'undefined') {

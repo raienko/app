@@ -2,6 +2,9 @@
 
 runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 
+## What is this?
+This is application boilerplate that can be used to start project faster with minimum configuration
+
 ## Features
 - [x] web support 
 - [x] absolute imports 
@@ -49,6 +52,8 @@ runs on iOS, android and [web](https://raienko.github.io/app/web/dist)
 - [ ] Deep Links
 - [ ] Deferred Links
 - [ ] Dynamic Links
-- [x] Sharing
+- [X] Sharing
 - [ ] in-app purchases
 - [X] splash screen
+- [X] Maps
+- [ ] expo ?

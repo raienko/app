@@ -39,6 +39,9 @@ export const wait = (timeout = 0): Promise<boolean> => {
   return new Promise(resolve => setTimeout(() => resolve(true), timeout));
 };
 
+export const img = (source: any) =>
+  typeof source === 'string' ? {uri: source} : source;
+
 export const extendChildrenWith = (children: any, props: any) => {
   if (!!children && !children?.length) {
     return React.cloneElement(children, props);

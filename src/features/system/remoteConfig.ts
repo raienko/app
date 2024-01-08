@@ -1,6 +1,6 @@
 import {useEffect} from 'react';
 import {AppState} from 'react-native';
-import {firebase} from '~/src/features';
+import * as firebase from '~/src/features/firebase';
 import slice from './slice';
 import store, {useStoreSelector} from '../store';
 import {getAppVersion} from '~/src/utils';

@@ -6,4 +6,5 @@ export default {
   defaultLanguage: `${Config.DEFAULT_LANGUAGE}`,
   baseUrl: `${Config.BASE_URL}`,
   apiKey: `${Config.API_KEY}`,
+  googleMapsKey: `${Config.GOOGLE_MAPS_KEY}`,
 };
