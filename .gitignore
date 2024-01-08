@@ -75,3 +75,8 @@ android/app/google-services.json
 
 # web
 #web/dist
+
+# Expo
+.expo
+dist/
+web-build/

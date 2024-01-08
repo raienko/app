@@ -2,6 +2,7 @@ import React from 'react';
 import {Pressable} from 'react-native';
 import BottomSheet, {hideBottomSheet, showBottomSheet} from '../BottomSheet';
 import CropPicker, {Image, Options} from 'react-native-image-crop-picker';
+import * as Picker from 'expo-image-picker';
 import Button from '../Button';
 import If from '../If';
 import {system} from '~/src/features';
@@ -87,6 +88,7 @@ export default function ImagePicker({
   };
 
   const handlePickerPress = () => {
+    return Picker.launchImageLibraryAsync().then(data => onChange?.(data));
     if (isWeb) {
       // @ts-ignore
       const options = {

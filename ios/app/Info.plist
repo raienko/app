@@ -33,10 +33,10 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>App needs camera access for this action</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-    <string>App needs gallery access for this action</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App needs gallery access for this action</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
