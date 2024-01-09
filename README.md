@@ -17,7 +17,7 @@ This is application boilerplate that can be used to start project faster with mi
 - [x] [remote config](./src/features/system/remoteConfig.ts)
 - [x] firebase: crashlytics
 - [ ] firebase: messaging
-- [ ] firebase: database
+- [x] firebase: database
 - [ ] firebase: auth
 - [ ] push notifications
 - [x] calendar
@@ -56,4 +56,5 @@ This is application boilerplate that can be used to start project faster with mi
 - [ ] in-app purchases
 - [X] splash screen
 - [X] Maps
-- [ ] expo ?
+- [X] expo
+- [ ] reset stores

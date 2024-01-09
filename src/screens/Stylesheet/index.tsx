@@ -172,11 +172,11 @@ export default function Stylesheet(): React.JSX.Element {
         <Image source={image} style={styles.box} />
       </ImagePicker>
       <Button
-        value={`Camera permission:${permissions.camera}`}
+        value={`Camera permission:${permissions?.camera}`}
         onPress={() => system.requestCameraPermission()}
       />
       <Button
-        value={`Notifications permission:${permissions.notifications}`}
+        value={`Notifications permission:${permissions?.notifications}`}
         onPress={() => system.requestNotificationsPermission()}
       />
     </Screen>

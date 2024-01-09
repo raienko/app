@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {system, firebase} from '~/src/features';
-import {StatusBar} from '~/src/components';
+import {StatusBar, InAppNotifications} from '~/src/components';
 import {useReloadOnWindowChange, logger} from '~/src/utils';
 
 export default function System(): React.JSX.Element {
@@ -15,6 +15,7 @@ export default function System(): React.JSX.Element {
 
   return (
     <View style={styles.wrapper} testID="System">
+      <InAppNotifications />
       <StatusBar />
     </View>
   );

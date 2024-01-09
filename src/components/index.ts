@@ -11,6 +11,7 @@ export {default as Header} from './Header';
 export {default as Icon} from './Icon';
 export {default as If} from './If';
 export {default as ImagePicker} from './ImagePicker';
+export {default as InAppNotifications} from './InAppNotifications';
 export {default as Input} from './Input';
 export {default as LottieAnimation} from './LottieAnimation';
 export {default as Map} from './Map';
