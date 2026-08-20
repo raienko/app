@@ -1,56 +1,105 @@
-# Welcome to your Expo app 👋
+# core
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+An [Expo](https://expo.dev) (SDK 57) app using [Expo Router](https://docs.expo.dev/router/introduction) for navigation, [MMKV](https://github.com/mrousavy/react-native-mmkv) for local storage, and [Storybook](https://storybook.js.org) (on-device + web) for component development.
 
 ## Get started
 
 1. Install dependencies
 
    ```bash
-   npm install
+   yarn install
    ```
 
-2. Start the app
+2. Set up environment variables
 
    ```bash
-   npx expo start
+   cp .env.example .env
    ```
 
-In the output, you'll find options to open the app in a
+   `.env` is read by Expo CLI (via `@expo/env`) and used both by `app.config.ts` (app name/slug/scheme/bundle id) and by the app itself through [`src/constants/env`](src/constants/env/index.js). Only `EXPO_PUBLIC_*`-prefixed vars are available at runtime — Metro inlines them into the bundle at build time, so they must be referenced as a static `process.env.EXPO_PUBLIC_X`, never a dynamic key. See the comment in `src/constants/env/index.js` before adding new ones.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+3. Start the app
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+   ```bash
+   yarn web       # browser
+   yarn ios       # iOS simulator, real dev client (see caveat below)
+   yarn android   # Android emulator, real dev client
+   ```
 
-## Get a fresh project
+   `yarn start` also works and lets you choose a platform from the Metro CLI (`w`/`i`/`a`), but note it opens **Expo Go** by default, which cannot load native modules like `react-native-mmkv` — use `yarn ios`/`yarn android` (or `expo run:ios`/`expo run:android`) for a real dev-client build instead when you need native storage to work.
 
-When you're ready, run:
+   > **iOS build caveat:** building the native dev client currently requires **Xcode 26.4+**. Expo SDK 57's `expo-modules-jsi` fails to compile on Xcode 26.0–26.3 due to a Swift 6.2 C++ interop strictness change ([expo/expo#46242](https://github.com/expo/expo/issues/46242)). Web and Android are unaffected.
 
-```bash
-npm run reset-project
+## Project structure
+
+```
+app.config.ts          Expo config — reads name/slug/scheme/bundleId from src/constants/env
+metro.config.js         Wraps Metro with Storybook's entry-swap (see Storybook below)
+src/
+  app/                   Routing only (Expo Router) — each route file re-exports a screen
+  screens/<name>/        One folder per screen, index.tsx is the screen component
+  components/<name>/     One folder per component: index.tsx, index.stories.tsx, index.test.tsx
+  features/storage/       LocalValue<T> — a small MMKV-backed reactive value primitive
+  constants/env/          Validated EXPO_PUBLIC_* env vars, used by both app code and app.config.ts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Every screen/component/feature-value lives in its own folder with a single `index` entry point; all imports go through that folder path (e.g. `@/components/text`), not into its internals. Components ship with a co-located Storybook story and a Jest smoke test that follows the same pattern:
 
-### Other setup steps
+```ts
+import Component from "./index";
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+describe(`${Component.name} smoke test`, () => {
+  /* ... */
+});
+```
+
+### Local storage — `LocalValue`
+
+```ts
+import { LocalValue } from "@/features/storage";
+
+const value = new LocalValue<T>("some-key");
+value.getValue(); // read once
+value.setValue(v); // write
+value.reset(); // clear
+value.use(); // reactive read inside a component — see note below
+```
+
+Backed by MMKV natively, `localStorage` (with an in-memory fallback for SSR) on web. Any component calling `.use()` needs a `"use no memo";` directive as its first line — React Compiler doesn't recognize a method call as a hook and will otherwise memoize the component and break reactivity (see the comment on `StorageValue.use()`).
+
+## Scripts
+
+| Script                            | What it does                                                            |
+| --------------------------------- | ----------------------------------------------------------------------- |
+| `yarn start`                      | Metro, choose platform interactively (opens Expo Go)                    |
+| `yarn web` / `ios` / `android`    | Run on a given platform (ios/android build a real dev client)           |
+| `yarn lint`                       | ESLint (`expo lint`)                                                    |
+| `yarn typecheck`                  | `tsc --noEmit`                                                          |
+| `yarn test`                       | Jest                                                                    |
+| `yarn format` / `format:check`    | Prettier write / check                                                  |
+| `yarn secretlint`                 | Scan the repo for committed secrets                                     |
+| `yarn storybook`                  | On-device Storybook (Metro, opens on whatever device/emulator you pick) |
+| `yarn storybook:ios` / `:android` | On-device Storybook, direct to one platform                             |
+| `yarn storybook:web`              | Web Storybook (Vite) at `localhost:6006`                                |
+| `yarn storybook:web:build`        | Build the web Storybook for static hosting                              |
+
+## Storybook
+
+Two separate setups, both driven by the same `*.stories.tsx` files under `src/`:
+
+- **On-device** (`.rnstorybook/`): `yarn storybook[:ios|:android]` sets `STORYBOOK_ENABLED=true`, which makes `metro.config.js` swap the app's entry point for the Storybook UI — the regular `yarn ios`/`yarn android`/`yarn web` builds are unaffected when the flag isn't set.
+- **Web** (`.storybook/`): a separate Vite-based build (`@storybook/react-native-web-vite`), since MMKV doesn't exist on web. `.env` is loaded manually here (Vite doesn't do Expo's env inlining) — see the `viteFinal` hook in `.storybook/main.ts`.
+
+## Git hooks
+
+Set up via [husky](https://typicode.github.io/husky) + [lint-staged](https://github.com/lint-staged/lint-staged), rooted at the repo root's `.git` even though `package.json` lives in this `core/` subdirectory (see `prepare` script and `core/.husky/`).
+
+- **pre-commit**: formats and lints staged files, and scans staged files for secrets ([secretlint](https://github.com/secretlint/secretlint)).
+- **pre-push**: full `lint` + `typecheck` + `test`.
 
 ## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [Expo documentation](https://docs.expo.dev/)
+- [Expo Router](https://docs.expo.dev/router/introduction/)
+- [react-native-mmkv](https://github.com/mrousavy/react-native-mmkv)
+- [Storybook for React Native](https://github.com/storybookjs/react-native)
