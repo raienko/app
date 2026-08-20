@@ -7,24 +7,19 @@
  * Web bundle. Node (app.config.ts) reads process.env directly regardless of
  * prefix, so the same file works unmodified in both places.
  */
-function required(name, value) {
-  if (!value || value.trim() === "") {
-    throw new Error(`Missing required environment variable: ${name}`);
+function getEnv(key, required) {
+  const value = process.env[key];
+  if (required && (!value || value.trim() === "")) {
+    throw new Error(`Missing required environment variable: ${key}`);
   }
   return value;
 }
 
 const env = {
-  appName: required("EXPO_PUBLIC_APP_NAME", process.env.EXPO_PUBLIC_APP_NAME),
-  appSlug: required("EXPO_PUBLIC_APP_SLUG", process.env.EXPO_PUBLIC_APP_SLUG),
-  appScheme: required(
-    "EXPO_PUBLIC_APP_SCHEME",
-    process.env.EXPO_PUBLIC_APP_SCHEME,
-  ),
-  appBundleId: required(
-    "EXPO_PUBLIC_APP_BUNDLE_ID",
-    process.env.EXPO_PUBLIC_APP_BUNDLE_ID,
-  ),
+  appName: getEnv("EXPO_PUBLIC_APP_NAME", true),
+  appSlug: getEnv("EXPO_PUBLIC_APP_SLUG", true),
+  appScheme: getEnv("EXPO_PUBLIC_APP_SCHEME", true),
+  appBundleId: getEnv("EXPO_PUBLIC_APP_BUNDLE_ID", true),
 };
 
 module.exports = env;
