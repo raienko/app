@@ -11,6 +11,7 @@ export type ThemeColors = {
   textSecondary: string;
   backgroundElement: string;
   backgroundElementSelected: string;
+  error: string;
 };
 
 export type ColorScheme = "light" | "dark";
@@ -21,6 +22,7 @@ const REQUIRED_KEYS: (keyof ThemeColors)[] = [
   "textSecondary",
   "backgroundElement",
   "backgroundElementSelected",
+  "error",
 ];
 
 function validate(

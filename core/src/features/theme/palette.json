@@ -4,13 +4,15 @@
     "text": "#000000",
     "textSecondary": "#6b7280",
     "backgroundElement": "#e5e7eb",
-    "backgroundElementSelected": "#d1d5db"
+    "backgroundElementSelected": "#d1d5db",
+    "error": "#dc2626"
   },
   "dark": {
     "background": "#000000",
     "text": "#ffffff",
     "textSecondary": "#9ca3af",
     "backgroundElement": "#27272a",
-    "backgroundElementSelected": "#3f3f46"
+    "backgroundElementSelected": "#3f3f46",
+    "error": "#f87171"
   }
 }

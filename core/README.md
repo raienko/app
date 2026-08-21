@@ -79,7 +79,7 @@ const theme = useTheme(); // { scheme, colors, preference, setPreference }
 - `scheme` — the resolved `"light" | "dark"` actually in effect.
 - `preference` — what the user picked: `"light" | "dark" | "system"` (default `"system"`), persisted via `LocalValue` so it survives restarts. `setPreference` updates it.
 - When `preference` is `"system"`, `scheme` tracks the OS setting live via React Native's `useColorScheme()` — no reload needed, verified by flipping the emulated OS scheme at runtime.
-- `colors` — the current palette (`ThemeColors`: `background`, `text`, `textSecondary`, `backgroundElement`, `backgroundElementSelected`), sourced from [`palette.json`](src/features/theme/palette.json). Swap that file for a rebrand/different palette without touching any other file — `colors.ts` validates both `light` and `dark` have every required key and throws a clear error naming the missing one otherwise. (It's `palette.json`, not `colors.json` — Metro and Vite disagree on `.ts` vs `.json` priority for a bare `./colors` specifier, so a same-basename pair resolves to the wrong file depending on which bundler is running; keep the JSON's basename different from `colors.ts`.)
+- `colors` — the current palette (`ThemeColors`: `background`, `text`, `textSecondary`, `backgroundElement`, `backgroundElementSelected`, `error`), sourced from [`palette.json`](src/features/theme/palette.json). Swap that file for a rebrand/different palette without touching any other file — `colors.ts` validates both `light` and `dark` have every required key and throws a clear error naming the missing one otherwise. (It's `palette.json`, not `colors.json` — Metro and Vite disagree on `.ts` vs `.json` priority for a bare `./colors` specifier, so a same-basename pair resolves to the wrong file depending on which bundler is running; keep the JSON's basename different from `colors.ts`.)
 
 `ThemeProvider` and a `ThemeSwitcher` component (`src/components/theme-switcher`, wired into the Home screen) are both included; `Text`, `Screen`, and `Icon` (default `color`) already consume `theme.colors`.
 
@@ -153,6 +153,55 @@ Wraps five [`@react-native-vector-icons`](https://www.npmjs.com/org/react-native
 - Every family needs its font registered on iOS — each `@react-native-vector-icons/*` package ships its own Expo config plugin (adds the font to `Info.plist`), listed in `app.config.ts`'s `plugins`.
 - Verified rendering on web: all 5 vector families with distinct glyphs, the custom SVG icon, and the omitted-`type` default all confirmed visually in-browser. Before the theme-default-color above, several of these icon families defaulted to **black** — invisible against this app's dark-mode `Screen` background unless you passed an explicit `color`; the theme default now makes that the non-issue it should be.
 - Adding a new vector family or a new custom icon is one line each in `icon-sets.ts` / `custom-icons.tsx` — nothing else needs to change.
+
+### `Input` — `src/components/input`
+
+```tsx
+import Input from "@/components/input";
+
+<Input
+  label="Name"
+  placeholder="Ada Lovelace"
+  value={name}
+  onChange={setName}
+/>;
+<Input
+  type="numeric"
+  label="Age"
+  value={age}
+  onChange={setAge}
+  min={0}
+  max={120}
+/>;
+<Input type="email" label="Email" value={email} onChange={setEmail} />;
+<Input value={query} onChange={setQuery} leftSlot={<Icon name="search" />} />;
+```
+
+One component, branching on `type` — like `<input>` in HTML. `type` is optional and defaults to `"text"`.
+
+```
+src/components/input/
+  index.tsx     Input — picks a variation by `type` and renders it
+  types.ts       CommonInputProps + each type's own props (the public API)
+  base/           BaseInput — the shared shell: label, slots, focus/disabled styling
+  text/           TextInput — type="text" (default)
+  numeric/        NumericInput — type="numeric", + its own use-numeric-text.ts
+  email/          EmailInput — type="email", forces the email-address keyboard
+```
+
+- **Every variation is its own component in its own folder**, not a branch inline in one big file. `BaseInput` (`./base`) owns everything shared — label, `leftSlot`/`rightSlot`, focus/disabled styling, the actual RN `TextInput` host — driven by a plain string `value`/`onChangeText`. `TextInput` (`./text`), `NumericInput` (`./numeric`), and `EmailInput` (`./email`) each resolve their own value shape and type-specific extras, then render through `BaseInput`; `Input` (`index.tsx`) just picks which one to render based on `type`. Adding a new variation (e.g. `"search"`, `"phone"`) means a new folder with its own component (+ whatever variation-only logic/UI it needs, developed and tested independently of the others) and a branch in `index.tsx` — no existing variation's file changes. `EmailInput` is the smallest possible example of this: it's `TextInput`-shaped (plain string `value`/`onChange`, no extra props) but forces `keyboardType="email-address"` — the whole variation is one four-line component.
+- **Shared API**: every variation takes `value`/`onChange`, plus `label`, `placeholder`, `disabled`, `leftSlot`/`rightSlot` (render any node — typically an `Icon`, but not limited to one — in either slot), and `style`. A variation adds only what it specifically needs on top: `type="text"` adds `secureTextEntry`; `type="numeric"` adds `min`/`max` and swaps `value`/`onChange` to `number | null` instead of `string`; `type="email"` adds nothing beyond the shared API. The discriminated union (same pattern as `Icon`'s `type`) means passing a numeric-only prop like `min` with `type="text"` — or the wrong `value` type for the chosen `type` — is a `tsc` error, not a runtime surprise.
+- **`autoCapitalize`/`autoCorrect` default off for every variation**, enforced in one place: `BaseInput` defaults them (`"none"`/`false`) when not passed, so every current and future variation gets that default for free instead of each one having to remember it — `EmailInput` needed zero extra code to get this right, which is the point. Still overridable per field, e.g. `<Input autoCapitalize="words" />` for a name field. Verified live in-browser: all three fields on the Home screen render with `autocapitalize="none"` and `autocorrect="off"` in the actual DOM without any of them setting either prop explicitly.
+- **`type="numeric"` buffers the raw typed text separately from the numeric `value`**, in `numeric/use-numeric-text.ts` — a `TextInput` controlled directly by `String(value)` can't represent in-progress input like `"1."` or a bare `"-"` (they'd parse to a number, re-render back to `"1"`/`""`, and the character just typed would vanish). Non-digit characters are stripped as you type, and `onChange` only fires once the buffered text parses to a real number, clamped to `min`/`max`. Verified live in-browser: typing `"2a5b0"` into an `Age` field (`min={0}`, `max={120}`) strips the letters as they're typed and the committed value clamps to `120` — which then round-trips back through the controlled `value` prop and corrects the displayed text to `"120"` too, since the Home screen demo feeds `onChange`'s value straight back in as `value`.
+- Resyncing the buffered text when `value` changes from outside (e.g. that clamp round-trip above) happens **during render**, not in a `useEffect` — React's documented pattern for adjusting state from a prop change without an extra render pass. A `useEffect` calling `setState` synchronously in its body is also an ESLint error in this project's `react-hooks/set-state-in-effect` rule, which caught the first draft of this hook.
+- Focus and disabled states are handled the same way `Button` handles `selected` — background swaps to `theme.colors.backgroundElementSelected` on focus, and `opacity: 0.5` when `disabled`, no new palette entries needed.
+- **`error`/`helperText`**: `helperText` renders under the field in `theme.colors.textSecondary`; `error` (also a string) replaces it, renders in `theme.colors.error`, and switches the field's border to that color too (`error` — a new key in `palette.json`/`ThemeColors`, `#dc2626`/`#f87171` light/dark — same swap-the-palette-file extensibility as every other color). Both live on `CommonInputProps`, so every variation gets them for free. Verified live: an invalid `Email` value renders a red border and "Enter a valid email" in place of blank helper text.
+- **Ref forwarding**: `BaseInput` is `forwardRef`, and every variation (`TextInput`/`NumericInput`/`EmailInput`) and the top-level `Input` forward their own ref straight through to it, so `<Input ref={...} />` exposes the underlying RN `TextInput`'s imperative `.focus()`/`.blur()` regardless of `type`. Verified live: a "Focus email" button on the Home screen calls `emailRef.current?.focus()` and moves real DOM focus to the email field (confirmed via `document.activeElement`). `forwardRef` components have no `.name` the way a plain function component does — each sets `displayName` explicitly so `describe(\`${Component.displayName} smoke test\`, ...)` keeps working the same way it does everywhere else in this codebase.
+- **Accessibility**: the RN `TextInput` gets `accessibilityLabel={label ?? placeholder}` (a sibling `Text` isn't auto-associated with a field the way HTML's `<label for>` is) and `accessibilityState={{ disabled }}`, so a screen reader announces the field's name and disabled state without extra wiring per variation.
+- **`onFocus`/`onBlur`** are plain optional callbacks on `CommonInputProps` — `BaseInput` still owns the focus-triggered background swap internally, but now also calls a consumer's `onFocus`/`onBlur` alongside it, e.g. for running validation when a field is left.
+- `index.tsx`'s dispatch is a `switch` on `props.type`, but the actual `{...props}` spread appears exactly once, in a generic `renderVariant<P>(Component, props, ref)` helper each `case` calls — TS infers `P` from `Component` and checks the (already-narrowed-by-`switch`) `props` against it, so a mismatched case (e.g. the wrong variation under the wrong `case`) is still a `tsc` error, unlike an earlier version of this dispatcher that stored the picked component in an `any`-typed variable.
+- Each of `BaseInput`/`TextInput`/`NumericInput`/`EmailInput`/`Input` has its own Storybook stories and Jest smoke test, scoped to what that layer actually owns — `BaseInput`'s test covers label/slots/focus/disabled/autoCapitalize-autoCorrect/error-helperText/accessibility/ref-forwarding once, so the variation tests only need to cover what's actually different about them (value coercion, `secureTextEntry`, digit filtering/clamping, keyboard type), and `Input`'s test just confirms routing.
+- Live examples on the Home screen (`Name` as text with a left icon and helper text, `Age` as numeric with `min`/`max`, `Email` with live validation showing the error state, plus a "Focus email" button) exercise every variation together, including the numeric clamp-and-resync behavior, the actual `type="email"` DOM attribute, and ref-based imperative focus.
 
 ### `Root` — `src/root`
 

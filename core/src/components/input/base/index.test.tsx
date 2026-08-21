@@ -1,0 +1,185 @@
+import { createRef } from "react";
+import { Text as RNText, type TextInput } from "react-native";
+
+import { fireEvent, render, screen, waitFor } from "@/root/testing";
+
+import Component from "./index";
+
+describe(`${Component.displayName} smoke test`, () => {
+  it("renders the label and value", async () => {
+    await render(
+      <Component label="Name" value="Ada" onChangeText={() => {}} />,
+    );
+
+    expect(screen.getByText("Name")).toBeTruthy();
+    expect(screen.getByDisplayValue("Ada")).toBeTruthy();
+  });
+
+  it("calls onChangeText as the underlying TextInput changes", async () => {
+    const onChangeText = jest.fn();
+    await render(
+      <Component value="" onChangeText={onChangeText} placeholder="Type" />,
+    );
+
+    fireEvent.changeText(screen.getByPlaceholderText("Type"), "hello");
+
+    expect(onChangeText).toHaveBeenCalledWith("hello");
+  });
+
+  it("renders leftSlot and rightSlot", async () => {
+    await render(
+      <Component
+        value=""
+        onChangeText={() => {}}
+        leftSlot={<RNText>left</RNText>}
+        rightSlot={<RNText>right</RNText>}
+      />,
+    );
+
+    expect(screen.getByText("left")).toBeTruthy();
+    expect(screen.getByText("right")).toBeTruthy();
+  });
+
+  it("is not editable when disabled", async () => {
+    await render(
+      <Component
+        value="locked"
+        onChangeText={() => {}}
+        disabled
+        placeholder="Disabled"
+      />,
+    );
+
+    expect(screen.getByDisplayValue("locked").props.editable).toBe(false);
+  });
+
+  it("defaults autoCapitalize to none and autoCorrect to false", async () => {
+    await render(
+      <Component value="" onChangeText={() => {}} placeholder="Type" />,
+    );
+
+    const input = screen.getByPlaceholderText("Type");
+    expect(input.props.autoCapitalize).toBe("none");
+    expect(input.props.autoCorrect).toBe(false);
+  });
+
+  it("lets autoCapitalize and autoCorrect be overridden", async () => {
+    await render(
+      <Component
+        value=""
+        onChangeText={() => {}}
+        placeholder="Type"
+        autoCapitalize="words"
+        autoCorrect
+      />,
+    );
+
+    const input = screen.getByPlaceholderText("Type");
+    expect(input.props.autoCapitalize).toBe("words");
+    expect(input.props.autoCorrect).toBe(true);
+  });
+
+  it("sets accessibilityLabel from label, falling back to placeholder", async () => {
+    const withLabel = await render(
+      <Component
+        value=""
+        onChangeText={() => {}}
+        label="Name"
+        placeholder="Ada"
+      />,
+    );
+    expect(withLabel.getByDisplayValue("").props.accessibilityLabel).toBe(
+      "Name",
+    );
+
+    const withoutLabel = await render(
+      <Component value="" onChangeText={() => {}} placeholder="Ada" />,
+    );
+    expect(withoutLabel.getByDisplayValue("").props.accessibilityLabel).toBe(
+      "Ada",
+    );
+  });
+
+  it("reflects disabled in accessibilityState", async () => {
+    await render(
+      <Component
+        value="locked"
+        onChangeText={() => {}}
+        disabled
+        placeholder="Disabled"
+      />,
+    );
+
+    expect(screen.getByDisplayValue("locked").props.accessibilityState).toEqual(
+      { disabled: true },
+    );
+  });
+
+  it("shows helperText when there's no error", async () => {
+    await render(
+      <Component
+        value=""
+        onChangeText={() => {}}
+        helperText="This is displayed publicly"
+      />,
+    );
+
+    expect(screen.getByText("This is displayed publicly")).toBeTruthy();
+  });
+
+  it("shows error instead of helperText when both are given", async () => {
+    await render(
+      <Component
+        value=""
+        onChangeText={() => {}}
+        helperText="This is displayed publicly"
+        error="Required"
+      />,
+    );
+
+    expect(screen.getByText("Required")).toBeTruthy();
+    expect(screen.queryByText("This is displayed publicly")).toBeNull();
+  });
+
+  it("calls onFocus/onBlur in addition to tracking focus internally", async () => {
+    const onFocus = jest.fn();
+    const onBlur = jest.fn();
+    await render(
+      <Component
+        value=""
+        onChangeText={() => {}}
+        placeholder="Type"
+        onFocus={onFocus}
+        onBlur={onBlur}
+      />,
+    );
+    const input = screen.getByPlaceholderText("Type");
+
+    fireEvent(input, "focus");
+    await waitFor(() => {
+      expect(onFocus).toHaveBeenCalledTimes(1);
+    });
+
+    fireEvent(input, "blur");
+    await waitFor(() => {
+      expect(onBlur).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it("forwards its ref to the underlying TextInput", async () => {
+    const ref = createRef<TextInput>();
+    await render(
+      <Component
+        ref={ref}
+        value=""
+        onChangeText={() => {}}
+        placeholder="Type"
+      />,
+    );
+
+    await waitFor(() => {
+      expect(ref.current).toBeTruthy();
+    });
+    expect(() => ref.current?.focus()).not.toThrow();
+  });
+});
