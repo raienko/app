@@ -1,5 +1,7 @@
 import type { Preview } from "@storybook/react-native";
 
+import { Providers } from "@/root";
+
 const preview: Preview = {
   parameters: {
     controls: {
@@ -9,6 +11,13 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    (Story) => (
+      <Providers>
+        <Story />
+      </Providers>
+    ),
+  ],
 };
 
 export default preview;

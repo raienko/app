@@ -5,7 +5,7 @@ import Root from "@/root";
 export default function RootLayout() {
   return (
     <Root>
-      <Stack />
+      <Stack screenOptions={{ headerShown: false }} />
     </Root>
   );
 }

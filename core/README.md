@@ -68,13 +68,43 @@ value.use(); // reactive read inside a component — see note below
 
 Backed by MMKV natively, `localStorage` (with an in-memory fallback for SSR) on web. Any component calling `.use()` needs a `"use no memo";` directive as its first line — React Compiler doesn't recognize a method call as a hook and will otherwise memoize the component and break reactivity (see the comment on `StorageValue.use()`).
 
+### Theme — `src/features/theme`
+
+```tsx
+import { useTheme } from "@/features/theme";
+
+const theme = useTheme(); // { scheme, colors, preference, setPreference }
+```
+
+- `scheme` — the resolved `"light" | "dark"` actually in effect.
+- `preference` — what the user picked: `"light" | "dark" | "system"` (default `"system"`), persisted via `LocalValue` so it survives restarts. `setPreference` updates it.
+- When `preference` is `"system"`, `scheme` tracks the OS setting live via React Native's `useColorScheme()` — no reload needed, verified by flipping the emulated OS scheme at runtime.
+- `colors` — the current palette (`ThemeColors`: `background`, `text`, `textSecondary`, `backgroundElement`, `backgroundElementSelected`), sourced from [`palette.json`](src/features/theme/palette.json). Swap that file for a rebrand/different palette without touching any other file — `colors.ts` validates both `light` and `dark` have every required key and throws a clear error naming the missing one otherwise. (It's `palette.json`, not `colors.json` — Metro and Vite disagree on `.ts` vs `.json` priority for a bare `./colors` specifier, so a same-basename pair resolves to the wrong file depending on which bundler is running; keep the JSON's basename different from `colors.ts`.)
+
+`ThemeProvider` and a `ThemeSwitcher` component (`src/components/theme-switcher`, wired into the Home screen) are both included; `Text` and `Screen` already consume `theme.colors`.
+
 ### `Root` — `src/root`
 
-Mounted once, in `src/app/_layout.tsx`, wrapping the router (`<Root><Stack /></Root>`). This is the single place for:
+```
+src/root/
+  index.tsx       Root — mounted once in src/app/_layout.tsx: <Root><Stack /></Root>
+  providers.tsx    Providers — every context provider (safe area, theme, ...)
+  testing.tsx       render()/screen/etc. wrapping Providers, for tests
+```
 
-- context providers every screen needs (currently `SafeAreaProvider`; add state/theme/etc. providers here as they're introduced)
+`Root` wraps `Providers` and is the single place for:
+
+- context providers every screen needs — add a new one to `providers.tsx` only
 - global overlay UI rendered above the current screen (toasts, modals, ...)
 - global listeners/services that should run for the app's lifetime (analytics init, push notification listeners, app-state listeners, ...) — wire these up here via `useEffect` once there's a concrete one to add
+
+**Providers are centralized on purpose.** Both Storybook preview configs (`.storybook/preview.tsx`, `.rnstorybook/preview.tsx`) decorate every story with `<Providers>`, and every component test imports `render`/`screen`/etc. from `@/root/testing` instead of `@testing-library/react-native` directly:
+
+```tsx
+import { render, screen } from "@/root/testing";
+```
+
+That `render` is a drop-in replacement that already wraps the tree in `Providers`. Adding a new provider in `providers.tsx` — a state provider, an auth provider, whatever comes next — makes it available to the real app, every Storybook story, and every test's `render()` in one edit; no per-file changes needed. (`src/root/index.test.tsx` is the one exception — it tests `Root` itself, so it renders unwrapped, via `@testing-library/react-native` directly.)
 
 It's not a route or a reusable UI component — it's app composition root, kept separate from `components/` for that reason.
 

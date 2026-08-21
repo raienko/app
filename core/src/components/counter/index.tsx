@@ -14,7 +14,10 @@ export default function Counter({ storageKey = "counter" }: Props) {
   // component as if count never changed. See StorageValue.use().
   "use no memo";
 
-  const counter = useMemo(() => new LocalValue<number>(storageKey), [storageKey]);
+  const counter = useMemo(
+    () => new LocalValue<number>(storageKey),
+    [storageKey],
+  );
   const count = counter.use();
 
   return (
@@ -22,7 +25,8 @@ export default function Counter({ storageKey = "counter" }: Props) {
       <Text value={`count: ${count ?? 0}`} />
       <Pressable
         onPress={() => counter.setValue((count ?? 0) + 1)}
-        style={styles.button}>
+        style={styles.button}
+      >
         <Text value="increment" />
       </Pressable>
       <Pressable onPress={() => counter.reset()} style={styles.button}>

@@ -1,5 +1,6 @@
-import { render, screen } from "@testing-library/react-native";
 import { Text as RNText } from "react-native";
+
+import { render, screen } from "@/root/testing";
 
 import Component from "./index";
 

@@ -1,6 +1,5 @@
-import { render, screen } from "@testing-library/react-native";
-
 import env from "@/constants/env";
+import { render, screen } from "@/root/testing";
 
 import Component from "./index";
 
