@@ -40,6 +40,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     "expo-router",
     "@react-native-community/datetimepicker",
+    "@react-native-vector-icons/feather",
+    "@react-native-vector-icons/material-icons",
+    "@react-native-vector-icons/ionicons",
+    "@react-native-vector-icons/fontawesome6",
+    "@react-native-vector-icons/ant-design",
     [
       "expo-splash-screen",
       {

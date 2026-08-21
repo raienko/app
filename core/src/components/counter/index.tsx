@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 
 import Button from "@/components/button";
 import Text from "@/components/text";
+import { createStyles } from "@/features/responsive";
 import { LocalValue } from "@/features/storage";
 
 type Props = {
@@ -20,6 +21,7 @@ export default function Counter({ storageKey = "counter" }: Props) {
     [storageKey],
   );
   const count = counter.use();
+  const styles = useStyles();
 
   return (
     <View style={styles.container}>
@@ -38,12 +40,14 @@ export default function Counter({ storageKey = "counter" }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    gap: 12,
-    alignItems: "center",
-  },
-  button: {
-    minWidth: 120,
-  },
-});
+const useStyles = createStyles(({ units }) =>
+  StyleSheet.create({
+    container: {
+      gap: units(12),
+      alignItems: "center",
+    },
+    button: {
+      minWidth: units(120),
+    },
+  }),
+);

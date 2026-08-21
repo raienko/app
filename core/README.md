@@ -81,7 +81,7 @@ const theme = useTheme(); // { scheme, colors, preference, setPreference }
 - When `preference` is `"system"`, `scheme` tracks the OS setting live via React Native's `useColorScheme()` — no reload needed, verified by flipping the emulated OS scheme at runtime.
 - `colors` — the current palette (`ThemeColors`: `background`, `text`, `textSecondary`, `backgroundElement`, `backgroundElementSelected`), sourced from [`palette.json`](src/features/theme/palette.json). Swap that file for a rebrand/different palette without touching any other file — `colors.ts` validates both `light` and `dark` have every required key and throws a clear error naming the missing one otherwise. (It's `palette.json`, not `colors.json` — Metro and Vite disagree on `.ts` vs `.json` priority for a bare `./colors` specifier, so a same-basename pair resolves to the wrong file depending on which bundler is running; keep the JSON's basename different from `colors.ts`.)
 
-`ThemeProvider` and a `ThemeSwitcher` component (`src/components/theme-switcher`, wired into the Home screen) are both included; `Text` and `Screen` already consume `theme.colors`.
+`ThemeProvider` and a `ThemeSwitcher` component (`src/components/theme-switcher`, wired into the Home screen) are both included; `Text`, `Screen`, and `Icon` (default `color`) already consume `theme.colors`.
 
 ### Responsive units — `src/features/responsive`
 
@@ -134,6 +134,25 @@ const useStyles = createStyles(({ units, breakpoint }) =>
 The factory receives the same reactive `units`/`breakpoint` as the hooks, and the result is memoized (only recomputed when they actually change). `Button` and `Screen` both use this. Verified live: resizing 375px → 768px without reloading grew both `Screen`'s padding and `Button`'s size in the same frame, exactly as before this refactor.
 
 - `createUnits(width)` / `getBreakpoint(width)` are the underlying pure functions (what the hooks call after reading `useWindowDimensions()`) — used directly in `units.test.ts`/`breakpoint.test.ts`, no component rendering needed.
+
+### `Icon` — `src/components/icon`
+
+```tsx
+import Icon from "@/components/icon";
+
+<Icon type="Feather" name="home" color="red" size={units(24)} />;
+<Icon type="custom" name="logo" size={units(24)} />;
+<Icon name="home" />; // type omitted -> the default family (Feather)
+```
+
+Wraps five [`@react-native-vector-icons`](https://www.npmjs.com/org/react-native-vector-icons) families — `Feather`, `MaterialIcons`, `Ionicons`, `FontAwesome6`, `AntDesign` — plus a `"custom"` type for SVG icons defined in `custom-icons.tsx` (built with `react-native-svg`, no asset-file transform needed).
+
+- **`name` autocompletes to the real glyph names for whichever `type` you pick**, and a name that doesn't exist for that type is a type error — not from a hand-written list, but from each package's own generated `<Family>IconName` union (`keyof typeof glyphMap`), which is also how it stays correct if a package updates its glyph set. Verified directly: `tsc` accepts `<Icon type="Feather" name="home" />` and rejects (with `@ts-expect-error`) a MaterialIcons-only name passed with `type="MaterialIcons"`, a Feather name passed to `type="custom"`, and vice versa — four independent, genuine type errors, not just "it compiles."
+- **Default type is one constant**: `DEFAULT_ICON_TYPE` in `index.tsx`. Change it there and `<Icon name="..." />` (type omitted) switches which family's names it expects — no other file changes.
+- **`color` defaults to `theme.colors.text`** — pass it explicitly to override, same as `size`. This is what makes an icon with no `color` prop legible in both themes automatically instead of defaulting to the underlying library's black. Verified both ways live in-browser: the Home screen's `<Icon type="Feather" name="home" size={units(20)} />` (no `color`) renders white in dark mode and black in light mode, tracking `theme.colors.text` with no reload; a `color="red"` override stays red in both.
+- Every family needs its font registered on iOS — each `@react-native-vector-icons/*` package ships its own Expo config plugin (adds the font to `Info.plist`), listed in `app.config.ts`'s `plugins`.
+- Verified rendering on web: all 5 vector families with distinct glyphs, the custom SVG icon, and the omitted-`type` default all confirmed visually in-browser. Before the theme-default-color above, several of these icon families defaulted to **black** — invisible against this app's dark-mode `Screen` background unless you passed an explicit `color`; the theme default now makes that the non-issue it should be.
+- Adding a new vector family or a new custom icon is one line each in `icon-sets.ts` / `custom-icons.tsx` — nothing else needs to change.
 
 ### `Root` — `src/root`
 
