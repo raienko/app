@@ -37,6 +37,7 @@ app.config.ts          Expo config — reads name/slug/scheme/bundleId from src/
 metro.config.js         Wraps Metro with Storybook's entry-swap (see Storybook below)
 src/
   app/                   Routing only (Expo Router) — each route file re-exports a screen
+  root/                   Root — wraps the router; see below
   screens/<name>/        One folder per screen, index.tsx is the screen component
   components/<name>/     One folder per component: index.tsx, index.stories.tsx, index.test.tsx
   features/storage/       LocalValue<T> — a small MMKV-backed reactive value primitive
@@ -66,6 +67,16 @@ value.use(); // reactive read inside a component — see note below
 ```
 
 Backed by MMKV natively, `localStorage` (with an in-memory fallback for SSR) on web. Any component calling `.use()` needs a `"use no memo";` directive as its first line — React Compiler doesn't recognize a method call as a hook and will otherwise memoize the component and break reactivity (see the comment on `StorageValue.use()`).
+
+### `Root` — `src/root`
+
+Mounted once, in `src/app/_layout.tsx`, wrapping the router (`<Root><Stack /></Root>`). This is the single place for:
+
+- context providers every screen needs (currently `SafeAreaProvider`; add state/theme/etc. providers here as they're introduced)
+- global overlay UI rendered above the current screen (toasts, modals, ...)
+- global listeners/services that should run for the app's lifetime (analytics init, push notification listeners, app-state listeners, ...) — wire these up here via `useEffect` once there's a concrete one to add
+
+It's not a route or a reusable UI component — it's app composition root, kept separate from `components/` for that reason.
 
 ## Scripts
 

@@ -5,6 +5,7 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 // constants/env/index.js (typed by the sibling index.d.ts) is required
 // directly instead. Plain `require` returns module.exports as-is (the env
 // object itself), matching its default export.
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- see comment above
 const env = require("./src/constants/env");
 
 export default ({ config }: ConfigContext): ExpoConfig => ({

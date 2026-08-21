@@ -1,5 +1,11 @@
 import { Stack } from "expo-router";
 
+import Root from "@/root";
+
 export default function RootLayout() {
-  return <Stack />;
+  return (
+    <Root>
+      <Stack />
+    </Root>
+  );
 }
