@@ -9,6 +9,7 @@ import Button from "@/components/button";
 import Counter from "@/components/counter";
 import Icon from "@/components/icon";
 import Input from "@/components/input";
+import Modal from "@/components/modal";
 import Screen from "@/components/screen";
 import Text from "@/components/text";
 import ThemeSwitcher from "@/components/theme-switcher";
@@ -67,6 +68,44 @@ export default function Home() {
           value={`name: ${name || "—"} / age: ${age ?? "—"} / email: ${email || "—"}`}
         />
       </View>
+      <View style={styles.form}>
+        <Button value="Popup" onPress={() => Modal.show("home-popup")} />
+        <Button
+          value="Bottom sheet"
+          onPress={() => Modal.show("home-bottom-sheet")}
+        />
+        <Button value="Actions" onPress={() => Modal.show("home-actions")} />
+        <Button
+          value="Fullscreen"
+          onPress={() => Modal.show("home-fullscreen")}
+        />
+      </View>
+
+      <Modal id="home-popup" type="popup">
+        <Text value="Popup modal" />
+        <Button value="Close" onPress={() => Modal.hide("home-popup")} />
+      </Modal>
+
+      <Modal id="home-bottom-sheet" type="bottomSheet">
+        <Text value="Bottom sheet modal" />
+        <Text value="Bottom sheet modal" />
+        <Text value="Bottom sheet modal" />
+        <Text value="Bottom sheet modal" />
+        <Text value="Bottom sheet modal" />
+        <Text value="Bottom sheet modal" />
+        <Button value="Close" onPress={() => Modal.hide("home-bottom-sheet")} />
+      </Modal>
+
+      <Modal id="home-actions" type="actions">
+        <Button value="Option A" onPress={() => Modal.hide("home-actions")} />
+        <Button value="Option B" onPress={() => Modal.hide("home-actions")} />
+        <Button value="Close" onPress={() => Modal.hide("home-actions")} />
+      </Modal>
+
+      <Modal id="home-fullscreen" type="fullscreen">
+        <Text value="Fullscreen modal" />
+        <Button value="Close" onPress={() => Modal.hide("home-fullscreen")} />
+      </Modal>
     </Screen>
   );
 }
