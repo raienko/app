@@ -83,6 +83,54 @@ const theme = useTheme(); // { scheme, colors, preference, setPreference }
 
 `ThemeProvider` and a `ThemeSwitcher` component (`src/components/theme-switcher`, wired into the Home screen) are both included; `Text` and `Screen` already consume `theme.colors`.
 
+### Responsive units — `src/features/responsive`
+
+```tsx
+import { useBreakpoint, useUnits } from "@/features/responsive";
+
+const units = useUnits();
+const breakpoint = useBreakpoint(); // "phone" | "foldable" | "tablet" | "desktop"
+
+<View style={{ padding: units(12) }} />; // 12 in Figma is units(12)
+```
+
+- `useUnits()` scales a Figma px value for the current device: near-1:1 on a base-width phone (375px, configurable in `config.ts`), scaling up moderately (not linearly — see `SCALE_MODERATION`) and clamped (`MIN_SCALE`/`MAX_SCALE`) so values don't blow up on tablet/desktop.
+- Reactive via `useWindowDimensions()` — updates live on rotation, a foldable unfolding, or a browser/desktop resize, verified by resizing the emulated viewport at runtime without navigating away (375 → 768 → 1280 → 2560px; `units(12)` went 12 → 18 → 19 → 19px, confirming both the moderated scale-up and the clamp holding at very wide desktop sizes).
+- Because it's reactive, a `units()`-based style can't live in a module-scope `StyleSheet.create` (that only runs once). Compute those inside the component instead, e.g. `useMemo(() => StyleSheet.create({ padding: units(12) }), [units])`.
+- `useBreakpoint()` classifies the current width into `"phone" | "foldable" | "tablet" | "desktop"` — thresholds in `config.ts` (768 deliberately reads as `"tablet"`, matching the common iPad-portrait/`md` breakpoint, not `"foldable"`).
+
+**Using `units()` outside a component.** There's also a plain, non-hook `units(value)`, for module scope, utility functions, or anywhere a hook isn't available:
+
+```ts
+import { units } from "@/features/responsive";
+
+const styles = StyleSheet.create({ padding: units(16) }); // module scope, no hook
+```
+
+It reads `Dimensions.get("window")` imperatively at call time rather than subscribing via `useWindowDimensions()`, so it's a **snapshot, not reactive** — verified directly: called at a 900px width it correctly returned `units(16) = 26`, but after resizing to 375px _without reloading_, that same module-scope value stayed frozen at `26` (it's only ever recomputed if the surrounding code re-runs, which module-scope code doesn't). Use `useUnits()` inside a component whenever the value needs to track live resizes.
+
+**Defining a style sheet outside the component, reactively.** `createStyles()` turns a factory into a hook — the factory is a plain function you write next to (or below) the component, and calling the hook it returns gives you fully reactive styles inside the component:
+
+```tsx
+import { StyleSheet, Text } from "react-native";
+import { createStyles } from "@/features/responsive";
+
+function Component() {
+  const styles = useStyles();
+  return <Text style={styles.text} />;
+}
+
+const useStyles = createStyles(({ units, breakpoint }) =>
+  StyleSheet.create({
+    text: { fontSize: units(14) },
+  }),
+);
+```
+
+The factory receives the same reactive `units`/`breakpoint` as the hooks, and the result is memoized (only recomputed when they actually change). `Button` and `Screen` both use this. Verified live: resizing 375px → 768px without reloading grew both `Screen`'s padding and `Button`'s size in the same frame, exactly as before this refactor.
+
+- `createUnits(width)` / `getBreakpoint(width)` are the underlying pure functions (what the hooks call after reading `useWindowDimensions()`) — used directly in `units.test.ts`/`breakpoint.test.ts`, no component rendering needed.
+
 ### `Root` — `src/root`
 
 ```

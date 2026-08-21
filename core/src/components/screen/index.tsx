@@ -1,9 +1,11 @@
 import { StyleSheet, View, type ViewProps } from "react-native";
 
+import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 export default function Screen({ style, ...props }: ViewProps) {
   const theme = useTheme();
+  const styles = useStyles();
 
   return (
     <View
@@ -17,10 +19,13 @@ export default function Screen({ style, ...props }: ViewProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+const useStyles = createStyles(({ units }) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      padding: units(16),
+    },
+  }),
+);

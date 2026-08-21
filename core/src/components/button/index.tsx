@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import Text from "@/components/text";
+import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 type Props = Omit<PressableProps, "children" | "style"> & {
@@ -22,6 +23,7 @@ export default function Button({
   ...props
 }: Props) {
   const theme = useTheme();
+  const styles = useStyles();
 
   return (
     <Pressable
@@ -41,11 +43,13 @@ export default function Button({
   );
 }
 
-const styles = StyleSheet.create({
-  button: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-});
+const useStyles = createStyles(({ units }) =>
+  StyleSheet.create({
+    button: {
+      paddingVertical: units(8),
+      paddingHorizontal: units(14),
+      borderRadius: units(8),
+      alignItems: "center",
+    },
+  }),
+);
