@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
+import Button from "@/components/button";
 import Text from "@/components/text";
 import { LocalValue } from "@/features/storage";
 
@@ -23,15 +24,16 @@ export default function Counter({ storageKey = "counter" }: Props) {
   return (
     <View style={styles.container}>
       <Text value={`count: ${count ?? 0}`} />
-      <Pressable
+      <Button
+        value="increment"
         onPress={() => counter.setValue((count ?? 0) + 1)}
         style={styles.button}
-      >
-        <Text value="increment" />
-      </Pressable>
-      <Pressable onPress={() => counter.reset()} style={styles.button}>
-        <Text value="reset" />
-      </Pressable>
+      />
+      <Button
+        value="reset"
+        onPress={() => counter.reset()}
+        style={styles.button}
+      />
     </View>
   );
 }
@@ -42,10 +44,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   button: {
-    padding: 12,
-    backgroundColor: "#e0e0e0",
-    borderRadius: 8,
-    alignItems: "center",
     minWidth: 120,
   },
 });

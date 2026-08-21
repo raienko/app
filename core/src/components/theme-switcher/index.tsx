@@ -1,35 +1,21 @@
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import Text from "@/components/text";
-import { useTheme, type ThemePreference } from "@/features/theme";
-
-const OPTIONS: ThemePreference[] = ["light", "dark", "system"];
+import Button from "@/components/button";
+import { THEME_PREFERENCES, useTheme } from "@/features/theme";
 
 export default function ThemeSwitcher() {
   const theme = useTheme();
 
   return (
     <View style={styles.container}>
-      {OPTIONS.map((option) => {
-        const selected = theme.preference === option;
-
-        return (
-          <Pressable
-            key={option}
-            onPress={() => theme.setPreference(option)}
-            style={[
-              styles.option,
-              {
-                backgroundColor: selected
-                  ? theme.colors.backgroundElementSelected
-                  : theme.colors.backgroundElement,
-              },
-            ]}
-          >
-            <Text value={option} />
-          </Pressable>
-        );
-      })}
+      {THEME_PREFERENCES.map((option) => (
+        <Button
+          key={option}
+          value={option}
+          selected={theme.preference === option}
+          onPress={() => theme.setPreference(option)}
+        />
+      ))}
     </View>
   );
 }
@@ -38,11 +24,5 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     gap: 8,
-  },
-  option: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 8,
-    alignItems: "center",
   },
 });
