@@ -2,7 +2,7 @@ import { type ReactNode } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { createStyles } from "@/features/responsive";
+import { createStyles, useUnits } from "@/features/responsive";
 
 import type { ModalPosition } from "./config";
 
@@ -34,11 +34,12 @@ export default function ModalScrollArea({
 }: Props) {
   const insets = useSafeAreaInsets();
   const styles = useStyles();
+  const units = useUnits();
 
   const scrollStyle = position === "fullscreen" ? styles.flex : styles.shrink;
   const contentContainerStyle = [
     styles.container,
-    position === "bottom" && { paddingBottom: insets.bottom },
+    position === "bottom" && { paddingBottom: insets.bottom + units(10) },
   ];
 
   return (

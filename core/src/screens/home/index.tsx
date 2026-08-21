@@ -5,6 +5,7 @@ import {
   type TextInput as RNTextInputInstance,
 } from "react-native";
 
+import Accordion from "@/components/accordion";
 import Button from "@/components/button";
 import Counter from "@/components/counter";
 import Icon from "@/components/icon";
@@ -32,54 +33,66 @@ export default function Home() {
         <Icon name="home" size={units(20)} />
         <Text value={env.appName} />
       </View>
-      <Counter storageKey="home-demo-counter" />
-      <ThemeSwitcher />
-      <View style={styles.form}>
-        <Input
-          label="Name"
-          placeholder="Ada Lovelace"
-          value={name}
-          onChange={setName}
-          leftSlot={<Icon name="user" />}
-          helperText="This is displayed on your profile"
-        />
-        <Input
-          type="numeric"
-          label="Age"
-          placeholder="0"
-          value={age}
-          onChange={setAge}
-          min={0}
-          max={120}
-          leftSlot={<Icon name="hash" />}
-        />
-        <Input
-          ref={emailRef}
-          type="email"
-          label="Email"
-          placeholder="ada@example.com"
-          value={email}
-          onChange={setEmail}
-          leftSlot={<Icon name="mail" />}
-          error={emailError}
-        />
-        <Button value="Focus email" onPress={() => emailRef.current?.focus()} />
-        <Text
-          value={`name: ${name || "—"} / age: ${age ?? "—"} / email: ${email || "—"}`}
-        />
-      </View>
-      <View style={styles.form}>
-        <Button value="Popup" onPress={() => Modal.show("home-popup")} />
-        <Button
-          value="Bottom sheet"
-          onPress={() => Modal.show("home-bottom-sheet")}
-        />
-        <Button value="Actions" onPress={() => Modal.show("home-actions")} />
-        <Button
-          value="Fullscreen"
-          onPress={() => Modal.show("home-fullscreen")}
-        />
-      </View>
+
+      <Accordion title="Counter & Theme">
+        <Counter storageKey="home-demo-counter" />
+        <ThemeSwitcher />
+      </Accordion>
+
+      <Accordion title="Input">
+        <View style={styles.form}>
+          <Input
+            label="Name"
+            placeholder="Ada Lovelace"
+            value={name}
+            onChange={setName}
+            leftSlot={<Icon name="user" />}
+            helperText="This is displayed on your profile"
+          />
+          <Input
+            type="numeric"
+            label="Age"
+            placeholder="0"
+            value={age}
+            onChange={setAge}
+            min={0}
+            max={120}
+            leftSlot={<Icon name="hash" />}
+          />
+          <Input
+            ref={emailRef}
+            type="email"
+            label="Email"
+            placeholder="ada@example.com"
+            value={email}
+            onChange={setEmail}
+            leftSlot={<Icon name="mail" />}
+            error={emailError}
+          />
+          <Button
+            value="Focus email"
+            onPress={() => emailRef.current?.focus()}
+          />
+          <Text
+            value={`name: ${name || "—"} / age: ${age ?? "—"} / email: ${email || "—"}`}
+          />
+        </View>
+      </Accordion>
+
+      <Accordion title="Modal">
+        <View style={styles.form}>
+          <Button value="Popup" onPress={() => Modal.show("home-popup")} />
+          <Button
+            value="Bottom sheet"
+            onPress={() => Modal.show("home-bottom-sheet")}
+          />
+          <Button value="Actions" onPress={() => Modal.show("home-actions")} />
+          <Button
+            value="Fullscreen"
+            onPress={() => Modal.show("home-fullscreen")}
+          />
+        </View>
+      </Accordion>
 
       <Modal id="home-popup" type="popup">
         <Text value="Popup modal" />
@@ -108,7 +121,7 @@ export default function Home() {
 const useStyles = createStyles(({ units }) =>
   StyleSheet.create({
     container: {
-      gap: units(24),
+      gap: units(16),
     },
     title: {
       flexDirection: "row",
@@ -116,7 +129,6 @@ const useStyles = createStyles(({ units }) =>
       gap: units(8),
     },
     form: {
-      width: units(260),
       gap: units(12),
     },
   }),
