@@ -88,11 +88,6 @@ export default function Home() {
 
       <Modal id="home-bottom-sheet" type="bottomSheet">
         <Text value="Bottom sheet modal" />
-        <Text value="Bottom sheet modal" />
-        <Text value="Bottom sheet modal" />
-        <Text value="Bottom sheet modal" />
-        <Text value="Bottom sheet modal" />
-        <Text value="Bottom sheet modal" />
         <Button value="Close" onPress={() => Modal.hide("home-bottom-sheet")} />
       </Modal>
 
