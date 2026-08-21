@@ -1,7 +1,7 @@
 import { Dimensions } from "react-native";
 
 import { BASE_WIDTH } from "./config";
-import { createUnits, scaleFactorForWidth, units } from "./units";
+import { createUnits, scaleFactorForWidth, unitsSnapshot } from "./units";
 
 describe("scaleFactorForWidth", () => {
   it("returns 1 at the base (Figma) width", () => {
@@ -43,8 +43,8 @@ describe("createUnits", () => {
   });
 });
 
-describe("units (module-scope, no hook required)", () => {
-  it("reads the current width imperatively via Dimensions.get", () => {
+describe("unitsSnapshot (module-scope, no hook required)", () => {
+  it("reads the current window size imperatively via Dimensions.get", () => {
     const spy = jest.spyOn(Dimensions, "get").mockReturnValue({
       width: BASE_WIDTH,
       height: 800,
@@ -52,7 +52,7 @@ describe("units (module-scope, no hook required)", () => {
       fontScale: 1,
     });
 
-    expect(units(12)).toBe(12);
+    expect(unitsSnapshot(12)).toBe(12);
     expect(spy).toHaveBeenCalledWith("window");
 
     spy.mockRestore();
@@ -65,10 +65,26 @@ describe("units (module-scope, no hook required)", () => {
       scale: 1,
       fontScale: 1,
     });
-    expect(units(12)).toBe(12);
+    expect(unitsSnapshot(12)).toBe(12);
 
     spy.mockReturnValue({ width: 900, height: 1200, scale: 1, fontScale: 1 });
-    expect(units(12)).toBeGreaterThan(12);
+    expect(unitsSnapshot(12)).toBeGreaterThan(12);
+
+    spy.mockRestore();
+  });
+
+  it("scales off the shorter edge, so landscape doesn't inflate values", () => {
+    // Same physical phone, portrait vs landscape — the short edge (375) is
+    // unchanged, so the scale should be identical either way.
+    const spy = jest.spyOn(Dimensions, "get");
+
+    spy.mockReturnValue({ width: 375, height: 812, scale: 1, fontScale: 1 });
+    const portrait = unitsSnapshot(12);
+
+    spy.mockReturnValue({ width: 812, height: 375, scale: 1, fontScale: 1 });
+    const landscape = unitsSnapshot(12);
+
+    expect(landscape).toBe(portrait);
 
     spy.mockRestore();
   });
