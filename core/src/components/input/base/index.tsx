@@ -1,6 +1,5 @@
 import { forwardRef, useState } from "react";
 import {
-  StyleSheet,
   TextInput as RNTextInput,
   View,
   type TextInput as RNTextInputInstance,
@@ -127,31 +126,30 @@ BaseInput.displayName = "BaseInput";
 
 export default BaseInput;
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    container: {
-      gap: units(6),
-    },
-    label: {
-      fontSize: units(13),
-    },
-    field: {
-      flexDirection: "row",
-      alignItems: "center",
-      gap: units(8),
-      minHeight: units(44),
-      borderRadius: units(8),
-      paddingHorizontal: units(12),
-      borderWidth: units(1),
-      borderColor: "transparent",
-    },
-    input: {
-      flex: 1,
-      fontSize: units(16),
-      padding: 0,
-    },
-    helperText: {
-      fontSize: units(12),
-    },
-  }),
-);
+const useStyles = createStyles(({ units, isRTL }) => ({
+  container: {
+    gap: units(6),
+  },
+  label: {
+    fontSize: units(13),
+  },
+  field: {
+    flexDirection: isRTL ? "row-reverse" : "row",
+    alignItems: "center",
+    gap: units(8),
+    minHeight: units(44),
+    borderRadius: units(8),
+    paddingHorizontal: units(12),
+    borderWidth: units(1),
+    borderColor: "transparent",
+  },
+  input: {
+    flex: 1,
+    fontSize: units(16),
+    padding: 0,
+    writingDirection: isRTL ? "rtl" : "ltr",
+  },
+  helperText: {
+    fontSize: units(12),
+  },
+}));

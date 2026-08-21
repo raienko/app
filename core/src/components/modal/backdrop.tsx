@@ -42,12 +42,10 @@ export default function ModalBackdrop({ progress, onDismiss }: Props) {
   );
 }
 
-const useStyles = createStyles(() =>
-  StyleSheet.create({
-    // The one deliberate exception to sourcing color from theme.colors — a
-    // dimming scrim is conventionally black regardless of theme.
-    backdrop: {
-      backgroundColor: "#000",
-    },
-  }),
-);
+const useStyles = createStyles(() => ({
+  // The one deliberate exception to sourcing color from theme.colors — a
+  // dimming scrim is conventionally black regardless of theme.
+  backdrop: {
+    backgroundColor: "#000",
+  },
+}));

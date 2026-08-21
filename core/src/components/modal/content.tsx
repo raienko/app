@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import {
-  StyleSheet,
   useWindowDimensions,
   type StyleProp,
   type ViewStyle,
@@ -84,24 +83,22 @@ export default function ModalContent({
   );
 }
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    popupContent: {
-      width: "100%",
-      maxWidth: units(360),
-      maxHeight: "85%",
-      borderRadius: units(16),
-      padding: units(20),
-    },
-    sheetContent: {
-      maxHeight: "85%",
-      borderTopLeftRadius: units(16),
-      borderTopRightRadius: units(16),
-      paddingHorizontal: units(20),
-    },
-    fullscreenContent: {
-      flex: 1,
-      padding: units(20),
-    },
-  }),
-);
+const useStyles = createStyles(({ units }) => ({
+  popupContent: {
+    width: "100%",
+    maxWidth: units(360),
+    maxHeight: "85%",
+    borderRadius: units(16),
+    padding: units(20),
+  },
+  sheetContent: {
+    maxHeight: "85%",
+    borderTopLeftRadius: units(16),
+    borderTopRightRadius: units(16),
+    paddingHorizontal: units(20),
+  },
+  fullscreenContent: {
+    flex: 1,
+    padding: units(20),
+  },
+}));

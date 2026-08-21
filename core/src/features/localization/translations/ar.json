@@ -1,0 +1,55 @@
+{
+  "common": {
+    "close": "إغلاق"
+  },
+  "home": {
+    "counterAndTheme": "العداد والسمة",
+    "input": "الإدخال",
+    "modal": "النافذة المنبثقة",
+    "summary": "الاسم: {{name}} / العمر: {{age}} / البريد الإلكتروني: {{email}}"
+  },
+  "input": {
+    "name": {
+      "label": "الاسم",
+      "placeholder": "Ada Lovelace",
+      "helper": "يظهر هذا في ملفك الشخصي"
+    },
+    "age": {
+      "label": "العمر",
+      "placeholder": "0"
+    },
+    "email": {
+      "label": "البريد الإلكتروني",
+      "placeholder": "ada@example.com",
+      "error": "أدخل بريدًا إلكترونيًا صالحًا"
+    },
+    "focusEmail": "التركيز على البريد الإلكتروني"
+  },
+  "modal": {
+    "popup": {
+      "trigger": "نافذة منبثقة",
+      "content": "نافذة منبثقة"
+    },
+    "bottomSheet": {
+      "trigger": "لوحة سفلية",
+      "content": "نافذة اللوحة السفلية"
+    },
+    "actions": {
+      "trigger": "إجراءات",
+      "optionA": "الخيار A",
+      "optionB": "الخيار B"
+    },
+    "fullscreen": {
+      "trigger": "ملء الشاشة",
+      "content": "نافذة ملء الشاشة"
+    }
+  },
+  "theme": {
+    "light": "فاتح",
+    "dark": "داكن",
+    "system": "النظام"
+  },
+  "locale": {
+    "system": "النظام"
+  }
+}

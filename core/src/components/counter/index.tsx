@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 import Button from "@/components/button";
 import Text from "@/components/text";
@@ -40,14 +40,12 @@ export default function Counter({ storageKey = "counter" }: Props) {
   );
 }
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    container: {
-      gap: units(12),
-      alignItems: "center",
-    },
-    button: {
-      minWidth: units(120),
-    },
-  }),
-);
+const useStyles = createStyles(({ units }) => ({
+  container: {
+    gap: units(12),
+    alignItems: "center",
+  },
+  button: {
+    minWidth: units(120),
+  },
+}));

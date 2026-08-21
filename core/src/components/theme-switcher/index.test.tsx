@@ -13,9 +13,9 @@ describe(`${Component.name} smoke test`, () => {
   it("renders an option for each preference", async () => {
     await render(<Component />);
 
-    expect(screen.getByText("light")).toBeTruthy();
-    expect(screen.getByText("dark")).toBeTruthy();
-    expect(screen.getByText("system")).toBeTruthy();
+    expect(screen.getByText("Light")).toBeTruthy();
+    expect(screen.getByText("Dark")).toBeTruthy();
+    expect(screen.getByText("System")).toBeTruthy();
   });
 
   it("updates the theme preference on press", async () => {
@@ -26,7 +26,7 @@ describe(`${Component.name} smoke test`, () => {
       </>,
     );
 
-    fireEvent.press(screen.getByText("dark"));
+    fireEvent.press(screen.getByText("Dark"));
 
     await waitFor(() =>
       expect(screen.getByText("preference: dark")).toBeTruthy(),

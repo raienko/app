@@ -1,6 +1,5 @@
 import {
   Pressable,
-  StyleSheet,
   type PressableProps,
   type StyleProp,
   type ViewStyle,
@@ -43,13 +42,11 @@ export default function Button({
   );
 }
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    button: {
-      paddingVertical: units(8),
-      paddingHorizontal: units(14),
-      borderRadius: units(8),
-      alignItems: "center",
-    },
-  }),
-);
+const useStyles = createStyles(({ units }) => ({
+  button: {
+    paddingVertical: units(8),
+    paddingHorizontal: units(14),
+    borderRadius: units(8),
+    alignItems: "center",
+  },
+}));

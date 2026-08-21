@@ -1,0 +1,55 @@
+{
+  "common": {
+    "close": "Close"
+  },
+  "home": {
+    "counterAndTheme": "Counter & Theme",
+    "input": "Input",
+    "modal": "Modal",
+    "summary": "name: {{name}} / age: {{age}} / email: {{email}}"
+  },
+  "input": {
+    "name": {
+      "label": "Name",
+      "placeholder": "Ada Lovelace",
+      "helper": "This is displayed on your profile"
+    },
+    "age": {
+      "label": "Age",
+      "placeholder": "0"
+    },
+    "email": {
+      "label": "Email",
+      "placeholder": "ada@example.com",
+      "error": "Enter a valid email"
+    },
+    "focusEmail": "Focus email"
+  },
+  "modal": {
+    "popup": {
+      "trigger": "Popup",
+      "content": "Popup modal"
+    },
+    "bottomSheet": {
+      "trigger": "Bottom sheet",
+      "content": "Bottom sheet modal"
+    },
+    "actions": {
+      "trigger": "Actions",
+      "optionA": "Option A",
+      "optionB": "Option B"
+    },
+    "fullscreen": {
+      "trigger": "Fullscreen",
+      "content": "Fullscreen modal"
+    }
+  },
+  "theme": {
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+  "locale": {
+    "system": "System"
+  }
+}

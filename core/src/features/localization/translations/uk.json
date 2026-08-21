@@ -1,0 +1,55 @@
+{
+  "common": {
+    "close": "Закрити"
+  },
+  "home": {
+    "counterAndTheme": "Лічильник і тема",
+    "input": "Введення",
+    "modal": "Модальне вікно",
+    "summary": "ім'я: {{name}} / вік: {{age}} / email: {{email}}"
+  },
+  "input": {
+    "name": {
+      "label": "Ім'я",
+      "placeholder": "Ada Lovelace",
+      "helper": "Це відображається у вашому профілі"
+    },
+    "age": {
+      "label": "Вік",
+      "placeholder": "0"
+    },
+    "email": {
+      "label": "Електронна пошта",
+      "placeholder": "ada@example.com",
+      "error": "Введіть дійсну електронну адресу"
+    },
+    "focusEmail": "Фокус на email"
+  },
+  "modal": {
+    "popup": {
+      "trigger": "Спливне вікно",
+      "content": "Спливне модальне вікно"
+    },
+    "bottomSheet": {
+      "trigger": "Нижня панель",
+      "content": "Модальне вікно знизу"
+    },
+    "actions": {
+      "trigger": "Дії",
+      "optionA": "Варіант A",
+      "optionB": "Варіант B"
+    },
+    "fullscreen": {
+      "trigger": "На весь екран",
+      "content": "Повноекранне модальне вікно"
+    }
+  },
+  "theme": {
+    "light": "Світла",
+    "dark": "Темна",
+    "system": "Системна"
+  },
+  "locale": {
+    "system": "Системна"
+  }
+}

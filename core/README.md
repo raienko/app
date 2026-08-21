@@ -83,6 +83,43 @@ const theme = useTheme(); // { scheme, colors, preference, setPreference }
 
 `ThemeProvider` and a `ThemeSwitcher` component (`src/components/theme-switcher`, wired into the Home screen) are both included; `Text`, `Screen`, and `Icon` (default `color`) already consume `theme.colors`.
 
+### Localization — `src/features/localization`
+
+```tsx
+import { useLocale } from "@/features/localization";
+
+const { locale, isRTL, preference, setPreference, t } = useLocale();
+
+t("common.close"); // "Close" / "Cerrar" / "关闭" / ... depending on locale
+t("home.summary", { name: "Ada", age: 30, email: "a@b.c" }); // {{token}} interpolation
+```
+
+Six locales ship out of the box — `en` (English), `uk` (Ukrainian), `es` (Spanish), `zh` (Chinese), `ja` (Japanese), `ar` (Arabic, the only RTL one) — plus a `"system"` preference (default) that resolves against the device's own language list via [`expo-localization`](https://docs.expo.dev/versions/v57.0.0/sdk/localization/)'s `getLocales()`, falling back to `en` if none of its languages are supported. Same shape as `ThemeProvider`/`useTheme()` end to end: `LocalePreference = LocaleCode | "system"`, persisted via `LocalValue` (`"locale-preference"`), `LocaleProvider` added to `Providers` alongside `ThemeProvider`.
+
+```
+src/features/localization/
+  translations/          One flat JSON file per locale (en/uk/es/zh/ja/ar.json)
+  translations.ts         Validates every locale against en.json + the `t()` lookup/interpolation
+  types.ts                 LocaleCode/LocalePreference/Locale types, the LOCALES metadata table
+  rtl.ts                    syncRTL() — the one platform-specific piece, see below
+  locale-provider.tsx        LocaleProvider — resolves locale, persists preference, calls syncRTL()
+  hooks.ts                    useLocale()/useIsRtl() — both read from context.ts
+  context.ts, index.ts
+```
+
+- **`en.json` is the source of truth for which keys must exist** — every other locale file is validated against its flattened key set on module load (missing _or_ extra keys throw a clear error naming them), the same fail-fast idea as `theme/colors.ts`'s palette validation. `TranslationKey` is a template-literal type derived from `en.json`'s actual shape (`Flatten<typeof en>`, producing dotted paths like `"input.email.error"`), the same "derive the type from the real data instead of hand-typing it" approach `Icon` uses for glyph names — passing a key that doesn't exist in `en.json` is a `tsc` error, not a runtime "Missing translation" surprise (though `translate()` also throws that at runtime, for the one case type-checking can't catch: a key that exists in `en.json` but was typo'd in a non-`en` locale file, which the cross-validation above already catches at import time instead).
+- **`{{token}}` interpolation** is a single `String.prototype.replace` in `translate()` — deliberately not a full ICU/plural-rules engine, since nothing in this app's copy needs pluralization yet; `t("home.summary", { name, age, email })` is the one interpolated string, used for the Home screen's live form-values readout.
+- **`LOCALES`** (`types.ts`) is the hand-authored display-name table — `code`, `englishName`, `nativeName` (what `LocaleSwitcher` actually renders — a language's own name for itself, not translated through `t()`), and `rtl`. Cross-checked on load against `Object.keys(translations)` so a locale can't have one without the other (a JSON file with no `LOCALES` entry, or vice versa) without an immediate, clear error.
+- **`LocaleSwitcher`** (`src/components/locale-switcher`, wired into the Home screen's "Counter & Theme" section next to `ThemeSwitcher`) renders one button per `LOCALE_PREFERENCES` entry (every locale's `nativeName`, plus `t("locale.system")`), same selected/`onPress` pattern as `ThemeSwitcher`.
+
+**RTL** is the one place native and web genuinely can't share a code path, and `rtl.ts`'s `syncRTL()` is deliberately small so that split is easy to see:
+
+- **Web**: sets `document.documentElement.dir` directly. CSS flexbox mirrors `flexDirection: "row"` off the element's own computed `direction` natively — no `I18nManager` involvement needed at all — so this alone re-mirrors every row layout (headers, button rows, `Input`'s `leftSlot`/`rightSlot`) live, with no reload. Verified live: switching to Arabic instantly mirrors the Home screen — title, every accordion header/chevron, every button row, and `Input`'s icon slots all flip from the left to the right side, text right-aligns, all without a reload.
+- **Native**: `I18nManager.forceRTL()` changes how Yoga mirrors layout app-wide, but only takes effect after a fresh bundle load — so `syncRTL` calls `DevSettings.reload()` after forcing it, guarded to only do so when `I18nManager.isRTL` doesn't already match (`DevSettings.reload()` works in a dev client, which is what this project's `yarn ios`/`yarn android` build; a store-shipped production build would need `expo-updates`' `Updates.reloadAsync()` for the same effect instead — out of scope for this starter app, same "deferred" reasoning as the Modal/`react-native-gesture-handler` Jest-utils note below).
+- **These two branches can't be merged into one guard.** `I18nManager.isRTL` reads as `undefined` on web — RN core's `I18nManager.js` snapshots `NativeI18nManager.getConstants()` once at module load, and no such native module is registered on web — so `undefined === false` is `false` on every single render, and reusing the native guard on web calls `syncRTL` → mismatch → (if it also reloaded on web) reload → same mismatch again, forever. This was a real bug caught while verifying this feature live: the first implementation used one shared reload-based guard for both platforms, and the dev server's terminal log showed a tight loop of full bundle rebuilds (`Web Bundled .../entry.js`, repeating every ~150ms) instead of the app ever settling — the fix was recognizing that web doesn't need (or support) the reload-based approach at all, not tuning the guard condition.
+- `expo-localization` is a native module — installed via `npx expo install` (keeps it Expo-SDK-compatible) and pinned exact like every other dependency, registered in `app.config.ts`'s `plugins`. Like the vector-icon font families, adding it requires an `expo run:ios`/`expo run:android` rebuild of the dev client before it works on device/simulator — a `yarn ios`/`yarn android` (or Metro reload alone) against an _already-built_ older dev client throws `Cannot find native module 'ExpoLocalization'` instead, same class of caveat as this README's Xcode-version note above.
+- **`useIsRtl()`** exposes `Locale.isRTL` on its own — a thin wrapper around `useLocale()` for callers that only need the RTL flag, not the rest (`t`, `preference`, `setPreference`, ...). It's what `createStyles` (see Responsive units below) builds its own `isRTL` on, specifically because it's derived straight from `LOCALES`' `rtl` table rather than from `I18nManager.isRTL` — it changes the instant the locale does, on every platform, with no reload to wait on. That makes it useful for more than just reacting to native's reload: styles that manually mirror off `isRTL` (`flexDirection: isRTL ? "row-reverse" : "row"`, swapped `marginLeft`/`marginRight`, ...) work correctly even in environments where automatic mirroring doesn't apply at all, like Yoga on native inside the split-second before `syncRTL`'s reload lands, or a future non-flexbox layout that wouldn't auto-mirror from `dir`/`I18nManager` either way.
+
 ### Responsive units — `src/features/responsive`
 
 ```tsx
@@ -116,7 +153,7 @@ It's named `unitsSnapshot`, not `units`, on purpose, and `eslint.config.js` bans
 **Defining a style sheet outside the component, reactively.** `createStyles()` turns a factory into a hook — the factory is a plain function you write next to (or below) the component, and calling the hook it returns gives you fully reactive styles inside the component:
 
 ```tsx
-import { StyleSheet, Text } from "react-native";
+import { Text } from "react-native";
 import { createStyles } from "@/features/responsive";
 
 function Component() {
@@ -124,14 +161,14 @@ function Component() {
   return <Text style={styles.text} />;
 }
 
-const useStyles = createStyles(({ units, breakpoint }) =>
-  StyleSheet.create({
-    text: { fontSize: units(14) },
-  }),
-);
+const useStyles = createStyles(({ units, breakpoint, isRTL }) => ({
+  text: { fontSize: units(14) },
+}));
 ```
 
-The factory receives the same reactive `units`/`breakpoint` as the hooks, and the result is memoized (only recomputed when they actually change). `Button` and `Screen` both use this. Verified live: resizing 375px → 768px without reloading grew both `Screen`'s padding and `Button`'s size in the same frame, exactly as before this refactor.
+The factory receives the same reactive `units`/`breakpoint` as the hooks, plus `isRTL` (see `useIsRtl()` in the Localization section below), and returns a plain style object — `createStyles` runs it through `StyleSheet.create()` itself, so call sites return the object directly and don't need their own `"react-native"` import just for that. The result is memoized (only recomputed when one of `units`/`breakpoint`/`isRTL` actually changes). `Button` and `Screen` both use this. Verified live: resizing 375px → 768px without reloading grew both `Screen`'s padding and `Button`'s size in the same frame, exactly as before this refactor.
+
+`isRTL` here is deliberately the locale-derived flag, not `I18nManager.isRTL` — see the Localization section's RTL note for why `I18nManager.isRTL` can't be used for this at all (it's a snapshot that never updates without a reload). Because `useIsRtl()` flips the instant the locale does, a style built directly off it (e.g. `flexDirection: isRTL ? "row-reverse" : "row"`) can mirror manually without waiting on the reload that native RTL otherwise requires.
 
 - `createUnits(width)` / `getBreakpoint(width)` are the underlying pure functions (what the hooks call after reading `useWindowDimensions()`) — used directly in `units.test.ts`/`breakpoint.test.ts`, no component rendering needed.
 

@@ -1,0 +1,55 @@
+{
+  "common": {
+    "close": "Cerrar"
+  },
+  "home": {
+    "counterAndTheme": "Contador y tema",
+    "input": "Entrada",
+    "modal": "Modal",
+    "summary": "nombre: {{name}} / edad: {{age}} / email: {{email}}"
+  },
+  "input": {
+    "name": {
+      "label": "Nombre",
+      "placeholder": "Ada Lovelace",
+      "helper": "Esto se muestra en tu perfil"
+    },
+    "age": {
+      "label": "Edad",
+      "placeholder": "0"
+    },
+    "email": {
+      "label": "Correo electrónico",
+      "placeholder": "ada@example.com",
+      "error": "Introduce un correo electrónico válido"
+    },
+    "focusEmail": "Enfocar correo"
+  },
+  "modal": {
+    "popup": {
+      "trigger": "Ventana emergente",
+      "content": "Modal emergente"
+    },
+    "bottomSheet": {
+      "trigger": "Panel inferior",
+      "content": "Modal de panel inferior"
+    },
+    "actions": {
+      "trigger": "Acciones",
+      "optionA": "Opción A",
+      "optionB": "Opción B"
+    },
+    "fullscreen": {
+      "trigger": "Pantalla completa",
+      "content": "Modal a pantalla completa"
+    }
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Oscuro",
+    "system": "Sistema"
+  },
+  "locale": {
+    "system": "Sistema"
+  }
+}

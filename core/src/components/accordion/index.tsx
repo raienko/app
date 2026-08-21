@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -82,30 +82,28 @@ export default function Accordion({
   );
 }
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    container: {
-      // Screen (this component's typical parent) centers children without
-      // stretching them, so without an explicit width the header's
-      // space-between would have no extra room to actually space with.
-      width: units(260),
-      borderRadius: units(12),
-      overflow: "hidden",
-    },
-    header: {
-      flexDirection: "row",
-      alignItems: "center",
-      justifyContent: "space-between",
-      paddingVertical: units(12),
-      paddingHorizontal: units(16),
-    },
-    title: {
-      flex: 1,
-    },
-    content: {
-      gap: units(12),
-      paddingHorizontal: units(16),
-      paddingBottom: units(16),
-    },
-  }),
-);
+const useStyles = createStyles(({ units, isRTL }) => ({
+  container: {
+    // Screen (this component's typical parent) centers children without
+    // stretching them, so without an explicit width the header's
+    // space-between would have no extra room to actually space with.
+    width: units(260),
+    borderRadius: units(12),
+    overflow: "hidden",
+  },
+  header: {
+    flexDirection: isRTL ? "row-reverse" : "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: units(12),
+    paddingHorizontal: units(16),
+  },
+  title: {
+    flex: 1,
+  },
+  content: {
+    gap: units(12),
+    paddingHorizontal: units(16),
+    paddingBottom: units(16),
+  },
+}));

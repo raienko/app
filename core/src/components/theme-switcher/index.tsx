@@ -1,11 +1,19 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
 import Button from "@/components/button";
+import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 import { THEME_PREFERENCES, useTheme } from "@/features/theme";
 
+const LABEL_KEY = {
+  light: "theme.light",
+  dark: "theme.dark",
+  system: "theme.system",
+} as const;
+
 export default function ThemeSwitcher() {
   const theme = useTheme();
+  const { t } = useLocale();
   const styles = useStyles();
 
   return (
@@ -13,7 +21,7 @@ export default function ThemeSwitcher() {
       {THEME_PREFERENCES.map((option) => (
         <Button
           key={option}
-          value={option}
+          value={t(LABEL_KEY[option])}
           selected={theme.preference === option}
           onPress={() => theme.setPreference(option)}
         />
@@ -22,11 +30,9 @@ export default function ThemeSwitcher() {
   );
 }
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    container: {
-      flexDirection: "row",
-      gap: units(8),
-    },
-  }),
-);
+const useStyles = createStyles(({ units }) => ({
+  container: {
+    flexDirection: "row",
+    gap: units(8),
+  },
+}));

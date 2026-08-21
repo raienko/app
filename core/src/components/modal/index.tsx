@@ -5,7 +5,7 @@ import {
   useImperativeHandle,
   useState,
 } from "react";
-import { Modal as RNModal, StyleSheet } from "react-native";
+import { Modal as RNModal } from "react-native";
 import Animated, {
   runOnJS,
   useSharedValue,
@@ -192,20 +192,18 @@ Modal.hide = (id: string) => {
 
 export default Modal;
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    containerCenter: {
-      flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      padding: units(24),
-    },
-    containerBottom: {
-      flex: 1,
-      justifyContent: "flex-end",
-    },
-    containerFullscreen: {
-      flex: 1,
-    },
-  }),
-);
+const useStyles = createStyles(({ units }) => ({
+  containerCenter: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: units(24),
+  },
+  containerBottom: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  containerFullscreen: {
+    flex: 1,
+  },
+}));

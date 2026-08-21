@@ -39,6 +39,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     "expo-router",
+    "expo-localization",
     "@react-native-community/datetimepicker",
     "@react-native-vector-icons/feather",
     "@react-native-vector-icons/material-icons",

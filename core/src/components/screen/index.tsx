@@ -1,4 +1,4 @@
-import { StyleSheet, View, type ViewProps } from "react-native";
+import { View, type ViewProps } from "react-native";
 
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
@@ -19,13 +19,11 @@ export default function Screen({ style, ...props }: ViewProps) {
   );
 }
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    container: {
-      flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
-      padding: units(16),
-    },
-  }),
-);
+const useStyles = createStyles(({ units }) => ({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: units(16),
+  },
+}));

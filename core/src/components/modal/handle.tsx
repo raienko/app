@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS, withTiming, type SharedValue } from "react-native-reanimated";
 
@@ -57,20 +57,18 @@ export default function ModalHandle({ dragY, onDismiss }: Props) {
   );
 }
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    grabberHandle: {
-      alignItems: "center",
-      paddingVertical: units(8),
-    },
-    // The grabber's mid-gray (iOS's own system gray for this exact element)
-    // is the other deliberate exception to theme.colors — it already reads
-    // clearly on both a light and a dark sheet without needing to switch.
-    grabber: {
-      width: units(36),
-      height: units(4),
-      borderRadius: units(2),
-      backgroundColor: "#8e8e93",
-    },
-  }),
-);
+const useStyles = createStyles(({ units }) => ({
+  grabberHandle: {
+    alignItems: "center",
+    paddingVertical: units(8),
+  },
+  // The grabber's mid-gray (iOS's own system gray for this exact element)
+  // is the other deliberate exception to theme.colors — it already reads
+  // clearly on both a light and a dark sheet without needing to switch.
+  grabber: {
+    width: units(36),
+    height: units(4),
+    borderRadius: units(2),
+    backgroundColor: "#8e8e93",
+  },
+}));

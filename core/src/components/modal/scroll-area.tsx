@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { createStyles, useUnits } from "@/features/responsive";
@@ -54,16 +54,14 @@ export default function ModalScrollArea({
   );
 }
 
-const useStyles = createStyles(({ units }) =>
-  StyleSheet.create({
-    flex: {
-      flex: 1,
-    },
-    shrink: {
-      flexShrink: 1,
-    },
-    container: {
-      gap: units(8),
-    },
-  }),
-);
+const useStyles = createStyles(({ units }) => ({
+  flex: {
+    flex: 1,
+  },
+  shrink: {
+    flexShrink: 1,
+  },
+  container: {
+    gap: units(8),
+  },
+}));

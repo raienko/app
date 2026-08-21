@@ -1,0 +1,55 @@
+{
+  "common": {
+    "close": "关闭"
+  },
+  "home": {
+    "counterAndTheme": "计数器与主题",
+    "input": "输入",
+    "modal": "模态框",
+    "summary": "姓名：{{name}} / 年龄：{{age}} / 邮箱：{{email}}"
+  },
+  "input": {
+    "name": {
+      "label": "姓名",
+      "placeholder": "Ada Lovelace",
+      "helper": "这将显示在您的个人资料中"
+    },
+    "age": {
+      "label": "年龄",
+      "placeholder": "0"
+    },
+    "email": {
+      "label": "邮箱",
+      "placeholder": "ada@example.com",
+      "error": "请输入有效的邮箱地址"
+    },
+    "focusEmail": "聚焦邮箱输入框"
+  },
+  "modal": {
+    "popup": {
+      "trigger": "弹出窗口",
+      "content": "弹出模态框"
+    },
+    "bottomSheet": {
+      "trigger": "底部面板",
+      "content": "底部面板模态框"
+    },
+    "actions": {
+      "trigger": "操作",
+      "optionA": "选项 A",
+      "optionB": "选项 B"
+    },
+    "fullscreen": {
+      "trigger": "全屏",
+      "content": "全屏模态框"
+    }
+  },
+  "theme": {
+    "light": "浅色",
+    "dark": "深色",
+    "system": "跟随系统"
+  },
+  "locale": {
+    "system": "跟随系统"
+  }
+}

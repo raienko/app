@@ -1,0 +1,55 @@
+{
+  "common": {
+    "close": "閉じる"
+  },
+  "home": {
+    "counterAndTheme": "カウンターとテーマ",
+    "input": "入力",
+    "modal": "モーダル",
+    "summary": "名前: {{name}} / 年齢: {{age}} / メール: {{email}}"
+  },
+  "input": {
+    "name": {
+      "label": "名前",
+      "placeholder": "Ada Lovelace",
+      "helper": "プロフィールに表示されます"
+    },
+    "age": {
+      "label": "年齢",
+      "placeholder": "0"
+    },
+    "email": {
+      "label": "メールアドレス",
+      "placeholder": "ada@example.com",
+      "error": "有効なメールアドレスを入力してください"
+    },
+    "focusEmail": "メール欄にフォーカス"
+  },
+  "modal": {
+    "popup": {
+      "trigger": "ポップアップ",
+      "content": "ポップアップモーダル"
+    },
+    "bottomSheet": {
+      "trigger": "ボトムシート",
+      "content": "ボトムシートモーダル"
+    },
+    "actions": {
+      "trigger": "アクション",
+      "optionA": "オプション A",
+      "optionB": "オプション B"
+    },
+    "fullscreen": {
+      "trigger": "フルスクリーン",
+      "content": "フルスクリーンモーダル"
+    }
+  },
+  "theme": {
+    "light": "ライト",
+    "dark": "ダーク",
+    "system": "システム"
+  },
+  "locale": {
+    "system": "システム"
+  }
+}
