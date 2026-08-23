@@ -19,11 +19,11 @@ export default function Screen({ style, ...props }: ViewProps) {
   );
 }
 
-const useStyles = createStyles(({ units }) => ({
+const useStyles = createStyles(({ spacing }) => ({
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: units(16),
+    padding: spacing.x16,
   },
 }));

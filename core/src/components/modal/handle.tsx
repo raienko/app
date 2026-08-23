@@ -57,18 +57,18 @@ export default function ModalHandle({ dragY, onDismiss }: Props) {
   );
 }
 
-const useStyles = createStyles(({ units }) => ({
+const useStyles = createStyles(({ units, spacing, sizes }) => ({
   grabberHandle: {
     alignItems: "center",
-    paddingVertical: units(8),
+    paddingVertical: spacing.x8,
   },
   // The grabber's mid-gray (iOS's own system gray for this exact element)
   // is the other deliberate exception to theme.colors — it already reads
   // clearly on both a light and a dark sheet without needing to switch.
   grabber: {
-    width: units(36),
-    height: units(4),
-    borderRadius: units(2),
+    width: sizes.grabberWidth,
+    height: sizes.grabberHeight,
+    borderRadius: sizes.grabberHeight / 2,
     backgroundColor: "#8e8e93",
   },
 }));

@@ -126,9 +126,9 @@ BaseInput.displayName = "BaseInput";
 
 export default BaseInput;
 
-const useStyles = createStyles(({ units, isRTL }) => ({
+const useStyles = createStyles(({ units, isRTL, spacing, radius, sizes }) => ({
   container: {
-    gap: units(6),
+    gap: spacing.x8,
   },
   label: {
     fontSize: units(13),
@@ -136,11 +136,11 @@ const useStyles = createStyles(({ units, isRTL }) => ({
   field: {
     flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "center",
-    gap: units(8),
-    minHeight: units(44),
-    borderRadius: units(8),
-    paddingHorizontal: units(12),
-    borderWidth: units(1),
+    gap: spacing.x8,
+    minHeight: sizes.elementHeightMd,
+    borderRadius: radius.x8,
+    paddingHorizontal: spacing.x12,
+    borderWidth: spacing.x1,
     borderColor: "transparent",
   },
   input: {

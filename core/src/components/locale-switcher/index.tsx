@@ -32,10 +32,10 @@ export default function LocaleSwitcher() {
   );
 }
 
-const useStyles = createStyles(({ units }) => ({
+const useStyles = createStyles(({ spacing }) => ({
   container: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: units(8),
+    gap: spacing.x8,
   },
 }));

@@ -54,7 +54,7 @@ export default function ModalScrollArea({
   );
 }
 
-const useStyles = createStyles(({ units }) => ({
+const useStyles = createStyles(({ spacing }) => ({
   flex: {
     flex: 1,
   },
@@ -62,6 +62,6 @@ const useStyles = createStyles(({ units }) => ({
     flexShrink: 1,
   },
   container: {
-    gap: units(8),
+    gap: spacing.x8,
   },
 }));

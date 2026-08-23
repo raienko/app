@@ -13,10 +13,10 @@ import Text from "@/components/text";
 import ThemeSwitcher from "@/components/theme-switcher";
 import env from "@/constants/env";
 import { useLocale } from "@/features/localization";
-import { createStyles, useUnits } from "@/features/responsive";
+import { createStyles, useSizes } from "@/features/responsive";
 
 export default function Home() {
-  const units = useUnits();
+  const { spacing } = useSizes();
   const styles = useStyles();
   const { t } = useLocale();
   const [name, setName] = useState("");
@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <Screen style={styles.container}>
       <View style={styles.title}>
-        <Icon name="home" size={units(20)} />
+        <Icon name="home" size={spacing.x20} />
         <Text value={env.appName} />
       </View>
 
@@ -146,16 +146,16 @@ export default function Home() {
   );
 }
 
-const useStyles = createStyles(({ units }) => ({
+const useStyles = createStyles(({ spacing }) => ({
   container: {
-    gap: units(16),
+    gap: spacing.x16,
   },
   title: {
     flexDirection: "row",
     alignItems: "center",
-    gap: units(8),
+    gap: spacing.x8,
   },
   form: {
-    gap: units(12),
+    gap: spacing.x12,
   },
 }));

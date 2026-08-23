@@ -4,9 +4,10 @@ import { StyleSheet } from "react-native";
 import { useIsRtl } from "@/features/localization";
 
 import { useBreakpoint, type Breakpoint } from "./breakpoint";
+import { useSizes, type Sizes } from "./sizes";
 import useUnits from "./units";
 
-type Responsive = {
+type Responsive = Sizes & {
   units: ReturnType<typeof useUnits>;
   breakpoint: Breakpoint;
   isRTL: boolean;
@@ -15,10 +16,11 @@ type Responsive = {
 /**
  * Turns a style factory defined outside a component into a hook you call
  * inside one — the factory gets the current (reactive) units()/breakpoint/
- * isRTL, and the result is memoized so it's only recomputed when one of
- * them actually changes. Runs the factory's return value through
- * StyleSheet.create() itself, so call sites return a plain style object and
- * don't need their own "react-native" import just for that.
+ * isRTL/spacing/radius/sizes, and the result is memoized so it's only
+ * recomputed when one of them actually changes. Runs the factory's return
+ * value through StyleSheet.create() itself, so call sites return a plain
+ * style object and don't need their own "react-native" import just for
+ * that.
  *
  * `isRTL` here is the locale-derived flag (useIsRtl(), see
  * features/localization), not I18nManager.isRTL — it flips the instant the
@@ -27,9 +29,16 @@ type Responsive = {
  * directly off it in a style that otherwise wouldn't re-render until a
  * reload landed.
  *
+ * `spacing`/`radius`/`sizes` are the sizes styleguide (see sizes.ts's
+ * useSizes(), which this calls internally) — already scaled through
+ * units(), so `spacing.x8`/`sizes.elementHeightMd` are used directly with
+ * no units() wrapping of their own.
+ *
  * @example
- * const useStyles = createStyles(({ units, breakpoint, isRTL }) => ({
+ * const useStyles = createStyles(({ units, isRTL, spacing, sizes }) => ({
  *   text: { fontSize: units(14) },
+ *   row: { gap: spacing.x8 },
+ *   field: { minHeight: sizes.elementHeightMd },
  * }));
  *
  * function Component() {
@@ -44,9 +53,13 @@ export default function createStyles<
     const units = useUnits();
     const breakpoint = useBreakpoint();
     const isRTL = useIsRtl();
+    const { spacing, radius, sizes } = useSizes();
     return useMemo(
-      () => StyleSheet.create(factory({ units, breakpoint, isRTL })),
-      [units, breakpoint, isRTL],
+      () =>
+        StyleSheet.create(
+          factory({ units, breakpoint, isRTL, spacing, radius, sizes }),
+        ),
+      [units, breakpoint, isRTL, spacing, radius, sizes],
     );
   };
 }

@@ -192,12 +192,12 @@ Modal.hide = (id: string) => {
 
 export default Modal;
 
-const useStyles = createStyles(({ units }) => ({
+const useStyles = createStyles(({ spacing }) => ({
   containerCenter: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    padding: units(24),
+    padding: spacing.x24,
   },
   containerBottom: {
     flex: 1,

@@ -42,11 +42,11 @@ export default function Button({
   );
 }
 
-const useStyles = createStyles(({ units }) => ({
+const useStyles = createStyles(({ spacing, radius }) => ({
   button: {
-    paddingVertical: units(8),
-    paddingHorizontal: units(14),
-    borderRadius: units(8),
+    paddingVertical: spacing.x8,
+    paddingHorizontal: spacing.x12,
+    borderRadius: radius.x8,
     alignItems: "center",
   },
 }));

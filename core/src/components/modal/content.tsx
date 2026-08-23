@@ -11,7 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { createStyles, useUnits } from "@/features/responsive";
+import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 import type { ModalTypeConfig } from "./config";
@@ -40,7 +40,7 @@ export default function ModalContent({
   children,
 }: Props) {
   const theme = useTheme();
-  const units = useUnits();
+  const { spacing } = useSizes();
   const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
   const styles = useStyles();
@@ -65,7 +65,7 @@ export default function ModalContent({
       ? styles.popupContent
       : config.position === "bottom"
         ? styles.sheetContent
-        : [styles.fullscreenContent, { paddingTop: units(20) + insets.top }];
+        : [styles.fullscreenContent, { paddingTop: spacing.x20 + insets.top }];
 
   return (
     <Animated.View
@@ -83,22 +83,22 @@ export default function ModalContent({
   );
 }
 
-const useStyles = createStyles(({ units }) => ({
+const useStyles = createStyles(({ radius, spacing, sizes }) => ({
   popupContent: {
     width: "100%",
-    maxWidth: units(360),
+    maxWidth: sizes.elementWidthLg,
     maxHeight: "85%",
-    borderRadius: units(16),
-    padding: units(20),
+    borderRadius: radius.x16,
+    padding: spacing.x20,
   },
   sheetContent: {
     maxHeight: "85%",
-    borderTopLeftRadius: units(16),
-    borderTopRightRadius: units(16),
-    paddingHorizontal: units(20),
+    borderTopLeftRadius: radius.x16,
+    borderTopRightRadius: radius.x16,
+    paddingHorizontal: spacing.x20,
   },
   fullscreenContent: {
     flex: 1,
-    padding: units(20),
+    padding: spacing.x20,
   },
 }));

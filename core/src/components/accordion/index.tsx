@@ -9,7 +9,7 @@ import Animated, {
 import If from "@/components/if";
 import Icon from "@/components/icon";
 import Text from "@/components/text";
-import { createStyles, useUnits } from "@/features/responsive";
+import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 const ANIMATION_DURATION = 200;
@@ -38,7 +38,7 @@ export default function Accordion({
   const [open, setOpen] = useState(defaultOpen);
   const rotation = useSharedValue(defaultOpen ? 1 : 0);
   const theme = useTheme();
-  const units = useUnits();
+  const { spacing } = useSizes();
   const styles = useStyles();
 
   function toggle() {
@@ -70,7 +70,7 @@ export default function Accordion({
         <Animated.View style={chevronStyle}>
           <Icon
             name="chevron-down"
-            size={units(20)}
+            size={spacing.x20}
             color={theme.colors.textSecondary}
           />
         </Animated.View>
@@ -82,28 +82,28 @@ export default function Accordion({
   );
 }
 
-const useStyles = createStyles(({ units, isRTL }) => ({
+const useStyles = createStyles(({ isRTL, spacing, radius, sizes }) => ({
   container: {
     // Screen (this component's typical parent) centers children without
     // stretching them, so without an explicit width the header's
     // space-between would have no extra room to actually space with.
-    width: units(260),
-    borderRadius: units(12),
+    width: sizes.elementWidthSm,
+    borderRadius: radius.x12,
     overflow: "hidden",
   },
   header: {
     flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingVertical: units(12),
-    paddingHorizontal: units(16),
+    paddingVertical: spacing.x12,
+    paddingHorizontal: spacing.x16,
   },
   title: {
     flex: 1,
   },
   content: {
-    gap: units(12),
-    paddingHorizontal: units(16),
-    paddingBottom: units(16),
+    gap: spacing.x12,
+    paddingHorizontal: spacing.x16,
+    paddingBottom: spacing.x16,
   },
 }));

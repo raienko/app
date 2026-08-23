@@ -161,16 +161,35 @@ function Component() {
   return <Text style={styles.text} />;
 }
 
-const useStyles = createStyles(({ units, breakpoint, isRTL }) => ({
-  text: { fontSize: units(14) },
-}));
+const useStyles = createStyles(
+  ({ units, breakpoint, isRTL, spacing, radius, sizes }) => ({
+    text: { fontSize: units(14) },
+  }),
+);
 ```
 
-The factory receives the same reactive `units`/`breakpoint` as the hooks, plus `isRTL` (see `useIsRtl()` in the Localization section below), and returns a plain style object — `createStyles` runs it through `StyleSheet.create()` itself, so call sites return the object directly and don't need their own `"react-native"` import just for that. The result is memoized (only recomputed when one of `units`/`breakpoint`/`isRTL` actually changes). `Button` and `Screen` both use this. Verified live: resizing 375px → 768px without reloading grew both `Screen`'s padding and `Button`'s size in the same frame, exactly as before this refactor.
+The factory receives the same reactive `units`/`breakpoint` as the hooks, plus `isRTL` (see `useIsRtl()` in the Localization section below) and `spacing`/`radius`/`sizes` (see the sizes styleguide just below), and returns a plain style object — `createStyles` runs it through `StyleSheet.create()` itself, so call sites return the object directly and don't need their own `"react-native"` import just for that. The result is memoized (only recomputed when one of these actually changes). `Button` and `Screen` both use this. Verified live: resizing 375px → 768px without reloading grew both `Screen`'s padding and `Button`'s size in the same frame, exactly as before this refactor.
 
 `isRTL` here is deliberately the locale-derived flag, not `I18nManager.isRTL` — see the Localization section's RTL note for why `I18nManager.isRTL` can't be used for this at all (it's a snapshot that never updates without a reload). Because `useIsRtl()` flips the instant the locale does, a style built directly off it (e.g. `flexDirection: isRTL ? "row-reverse" : "row"`) can mirror manually without waiting on the reload that native RTL otherwise requires.
 
 - `createUnits(width)` / `getBreakpoint(width)` are the underlying pure functions (what the hooks call after reading `useWindowDimensions()`) — used directly in `units.test.ts`/`breakpoint.test.ts`, no component rendering needed.
+
+**Sizes styleguide — `spacing`/`radius`/`sizes`** (`sizes.ts`, via `useSizes()`). Two different things that both answer "don't hardcode the same size in two places" — and both come out already scaled, no `units()` wrapping needed at the call site:
+
+```tsx
+import { createStyles } from "@/features/responsive";
+
+const useStyles = createStyles(({ units, spacing, radius, sizes }) => ({
+  row: { gap: spacing.x8, padding: spacing.x12 },
+  card: { borderRadius: radius.x12 },
+  field: { minHeight: sizes.elementHeightMd },
+}));
+```
+
+- **`spacing`/`radius` are a generic scale**, keyed `x<value>` (`spacing.x8`, not `spacing.sm` or `spacing[8]`) — a numeric-value key says exactly what step you're getting without a name to look up first, and `spacing.x10` (not a step in the scale) is a `tsc` error instead of a silently-accepted typo; the `x` prefix exists only because a bare number can't be a dot-accessible property name. The underlying steps match the distinct values already in real use across the component set when this was written (same "derive from what's actually there" reasoning as `THEME_PREFERENCES` deriving from `Object.keys(colors)` rather than being hand-typed). Every `createStyles` call site in the app now reaches for one of these wherever its value matches a step, instead of a bare number — adopting them was a like-for-like swap with zero visual change (verified: full test suite and a live before/after screenshot both came back identical). Not only for `gap`/`padding`, either: `Accordion`'s chevron and the Home screen's header icon both pass `size={spacing.x20}` to `Icon`, reusing the same step `Screen`'s padding already uses, rather than a separate icon-size scale.
+- **`sizes` (from `NAMED_SIZES`) is purpose-specific, not generic — but named by _purpose_, not by whichever component happens to use it first.** Where `spacing.x16` means nothing beyond "16px", each `NAMED_SIZES` entry means exactly one thing: `elementHeightMd` (currently Input's minimum touch-target height, the standard 44pt — named for the concept, since a future Button/Select sized to match is reusing the same touch-target height, not borrowing Input's own measurement), `elementWidthSm`/`elementWidthLg` (currently Accordion's fixed width and Modal's content `maxWidth` — two components that happened to need two different tiers of "how wide should a self-contained element be" first, not two unrelated measurements). `grabberWidth`/`grabberHeight` (Modal's drag handle) stay specifically named, though — they're genuinely that one element's own pill dimensions, not a reusable concept, and genericizing the name wouldn't make the measurement itself any more general.
+- **Both groups are computed by one hook, `useSizes()`** — `createStyles` calls it internally and hands `spacing`/`radius`/`sizes` straight to the style factory, which is how most call sites get them. A component needs it directly only for a size used outside a style object entirely — `Accordion` and the Home screen both call `useSizes()` themselves for exactly that (the `Icon` `size` prop above).
+- **What's deliberately excluded from both groups**: a measurement that doesn't represent a reusable step or a reusable named purpose — a hairline `borderWidth`, `Counter`'s button `minWidth` tuned to that component's own two buttons, font sizes (their own, not-yet-written styleguide) — stays a plain number owned by its component, still passed through `units()` at the call site same as always. Nothing was rounded or forced to fit either group just to reuse it; `sizes.ts`'s own doc comments say the same for each: pull a value in once it has a genuine second use or a clear standalone purpose, not before.
 
 ### `Icon` — `src/components/icon`
 

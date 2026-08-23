@@ -3,12 +3,17 @@ import { renderHook } from "@/root/testing";
 import createStyles from "./create-styles";
 
 describe(`${createStyles.name} smoke test`, () => {
-  it("passes units, breakpoint, and isRTL through to the factory", async () => {
-    const factory = jest.fn(({ units, breakpoint, isRTL }) => ({
-      text: { fontSize: units(14) },
-      breakpoint,
-      isRTL,
-    }));
+  it("passes units, breakpoint, isRTL, spacing, radius, and sizes through to the factory", async () => {
+    const factory = jest.fn(
+      ({ units, breakpoint, isRTL, spacing, radius, sizes }) => ({
+        text: { fontSize: units(14) },
+        breakpoint,
+        isRTL,
+        gap: spacing.x8,
+        radius: radius.x8,
+        elementHeightMd: sizes.elementHeightMd,
+      }),
+    );
     const useStyles = createStyles(factory);
 
     const { result } = await renderHook(() => useStyles());
@@ -18,9 +23,15 @@ describe(`${createStyles.name} smoke test`, () => {
         units: expect.any(Function),
         breakpoint: expect.any(String),
         isRTL: expect.any(Boolean),
+        spacing: expect.objectContaining({ x8: expect.any(Number) }),
+        radius: expect.objectContaining({ x8: expect.any(Number) }),
+        sizes: expect.objectContaining({ elementHeightMd: expect.any(Number) }),
       }),
     );
     expect(typeof result.current.text.fontSize).toBe("number");
+    expect(typeof result.current.gap).toBe("number");
+    expect(typeof result.current.radius).toBe("number");
+    expect(typeof result.current.elementHeightMd).toBe("number");
   });
 
   it("memoizes the result across re-renders with unchanged dimensions", async () => {

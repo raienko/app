@@ -40,9 +40,9 @@ export default function Counter({ storageKey = "counter" }: Props) {
   );
 }
 
-const useStyles = createStyles(({ units }) => ({
+const useStyles = createStyles(({ units, spacing }) => ({
   container: {
-    gap: units(12),
+    gap: spacing.x12,
     alignItems: "center",
   },
   button: {
