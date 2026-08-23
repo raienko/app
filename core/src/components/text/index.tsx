@@ -1,19 +1,21 @@
 import { Text as RNText, type TextProps as RNTextProps } from "react-native";
 
+import { createStyles, type TypographyToken } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { createStyles } from "@/features/responsive";
 
 type Props = Omit<RNTextProps, "children"> & {
   value: string;
+  /** One of Apple's HIG type-scale names — see `@/features/responsive`'s typography styleguide. Defaults to `"body"`. */
+  type?: TypographyToken;
 };
 
-export default function Text({ value, style, ...props }: Props) {
+export default function Text({ value, type = "body", style, ...props }: Props) {
   const theme = useTheme();
-  const baseStyle = useStyles();
+  const styles = useStyles();
 
   return (
     <RNText
-      style={[baseStyle.text, { color: theme.colors.text }, style]}
+      style={[styles.text, styles[type], { color: theme.colors.text }, style]}
       {...props}
     >
       {value}
@@ -21,8 +23,9 @@ export default function Text({ value, style, ...props }: Props) {
   );
 }
 
-const useStyles = createStyles(({ isRTL }) => ({
+const useStyles = createStyles(({ isRTL, typography }) => ({
   text: {
     textAlign: isRTL ? "right" : "left",
   },
+  ...typography,
 }));
