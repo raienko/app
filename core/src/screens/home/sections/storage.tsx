@@ -5,7 +5,7 @@ import Button from "@/components/button";
 import Counter from "@/components/counter";
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
-import { LocalValue } from "@/features/storage";
+import { isStoragePersistent, LocalValue } from "@/features/storage";
 import { useTheme } from "@/features/theme";
 
 import Readout from "./readout";
@@ -23,6 +23,7 @@ export default function StorageSection() {
   const theme = useTheme();
   const styles = useStyles();
   const [stored, setStored] = useState(() => note.getValue() ?? "—");
+  const persistent = isStoragePersistent();
 
   return (
     <View style={styles.container}>
@@ -46,11 +47,18 @@ export default function StorageSection() {
       </View>
 
       <Readout label='LocalValue("showcase-note")' value={stored} />
+      <Readout label="isStoragePersistent()" value={String(persistent)} />
 
       <Text
-        value="Both survive a reload — MMKV on device, localStorage on web."
+        value={
+          persistent
+            ? "One MMKV-backed API everywhere — a real file on device, localStorage on web. Both survive a reload."
+            : "This browser is blocking localStorage, so MMKV has fallen back to in-memory storage: anything written here is lost on reload."
+        }
         type="caption1"
-        style={{ color: theme.colors.textSecondary }}
+        style={{
+          color: persistent ? theme.colors.textSecondary : theme.colors.error,
+        }}
       />
     </View>
   );
