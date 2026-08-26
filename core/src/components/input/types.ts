@@ -47,7 +47,35 @@ export type EmailInputTypeProps = {
   onChange: (value: string) => void;
 };
 
+/**
+ * One choice in a `select`. `value` is what `onChange` reports and what
+ * `value` is matched against; `label` is the only thing ever shown, so the
+ * stored value can stay a stable code (`"uk"`) while the visible text is
+ * free to be translated or reworded.
+ */
+export type SelectOption = {
+  value: string;
+  label: string;
+};
+
+export type SelectInputTypeProps = {
+  type: "select";
+  /** `null` when nothing is picked yet — the field then shows its placeholder. */
+  value: string | null;
+  /**
+   * Only ever called with an option's `value`. It can't report `null`,
+   * because picking an option is the only thing that fires it — a field
+   * that should be clearable wants its own "None" option, whose `value` the
+   * call site decides.
+   */
+  onChange: (value: string) => void;
+  options: SelectOption[];
+};
+
 export type InputProps = (
-  TextInputTypeProps | NumericInputTypeProps | EmailInputTypeProps
+  | TextInputTypeProps
+  | NumericInputTypeProps
+  | EmailInputTypeProps
+  | SelectInputTypeProps
 ) &
   CommonInputProps;

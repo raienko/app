@@ -1,5 +1,6 @@
-import { forwardRef, useState } from "react";
+import { forwardRef, useState, type ReactNode } from "react";
 import {
+  Pressable,
   TextInput as RNTextInput,
   View,
   type TextInput as RNTextInputInstance,
@@ -7,7 +8,7 @@ import {
 } from "react-native";
 
 import Text from "@/components/text";
-import { fieldA11yProps } from "@/features/accessibility";
+import { controlA11yProps, fieldA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
@@ -15,14 +16,27 @@ import type { CommonInputProps } from "../types";
 
 export type BaseInputProps = CommonInputProps & {
   value: string;
-  onChangeText: (value: string) => void;
+  /**
+   * Omitted only by a press-mode field (see `onPress`), which is never
+   * editable and so can never fire it.
+   */
+  onChangeText?: (value: string) => void;
   keyboardType?: RNTextInputProps["keyboardType"];
   secureTextEntry?: boolean;
+  /**
+   * Turns the field into a button: it stops being typed into and instead
+   * displays `value` (or `placeholder`, when empty) as read-only text,
+   * calling this on tap. For a variation whose value is picked from
+   * somewhere else — `select` picks it in a Modal — rather than typed.
+   */
+  onPress?: () => void;
+  /** Only meaningful alongside `onPress`: whether what it opens is showing. */
+  expanded?: boolean;
 };
 
 /**
- * The shared shell every input variation (Text, Numeric, ...) renders
- * through — label, left/right slots, the actual RN TextInput host,
+ * The shared shell every input variation (Text, Numeric, Select, ...)
+ * renders through — label, left/right slots, the actual value host,
  * focus/disabled styling, and error/helper text. A variation only needs to
  * resolve its own value/onChangeText (and whatever type-specific extras) and
  * hand the rest straight through here; none of that shared UI is duplicated
@@ -33,7 +47,9 @@ export type BaseInputProps = CommonInputProps & {
  *
  * Forwards its ref to the underlying RN TextInput, so a parent can call
  * `.focus()`/`.blur()` imperatively (e.g. focusing the next field on
- * submit) — every variation forwards its own ref through to here too.
+ * submit) — every variation forwards its own ref through to here too. A
+ * press-mode field has no TextInput to forward to, so its ref stays `null`;
+ * there's nothing to focus in a field that can't be typed into.
  */
 const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
   function BaseInput(
@@ -54,6 +70,8 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
       helperText,
       onFocus,
       onBlur,
+      onPress,
+      expanded,
     },
     ref,
   ) {
@@ -63,53 +81,93 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
 
     const helper = error ?? helperText;
 
+    const fieldStyle = [
+      styles.field,
+      {
+        backgroundColor: focused
+          ? theme.colors.backgroundElementSelected
+          : theme.colors.backgroundElement,
+        opacity: disabled ? 0.5 : 1,
+      },
+      error ? { borderColor: theme.colors.error } : null,
+    ];
+
+    // A press-mode field renders its value as plain text rather than a
+    // non-editable TextInput. Both look identical, but a TextInput announces
+    // itself as an edit box and takes keyboard focus on web — wrong for a
+    // control whose value can only be picked, not typed.
+    const host: ReactNode = onPress ? (
+      <Text
+        value={value || placeholder || ""}
+        type="callout"
+        numberOfLines={1}
+        style={[
+          styles.text,
+          { color: value ? theme.colors.text : theme.colors.textSecondary },
+        ]}
+      />
+    ) : (
+      <RNTextInput
+        ref={ref}
+        style={[styles.input, { color: theme.colors.text }]}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        placeholderTextColor={theme.colors.textSecondary}
+        editable={!disabled}
+        // A sibling <Text> label isn't auto-associated with a field the
+        // way HTML's <label for> is, and an error needs announcing as
+        // *why* the field is invalid — both handled by the shared helper.
+        {...fieldA11yProps({
+          label: label ?? placeholder,
+          disabled,
+          error,
+        })}
+        onFocus={() => {
+          setFocused(true);
+          onFocus?.();
+        }}
+        onBlur={() => {
+          setFocused(false);
+          onBlur?.();
+        }}
+        keyboardType={keyboardType}
+        secureTextEntry={secureTextEntry}
+        autoCapitalize={autoCapitalize}
+        autoCorrect={autoCorrect}
+      />
+    );
+
     return (
       <View style={[styles.container, style]}>
         {label ? <Text value={label} type="footnote" /> : null}
-        <View
-          style={[
-            styles.field,
-            {
-              backgroundColor: focused
-                ? theme.colors.backgroundElementSelected
-                : theme.colors.backgroundElement,
-              opacity: disabled ? 0.5 : 1,
-            },
-            error ? { borderColor: theme.colors.error } : null,
-          ]}
-        >
-          {leftSlot}
-          <RNTextInput
-            ref={ref}
-            style={[styles.input, { color: theme.colors.text }]}
-            value={value}
-            onChangeText={onChangeText}
-            placeholder={placeholder}
-            placeholderTextColor={theme.colors.textSecondary}
-            editable={!disabled}
-            // A sibling <Text> label isn't auto-associated with a field the
-            // way HTML's <label for> is, and an error needs announcing as
-            // *why* the field is invalid — both handled by the shared helper.
-            {...fieldA11yProps({
+        {onPress ? (
+          <Pressable
+            style={fieldStyle}
+            onPress={onPress}
+            disabled={disabled}
+            // The whole row is one control, so the announcement is built
+            // here rather than left to RN deriving it from the children —
+            // which would read out the placeholder as if it were a value.
+            {...controlA11yProps({
               label: label ?? placeholder,
-              disabled,
-              error,
+              value: value || undefined,
+              hint: error,
+              disabled: disabled ?? false,
+              expanded,
             })}
-            onFocus={() => {
-              setFocused(true);
-              onFocus?.();
-            }}
-            onBlur={() => {
-              setFocused(false);
-              onBlur?.();
-            }}
-            keyboardType={keyboardType}
-            secureTextEntry={secureTextEntry}
-            autoCapitalize={autoCapitalize}
-            autoCorrect={autoCorrect}
-          />
-          {rightSlot}
-        </View>
+          >
+            {leftSlot}
+            {host}
+            {rightSlot}
+          </Pressable>
+        ) : (
+          <View style={fieldStyle}>
+            {leftSlot}
+            {host}
+            {rightSlot}
+          </View>
+        )}
         {helper ? (
           <Text
             value={helper}
@@ -156,6 +214,12 @@ const useStyles = createStyles(
       ...typography.callout,
       flex: 1,
       padding: 0,
+      writingDirection: isRTL ? "rtl" : "ltr",
+    },
+    // The press-mode host *is* our Text component, so it only needs the
+    // layout half of the above — `type="callout"` carries the type scale.
+    text: {
+      flex: 1,
       writingDirection: isRTL ? "rtl" : "ltr",
     },
   }),

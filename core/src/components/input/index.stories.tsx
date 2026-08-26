@@ -26,6 +26,26 @@ export const Numeric = {
   },
 };
 
+// `select` has no uncontrolled form to demo through args at all — its value
+// only ever changes by picking one of `options` — so it owns state here too.
+export function Select() {
+  const [value, setValue] = useState<string | null>(null);
+  return (
+    <Component
+      type="select"
+      label="Country"
+      placeholder="Pick a country"
+      value={value}
+      onChange={setValue}
+      options={[
+        { value: "uk", label: "United Kingdom" },
+        { value: "ua", label: "Ukraine" },
+        { value: "jp", label: "Japan" },
+      ]}
+    />
+  );
+}
+
 // Controlled demo — Storybook args don't feed back into a controlled
 // TextInput's value, so this story owns its own state. See ./text and
 // ./numeric for each variation's own story set.

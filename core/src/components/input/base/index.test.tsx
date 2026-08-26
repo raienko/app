@@ -166,6 +166,92 @@ describe(`${Component.displayName} smoke test`, () => {
     });
   });
 
+  describe("press mode (onPress)", () => {
+    it("renders the value as text instead of an editable field", async () => {
+      const onPress = jest.fn();
+      await render(
+        <Component
+          label="Country"
+          value="Ukraine"
+          placeholder="Pick one"
+          onPress={onPress}
+        />,
+      );
+
+      // No TextInput at all — a non-editable one would still announce as an
+      // edit box and take keyboard focus on web.
+      expect(screen.queryByDisplayValue("Ukraine")).toBeNull();
+      expect(screen.getByText("Ukraine")).toBeTruthy();
+    });
+
+    it("shows the placeholder when the value is empty", async () => {
+      await render(
+        <Component value="" placeholder="Pick one" onPress={() => {}} />,
+      );
+
+      expect(screen.getByText("Pick one")).toBeTruthy();
+    });
+
+    it("announces itself as a button carrying label, value, state and error", async () => {
+      await render(
+        <Component
+          label="Country"
+          value="Ukraine"
+          error="Required"
+          expanded
+          onPress={() => {}}
+        />,
+      );
+
+      const field = screen.getByLabelText("Country");
+      expect(field.props.accessibilityRole).toBe("button");
+      expect(field.props.accessibilityValue).toEqual({ text: "Ukraine" });
+      expect(field.props.accessibilityHint).toBe("Required");
+      expect(field.props.accessibilityState).toEqual({
+        disabled: false,
+        expanded: true,
+      });
+    });
+
+    it("calls onPress on tap", async () => {
+      const onPress = jest.fn();
+      const enabled = await render(
+        <Component label="Country" value="" onPress={onPress} />,
+      );
+
+      fireEvent.press(enabled.getByLabelText("Country"));
+
+      expect(onPress).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not call onPress while disabled", async () => {
+      const onPress = jest.fn();
+      const off = await render(
+        <Component label="Country" value="" onPress={onPress} disabled />,
+      );
+
+      fireEvent.press(off.getByLabelText("Country"));
+
+      expect(onPress).not.toHaveBeenCalled();
+    });
+
+    it("still renders slots and helper text", async () => {
+      await render(
+        <Component
+          value=""
+          onPress={() => {}}
+          leftSlot={<RNText>left</RNText>}
+          rightSlot={<RNText>right</RNText>}
+          helperText="Pick your country"
+        />,
+      );
+
+      expect(screen.getByText("left")).toBeTruthy();
+      expect(screen.getByText("right")).toBeTruthy();
+      expect(screen.getByText("Pick your country")).toBeTruthy();
+    });
+  });
+
   it("forwards its ref to the underlying TextInput", async () => {
     const ref = createRef<TextInput>();
     await render(

@@ -35,6 +35,20 @@ type ControlOptions = {
    * duplicate explicit label just makes the announcement noisier.
    */
   label?: string;
+  /**
+   * The control's *current* setting, announced after its label — for a
+   * control that carries one (a select's chosen option). Separate from
+   * `label` on purpose: "Country, United Kingdom" is what a screen reader
+   * should say, and folding both into `label` would instead re-announce the
+   * whole string every time the value changes.
+   */
+  value?: string;
+  /**
+   * Extra context read after the label — a select's validation message, say.
+   * Mirrors how `fieldA11yProps` surfaces an `error`, which RN has no
+   * "invalid" state for.
+   */
+  hint?: string;
   disabled?: boolean;
   /** For a control that's one of several choices (a segmented option). */
   selected?: boolean;
@@ -59,6 +73,8 @@ type ControlOptions = {
  */
 export function controlA11yProps({
   label,
+  value,
+  hint,
   disabled,
   selected,
   expanded,
@@ -73,6 +89,10 @@ export function controlA11yProps({
   return {
     accessibilityRole: "button",
     ...(label === undefined ? null : { accessibilityLabel: label }),
+    ...(value === undefined
+      ? null
+      : { accessibilityValue: { text: value }, "aria-valuetext": value }),
+    ...(hint === undefined ? null : { accessibilityHint: hint }),
     ...(Object.keys(state).length === 0 ? null : { accessibilityState: state }),
     // Both spellings on purpose. `accessibilityState` is what native reads
     // and what testing-library asserts against; react-native-web 0.21 only

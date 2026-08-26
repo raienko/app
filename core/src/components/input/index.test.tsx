@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@/root/testing";
+import { fireEvent, render, screen, waitFor } from "@/root/testing";
 
 import Component from "./index";
 
@@ -48,5 +48,29 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(screen.getByPlaceholderText("Email").props.keyboardType).toBe(
       "email-address",
     );
+  });
+
+  it("routes to the select variation when type='select'", async () => {
+    const onChange = jest.fn();
+    await render(
+      <Component
+        type="select"
+        label="Country"
+        value={null}
+        onChange={onChange}
+        options={[
+          { value: "uk", label: "United Kingdom" },
+          { value: "jp", label: "Japan" },
+        ]}
+      />,
+    );
+
+    fireEvent.press(screen.getByLabelText("Country"));
+    await waitFor(() => {
+      expect(screen.getByRole("button", { name: "Japan" })).toBeTruthy();
+    });
+    fireEvent.press(screen.getByRole("button", { name: "Japan" }));
+
+    expect(onChange).toHaveBeenCalledWith("jp");
   });
 });

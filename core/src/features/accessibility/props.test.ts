@@ -37,6 +37,28 @@ describe("controlA11yProps", () => {
       "Dismiss",
     );
   });
+
+  // A select announces "Country, United Kingdom" — the setting is separate
+  // from the label so a changed value doesn't re-announce the whole string.
+  it("carries a current value separately from the label, in both spellings", () => {
+    expect(controlA11yProps()).not.toHaveProperty("accessibilityValue");
+
+    const props = controlA11yProps({
+      label: "Country",
+      value: "United Kingdom",
+    });
+
+    expect(props.accessibilityLabel).toBe("Country");
+    expect(props.accessibilityValue).toEqual({ text: "United Kingdom" });
+    expect(props["aria-valuetext"]).toBe("United Kingdom");
+  });
+
+  it("surfaces a hint only when given one", () => {
+    expect(controlA11yProps()).not.toHaveProperty("accessibilityHint");
+    expect(controlA11yProps({ hint: "Required" }).accessibilityHint).toBe(
+      "Required",
+    );
+  });
 });
 
 describe("fieldA11yProps", () => {

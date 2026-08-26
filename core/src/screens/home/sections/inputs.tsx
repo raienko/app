@@ -9,12 +9,21 @@ import { createStyles } from "@/features/responsive";
 
 import Readout from "./readout";
 
+const COUNTRIES = [
+  { value: "uk", label: "United Kingdom" },
+  { value: "ua", label: "Ukraine" },
+  { value: "es", label: "Spain" },
+  { value: "jp", label: "Japan" },
+  { value: "cn", label: "China" },
+];
+
 /**
- * All three input variations at once, each showing what's specific to it:
+ * Every input variation at once, each showing what's specific to it:
  * `text` with a label, slot and helper text; `numeric` with min/max
  * clamping and its own number keyboard; `email` with live validation
- * driving the error state. The last field is disabled, and "Focus email"
- * exercises ref forwarding through the variation to the RN TextInput.
+ * driving the error state; `select` picking from a list in a Modal instead
+ * of being typed into. One field is disabled, and "Focus email" exercises
+ * ref forwarding through the variation to the RN TextInput.
  */
 export default function InputsSection() {
   const { t } = useLocale();
@@ -23,6 +32,7 @@ export default function InputsSection() {
   const [age, setAge] = useState<number | null>(null);
   const [email, setEmail] = useState("");
   const [secret, setSecret] = useState("");
+  const [country, setCountry] = useState<string | null>(null);
   const emailRef = useRef<RNTextInputInstance>(null);
 
   const emailError =
@@ -68,6 +78,16 @@ export default function InputsSection() {
         leftSlot={<Icon name="lock" />}
       />
       <Input
+        type="select"
+        label="Country"
+        placeholder="Pick a country"
+        value={country}
+        onChange={setCountry}
+        options={COUNTRIES}
+        leftSlot={<Icon name="globe" />}
+        helperText="Opens a bottom-sheet Modal — tap the backdrop to keep the current pick"
+      />
+      <Input
         label="Disabled"
         placeholder="not editable"
         value=""
@@ -84,6 +104,9 @@ export default function InputsSection() {
       <Readout label="name" value={name || "—"} />
       <Readout label="age" value={age === null ? "—" : String(age)} />
       <Readout label="email" value={email || "—"} />
+      {/* The stored value, not the label — the point of an option's `value`
+          being separate from what it displays. */}
+      <Readout label="country" value={country ?? "—"} />
     </View>
   );
 }
