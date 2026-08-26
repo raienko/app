@@ -1,31 +1,104 @@
-import { Text as RNText, type TextProps as RNTextProps } from "react-native";
+import { useMemo } from "react";
+import {
+  Text as RNText,
+  type TextProps as RNTextProps,
+  type StyleProp,
+  type TextStyle,
+} from "react-native";
 
-import { createStyles, type TypographyToken } from "@/features/responsive";
+import { headingA11yProps, type HeadingLevel } from "@/features/accessibility";
+import { useIsRtl } from "@/features/localization";
+import { useResponsive, type TypographyToken } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+
+/**
+ * Which heading level each type-scale entry means, in document-outline
+ * terms. Apple's Large Title is the page's own title, and Title 1–3 are
+ * nested section headings, so they map straight onto `<h1>`–`<h4>`.
+ *
+ * `type` is the only input — there's no separate `heading` prop, because
+ * the type scale already *is* the hierarchy. Picking `title2` because
+ * something is a sub-section and then separately declaring it a heading
+ * states the same fact twice, with the option of contradicting yourself.
+ *
+ * `headline` is deliberately absent: HIG uses it for things like list-row
+ * titles at body size, which are emphasis rather than document structure.
+ * Marking those as headings would fill a screen reader's heading rotor
+ * with entries that aren't navigation landmarks.
+ *
+ * The tradeoff is that a title size can't be used as pure decoration (a
+ * large stat, say) without also entering the outline. No call site needs
+ * that yet; if one shows up, an explicit opt-out is the change to make —
+ * same "pull it in when there's a real second case" rule the styleguides
+ * follow.
+ */
+const HEADING_LEVEL_BY_TYPE: Partial<Record<TypographyToken, HeadingLevel>> = {
+  largeTitle: 1,
+  title1: 2,
+  title2: 3,
+  title3: 4,
+};
 
 type Props = Omit<RNTextProps, "children"> & {
   value: string;
-  /** One of Apple's HIG type-scale names — see `@/features/responsive`'s typography styleguide. Defaults to `"body"`. */
+  /**
+   * One of Apple's HIG type-scale names — see `@/features/responsive`'s
+   * typography styleguide. Defaults to `"body"`.
+   *
+   * This also decides heading semantics: the four title sizes announce as
+   * headings (and render as real `<h1>`–`<h4>` on web), everything else as
+   * plain text.
+   */
   type?: TypographyToken;
 };
 
-export default function Text({ value, type = "body", style, ...props }: Props) {
+/**
+ * The one component that reads the type scale directly rather than through
+ * `createStyles`. Its variant is chosen by a *prop* at render time, which a
+ * static style factory can't express — the previous version worked around
+ * that by spreading all eleven tokens into this component's own
+ * `StyleSheet.create`, so every `<Text>` instance allocated twelve style
+ * objects to use exactly one of them. Reading `typography[type]` costs one.
+ */
+export default function Text({
+  value,
+  type = "body",
+  style,
+  allowFontScaling,
+  ...props
+}: Props) {
   const theme = useTheme();
-  const styles = useStyles();
+  const { typography, fontScale } = useResponsive();
+  const isRTL = useIsRtl();
+
+  const headingLevel = HEADING_LEVEL_BY_TYPE[type];
+
+  const baseStyle = useMemo<StyleProp<TextStyle>>(() => {
+    const token = typography[type];
+    return [
+      token,
+      // `typography` pre-scales lineHeight by the OS text-size multiplier
+      // because RN scales fontSize but not lineHeight. Opting out of that
+      // automatic fontSize scaling has to undo the lineHeight half too, or
+      // the text stays put while its line box keeps growing.
+      allowFontScaling === false
+        ? { lineHeight: Math.round(token.lineHeight / fontScale) }
+        : null,
+      {
+        color: theme.colors.text,
+        textAlign: isRTL ? ("right" as const) : ("left" as const),
+      },
+    ];
+  }, [typography, type, allowFontScaling, fontScale, theme.colors.text, isRTL]);
 
   return (
     <RNText
-      style={[styles.text, styles[type], { color: theme.colors.text }, style]}
+      style={[baseStyle, style]}
+      allowFontScaling={allowFontScaling}
+      {...(headingLevel === undefined ? null : headingA11yProps(headingLevel))}
       {...props}
     >
       {value}
     </RNText>
   );
 }
-
-const useStyles = createStyles(({ isRTL, typography }) => ({
-  text: {
-    textAlign: isRTL ? "right" : "left",
-  },
-  ...typography,
-}));

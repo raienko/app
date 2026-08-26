@@ -13,6 +13,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import If from "@/components/if";
+import { useAnimationDuration } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 
 import ModalBackdrop from "./backdrop";
@@ -77,6 +78,7 @@ const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
 ) {
   const config = MODAL_TYPE_CONFIG[type];
   const styles = useStyles();
+  const duration = useAnimationDuration();
 
   const [nativeVisible, setNativeVisible] = useState(false);
   const progress = useSharedValue(0);
@@ -92,14 +94,17 @@ const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
   }, [onClose]);
 
   const hide = useCallback(() => {
+    // Under "Reduce Motion" duration() is 0, so the exit lands immediately —
+    // the completion callback still fires, so the delayed-unmount handshake
+    // with RN Modal's `visible` prop works exactly the same either way.
     progress.value = withTiming(
       0,
-      { duration: ANIMATION_DURATION },
+      { duration: duration(ANIMATION_DURATION) },
       (finished) => {
         if (finished) runOnJS(handleHidden)();
       },
     );
-  }, [progress, handleHidden]);
+  }, [progress, handleHidden, duration]);
 
   const dismiss = useCallback(() => {
     if (onDismiss) {
@@ -109,7 +114,7 @@ const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
     }
   }, [onDismiss, hide]);
 
-  useImperativeHandle(ref, () => ({ show, hide }));
+  useImperativeHandle(ref, () => ({ show, hide }), [show, hide]);
 
   useEffect(() => registerModalId(id), [id]);
 
@@ -128,9 +133,11 @@ const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
 
   useEffect(() => {
     if (nativeVisible) {
-      progress.value = withTiming(1, { duration: ANIMATION_DURATION });
+      progress.value = withTiming(1, {
+        duration: duration(ANIMATION_DURATION),
+      });
     }
-  }, [nativeVisible, progress]);
+  }, [nativeVisible, progress, duration]);
 
   const containerStyle =
     config.position === "center"

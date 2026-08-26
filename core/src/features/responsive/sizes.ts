@@ -1,16 +1,11 @@
-import { useMemo } from "react";
-
-import useUnits from "./units";
+import type { Units } from "./units";
 
 /**
  * The sizes styleguide's generic scale — named steps for the Figma px
  * values components pass to `units()`, so two components that mean the
  * same thing (e.g. "the standard gap between stacked fields") share one
  * named value instead of each separately hardcoding `units(12)` and
- * drifting out of sync later. Matches exactly the distinct values already
- * in real use across the component set at the time this was written, not
- * invented ahead of need — same reasoning as `THEME_PREFERENCES` deriving
- * from `Object.keys(colors)` rather than being hand-typed.
+ * drifting out of sync later.
  *
  * Keyed `x<value>` (`spacing.x8`, not `spacing[8]` or `spacing.sm`) — a
  * numeric-value key says exactly what step you're getting without a name
@@ -18,7 +13,10 @@ import useUnits from "./units";
  * error instead of a silent typo), and the `x` prefix is only there
  * because a bare number can't be a dot-accessible property name.
  *
- * Not exported directly — see `useSizes()` below for why.
+ * Not exported — every consumer goes through the scaled `spacing` from
+ * `useSizes()`/`createStyles()`. Handing out the raw table would let a
+ * call site use an unscaled value by accident, silently skipping the
+ * device scaling every other size in the app gets.
  */
 const RAW_SPACING = {
   x1: 1,
@@ -65,7 +63,7 @@ const RAW_RADIUS = {
  * value that's genuinely one component's own business (padding tuned to
  * that component's own visual balance, say) still belongs local to it.
  */
-export const NAMED_SIZES = {
+const RAW_NAMED_SIZES = {
   /** Standard interactive-element touch-target height (currently: Input's minimum height — the standard 44pt minimum; expected to be shared by future form controls sized to match). */
   elementHeightMd: 44,
   /** Modal's bottom-sheet/actions drag handle grabber pill — specific to that one element's own shape, not a reusable step (see the doc comment above). */
@@ -80,7 +78,7 @@ export const NAMED_SIZES = {
 type Scaled<T extends Record<string, number>> = { [K in keyof T]: number };
 
 function scale<T extends Record<string, number>>(
-  units: ReturnType<typeof useUnits>,
+  units: Units,
   raw: T,
 ): Scaled<T> {
   return Object.fromEntries(
@@ -91,40 +89,21 @@ function scale<T extends Record<string, number>>(
 export type Sizes = {
   spacing: Scaled<typeof RAW_SPACING>;
   radius: Scaled<typeof RAW_RADIUS>;
-  sizes: Scaled<typeof NAMED_SIZES>;
+  sizes: Scaled<typeof RAW_NAMED_SIZES>;
 };
 
 /**
- * The sizes styleguide, reactive and already scaled — `spacing.x8`,
- * `radius.x12`, `sizes.elementHeightMd` are all real, final pixel values with
- * no `units()` wrapping needed at the call site (that's the whole reason
- * `RAW_SPACING`/`RAW_RADIUS` above aren't exported directly — using them
- * unscaled would silently skip the device scaling every other size in the
- * app gets).
- *
- * `createStyles` (see create-styles.ts) calls this internally and hands
- * its three groups straight to the style factory — most call sites never
- * call this directly. Reach for it yourself only for a size needed outside
- * a style object entirely, e.g. an `Icon`'s `size` prop (`Accordion`'s
- * chevron and the Home screen's header icon both do this, passing
- * `spacing.x20` — the same step `Screen`'s padding uses, not a coincidence
- * worth a separate icon-size scale over).
- *
- * What's deliberately excluded from both groups: a measurement that
- * doesn't represent a reusable step or a reusable named purpose — a
- * hairline `borderWidth`, `Counter`'s button `minWidth` tuned to that
- * component's own two buttons, font sizes (their own, not-yet-written
- * styleguide) — stays a plain number owned by its component. Nothing was
- * rounded or forced to fit either scale just to reuse it.
+ * Pure — takes a `units` function and returns the whole sizes styleguide
+ * already scaled through it. The hook wrapper (`useSizes()`, in
+ * use-responsive.ts) is what components call; keeping the computation
+ * itself hook-free is what lets `useResponsive()` build sizes, typography,
+ * and breakpoint from a *single* `useWindowDimensions()` read instead of
+ * one per styleguide.
  */
-export function useSizes(): Sizes {
-  const units = useUnits();
-  return useMemo(
-    () => ({
-      spacing: scale(units, RAW_SPACING),
-      radius: scale(units, RAW_RADIUS),
-      sizes: scale(units, NAMED_SIZES),
-    }),
-    [units],
-  );
+export function createSizes(units: Units): Sizes {
+  return {
+    spacing: scale(units, RAW_SPACING),
+    radius: scale(units, RAW_RADIUS),
+    sizes: scale(units, RAW_NAMED_SIZES),
+  };
 }

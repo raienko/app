@@ -2,6 +2,7 @@ import { View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { runOnJS, withTiming, type SharedValue } from "react-native-reanimated";
 
+import { useAnimationDuration } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 
 import { ANIMATION_DURATION } from "./constants";
@@ -26,6 +27,8 @@ type Props = {
  */
 export default function ModalHandle({ dragY, onDismiss }: Props) {
   const styles = useStyles();
+  const duration = useAnimationDuration();
+  const snapBackDuration = duration(ANIMATION_DURATION);
 
   // dragY is a Reanimated SharedValue passed down as a prop (so ModalContent
   // can read the same value) — `.value =` is its own designed-to-be-mutable
@@ -45,7 +48,7 @@ export default function ModalHandle({ dragY, onDismiss }: Props) {
         runOnJS(onDismiss)();
       }
       // eslint-disable-next-line react-hooks/immutability -- see comment above
-      dragY.value = withTiming(0, { duration: ANIMATION_DURATION });
+      dragY.value = withTiming(0, { duration: snapBackDuration });
     });
 
   return (

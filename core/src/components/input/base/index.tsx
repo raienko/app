@@ -7,6 +7,7 @@ import {
 } from "react-native";
 
 import Text from "@/components/text";
+import { fieldA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
@@ -64,7 +65,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
 
     return (
       <View style={[styles.container, style]}>
-        {label ? <Text value={label} style={styles.label} /> : null}
+        {label ? <Text value={label} type="footnote" /> : null}
         <View
           style={[
             styles.field,
@@ -86,8 +87,14 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
             placeholder={placeholder}
             placeholderTextColor={theme.colors.textSecondary}
             editable={!disabled}
-            accessibilityLabel={label ?? placeholder}
-            accessibilityState={{ disabled }}
+            // A sibling <Text> label isn't auto-associated with a field the
+            // way HTML's <label for> is, and an error needs announcing as
+            // *why* the field is invalid — both handled by the shared helper.
+            {...fieldA11yProps({
+              label: label ?? placeholder,
+              disabled,
+              error,
+            })}
             onFocus={() => {
               setFocused(true);
               onFocus?.();
@@ -106,12 +113,10 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
         {helper ? (
           <Text
             value={helper}
-            style={[
-              styles.helperText,
-              {
-                color: error ? theme.colors.error : theme.colors.textSecondary,
-              },
-            ]}
+            type="caption1"
+            style={{
+              color: error ? theme.colors.error : theme.colors.textSecondary,
+            }}
           />
         ) : null}
       </View>
@@ -126,30 +131,32 @@ BaseInput.displayName = "BaseInput";
 
 export default BaseInput;
 
-const useStyles = createStyles(({ units, isRTL, spacing, radius, sizes }) => ({
-  container: {
-    gap: spacing.x8,
-  },
-  label: {
-    fontSize: units(13),
-  },
-  field: {
-    flexDirection: isRTL ? "row-reverse" : "row",
-    alignItems: "center",
-    gap: spacing.x8,
-    minHeight: sizes.elementHeightMd,
-    borderRadius: radius.x8,
-    paddingHorizontal: spacing.x12,
-    borderWidth: spacing.x1,
-    borderColor: "transparent",
-  },
-  input: {
-    flex: 1,
-    fontSize: units(16),
-    padding: 0,
-    writingDirection: isRTL ? "rtl" : "ltr",
-  },
-  helperText: {
-    fontSize: units(12),
-  },
-}));
+// Label and helper text aren't styled here — they're <Text type="footnote">
+// and <Text type="caption1">, so they get a *whole* type-scale entry rather
+// than this file overriding only `fontSize` on top of `body`. That partial
+// override was a real bug: an 11px label kept body's 19px line height.
+const useStyles = createStyles(
+  ({ isRTL, spacing, radius, sizes, typography }) => ({
+    container: {
+      gap: spacing.x8,
+    },
+    field: {
+      flexDirection: isRTL ? "row-reverse" : "row",
+      alignItems: "center",
+      gap: spacing.x8,
+      minHeight: sizes.elementHeightMd,
+      borderRadius: radius.x8,
+      paddingHorizontal: spacing.x12,
+      borderWidth: spacing.x1,
+      borderColor: "transparent",
+    },
+    // The RN TextInput host is not our Text component, so it takes the type
+    // scale as a style rather than a `type` prop.
+    input: {
+      ...typography.callout,
+      flex: 1,
+      padding: 0,
+      writingDirection: isRTL ? "rtl" : "ltr",
+    },
+  }),
+);

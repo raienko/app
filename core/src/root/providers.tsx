@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { AccessibilityProvider } from "@/features/accessibility";
 import { LocaleProvider } from "@/features/localization";
 import { ThemeProvider } from "@/features/theme";
 
@@ -25,9 +26,11 @@ export default function Providers({ children }: Props) {
   return (
     <GestureHandlerRootView style={styles.flex}>
       <SafeAreaProvider>
-        <ThemeProvider>
-          <LocaleProvider>{children}</LocaleProvider>
-        </ThemeProvider>
+        <AccessibilityProvider>
+          <ThemeProvider>
+            <LocaleProvider>{children}</LocaleProvider>
+          </ThemeProvider>
+        </AccessibilityProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

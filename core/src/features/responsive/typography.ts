@@ -1,7 +1,6 @@
-import { useMemo } from "react";
 import { Platform, type TextStyle } from "react-native";
 
-import useUnits from "./units";
+import type { Units } from "./units";
 
 /**
  * RN's special-cased "System" font resolves to San Francisco on iOS — the
@@ -35,13 +34,10 @@ const SYSTEM_FONT_FAMILY = Platform.select({
  *
  * Point sizes, line heights, and tracking (letter spacing) are Apple's own
  * published values for this scale, used as-is as the Figma-px input to
- * units() — exactly like SPACING/RADIUS's steps, not invented for this
- * app. `fontWeight` follows Apple's spec too: everything is Regular (400)
- * except Headline, which HIG specifies as Semibold (600) to visually
- * separate it from Body despite sharing Body's 17pt size. Every entry uses
- * `SYSTEM_FONT_FAMILY` for now (San Francisco is what HIG itself specifies
- * this scale in) — see that constant's own doc comment for why each entry
- * names its font individually instead of the scale hardcoding one face.
+ * units() — exactly like the sizes styleguide's steps, not invented for
+ * this app. `fontWeight` follows Apple's spec too: everything is Regular
+ * (400) except Headline, which HIG specifies as Semibold (600) to visually
+ * separate it from Body despite sharing Body's 17pt size.
  */
 const RAW_TYPOGRAPHY = {
   largeTitle: {
@@ -132,7 +128,7 @@ const RAW_TYPOGRAPHY = {
   }
 >;
 
-/** `"largeTitle" | "title1" | ... | "caption2"` — Text's `type` prop, see index.tsx. */
+/** `"largeTitle" | "title1" | ... | "caption2"` — Text's `type` prop, see components/text. */
 export type TypographyToken = keyof typeof RAW_TYPOGRAPHY;
 
 export type TypographyStyle = {
@@ -146,34 +142,31 @@ export type TypographyStyle = {
 export type Typography = { [K in TypographyToken]: TypographyStyle };
 
 /**
- * The typography styleguide, reactive and already scaled — every field on
- * `typography.body` (etc.) is a real, final value with no `units()`
- * wrapping needed at the call site, same reasoning as `useSizes()`'s
- * `spacing`/`radius`/`sizes`.
+ * Pure — takes a `units` function and the OS text-size multiplier, and
+ * returns the whole type scale already resolved. The hook wrapper
+ * (`useTypography()`, in use-responsive.ts) is what components call; see
+ * `createSizes` for why the computation itself is hook-free.
  *
- * `createStyles` (see create-styles.ts) calls this internally and hands
- * `typography` straight to the style factory — most call sites never call
- * this directly. `Text` (`src/components/text`) is the one place that does,
- * since its `type` prop needs to pick a single variant out of the whole
- * scale at render time rather than bake one fixed variant into a static
- * style key.
+ * **`fontSize` is deliberately *not* multiplied by `fontScale`.** RN scales
+ * a `<Text>`'s font size by the OS text-size setting itself
+ * (`allowFontScaling`, on by default), so applying the multiplier here too
+ * would double it. `lineHeight` is the opposite case — RN does *not* scale
+ * it, so a fixed line height stays put while the text inside it grows, and
+ * at large Dynamic Type sizes the glyphs get clipped. Scaling it here is
+ * what keeps a line box proportional to the text it holds at every text
+ * size setting.
  */
-export function useTypography(): Typography {
-  const units = useUnits();
-  return useMemo(
-    () =>
-      Object.fromEntries(
-        Object.entries(RAW_TYPOGRAPHY).map(([key, value]) => [
-          key,
-          {
-            fontFamily: value.fontFamily,
-            fontSize: units(value.fontSize),
-            fontWeight: value.fontWeight,
-            lineHeight: units(value.lineHeight),
-            letterSpacing: units(value.letterSpacing),
-          },
-        ]),
-      ) as Typography,
-    [units],
-  );
+export function createTypography(units: Units, fontScale: number): Typography {
+  return Object.fromEntries(
+    Object.entries(RAW_TYPOGRAPHY).map(([key, value]) => [
+      key,
+      {
+        fontFamily: value.fontFamily,
+        fontSize: units(value.fontSize),
+        fontWeight: value.fontWeight,
+        lineHeight: Math.round(units(value.lineHeight) * fontScale),
+        letterSpacing: units(value.letterSpacing),
+      },
+    ]),
+  ) as Typography;
 }

@@ -21,7 +21,17 @@ export function scaleFactorForWidth(referenceDimension: number): number {
   return clamp(moderated, MIN_SCALE, MAX_SCALE);
 }
 
-function unitsFromScale(scale: number) {
+/** What every units(value) function in the app looks like. */
+export type Units = (value: number) => number;
+
+/**
+ * Creates a units(value) function from an already-derived scale factor.
+ * Separate from createUnits() so a caller that already has the scale (see
+ * useResponsive) can memoize on *it* rather than on raw width/height — two
+ * sizes that clamp to the same scale then produce the same function
+ * reference, and nothing downstream recomputes.
+ */
+export function createUnitsForScale(scale: number): Units {
   return (value: number): number => Math.round(value * scale);
 }
 
@@ -31,8 +41,8 @@ function unitsFromScale(scale: number) {
  * testing — components should use useUnits() so values update as the
  * window resizes (rotation, foldable unfold/fold, browser/desktop resize).
  */
-export function createUnits(referenceDimension: number) {
-  return unitsFromScale(scaleFactorForWidth(referenceDimension));
+export function createUnits(referenceDimension: number): Units {
+  return createUnitsForScale(scaleFactorForWidth(referenceDimension));
 }
 
 /**
@@ -81,8 +91,8 @@ export function unitsSnapshot(value: number): number {
  * it works directly in a module-scope StyleSheet.create. (Not from a
  * component/screen/root file, though — see unitsSnapshot's doc comment.)
  */
-export default function useUnits() {
+export default function useUnits(): Units {
   const { width, height } = useWindowDimensions();
   const scale = scaleFactorForWidth(Math.min(width, height));
-  return useMemo(() => unitsFromScale(scale), [scale]);
+  return useMemo(() => createUnitsForScale(scale), [scale]);
 }

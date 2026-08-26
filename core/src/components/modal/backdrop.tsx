@@ -4,6 +4,7 @@ import Animated, {
   type SharedValue,
 } from "react-native-reanimated";
 
+import { controlA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 
 const BACKDROP_MAX_OPACITY = 0.5;
@@ -32,8 +33,9 @@ export default function ModalBackdrop({ progress, onDismiss }: Props) {
       testID="modal-backdrop"
       style={StyleSheet.absoluteFill}
       onPress={onDismiss}
-      accessibilityRole="button"
-      accessibilityLabel="Dismiss"
+      // It has no text of its own, so unlike Button it needs an explicit
+      // label — otherwise a screen reader announces an unnamed button.
+      {...controlA11yProps({ label: "Dismiss" })}
     >
       <Animated.View
         style={[StyleSheet.absoluteFill, styles.backdrop, backdropStyle]}

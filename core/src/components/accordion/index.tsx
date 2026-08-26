@@ -9,6 +9,10 @@ import Animated, {
 import If from "@/components/if";
 import Icon from "@/components/icon";
 import Text from "@/components/text";
+import {
+  controlA11yProps,
+  useAnimationDuration,
+} from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
@@ -40,12 +44,15 @@ export default function Accordion({
   const theme = useTheme();
   const { spacing } = useSizes();
   const styles = useStyles();
+  const duration = useAnimationDuration();
 
   function toggle() {
     const next = !open;
     setOpen(next);
+    // duration() collapses to 0 under "Reduce Motion" — the chevron still
+    // ends up in the right place, it just doesn't spin to get there.
     rotation.value = withTiming(next ? 1 : 0, {
-      duration: ANIMATION_DURATION,
+      duration: duration(ANIMATION_DURATION),
     });
   }
 
@@ -63,8 +70,7 @@ export default function Accordion({
       <Pressable
         style={styles.header}
         onPress={toggle}
-        accessibilityRole="button"
-        accessibilityState={{ expanded: open }}
+        {...controlA11yProps({ expanded: open })}
       >
         <Text value={title} style={styles.title} />
         <Animated.View style={chevronStyle}>

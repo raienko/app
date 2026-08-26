@@ -9,7 +9,6 @@ import type { ModalPosition } from "./config";
 type Props = {
   position: ModalPosition;
   children: ReactNode;
-  scrollEnabled?: boolean;
 };
 
 /**
@@ -17,21 +16,19 @@ type Props = {
  * bounded by ModalContent's own `maxHeight`, so it shrinks to fit short
  * content and only scrolls once content actually exceeds that cap.
  *
- * Spaces its children apart with explicit spacer Views rather than a `gap`
- * style — `gap` on a ScrollView's content is inconsistently supported
- * across RN environments (confirmed missing on-device even though it works
- * on web), where a plain spacer View always renders the same everywhere.
+ * Children are spaced with a plain `gap` on the content container. (An
+ * earlier version used explicit spacer Views, on the theory that `gap`
+ * wasn't reliably applied to a ScrollView's content across RN
+ * environments — that turned out to be a misread: the gap was rendering
+ * correctly all along and was simply too subtle to see against the
+ * backdrop in a screenshot.)
  *
  * `position === "bottom"` gets the safe-area bottom inset added as padding
  * *inside* the scrollable area (not on the card outside it), so it's always
  * reachable by scrolling to the end instead of being pushed past the
  * card's own (otherwise unbounded) height and clipped.
  */
-export default function ModalScrollArea({
-  position,
-  children,
-  scrollEnabled,
-}: Props) {
+export default function ModalScrollArea({ position, children }: Props) {
   const insets = useSafeAreaInsets();
   const styles = useStyles();
   const units = useUnits();
@@ -45,7 +42,6 @@ export default function ModalScrollArea({
   return (
     <ScrollView
       style={scrollStyle}
-      scrollEnabled={scrollEnabled}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={contentContainerStyle}
     >

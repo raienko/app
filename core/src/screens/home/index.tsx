@@ -29,8 +29,10 @@ export default function Home() {
   return (
     <Screen style={styles.container}>
       <View style={styles.title}>
-        <Icon name="home" size={spacing.x20} />
-        <Text value={env.appName} />
+        <Icon name="home" size={spacing.x24} />
+        {/* The screen's own title, so it takes the page-title type — which
+            is also what makes it the top-level heading. */}
+        <Text value={env.appName} type="largeTitle" />
       </View>
 
       <Accordion title={t("home.counterAndTheme")}>
