@@ -3,9 +3,6 @@
     "close": "إغلاق"
   },
   "home": {
-    "counterAndTheme": "العداد والسمة",
-    "input": "الإدخال",
-    "modal": "النافذة المنبثقة",
     "summary": "الاسم: {{name}} / العمر: {{age}} / البريد الإلكتروني: {{email}}"
   },
   "input": {
@@ -51,5 +48,19 @@
   },
   "locale": {
     "system": "النظام"
+  },
+  "showcase": {
+    "typography": "الطباعة",
+    "theme": "السمة والألوان",
+    "localization": "الترجمة",
+    "accessibility": "إمكانية الوصول",
+    "responsive": "الوحدات المتجاوبة",
+    "icons": "الأيقونات",
+    "buttons": "الأزرار",
+    "inputs": "حقول الإدخال",
+    "modals": "النوافذ المنبثقة",
+    "storage": "التخزين",
+    "utilities": "الأدوات",
+    "sampleSentence": "نص حكيم له سر قاطع وذو شأن عظيم مكتوب على ثوب أخضر."
   }
 }

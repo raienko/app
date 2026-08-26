@@ -39,6 +39,7 @@ src/
   app/                   Routing only (Expo Router) — each route file re-exports a screen
   root/                   Root — wraps the router; see below
   screens/<name>/        One folder per screen, index.tsx is the screen component
+  screens/home/sections/  One file per showcase section — see "The app" below
   components/<name>/     One folder per component: index.tsx, index.stories.tsx, index.test.tsx
   features/storage/       LocalValue<T> — a small MMKV-backed reactive value primitive
   constants/env/          Validated EXPO_PUBLIC_* env vars, used by both app code and app.config.ts
@@ -53,6 +54,28 @@ describe(`${Component.name} smoke test`, () => {
   /* ... */
 });
 ```
+
+## The app
+
+The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are ordered foundations-first — the styleguides and app-wide settings everything else is built on, then the components that consume them.
+
+| Section          | What it demonstrates                                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------ |
+| Typography       | All 11 type-scale entries at their own size, with the title sizes as real headings         |
+| Theme & colors   | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key              |
+| Localization     | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                 |
+| Accessibility    | A live readout of every OS flag, `fontScale`, and `duration()`                             |
+| Responsive units | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes        |
+| Icons            | One glyph from each of the five families, the custom SVG set, colour and size overrides    |
+| Buttons          | A real segmented control (so `selected` moves), plus press counting and a disabled button  |
+| Inputs           | All three variations, secure entry, a disabled field, live validation, and ref-based focus |
+| Modals           | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live            |
+| Storage          | `Counter` (reactive `.use()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`     |
+| Utilities        | `If` toggling content, and a scoped event bus emitting and counting pings                  |
+
+Each section is its own file under `src/screens/home/sections/`. They're screen-local — the showcase is their only consumer — but split for the same reason `Modal`'s internals are: one file per concern beats one file that renders eleven. The section list itself is a table in `screens/home/index.tsx`, so adding one is an entry there plus a file.
+
+Section titles are translated; the labels _inside_ sections mostly aren't, on purpose — token names, flag names, and icon family names are identifiers, not copy, and translating `sizes.elementHeightMd` would make it harder to match against the code it names.
 
 ### Local storage — `LocalValue`
 
@@ -269,6 +292,7 @@ Wraps five [`@react-native-vector-icons`](https://www.npmjs.com/org/react-native
 - Every family needs its font registered on iOS — each `@react-native-vector-icons/*` package ships its own Expo config plugin (adds the font to `Info.plist`), listed in `app.config.ts`'s `plugins`.
 - Verified rendering on web: all 5 vector families with distinct glyphs, the custom SVG icon, and the omitted-`type` default all confirmed visually in-browser. Before the theme-default-color above, several of these icon families defaulted to **black** — invisible against this app's dark-mode `Screen` background unless you passed an explicit `color`; the theme default now makes that the non-issue it should be.
 - Adding a new vector family or a new custom icon is one line each in `icon-sets.ts` / `custom-icons.tsx` — nothing else needs to change.
+- **FontAwesome6 is the one family that needs a style picked for it.** It ships three separate fonts (regular / solid / brand), each with its own glyphs, chosen by an `iconStyle` prop that defaults to `regular` — much the smallest of the three in the free tier. Its exported `FontAwesome6IconName` is the union of _all three_, so a solid-only name like `"rocket"` type-checked and then rendered as a missing-glyph box: the type promised more than the default font could draw. `IconNameByType` now narrows to `FontAwesome6SolidIconName` and `index.tsx` passes the matching `iconStyle="solid"`, so names and glyphs agree again. Found by building the showcase — the Icons section rendered a `?` where the rocket should have been. Regular/brand aren't exposed yet; add them the day something needs one.
 
 ### `Input` — `src/components/input`
 
@@ -398,6 +422,15 @@ import Accordion from "@/components/accordion";
 ```
 
 A titled, collapsible section — tapping the header toggles `children` between hidden and shown. The chevron on the right (via `Icon`) rotates 180° between collapsed/open with a Reanimated `withTiming`, rather than swapping between two separate icon assets, so there's only ever one glyph to keep in sync with state. `defaultOpen` (default `false`) controls the initial state. Content itself shows/hides instantly via `If` (above), not height-animated — animating to/from an unmeasured "auto" height is the fiddly part of building an accordion, and not worth taking on until there's a real need for that extra polish. The Home screen wraps each of its three demo sections (Counter & Theme, Input, Modal) in one.
+
+### `Screen` — `src/components/screen`
+
+```tsx
+<Screen>…</Screen>              // centred, fills the viewport
+<Screen scrollable>…</Screen>   // scrolls, content starts at the top
+```
+
+The app's layout primitive: fills the viewport, applies `theme.colors.background`, and pads with `spacing.x16`. `scrollable` swaps the `View` for a `ScrollView` and drops the vertical centring — content that can outgrow the viewport has to start at the top, or the first screenful gets pushed off the top edge as it grows. The showcase uses it; a short screen shouldn't.
 
 ### `Root` — `src/root`
 

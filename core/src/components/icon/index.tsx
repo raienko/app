@@ -56,5 +56,15 @@ export default function Icon({
   }
 
   const VectorIcon = ICON_SETS[type];
-  return <VectorIcon name={name as never} size={size} color={resolvedColor} />;
+  return (
+    <VectorIcon
+      name={name as never}
+      size={size}
+      color={resolvedColor}
+      // FontAwesome6 alone splits its glyphs across three fonts and picks
+      // `regular` when not told otherwise — see IconNameByType for why this
+      // has to match the name type it's paired with.
+      {...(type === "FontAwesome6" ? { iconStyle: "solid" as const } : null)}
+    />
+  );
 }

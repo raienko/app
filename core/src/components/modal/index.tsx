@@ -199,6 +199,11 @@ Modal.hide = (id: string) => {
 
 export default Modal;
 
+// Re-exported so a consumer typing a ref (`useRef<ModalHandle>(null)`) or a
+// wrapper's props can reach them through this folder's entry point, rather
+// than importing from ./types directly.
+export type { ModalHandle, ModalProps, ModalType } from "./types";
+
 const useStyles = createStyles(({ spacing }) => ({
   containerCenter: {
     flex: 1,

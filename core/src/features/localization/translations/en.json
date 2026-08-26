@@ -3,9 +3,6 @@
     "close": "Close"
   },
   "home": {
-    "counterAndTheme": "Counter & Theme",
-    "input": "Input",
-    "modal": "Modal",
     "summary": "name: {{name}} / age: {{age}} / email: {{email}}"
   },
   "input": {
@@ -51,5 +48,19 @@
   },
   "locale": {
     "system": "System"
+  },
+  "showcase": {
+    "typography": "Typography",
+    "theme": "Theme & colors",
+    "localization": "Localization",
+    "accessibility": "Accessibility",
+    "responsive": "Responsive units",
+    "icons": "Icons",
+    "buttons": "Buttons",
+    "inputs": "Inputs",
+    "modals": "Modals",
+    "storage": "Storage",
+    "utilities": "Utilities",
+    "sampleSentence": "The quick brown fox jumps over the lazy dog."
   }
 }

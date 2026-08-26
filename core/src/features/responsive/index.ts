@@ -18,6 +18,7 @@ export {
 export { createSizes, type Sizes } from "./sizes";
 export {
   createTypography,
+  TYPOGRAPHY_TOKENS,
   type Typography,
   type TypographyToken,
   type TypographyStyle,

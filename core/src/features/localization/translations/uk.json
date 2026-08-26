@@ -3,9 +3,6 @@
     "close": "Закрити"
   },
   "home": {
-    "counterAndTheme": "Лічильник і тема",
-    "input": "Введення",
-    "modal": "Модальне вікно",
     "summary": "ім'я: {{name}} / вік: {{age}} / email: {{email}}"
   },
   "input": {
@@ -51,5 +48,19 @@
   },
   "locale": {
     "system": "Системна"
+  },
+  "showcase": {
+    "typography": "Типографіка",
+    "theme": "Тема та кольори",
+    "localization": "Локалізація",
+    "accessibility": "Доступність",
+    "responsive": "Адаптивні одиниці",
+    "icons": "Іконки",
+    "buttons": "Кнопки",
+    "inputs": "Поля введення",
+    "modals": "Модальні вікна",
+    "storage": "Сховище",
+    "utilities": "Утиліти",
+    "sampleSentence": "Жвавий чорний пес перестрибнув через ліниву руду лисицю."
   }
 }

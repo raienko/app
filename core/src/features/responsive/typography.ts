@@ -131,6 +131,17 @@ const RAW_TYPOGRAPHY = {
 /** `"largeTitle" | "title1" | ... | "caption2"` — Text's `type` prop, see components/text. */
 export type TypographyToken = keyof typeof RAW_TYPOGRAPHY;
 
+/**
+ * Every token, largest to smallest — derived from the table above rather
+ * than hand-listed, so it can't fall out of sync (same reasoning as
+ * `THEME_PREFERENCES` deriving from `Object.keys(colors)`). Declaration
+ * order *is* the scale order, which is what makes this useful for
+ * rendering the whole scale.
+ */
+export const TYPOGRAPHY_TOKENS = Object.keys(
+  RAW_TYPOGRAPHY,
+) as TypographyToken[];
+
 export type TypographyStyle = {
   fontFamily: string;
   fontSize: number;

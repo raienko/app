@@ -8,7 +8,7 @@ import {
 } from "@react-native-vector-icons/feather";
 import {
   FontAwesome6,
-  type FontAwesome6IconName,
+  type FontAwesome6SolidIconName,
 } from "@react-native-vector-icons/fontawesome6";
 import {
   Ionicons,
@@ -38,6 +38,20 @@ export type IconNameByType = {
   Feather: FeatherIconName;
   MaterialIcons: MaterialIconsIconName;
   Ionicons: IoniconsIconName;
-  FontAwesome6: FontAwesome6IconName;
+  /**
+   * The *solid* set specifically, not FontAwesome6's catch-all
+   * `FontAwesome6IconName`.
+   *
+   * FontAwesome6 ships three separate fonts (regular / solid / brand), each
+   * with its own glyphs, selected by an `iconStyle` prop that defaults to
+   * `regular`. Its exported `FontAwesome6IconName` is the union of all
+   * three, so a solid-only name like `"rocket"` type-checks and then
+   * renders as a missing-glyph box — the type promises more than the
+   * default font can draw. Narrowing to the solid set (much the largest of
+   * the three in the free tier) keeps names honest; `index.tsx` passes the
+   * matching `iconStyle`. Regular/brand aren't exposed yet — add them the
+   * day something needs one.
+   */
+  FontAwesome6: FontAwesome6SolidIconName;
   AntDesign: AntDesignIconName;
 };

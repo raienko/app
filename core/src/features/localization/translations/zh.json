@@ -3,9 +3,6 @@
     "close": "关闭"
   },
   "home": {
-    "counterAndTheme": "计数器与主题",
-    "input": "输入",
-    "modal": "模态框",
     "summary": "姓名：{{name}} / 年龄：{{age}} / 邮箱：{{email}}"
   },
   "input": {
@@ -51,5 +48,19 @@
   },
   "locale": {
     "system": "跟随系统"
+  },
+  "showcase": {
+    "typography": "排版",
+    "theme": "主题与颜色",
+    "localization": "本地化",
+    "accessibility": "无障碍",
+    "responsive": "响应式单位",
+    "icons": "图标",
+    "buttons": "按钮",
+    "inputs": "输入框",
+    "modals": "模态框",
+    "storage": "存储",
+    "utilities": "实用工具",
+    "sampleSentence": "敏捷的棕色狐狸跳过了那只懒狗。"
   }
 }

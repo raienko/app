@@ -3,9 +3,6 @@
     "close": "Cerrar"
   },
   "home": {
-    "counterAndTheme": "Contador y tema",
-    "input": "Entrada",
-    "modal": "Modal",
     "summary": "nombre: {{name}} / edad: {{age}} / email: {{email}}"
   },
   "input": {
@@ -51,5 +48,19 @@
   },
   "locale": {
     "system": "Sistema"
+  },
+  "showcase": {
+    "typography": "Tipografía",
+    "theme": "Tema y colores",
+    "localization": "Localización",
+    "accessibility": "Accesibilidad",
+    "responsive": "Unidades adaptables",
+    "icons": "Iconos",
+    "buttons": "Botones",
+    "inputs": "Campos de entrada",
+    "modals": "Ventanas modales",
+    "storage": "Almacenamiento",
+    "utilities": "Utilidades",
+    "sampleSentence": "El veloz murciélago hindú comía feliz cardillo y kiwi."
   }
 }

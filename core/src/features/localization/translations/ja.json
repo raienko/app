@@ -3,9 +3,6 @@
     "close": "閉じる"
   },
   "home": {
-    "counterAndTheme": "カウンターとテーマ",
-    "input": "入力",
-    "modal": "モーダル",
     "summary": "名前: {{name}} / 年齢: {{age}} / メール: {{email}}"
   },
   "input": {
@@ -51,5 +48,19 @@
   },
   "locale": {
     "system": "システム"
+  },
+  "showcase": {
+    "typography": "タイポグラフィ",
+    "theme": "テーマと色",
+    "localization": "ローカライズ",
+    "accessibility": "アクセシビリティ",
+    "responsive": "レスポンシブ単位",
+    "icons": "アイコン",
+    "buttons": "ボタン",
+    "inputs": "入力フィールド",
+    "modals": "モーダル",
+    "storage": "ストレージ",
+    "utilities": "ユーティリティ",
+    "sampleSentence": "素早い茶色の狐が怠け者の犬を飛び越えた。"
   }
 }
