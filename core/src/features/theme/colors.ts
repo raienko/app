@@ -12,6 +12,10 @@ export type ThemeColors = {
   backgroundElement: string;
   backgroundElementSelected: string;
   error: string;
+  /** Accent used for high-emphasis actions — see Button's `primary` type. */
+  primary: string;
+  /** Text/icon colour that sits legibly on `primary`. */
+  onPrimary: string;
 };
 
 export type ColorScheme = "light" | "dark";
@@ -23,6 +27,8 @@ const REQUIRED_KEYS: (keyof ThemeColors)[] = [
   "backgroundElement",
   "backgroundElementSelected",
   "error",
+  "primary",
+  "onPrimary",
 ];
 
 function validate(

@@ -59,20 +59,20 @@ describe(`${Component.name} smoke test`, () => {
 
 The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are ordered foundations-first — the styleguides and app-wide settings everything else is built on, then the components that consume them.
 
-| Section          | What it demonstrates                                                                       |
-| ---------------- | ------------------------------------------------------------------------------------------ |
-| Typography       | All 11 type-scale entries at their own size, with the title sizes as real headings         |
-| Theme & colors   | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key              |
-| Localization     | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                 |
-| Accessibility    | A live readout of every OS flag, `fontScale`, and `duration()`                             |
-| Responsive units | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes        |
-| Grid             | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid               |
-| Icons            | One glyph from each of the five families, the custom SVG set, colour and size overrides    |
-| Buttons          | A real segmented control (so `selected` moves), plus press counting and a disabled button  |
-| Inputs           | All three variations, secure entry, a disabled field, live validation, and ref-based focus |
-| Modals           | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live            |
-| Storage          | `Counter` (reactive `.use()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`     |
-| Utilities        | `If` toggling content, and a scoped event bus emitting and counting pings                  |
+| Section          | What it demonstrates                                                                            |
+| ---------------- | ----------------------------------------------------------------------------------------------- |
+| Typography       | All 11 type-scale entries at their own size, with the title sizes as real headings              |
+| Theme & colors   | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                   |
+| Localization     | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                      |
+| Accessibility    | A live readout of every OS flag, `fontScale`, and `duration()`                                  |
+| Responsive units | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes             |
+| Grid             | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                    |
+| Icons            | One glyph from each of the five families, the custom SVG set, colour and size overrides         |
+| Buttons          | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row |
+| Inputs           | All three variations, secure entry, a disabled field, live validation, and ref-based focus      |
+| Modals           | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                 |
+| Storage          | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`     |
+| Utilities        | `If` toggling content, and a scoped event bus emitting and counting pings                       |
 
 Each section is its own file under `src/screens/home/sections/`. They're screen-local — the showcase is their only consumer — but split for the same reason `Modal`'s internals are: one file per concern beats one file that renders eleven. The section list itself is a table in `screens/home/index.tsx`, so adding one is an entry there plus a file.
 
@@ -87,10 +87,10 @@ const value = new LocalValue<T>("some-key");
 value.getValue(); // read once
 value.setValue(v); // write
 value.reset(); // clear
-value.use(); // reactive read inside a component — see note below
+value.useValue(); // reactive read inside a component — see note below
 ```
 
-Backed by MMKV on **every** platform, web included. `react-native-mmkv` ships its own web implementation (`createMMKV.web.ts`, storing into `localStorage` under keys namespaced by the store's `id`), so platform resolution swaps it in and there's a single adapter with nothing to branch on. Any component calling `.use()` needs a `"use no memo";` directive as its first line — React Compiler doesn't recognize a method call as a hook and will otherwise memoize the component and break reactivity (see the comment on `StorageValue.use()`).
+Backed by MMKV on **every** platform, web included. `react-native-mmkv` ships its own web implementation (`createMMKV.web.ts`, storing into `localStorage` under keys namespaced by the store's `id`), so platform resolution swaps it in and there's a single adapter with nothing to branch on.
 
 **The one web-specific case — `isStoragePersistent()`.** When a browser refuses `localStorage` (private browsing, blocked site data, an enterprise policy), MMKV doesn't fail — it quietly substitutes an in-memory `Map`. Writes look like they worked and vanish on the next reload, which is exactly the data loss [MMKV's docs warn about](https://github.com/mrousavy/react-native-mmkv). MMKV doesn't expose which of the two is in play, so `features/storage/persistence.web.ts` asks directly and the app can tell the user rather than losing their data silently. Native always answers `true` — MMKV writes a real file there, and no user setting turns that off.
 
@@ -112,7 +112,10 @@ const theme = useTheme(); // { scheme, colors, preference, setPreference }
 - `scheme` — the resolved `"light" | "dark"` actually in effect.
 - `preference` — what the user picked: `"light" | "dark" | "system"` (default `"system"`), persisted via `LocalValue` so it survives restarts. `setPreference` updates it.
 - When `preference` is `"system"`, `scheme` tracks the OS setting live via React Native's `useColorScheme()` — no reload needed, verified by flipping the emulated OS scheme at runtime.
-- `colors` — the current palette (`ThemeColors`: `background`, `text`, `textSecondary`, `backgroundElement`, `backgroundElementSelected`, `error`), sourced from [`palette.json`](src/features/theme/palette.json). Swap that file for a rebrand/different palette without touching any other file — `colors.ts` validates both `light` and `dark` have every required key and throws a clear error naming the missing one otherwise. (It's `palette.json`, not `colors.json` — Metro and Vite disagree on `.ts` vs `.json` priority for a bare `./colors` specifier, so a same-basename pair resolves to the wrong file depending on which bundler is running; keep the JSON's basename different from `colors.ts`.)
+- `colors` — the current palette (`ThemeColors`: `background`, `text`, `textSecondary`, `backgroundElement`, `backgroundElementSelected`, `error`, `primary`, `onPrimary`), sourced from [`palette.json`](src/features/theme/palette.json). Swap that file for a rebrand/different palette without touching any other file — `colors.ts` validates both `light` and `dark` have every required key and throws a clear error naming the missing one otherwise. (It's `palette.json`, not `colors.json` — Metro and Vite disagree on `.ts` vs `.json` priority for a bare `./colors` specifier, so a same-basename pair resolves to the wrong file depending on which bundler is running; keep the JSON's basename different from `colors.ts`.)
+
+- **`primary`/`onPrimary` are an accent pair, not two independent colors.** `primary` is the high-emphasis accent (`Button`'s `primary` fill and `tertiary` label); `onPrimary` is the only color guaranteed legible _on_ it. A rebrand has to move both together — changing `primary` alone is exactly the edit the contrast test below exists to catch.
+- **[`colors.test.ts`](src/features/theme/colors.test.ts) enforces WCAG contrast on the palette itself**, so a palette edit can't quietly ship an unreadable combination: every foreground (`text`, `primary`, `error`) clears 4.5:1 against both surfaces the app paints text on, `onPrimary` clears it against a `primary` fill, and `textSecondary` clears the 3:1 that WCAG 1.4.11 asks of a control outline against all three fills. It reimplements the luminance math rather than importing it — the point is to check the palette independently. Two real failures were found this way and fixed rather than waived: the accent was 4.17:1 as a label on `backgroundElement` (the Accordion/Modal surface `tertiary` buttons actually sit on), and `error` was 3.90:1 on the same surface. `backgroundElementSelected` is deliberately excluded from the _text_ checks — it's a pressed/selected fill, and the only type that uses it labels itself in `text`; holding every foreground to 4.5:1 against it as well would force the accent several steps paler than any surface in the app needs.
 
 `ThemeProvider` and a `ThemeSwitcher` component (`src/components/theme-switcher`, wired into the Home screen) are both included; `Text`, `Screen`, and `Icon` (default `color`) already consume `theme.colors`.
 
@@ -259,7 +262,7 @@ const useStyles = createStyles(({ units, spacing, radius, sizes }) => ({
 ```
 
 - **`spacing`/`radius` are a generic scale**, keyed `x<value>` (`spacing.x8`, not `spacing.sm` or `spacing[8]`) — a numeric-value key says exactly what step you're getting without a name to look up first, and `spacing.x10` (not a step in the scale) is a `tsc` error instead of a silently-accepted typo; the `x` prefix exists only because a bare number can't be a dot-accessible property name. The underlying steps match the distinct values already in real use across the component set when this was written (same "derive from what's actually there" reasoning as `THEME_PREFERENCES` deriving from `Object.keys(colors)` rather than being hand-typed). Every `createStyles` call site in the app now reaches for one of these wherever its value matches a step, instead of a bare number — adopting them was a like-for-like swap with zero visual change (verified: full test suite and a live before/after screenshot both came back identical). Not only for `gap`/`padding`, either: `Accordion`'s chevron and the Home screen's header icon both pass `size={spacing.x20}` to `Icon`, reusing the same step `Screen`'s padding already uses, rather than a separate icon-size scale.
-- **`sizes` is purpose-specific, not generic — but named by _purpose_, not by whichever component happens to use it first.** Where `spacing.x16` means nothing beyond "16px", each entry means exactly one thing: `elementHeightMd` (currently Input's minimum touch-target height, the standard 44pt — named for the concept, since a future Button/Select sized to match is reusing the same touch-target height, not borrowing Input's own measurement), `elementWidthSm`/`elementWidthLg` (currently Accordion's fixed width and Modal's content `maxWidth` — two components that happened to need two different tiers of "how wide should a self-contained element be" first, not two unrelated measurements). `grabberWidth`/`grabberHeight` (Modal's drag handle) stay specifically named, though — they're genuinely that one element's own pill dimensions, not a reusable concept, and genericizing the name wouldn't make the measurement itself any more general.
+- **`sizes` is purpose-specific, not generic — but named by _purpose_, not by whichever component happens to use it first.** Where `spacing.x16` means nothing beyond "16px", each entry means exactly one thing: `elementHeightSm`/`elementHeightMd`/`elementHeightLg` (32/44/56 — the compact, standard and prominent control heights, shared by `Input`'s minimum touch target and `Button`'s three fixed sizes; `elementHeightMd` is the 44pt minimum, named for the concept rather than for Input, which is why `Button` sizing itself to match is reusing a touch-target height rather than borrowing Input's own measurement), `elementWidthSm`/`elementWidthLg` (currently Accordion's fixed width and Modal's content `maxWidth` — two components that happened to need two different tiers of "how wide should a self-contained element be" first, not two unrelated measurements). `grabberWidth`/`grabberHeight` (Modal's drag handle) stay specifically named, though — they're genuinely that one element's own pill dimensions, not a reusable concept, and genericizing the name wouldn't make the measurement itself any more general.
 - **None of the three raw tables is exported** — every consumer goes through the scaled `spacing`/`radius`/`sizes` from `useSizes()` or `createStyles`. Handing out a raw table would let a call site use an unscaled value by accident, silently skipping the device scaling every other size in the app gets. (`NAMED_SIZES` used to be exported with exactly that hazard, unused by anything, while the two tables beside it were deliberately kept private — the inconsistency is now closed.)
 - **`createStyles` hands the whole styleguide to its factory**, which is how most call sites get it. A component needs `useSizes()` directly only for a size used outside a style object entirely — `Accordion` and the Home screen both do exactly that (the `Icon` `size` prop above).
 - **What's deliberately excluded from both groups**: a measurement that doesn't represent a reusable step or a reusable named purpose — a hairline `borderWidth`, `Counter`'s button `minWidth` tuned to that component's own two buttons — stays a plain number owned by its component, still passed through `units()` at the call site same as always. Nothing was rounded or forced to fit either group just to reuse it; `sizes.ts`'s own doc comments say the same for each: pull a value in once it has a genuine second use or a clear standalone purpose, not before.
@@ -283,6 +286,39 @@ const useStyles = createStyles(({ typography }) => ({
   - The tradeoff is that a title size can't currently be used as pure decoration (a large stat, say) without also entering the outline. No call site needs that yet; if one turns up, an explicit opt-out is the change to make — the same "pull it in when there's a real second case" rule the styleguides follow.
   - Before this the app had **zero** heading semantics anywhere — verified in the DOM: no `role="heading"`, no `<h*>` tags, no `aria-level` — so a screen-reader user had no way to navigate a screen by structure at all. The Home screen's title now renders as a genuine `<h1 aria-level="1">`.
 - **`createStyles` supports `typography` the same way it supports `spacing`/`radius`/`sizes`** — it arrives already scaled, no `units()` wrapping needed at the call site.
+
+### `Button` — `src/components/button`
+
+```tsx
+import Button from "@/components/button";
+
+<Button value="Continue" type="primary" size="large" onPress={submit} />
+<Button value="Cancel" onPress={dismiss} />              // secondary / medium
+<Button value="Learn more" type="tertiary" size="auto" onPress={open} />
+```
+
+Two independent axes — `type` (visual emphasis) and `size` (box metrics and type scale) — plus `selected` and `disabled` states that cut across both.
+
+| `type`      | Fill                                   | Border          | Label       |
+| ----------- | -------------------------------------- | --------------- | ----------- |
+| `primary`   | `primary`                              | —               | `onPrimary` |
+| `secondary` | `backgroundElement`                    | `textSecondary` | `text`      |
+| `tertiary`  | none (`backgroundElement` when picked) | —               | `primary`   |
+
+| `size`   | Height                 | Label type |
+| -------- | ---------------------- | ---------- |
+| `small`  | `elementHeightSm` (32) | `footnote` |
+| `medium` | `elementHeightMd` (44) | `body`     |
+| `large`  | `elementHeightLg` (56) | `headline` |
+| `auto`   | hugs its label         | `body`     |
+
+- **The defaults are `type="secondary"`, `size="medium"`** — chosen so adding both props changed nothing about how any existing button in the app renders. `secondary` is also the right default on the merits: the app's buttons are overwhelmingly utility actions, and defaulting to `primary` would make every one of them shout.
+- **`secondary`'s border is load-bearing, not decoration.** Its fill is `backgroundElement` — the same token `Accordion`, `Modal` and every other raised surface uses — so on one of those surfaces a fill-only secondary button is literally the same color as what's behind it and vanishes. Found live, in the showcase, the moment a `primary` button sat next to one. The border is `textSecondary` rather than the more obvious `backgroundElementSelected`: on a `backgroundElement` surface those two greys contrast at 1.19:1, well under the 3:1 WCAG 1.4.11 asks of a boundary that's the only thing marking the control (see the palette contrast test in the Theme section).
+- **Every type gets two backgrounds, resting and `selected`**, so a segmented control reads as picked whichever type it's built from — not just the one that happened to have a darker token lying around. `primary` is the exception and stays put: it's already at full emphasis, so it conveys selection through `aria-selected` alone. Verified live: clicking through the showcase's segmented control moves both the readout and the rendered `aria-selected`.
+- **`auto` is the one size that reserves no touch target** — it hugs its label, for a button that has to sit inline with text or in a tight row, which by definition puts it under the 44pt minimum. That's why it's the one size to avoid for a primary action, and why it's called out here rather than left to be discovered.
+- **The box metrics live in `createStyles`, the type scale in a lookup table.** Height and padding need `units()`-scaled values, which only the style factory has; the label's typography token doesn't. Splitting them isn't ideal, but duplicating the heights into a const nothing reads would be worse — an earlier version did exactly that and the dead fields survived a refactor unnoticed.
+- **`borderWidth` is always present, transparent unless the type asks for a border**, so a bordered and an unbordered type occupy identical space and swapping between them doesn't shift the layout around them.
+- **Accessibility** comes from `controlA11yProps()` (see the Accessibility section) — a bare `Pressable` has no role of its own, so without it every button announces as an anonymous group. The label comes from the `Text` child rather than an explicit `accessibilityLabel`, and only the states actually in play are emitted.
 
 ### `Icon` — `src/components/icon`
 

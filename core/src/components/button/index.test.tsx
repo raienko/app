@@ -1,6 +1,24 @@
+import { StyleSheet, type TextStyle, type ViewStyle } from "react-native";
+
+import { colors } from "@/features/theme/colors";
 import { fireEvent, render, screen } from "@/root/testing";
 
-import Component from "./index";
+import Component, { type ButtonSize, type ButtonType } from "./index";
+
+function boxOf(name: string): ViewStyle {
+  return StyleSheet.flatten(
+    screen.getByRole("button", { name }).props.style,
+  ) as ViewStyle;
+}
+
+function labelOf(name: string): TextStyle {
+  return StyleSheet.flatten(screen.getByText(name).props.style) as TextStyle;
+}
+
+// Jest reports no OS dark-mode preference, so the default "system" theme
+// resolves to light here. Assertions compare against that palette rather
+// than hard-coded hex, so a palette change updates them automatically.
+const palette = colors.light;
 
 describe(`${Component.name} smoke test`, () => {
   it("renders the given value", async () => {
@@ -19,8 +37,7 @@ describe(`${Component.name} smoke test`, () => {
   });
 
   // A plain Pressable has no role of its own — without this every button in
-  // the app announces as an anonymous group, which is exactly what shipped
-  // before the accessibility feature landed.
+  // the app announces as an anonymous group.
   it("announces as a button, labelled by its own text", async () => {
     await render(<Component value="press me" onPress={() => {}} />);
 
@@ -45,5 +62,143 @@ describe(`${Component.name} smoke test`, () => {
 
     fireEvent.press(screen.getByText("nope"));
     expect(onPress).not.toHaveBeenCalled();
+  });
+});
+
+describe("Button type", () => {
+  it("defaults to secondary, so existing buttons keep their look", async () => {
+    await render(<Component value="plain" onPress={() => {}} />);
+
+    expect(boxOf("plain").backgroundColor).toBe(palette.backgroundElement);
+    expect(labelOf("plain").color).toBe(palette.text);
+  });
+
+  it("fills a primary button with the accent and its contrasting label", async () => {
+    await render(<Component value="go" type="primary" onPress={() => {}} />);
+
+    expect(boxOf("go").backgroundColor).toBe(palette.primary);
+    expect(labelOf("go").color).toBe(palette.onPrimary);
+  });
+
+  it("leaves a tertiary button unfilled, labelled in the accent", async () => {
+    await render(
+      <Component value="ghost" type="tertiary" onPress={() => {}} />,
+    );
+
+    expect(boxOf("ghost").backgroundColor).toBe("transparent");
+    expect(labelOf("ghost").color).toBe(palette.primary);
+  });
+
+  /**
+   * The point of giving every type two backgrounds: a segmented control has
+   * to read as picked whichever type it's built from, not only the one with
+   * a darker token lying around.
+   */
+  it("changes background when selected, in every type", async () => {
+    const types: ButtonType[] = ["primary", "secondary", "tertiary"];
+
+    await render(
+      <>
+        {types.map((type) => (
+          <Component
+            key={type}
+            value={`${type}-off`}
+            type={type}
+            onPress={() => {}}
+          />
+        ))}
+        {types.map((type) => (
+          <Component
+            key={type}
+            value={`${type}-on`}
+            type={type}
+            selected
+            onPress={() => {}}
+          />
+        ))}
+      </>,
+    );
+
+    for (const type of types) {
+      const off = boxOf(`${type}-off`).backgroundColor;
+      const on = boxOf(`${type}-on`).backgroundColor;
+      // Primary is already at full emphasis, so it stays put and conveys
+      // selection through aria-selected alone.
+      if (type === "primary") {
+        expect(on).toBe(off);
+      } else {
+        expect(on).not.toBe(off);
+      }
+    }
+  });
+});
+
+describe("Button size", () => {
+  it("defaults to the 44pt touch-target height", async () => {
+    await render(<Component value="std" onPress={() => {}} />);
+
+    expect(boxOf("std").minHeight).toBeGreaterThan(0);
+  });
+
+  it("orders small < medium < large by height and padding", async () => {
+    await render(
+      <>
+        <Component value="s" size="small" onPress={() => {}} />
+        <Component value="m" size="medium" onPress={() => {}} />
+        <Component value="l" size="large" onPress={() => {}} />
+      </>,
+    );
+
+    const [s, m, l] = ["s", "m", "l"].map(boxOf);
+
+    expect(s.minHeight!).toBeLessThan(m.minHeight as number);
+    expect(m.minHeight!).toBeLessThan(l.minHeight as number);
+    expect(s.paddingHorizontal!).toBeLessThan(m.paddingHorizontal as number);
+    expect(m.paddingHorizontal!).toBeLessThan(l.paddingHorizontal as number);
+  });
+
+  it("gives each size its own step of the type scale", async () => {
+    await render(
+      <>
+        <Component value="s" size="small" onPress={() => {}} />
+        <Component value="l" size="large" onPress={() => {}} />
+      </>,
+    );
+
+    expect(labelOf("s").fontSize!).toBeLessThan(
+      labelOf("l").fontSize as number,
+    );
+  });
+
+  // `auto` is the one size that hugs its label instead of reserving a
+  // touch target — deliberate, and why it's unsuitable for primary actions.
+  it("imposes no height for auto", async () => {
+    await render(<Component value="hug" size="auto" onPress={() => {}} />);
+
+    expect(boxOf("hug").minHeight).toBeUndefined();
+  });
+
+  it("stays pressable in every size", async () => {
+    const sizes: ButtonSize[] = ["small", "medium", "large", "auto"];
+    const onPress = jest.fn();
+
+    await render(
+      <>
+        {sizes.map((size) => (
+          <Component
+            key={size}
+            value={size}
+            size={size}
+            onPress={() => onPress(size)}
+          />
+        ))}
+      </>,
+    );
+
+    for (const size of sizes) {
+      fireEvent.press(screen.getByText(size));
+    }
+
+    expect(onPress.mock.calls.flat()).toEqual(sizes);
   });
 });

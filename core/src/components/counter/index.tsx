@@ -39,6 +39,7 @@ const useStyles = createStyles(({ units, spacing }) => ({
   container: {
     gap: spacing.x12,
     alignItems: "center",
+    flexDirection: "row",
   },
   button: {
     minWidth: units(120),

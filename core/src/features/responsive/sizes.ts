@@ -64,8 +64,12 @@ const RAW_RADIUS = {
  * that component's own visual balance, say) still belongs local to it.
  */
 const RAW_NAMED_SIZES = {
-  /** Standard interactive-element touch-target height (currently: Input's minimum height — the standard 44pt minimum; expected to be shared by future form controls sized to match). */
+  /** Compact interactive-element height, for dense or secondary controls (below the 44pt target, so reserve it for non-primary actions). */
+  elementHeightSm: 32,
+  /** Standard interactive-element touch-target height — the 44pt minimum, shared by Input and Button's default size. */
   elementHeightMd: 44,
+  /** Prominent interactive-element height, for primary calls to action. */
+  elementHeightLg: 56,
   /** Modal's bottom-sheet/actions drag handle grabber pill — specific to that one element's own shape, not a reusable step (see the doc comment above). */
   grabberWidth: 36,
   grabberHeight: 4,

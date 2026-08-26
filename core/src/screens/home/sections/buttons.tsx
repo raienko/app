@@ -1,52 +1,95 @@
 import { useState } from "react";
 import { View } from "react-native";
 
-import Button from "@/components/button";
-import { createStyles } from "@/features/responsive";
+import Button, { type ButtonSize, type ButtonType } from "@/components/button";
+import { Column } from "@/components/grid";
+import Text from "@/components/text";
+import { createStyles, useSizes } from "@/features/responsive";
+import { useTheme } from "@/features/theme";
 
 import Readout from "./readout";
 
+const TYPES: ButtonType[] = ["primary", "secondary", "tertiary"];
+const SIZES: ButtonSize[] = ["small", "medium", "large", "auto"];
+
 /**
- * Every Button state side by side. The first row is a real segmented
- * control rather than three static buttons, so `selected` can be seen
- * moving — and with it `aria-selected`, which is what a screen reader
- * announces.
+ * The full type × size matrix, plus the states that cut across both.
+ *
+ * Laid out as one row per type so the emphasis order reads top to bottom —
+ * filled accent, filled neutral, unfilled — and the sizes line up in
+ * columns, which is the easiest way to see that `auto` is the only one that
+ * doesn't reserve a touch target.
  */
 export default function ButtonsSection() {
-  const [picked, setPicked] = useState("one");
-  const [pressCount, setPressCount] = useState(0);
+  const theme = useTheme();
+  const { spacing } = useSizes();
   const styles = useStyles();
+  const [picked, setPicked] = useState<ButtonType>("secondary");
+  const [pressCount, setPressCount] = useState(0);
 
   return (
-    <View style={styles.container}>
+    <Column gap={spacing.x12}>
+      {TYPES.map((type) => (
+        <View key={type} style={styles.group}>
+          <Text
+            value={type}
+            type="footnote"
+            style={{ color: theme.colors.textSecondary }}
+          />
+          <View style={styles.row}>
+            {SIZES.map((size) => (
+              <Button
+                key={size}
+                value={size}
+                type={type}
+                size={size}
+                onPress={() => setPressCount((n) => n + 1)}
+              />
+            ))}
+          </View>
+        </View>
+      ))}
+
+      <Text value="Selected — a segmented control" type="headline" />
       <View style={styles.row}>
-        {["one", "two", "three"].map((option) => (
+        {TYPES.map((type) => (
           <Button
-            key={option}
-            value={option}
-            selected={picked === option}
-            onPress={() => setPicked(option)}
+            key={type}
+            value={type}
+            type={type}
+            selected={picked === type}
+            onPress={() => setPicked(type)}
           />
         ))}
       </View>
       <Readout label="selected" value={picked} />
 
+      <Text value="Disabled" type="headline" />
       <View style={styles.row}>
-        <Button value="press me" onPress={() => setPressCount((n) => n + 1)} />
-        <Button value="disabled" disabled onPress={() => {}} />
+        {TYPES.map((type) => (
+          <Button
+            key={type}
+            value={type}
+            type={type}
+            disabled
+            onPress={() => {}}
+          />
+        ))}
       </View>
+
       <Readout label="presses" value={String(pressCount)} />
-    </View>
+    </Column>
   );
 }
 
 const useStyles = createStyles(({ spacing }) => ({
-  container: {
-    gap: spacing.x8,
+  group: {
+    gap: spacing.x4,
   },
   row: {
     flexDirection: "row",
     flexWrap: "wrap",
+    alignItems: "center",
     gap: spacing.x8,
   },
 }));
