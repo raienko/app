@@ -88,12 +88,16 @@ export default function Accordion({
   );
 }
 
-const useStyles = createStyles(({ isRTL, spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
   container: {
-    // Screen (this component's typical parent) centers children without
-    // stretching them, so without an explicit width the header's
-    // space-between would have no extra room to actually space with.
-    width: sizes.elementWidthSm,
+    // Fills whatever contains it, rather than picking a width of its own.
+    // `alignSelf` (not `width: "100%"`) because the usual parent — Screen —
+    // centers its children without stretching them, and only alignSelf
+    // opts back out of that; without it the header's `space-between` has no
+    // extra room to space with and the chevron sits against the title.
+    // Constraining the width is the parent's call: see the Home screen,
+    // which caps its content column at `sizes.contentMaxWidth`.
+    alignSelf: "stretch",
     borderRadius: radius.x12,
     overflow: "hidden",
   },

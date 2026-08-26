@@ -9,6 +9,7 @@ const SECTION_TITLES = [
   "Localization",
   "Accessibility",
   "Responsive units",
+  "Grid",
   "Icons",
   "Buttons",
   "Inputs",

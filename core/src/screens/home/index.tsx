@@ -10,6 +10,7 @@ import { createStyles, useSizes } from "@/features/responsive";
 
 import AccessibilitySection from "./sections/accessibility";
 import ButtonsSection from "./sections/buttons";
+import GridSection from "./sections/grid";
 import IconsSection from "./sections/icons";
 import InputsSection from "./sections/inputs";
 import LocalizationSection from "./sections/localization";
@@ -38,6 +39,7 @@ const SECTIONS: {
   { title: "showcase.localization", Component: LocalizationSection },
   { title: "showcase.accessibility", Component: AccessibilitySection },
   { title: "showcase.responsive", Component: ResponsiveSection },
+  { title: "showcase.grid", Component: GridSection },
   { title: "showcase.icons", Component: IconsSection },
   { title: "showcase.buttons", Component: ButtonsSection },
   { title: "showcase.inputs", Component: InputsSection },
@@ -69,9 +71,14 @@ export default function Home() {
   );
 }
 
-const useStyles = createStyles(({ isRTL, spacing }) => ({
+const useStyles = createStyles(({ isRTL, spacing, sizes }) => ({
   container: {
     gap: spacing.x16,
+    // Sections stretch to this column rather than to the window, so the
+    // showcase stays readable on a desktop-width screen while still being
+    // wide enough for the grid section to actually reflow.
+    width: "100%",
+    maxWidth: sizes.contentMaxWidth,
   },
   title: {
     flexDirection: isRTL ? "row-reverse" : "row",

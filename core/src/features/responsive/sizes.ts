@@ -50,10 +50,10 @@ const RAW_RADIUS = {
  * Named by what the size *is for*, not by which component happens to use it
  * first — `elementHeightMd`, not `inputHeight`, because a future Button or
  * Select sized to match Input's touch target is reusing the same concept,
- * not borrowing Input's own measurement. Same for `elementWidthSm`/`Lg`:
- * Accordion and Modal don't mean different things by their own width/
- * maxWidth, they're just two components that happened to need two
- * different tiers of "how wide should a self-contained element be" first.
+ * not borrowing Input's own measurement. Same for `elementWidthLg`:
+ * Modal's content cap isn't "Modal's width", it's one tier of "how wide
+ * should a self-contained element be", and the next component to want that
+ * tier should reach for the same value.
  * A size that's genuinely specific to one element's own shape (the drag
  * handle's exact grabber-pill dimensions, say) still gets a specific name —
  * genericizing a name doesn't make the measurement itself any more general.
@@ -69,9 +69,9 @@ const RAW_NAMED_SIZES = {
   /** Modal's bottom-sheet/actions drag handle grabber pill — specific to that one element's own shape, not a reusable step (see the doc comment above). */
   grabberWidth: 36,
   grabberHeight: 4,
-  /** Smaller tier of "how wide should a self-contained element be" (currently: Accordion's fixed content width — see its own container comment for why it's fixed at all). */
-  elementWidthSm: 260,
-  /** Larger tier of the same — Modal's `popup`/`bottomSheet`/`actions` content, capped so it doesn't stretch edge-to-edge on a wide screen. */
+  /** Cap on a readable content column, so a screen's body doesn't stretch edge-to-edge on a tablet or desktop window. */
+  contentMaxWidth: 720,
+  /** How wide a self-contained overlay element gets — currently Modal's `popup`/`bottomSheet`/`actions` content, capped so it doesn't stretch edge-to-edge on a wide screen. */
   elementWidthLg: 360,
 } as const;
 

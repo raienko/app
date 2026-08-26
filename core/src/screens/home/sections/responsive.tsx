@@ -53,8 +53,8 @@ export default function ResponsiveSection() {
         value={String(sizes.elementHeightMd)}
       />
       <Readout
-        label="sizes.elementWidthSm"
-        value={String(sizes.elementWidthSm)}
+        label="sizes.contentMaxWidth"
+        value={String(sizes.contentMaxWidth)}
       />
       <Readout label="radius.x12" value={String(radius.x12)} />
     </View>

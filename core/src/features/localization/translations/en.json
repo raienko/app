@@ -55,6 +55,7 @@
     "localization": "Localization",
     "accessibility": "Accessibility",
     "responsive": "Responsive units",
+    "grid": "Grid",
     "icons": "Icons",
     "buttons": "Buttons",
     "inputs": "Inputs",

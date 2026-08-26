@@ -6,7 +6,19 @@ export {
   scaleFactorForWidth,
   type Units,
 } from "./units";
-export { useBreakpoint, getBreakpoint, type Breakpoint } from "./breakpoint";
+export {
+  useBreakpoint,
+  getBreakpoint,
+  BREAKPOINT_ORDER,
+  type Breakpoint,
+} from "./breakpoint";
+export { resolveResponsive, type ResponsiveValue } from "./responsive-value";
+export {
+  createGridMetrics,
+  useGridMetrics,
+  DEFAULT_COLUMNS,
+  type GridMetrics,
+} from "./grid";
 export { default as createStyles } from "./create-styles";
 export { BASE_WIDTH, BREAKPOINTS } from "./config";
 export {
