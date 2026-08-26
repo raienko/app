@@ -28,7 +28,7 @@ describe(`${LocalValue.name} smoke test`, () => {
 
   it("reflects updates reactively through use()", async () => {
     const value = new LocalValue<number>("reactive-key");
-    const { result } = await renderHook(() => value.use());
+    const { result } = await renderHook(() => value.useValue());
 
     expect(result.current).toBeUndefined();
 

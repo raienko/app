@@ -27,11 +27,7 @@ type Props = {
  * `<concrete value> | "system"`, with `"system"` deferring to the OS.
  */
 export default function LocaleProvider({ children }: Props) {
-  // localePreference.use() is a method call, not a useXxx() identifier, so
-  // React Compiler can't see it's a hook — see StorageValue.use().
-  "use no memo";
-
-  const preference = localePreference.use() ?? "system";
+  const preference = localePreference.useValue() ?? "system";
   const osLocale = useOsLocale();
   const locale = preference === "system" ? osLocale : preference;
   const isRTL = LOCALES.find((entry) => entry.code === locale)?.rtl ?? false;

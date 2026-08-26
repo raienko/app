@@ -13,7 +13,7 @@ import Readout from "./readout";
 const note = new LocalValue<string>("showcase-note");
 
 /**
- * Two views onto the same primitive. `Counter` uses `.use()`, the reactive
+ * Two views onto the same primitive. `Counter` uses `.useValue()`, the reactive
  * read — increment it, reload the app, and the value is still there. The
  * row below writes through `.setValue()`/`.reset()` and reads back with
  * `.getValue()`, the imperative pair, to show that persistence isn't tied

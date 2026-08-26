@@ -9,7 +9,7 @@ import localStorageAdapter from "./adapter";
  * const value = new LocalValue<string>("example");
  * value.setValue("hello");
  * value.getValue(); // "hello"
- * value.use(); // reactive read, inside a component
+ * value.useValue(); // reactive read, inside a component
  * value.reset();
  */
 export default class LocalValue<T> extends StorageValue<T> {

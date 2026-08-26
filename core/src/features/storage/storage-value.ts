@@ -36,17 +36,7 @@ export default class StorageValue<T> {
     this.adapter.removeItem(this.key);
   }
 
-  /**
-   * Reactive read — re-renders the calling component when the value changes.
-   *
-   * `value.use()` is a *method* call, not a `useXxx()` identifier, so React
-   * Compiler's static analysis doesn't recognize it as a hook and will
-   * memoize the caller as if this were a plain value read, silently
-   * breaking reactivity. Any component that calls `.use()` needs a
-   * `"use no memo";` directive as the first line of its body to opt out of
-   * compiler memoization.
-   */
-  use(): T | undefined {
+  useValue(): T | undefined {
     return this.parse(this.adapter.useValue(this.key));
   }
 }

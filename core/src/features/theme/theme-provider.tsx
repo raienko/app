@@ -14,12 +14,8 @@ type Props = {
 };
 
 export default function ThemeProvider({ children }: Props) {
-  // themePreference.use() is a method call, not a useXxx() identifier, so
-  // React Compiler can't see it's a hook — see StorageValue.use().
-  "use no memo";
-
   const systemScheme = useColorScheme();
-  const preference = themePreference.use() ?? "system";
+  const preference = themePreference.useValue() ?? "system";
   const scheme: ColorScheme =
     preference === "system"
       ? systemScheme === "dark"

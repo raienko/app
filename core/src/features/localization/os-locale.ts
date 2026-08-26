@@ -52,12 +52,8 @@ export function getStoredOsLocale(): LocaleCode | undefined {
  * override it. See `LocaleProvider`.
  */
 export default function useOsLocale(): LocaleCode {
-  // osLocaleValue.use() is a method call, not a useXxx() identifier, so
-  // React Compiler can't see it's a hook — see StorageValue.use().
-  "use no memo";
-
   const deviceLocales = useLocales();
-  const stored = osLocaleValue.use();
+  const stored = osLocaleValue.useValue();
 
   const osLocale = useMemo(
     () => resolveSupported(deviceLocales),

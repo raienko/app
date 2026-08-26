@@ -11,16 +11,11 @@ type Props = {
 };
 
 export default function Counter({ storageKey = "counter" }: Props) {
-  // counter.use() is a method call, not a useXxx() identifier, so React
-  // Compiler can't see it's a hook and would otherwise memoize this
-  // component as if count never changed. See StorageValue.use().
-  "use no memo";
-
   const counter = useMemo(
     () => new LocalValue<number>(storageKey),
     [storageKey],
   );
-  const count = counter.use();
+  const count = counter.useValue();
   const styles = useStyles();
 
   return (
