@@ -21,7 +21,7 @@ describe(`${Component.displayName} smoke test`, () => {
       <Component value="" onChangeText={onChangeText} placeholder="Type" />,
     );
 
-    fireEvent.changeText(screen.getByPlaceholderText("Type"), "hello");
+    await fireEvent.changeText(screen.getByPlaceholderText("Type"), "hello");
 
     expect(onChangeText).toHaveBeenCalledWith("hello");
   });
@@ -155,12 +155,12 @@ describe(`${Component.displayName} smoke test`, () => {
     );
     const input = screen.getByPlaceholderText("Type");
 
-    fireEvent(input, "focus");
+    await fireEvent(input, "focus");
     await waitFor(() => {
       expect(onFocus).toHaveBeenCalledTimes(1);
     });
 
-    fireEvent(input, "blur");
+    await fireEvent(input, "blur");
     await waitFor(() => {
       expect(onBlur).toHaveBeenCalledTimes(1);
     });
@@ -219,7 +219,7 @@ describe(`${Component.displayName} smoke test`, () => {
         <Component label="Country" value="" onPress={onPress} />,
       );
 
-      fireEvent.press(enabled.getByLabelText("Country"));
+      await fireEvent.press(enabled.getByLabelText("Country"));
 
       expect(onPress).toHaveBeenCalledTimes(1);
     });
@@ -230,7 +230,7 @@ describe(`${Component.displayName} smoke test`, () => {
         <Component label="Country" value="" onPress={onPress} disabled />,
       );
 
-      fireEvent.press(off.getByLabelText("Country"));
+      await fireEvent.press(off.getByLabelText("Country"));
 
       expect(onPress).not.toHaveBeenCalled();
     });

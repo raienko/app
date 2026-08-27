@@ -21,7 +21,7 @@ function CurrentPreference() {
 
 /** Presses the field and waits for the options Modal to finish presenting. */
 async function openOptions(label = "Language") {
-  fireEvent.press(screen.getByLabelText(label));
+  await fireEvent.press(screen.getByLabelText(label));
   await waitFor(() => {
     expect(screen.getByRole("button", { name: "English" })).toBeTruthy();
   });
@@ -60,7 +60,7 @@ describe(`${Component.name} smoke test`, () => {
     );
 
     await openOptions();
-    fireEvent.press(screen.getByRole("button", { name: "Español" }));
+    await fireEvent.press(screen.getByRole("button", { name: "Español" }));
 
     await waitFor(() =>
       expect(screen.getByText("preference: es")).toBeTruthy(),

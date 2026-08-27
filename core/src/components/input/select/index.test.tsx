@@ -13,7 +13,7 @@ const OPTIONS = [
 
 /** Presses the field and waits for the options Modal to finish presenting. */
 async function openOptions(label = "Country") {
-  fireEvent.press(screen.getByLabelText(label));
+  await fireEvent.press(screen.getByLabelText(label));
   await waitFor(() => {
     expect(screen.getByRole("button", { name: "Japan" })).toBeTruthy();
   });
@@ -94,7 +94,7 @@ describe(`${Component.displayName} smoke test`, () => {
     );
 
     await openOptions();
-    fireEvent.press(screen.getByRole("button", { name: "Japan" }));
+    await fireEvent.press(screen.getByRole("button", { name: "Japan" }));
 
     expect(onChange).toHaveBeenCalledWith("jp");
     await waitFor(() => {
@@ -188,7 +188,7 @@ describe(`${Component.displayName} smoke test`, () => {
       />,
     );
 
-    fireEvent.press(screen.getByLabelText("Country"));
+    await fireEvent.press(screen.getByLabelText("Country"));
 
     // `expanded` flips synchronously with the press, so it catches a sheet
     // that was asked to open — the Modal itself only appears a frame later,

@@ -33,12 +33,12 @@ describe(`${Component.name} smoke test`, () => {
       </Component>,
     );
 
-    fireEvent.press(screen.getByText("Section"));
+    await fireEvent.press(screen.getByText("Section"));
     await waitFor(() => {
       expect(screen.getByText("content")).toBeTruthy();
     });
 
-    fireEvent.press(screen.getByText("Section"));
+    await fireEvent.press(screen.getByText("Section"));
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeNull();
     });
@@ -55,7 +55,7 @@ describe(`${Component.name} smoke test`, () => {
       false,
     );
 
-    fireEvent.press(screen.getByRole("button"));
+    await fireEvent.press(screen.getByRole("button"));
     await waitFor(() => {
       expect(screen.getByRole("button").props.accessibilityState.expanded).toBe(
         true,

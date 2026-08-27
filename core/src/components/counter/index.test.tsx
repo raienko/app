@@ -12,7 +12,7 @@ describe(`${Component.name} smoke test`, () => {
   it("increments the count on press", async () => {
     await render(<Component storageKey="counter-test-increment" />);
 
-    fireEvent.press(screen.getByText("increment"));
+    await fireEvent.press(screen.getByText("increment"));
 
     await waitFor(() => expect(screen.getByText("count: 1")).toBeTruthy());
   });
@@ -20,10 +20,10 @@ describe(`${Component.name} smoke test`, () => {
   it("clears the count on reset", async () => {
     await render(<Component storageKey="counter-test-reset" />);
 
-    fireEvent.press(screen.getByText("increment"));
+    await fireEvent.press(screen.getByText("increment"));
     await waitFor(() => expect(screen.getByText("count: 1")).toBeTruthy());
 
-    fireEvent.press(screen.getByText("reset"));
+    await fireEvent.press(screen.getByText("reset"));
     await waitFor(() => expect(screen.getByText("count: 0")).toBeTruthy());
   });
 });

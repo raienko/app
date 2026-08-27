@@ -31,7 +31,7 @@ describe(`${Component.name} smoke test`, () => {
     const onPress = jest.fn();
     await render(<Component value="press me" onPress={onPress} />);
 
-    fireEvent.press(screen.getByText("press me"));
+    await fireEvent.press(screen.getByText("press me"));
 
     expect(onPress).toHaveBeenCalledTimes(1);
   });
@@ -60,7 +60,7 @@ describe(`${Component.name} smoke test`, () => {
       true,
     );
 
-    fireEvent.press(screen.getByText("nope"));
+    await fireEvent.press(screen.getByText("nope"));
     expect(onPress).not.toHaveBeenCalled();
   });
 });
@@ -196,7 +196,7 @@ describe("Button size", () => {
     );
 
     for (const size of sizes) {
-      fireEvent.press(screen.getByText(size));
+      await fireEvent.press(screen.getByText(size));
     }
 
     expect(onPress.mock.calls.flat()).toEqual(sizes);

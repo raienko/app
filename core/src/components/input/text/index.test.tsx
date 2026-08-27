@@ -7,7 +7,7 @@ describe(`${Component.displayName} smoke test`, () => {
     const onChange = jest.fn();
     await render(<Component value="" onChange={onChange} placeholder="Type" />);
 
-    fireEvent.changeText(screen.getByPlaceholderText("Type"), "hello");
+    await fireEvent.changeText(screen.getByPlaceholderText("Type"), "hello");
 
     expect(onChange).toHaveBeenCalledWith("hello");
   });

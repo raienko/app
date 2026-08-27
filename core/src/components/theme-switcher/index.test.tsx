@@ -26,7 +26,7 @@ describe(`${Component.name} smoke test`, () => {
       </>,
     );
 
-    fireEvent.press(screen.getByText("Dark"));
+    await fireEvent.press(screen.getByText("Dark"));
 
     await waitFor(() =>
       expect(screen.getByText("preference: dark")).toBeTruthy(),

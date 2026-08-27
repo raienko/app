@@ -9,7 +9,7 @@ describe(`${Component.displayName} smoke test`, () => {
       <Component value={null} onChange={onChange} placeholder="Age" />,
     );
 
-    fireEvent.changeText(screen.getByPlaceholderText("Age"), "42");
+    await fireEvent.changeText(screen.getByPlaceholderText("Age"), "42");
 
     expect(onChange).toHaveBeenCalledWith(42);
   });
@@ -20,7 +20,7 @@ describe(`${Component.displayName} smoke test`, () => {
       <Component value={null} onChange={onChange} placeholder="Amount" />,
     );
 
-    fireEvent.changeText(screen.getByPlaceholderText("Amount"), "1.");
+    await fireEvent.changeText(screen.getByPlaceholderText("Amount"), "1.");
 
     expect(onChange).not.toHaveBeenCalled();
     await waitFor(() => {
@@ -40,7 +40,7 @@ describe(`${Component.displayName} smoke test`, () => {
       />,
     );
 
-    fireEvent.changeText(screen.getByPlaceholderText("Clamped"), "99");
+    await fireEvent.changeText(screen.getByPlaceholderText("Clamped"), "99");
 
     expect(onChange).toHaveBeenCalledWith(10);
   });
@@ -51,7 +51,7 @@ describe(`${Component.displayName} smoke test`, () => {
       <Component value={null} onChange={onChange} placeholder="Digits" />,
     );
 
-    fireEvent.changeText(screen.getByPlaceholderText("Digits"), "12abc3");
+    await fireEvent.changeText(screen.getByPlaceholderText("Digits"), "12abc3");
 
     expect(onChange).toHaveBeenCalledWith(123);
   });

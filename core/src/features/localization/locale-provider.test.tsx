@@ -69,7 +69,7 @@ describe("LocaleProvider", () => {
     await render(<Probe />);
     expect(screen.getByText("locale:es")).toBeTruthy();
 
-    fireEvent.press(screen.getByTestId("pick-ja"));
+    await fireEvent.press(screen.getByTestId("pick-ja"));
     await waitFor(() => expect(screen.getByText("locale:ja")).toBeTruthy());
 
     mockUseLocales.mockReturnValue([{ languageCode: "uk" }]);
@@ -80,10 +80,10 @@ describe("LocaleProvider", () => {
 
   it("follows the OS again once the preference is set back to system", async () => {
     await render(<Probe />);
-    fireEvent.press(screen.getByTestId("pick-ja"));
+    await fireEvent.press(screen.getByTestId("pick-ja"));
     await waitFor(() => expect(screen.getByText("locale:ja")).toBeTruthy());
 
-    fireEvent.press(screen.getByTestId("pick-system"));
+    await fireEvent.press(screen.getByTestId("pick-system"));
     await waitFor(() => expect(screen.getByText("locale:es")).toBeTruthy());
   });
 });

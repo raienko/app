@@ -9,7 +9,7 @@ describe(`${Component.displayName} smoke test`, () => {
       <Component value="" onChange={onChange} placeholder="Email" />,
     );
 
-    fireEvent.changeText(
+    await fireEvent.changeText(
       screen.getByPlaceholderText("Email"),
       "ada@example.com",
     );

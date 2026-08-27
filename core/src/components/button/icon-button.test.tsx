@@ -44,7 +44,7 @@ describe(`${Component.name} smoke test`, () => {
       </Component>,
     );
 
-    fireEvent.press(screen.getByRole("button", { name: "Close" }));
+    await fireEvent.press(screen.getByRole("button", { name: "Close" }));
 
     expect(onPress).toHaveBeenCalledTimes(1);
   });
@@ -87,7 +87,7 @@ describe(`${Component.name} smoke test`, () => {
     );
     const button = screen.getByRole("button", { name: "Close" });
 
-    fireEvent.press(button);
+    await fireEvent.press(button);
 
     expect(onPress).not.toHaveBeenCalled();
     expect(button.props.accessibilityState.disabled).toBe(true);

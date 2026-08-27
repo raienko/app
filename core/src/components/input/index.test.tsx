@@ -7,7 +7,7 @@ describe(`${Component.displayName} smoke test`, () => {
     const onChange = jest.fn();
     await render(<Component value="" onChange={onChange} placeholder="Type" />);
 
-    fireEvent.changeText(screen.getByPlaceholderText("Type"), "hello");
+    await fireEvent.changeText(screen.getByPlaceholderText("Type"), "hello");
 
     expect(onChange).toHaveBeenCalledWith("hello");
   });
@@ -23,7 +23,7 @@ describe(`${Component.displayName} smoke test`, () => {
       />,
     );
 
-    fireEvent.changeText(screen.getByPlaceholderText("Age"), "12abc");
+    await fireEvent.changeText(screen.getByPlaceholderText("Age"), "12abc");
 
     expect(onChange).toHaveBeenCalledWith(12);
   });
@@ -39,7 +39,7 @@ describe(`${Component.displayName} smoke test`, () => {
       />,
     );
 
-    fireEvent.changeText(
+    await fireEvent.changeText(
       screen.getByPlaceholderText("Email"),
       "ada@example.com",
     );
@@ -65,11 +65,11 @@ describe(`${Component.displayName} smoke test`, () => {
       />,
     );
 
-    fireEvent.press(screen.getByLabelText("Country"));
+    await fireEvent.press(screen.getByLabelText("Country"));
     await waitFor(() => {
       expect(screen.getByRole("button", { name: "Japan" })).toBeTruthy();
     });
-    fireEvent.press(screen.getByRole("button", { name: "Japan" }));
+    await fireEvent.press(screen.getByRole("button", { name: "Japan" }));
 
     expect(onChange).toHaveBeenCalledWith("jp");
   });
@@ -86,11 +86,11 @@ describe(`${Component.displayName} smoke test`, () => {
       />,
     );
 
-    fireEvent.press(screen.getByLabelText("Starts"));
+    await fireEvent.press(screen.getByLabelText("Starts"));
     await waitFor(() => {
       expect(screen.getByTestId("calendar")).toBeTruthy();
     });
-    fireEvent.press(screen.getByRole("button", { name: "Done" }));
+    await fireEvent.press(screen.getByRole("button", { name: "Done" }));
 
     expect(onChange).toHaveBeenCalledWith(new Date(2026, 7, 27));
   });
@@ -109,7 +109,7 @@ describe(`${Component.displayName} smoke test`, () => {
     const field = screen.getByLabelText("Password");
     expect(field.props.secureTextEntry).toBe(true);
 
-    fireEvent.changeText(field, "hunter2");
+    await fireEvent.changeText(field, "hunter2");
 
     expect(onChange).toHaveBeenCalledWith("hunter2");
   });

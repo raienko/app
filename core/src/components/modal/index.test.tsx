@@ -1,7 +1,7 @@
-import { act, createRef } from "react";
+import { createRef } from "react";
 import { Text as RNText } from "react-native";
 
-import { fireEvent, render, screen, waitFor } from "@/root/testing";
+import { act, fireEvent, render, screen, waitFor } from "@/root/testing";
 
 import Component from "./index";
 import type { ModalHandle } from "./types";
@@ -32,12 +32,12 @@ describe(`${Component.displayName} smoke test`, () => {
       </Component>,
     );
 
-    act(() => ref.current?.show());
+    await act(() => ref.current?.show());
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
 
-    act(() => ref.current?.hide());
+    await act(() => ref.current?.hide());
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeNull();
     });
@@ -50,12 +50,12 @@ describe(`${Component.displayName} smoke test`, () => {
       </Component>,
     );
 
-    act(() => Component.show("test-static"));
+    await act(() => Component.show("test-static"));
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
 
-    act(() => Component.hide("test-static"));
+    await act(() => Component.hide("test-static"));
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeNull();
     });
@@ -69,7 +69,7 @@ describe(`${Component.displayName} smoke test`, () => {
       </Component>,
     );
 
-    act(() => Component.show("some-other-id"));
+    await act(() => Component.show("some-other-id"));
 
     await new Promise((resolve) => setTimeout(resolve, 10));
     expect(screen.queryByText("content")).toBeNull();
@@ -88,12 +88,12 @@ describe(`${Component.displayName} smoke test`, () => {
       </Component>,
     );
 
-    act(() => ref.current?.show());
+    await act(() => ref.current?.show());
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
 
-    fireEvent.press(screen.getByTestId("modal-backdrop"));
+    await fireEvent.press(screen.getByTestId("modal-backdrop"));
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeNull();
     });
@@ -108,12 +108,12 @@ describe(`${Component.displayName} smoke test`, () => {
       </Component>,
     );
 
-    act(() => ref.current?.show());
+    await act(() => ref.current?.show());
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
 
-    fireEvent.press(screen.getByTestId("modal-backdrop"));
+    await fireEvent.press(screen.getByTestId("modal-backdrop"));
 
     expect(onDismiss).toHaveBeenCalledTimes(1);
     // onDismiss doesn't hide on its own — the modal is still up until the
@@ -129,7 +129,7 @@ describe(`${Component.displayName} smoke test`, () => {
       </Component>,
     );
 
-    act(() => ref.current?.show());
+    await act(() => ref.current?.show());
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
@@ -149,7 +149,7 @@ describe(`${Component.displayName} smoke test`, () => {
       </Component>,
     );
 
-    act(() => ref.current?.show());
+    await act(() => ref.current?.show());
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
@@ -184,7 +184,7 @@ describe(`${Component.displayName} smoke test`, () => {
       </Component>,
     );
 
-    act(() => ref.current?.show());
+    await act(() => ref.current?.show());
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
@@ -209,7 +209,7 @@ describe(`${Component.displayName} smoke test`, () => {
         </Component>,
       );
 
-      act(() => ref.current?.show());
+      await act(() => ref.current?.show());
       await waitFor(() => {
         expect(screen.queryByText("content")).toBeTruthy();
       });
@@ -232,7 +232,7 @@ describe(`${Component.displayName} smoke test`, () => {
         </Component>,
       );
 
-      act(() => ref.current?.show());
+      await act(() => ref.current?.show());
 
       await waitFor(() => {
         expect(screen.queryByText("content")).toBeTruthy();

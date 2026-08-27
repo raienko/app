@@ -15,7 +15,7 @@ describe(`${Component.displayName} smoke test`, () => {
     const onChange = jest.fn();
     await render(<Component label="Password" value="" onChange={onChange} />);
 
-    fireEvent.changeText(field(), "hunter2");
+    await fireEvent.changeText(field(), "hunter2");
 
     expect(onChange).toHaveBeenCalledWith("hunter2");
   });
@@ -27,7 +27,7 @@ describe(`${Component.displayName} smoke test`, () => {
 
     expect(field().props.secureTextEntry).toBe(true);
 
-    fireEvent.press(toggle("Show password"));
+    await fireEvent.press(toggle("Show password"));
 
     await waitFor(() => {
       expect(field().props.secureTextEntry).toBe(false);
@@ -39,12 +39,12 @@ describe(`${Component.displayName} smoke test`, () => {
       <Component label="Password" value="hunter2" onChange={() => {}} />,
     );
 
-    fireEvent.press(toggle("Show password"));
+    await fireEvent.press(toggle("Show password"));
     await waitFor(() => {
       expect(toggle("Hide password")).toBeTruthy();
     });
 
-    fireEvent.press(toggle("Hide password"));
+    await fireEvent.press(toggle("Hide password"));
 
     await waitFor(() => {
       expect(field().props.secureTextEntry).toBe(true);
@@ -91,7 +91,7 @@ describe(`${Component.displayName} smoke test`, () => {
       />,
     );
 
-    fireEvent.press(toggle("Show password"));
+    await fireEvent.press(toggle("Show password"));
 
     expect(field().props.secureTextEntry).toBe(true);
   });
