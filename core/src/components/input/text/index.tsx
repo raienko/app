@@ -7,23 +7,23 @@ import type { CommonInputProps, TextInputTypeProps } from "../types";
 type Props = Omit<TextInputTypeProps, "type"> & CommonInputProps;
 
 /**
- * Plain string in, string out — the default variation. Only adds
- * `secureTextEntry` on top of BaseInput; everything else (label, slots,
- * focus/disabled styling, the autoCapitalize/autoCorrect-off defaults) comes
- * from BaseInput.
+ * Plain string in, string out — the default variation, and the one that adds
+ * nothing at all. Everything (label, slots, focus/disabled styling, the
+ * autoCapitalize/autoCorrect-off defaults) comes from BaseInput; this exists
+ * so `type` has a default case rather than because a plain text field needs
+ * behaviour of its own.
+ *
+ * Masking deliberately isn't here. It used to be, as a `secureTextEntry`
+ * prop, which gave you a field you could hide but never unhide and that no
+ * password manager could recognise — see ./password, which is the whole
+ * feature rather than one third of it.
  */
 const TextInput = forwardRef<RNTextInputInstance, Props>(function TextInput(
-  { value, onChange, secureTextEntry, ...props },
+  { value, onChange, ...props },
   ref,
 ) {
   return (
-    <BaseInput
-      ref={ref}
-      {...props}
-      value={value}
-      onChangeText={onChange}
-      secureTextEntry={secureTextEntry}
-    />
+    <BaseInput ref={ref} {...props} value={value} onChangeText={onChange} />
   );
 });
 

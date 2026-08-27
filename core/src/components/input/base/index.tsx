@@ -22,7 +22,20 @@ export type BaseInputProps = CommonInputProps & {
    */
   onChangeText?: (value: string) => void;
   keyboardType?: RNTextInputProps["keyboardType"];
+  /**
+   * Masks the field. Set by the `password` variation, which pairs it with a
+   * toggle and an `autoComplete` hint — it is deliberately not on any
+   * variation's own props, because masking on its own is the least useful
+   * third of a password field.
+   */
   secureTextEntry?: boolean;
+  /**
+   * What the OS and any password manager should offer to fill in. Off unless
+   * a variation asks for it — an unlabelled field is better than one
+   * labelled wrongly, which is how a password ends up autofilled into a
+   * nickname box.
+   */
+  autoComplete?: RNTextInputProps["autoComplete"];
   /**
    * Turns the field into a button: it stops being typed into and instead
    * displays `value` (or `placeholder`, when empty) as read-only text,
@@ -64,6 +77,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
       style,
       keyboardType = "default",
       secureTextEntry,
+      autoComplete,
       autoCapitalize = "none",
       autoCorrect = false,
       error,
@@ -133,6 +147,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
         }}
         keyboardType={keyboardType}
         secureTextEntry={secureTextEntry}
+        autoComplete={autoComplete}
         autoCapitalize={autoCapitalize}
         autoCorrect={autoCorrect}
       />

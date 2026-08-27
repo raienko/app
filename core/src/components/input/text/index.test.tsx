@@ -11,19 +11,4 @@ describe(`${Component.displayName} smoke test`, () => {
 
     expect(onChange).toHaveBeenCalledWith("hello");
   });
-
-  it("passes secureTextEntry through to the underlying field", async () => {
-    await render(
-      <Component
-        value=""
-        onChange={() => {}}
-        placeholder="Password"
-        secureTextEntry
-      />,
-    );
-
-    expect(screen.getByPlaceholderText("Password").props.secureTextEntry).toBe(
-      true,
-    );
-  });
 });

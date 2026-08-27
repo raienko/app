@@ -29,15 +29,6 @@ export const WithSlots = {
   },
 };
 
-export const Password = {
-  args: {
-    label: "Password",
-    placeholder: "••••••••",
-    secureTextEntry: true,
-    leftSlot: <Icon name="lock" />,
-  },
-};
-
 export const Disabled = {
   args: {
     label: "Email",

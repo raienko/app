@@ -22,8 +22,9 @@ const TODAY = new Date();
  * `text` with a label, slot and helper text; `numeric` with min/max
  * clamping and its own number keyboard; `email` with live validation
  * driving the error state; `select` picking from a list in a Modal instead
- * of being typed into; `datetime` in all three of its modes, one of them
- * bounded so the disabled days are visible. One field is
+ * of being typed into; `password` masked behind an eye that unmasks it;
+ * `datetime` in all three of its modes, one of them bounded so the disabled
+ * days are visible. One field is
  * disabled, and "Focus email" exercises ref forwarding through the
  * variation to the RN TextInput.
  */
@@ -80,11 +81,11 @@ export default function InputsSection() {
         error={emailError}
       />
       <Input
+        type="password"
         label={t("input.password.label")}
         placeholder="••••••••"
         value={secret}
         onChange={setSecret}
-        secureTextEntry
         leftSlot={<Icon name="lock" />}
       />
       <Input

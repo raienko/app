@@ -25,7 +25,9 @@
     },
     "focusEmail": "聚焦邮箱输入框",
     "password": {
-      "label": "密码"
+      "label": "密码",
+      "show": "显示密码",
+      "hide": "隐藏密码"
     },
     "disabled": {
       "label": "已禁用",

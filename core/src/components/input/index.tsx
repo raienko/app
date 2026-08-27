@@ -9,6 +9,7 @@ import type { TextInput as RNTextInputInstance } from "react-native";
 import DateTimeInput from "./datetime";
 import EmailInput from "./email";
 import NumericInput from "./numeric";
+import PasswordInput from "./password";
 import SelectInput from "./select";
 import TextInput from "./text";
 import type { InputProps } from "./types";
@@ -49,6 +50,7 @@ function renderVariant<P>(
  * @example <Input type="email" value={email} onChange={setEmail} />
  * @example <Input type="select" value={country} onChange={setCountry} options={COUNTRIES} />
  * @example <Input type="datetime" value={when} onChange={setWhen} mode="date" />
+ * @example <Input type="password" value={password} onChange={setPassword} />
  * @example <Input value={query} onChange={setQuery} leftSlot={<Icon name="search" />} />
  */
 const Input = forwardRef<RNTextInputInstance, InputProps>(
@@ -62,6 +64,8 @@ const Input = forwardRef<RNTextInputInstance, InputProps>(
         return renderVariant(SelectInput, props, ref);
       case "datetime":
         return renderVariant(DateTimeInput, props, ref);
+      case "password":
+        return renderVariant(PasswordInput, props, ref);
       default:
         return renderVariant(TextInput, props, ref);
     }

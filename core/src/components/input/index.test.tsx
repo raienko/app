@@ -94,4 +94,23 @@ describe(`${Component.displayName} smoke test`, () => {
 
     expect(onChange).toHaveBeenCalledWith(new Date(2026, 7, 27));
   });
+
+  it("routes to the password variation when type='password'", async () => {
+    const onChange = jest.fn();
+    await render(
+      <Component
+        type="password"
+        label="Password"
+        value=""
+        onChange={onChange}
+      />,
+    );
+
+    const field = screen.getByLabelText("Password");
+    expect(field.props.secureTextEntry).toBe(true);
+
+    fireEvent.changeText(field, "hunter2");
+
+    expect(onChange).toHaveBeenCalledWith("hunter2");
+  });
 });

@@ -30,7 +30,6 @@ export type TextInputTypeProps = {
   type?: "text";
   value: string;
   onChange: (value: string) => void;
-  secureTextEntry?: boolean;
 };
 
 export type NumericInputTypeProps = {
@@ -45,6 +44,22 @@ export type EmailInputTypeProps = {
   type: "email";
   value: string;
   onChange: (value: string) => void;
+};
+
+export type PasswordInputTypeProps = {
+  type: "password";
+  value: string;
+  onChange: (value: string) => void;
+  /**
+   * Marks this as the field a *new* password is being chosen in, rather than
+   * an existing one being entered.
+   *
+   * It only changes what the OS and password managers are told
+   * (`autoComplete`), but getting it wrong is the difference between being
+   * offered the saved password and being offered a generated one. Defaults
+   * to false — signing in is much the commoner case.
+   */
+  newPassword?: boolean;
 };
 
 /**
@@ -100,5 +115,6 @@ export type InputProps = (
   | EmailInputTypeProps
   | SelectInputTypeProps
   | DateTimeInputTypeProps
+  | PasswordInputTypeProps
 ) &
   CommonInputProps;

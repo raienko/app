@@ -46,6 +46,19 @@ export function Select() {
   );
 }
 
+export function Password() {
+  const [value, setValue] = useState("");
+  return (
+    <Component
+      type="password"
+      label="Password"
+      placeholder="••••••••"
+      value={value}
+      onChange={setValue}
+    />
+  );
+}
+
 // Controlled demo — Storybook args don't feed back into a controlled
 // TextInput's value, so this story owns its own state. See ./text and
 // ./numeric for each variation's own story set.

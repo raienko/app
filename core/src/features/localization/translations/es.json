@@ -25,7 +25,9 @@
     },
     "focusEmail": "Enfocar correo",
     "password": {
-      "label": "Contraseña"
+      "label": "Contraseña",
+      "show": "Mostrar contraseña",
+      "hide": "Ocultar contraseña"
     },
     "disabled": {
       "label": "Deshabilitado",

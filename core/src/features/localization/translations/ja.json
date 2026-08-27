@@ -25,7 +25,9 @@
     },
     "focusEmail": "メール欄にフォーカス",
     "password": {
-      "label": "パスワード"
+      "label": "パスワード",
+      "show": "パスワードを表示",
+      "hide": "パスワードを非表示"
     },
     "disabled": {
       "label": "無効",

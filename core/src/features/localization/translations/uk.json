@@ -25,7 +25,9 @@
     },
     "focusEmail": "Фокус на email",
     "password": {
-      "label": "Пароль"
+      "label": "Пароль",
+      "show": "Показати пароль",
+      "hide": "Приховати пароль"
     },
     "disabled": {
       "label": "Вимкнено",

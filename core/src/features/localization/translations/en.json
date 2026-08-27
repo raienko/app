@@ -25,7 +25,9 @@
     },
     "focusEmail": "Focus email",
     "password": {
-      "label": "Password"
+      "label": "Password",
+      "show": "Show password",
+      "hide": "Hide password"
     },
     "disabled": {
       "label": "Disabled",
