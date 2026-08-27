@@ -1,9 +1,6 @@
-import { Pressable } from "react-native";
-
+import { IconButton } from "@/components/button";
 import Icon from "@/components/icon";
-import { controlA11yProps } from "@/features/accessibility";
 import { useLocale } from "@/features/localization";
-import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 type Props = {
@@ -21,9 +18,10 @@ type Props = {
  * it's the one label that stays unambiguous when the icon has flipped but
  * the announcement hasn't been re-read.
  *
- * The hit area is a full touch target rather than the icon's own size: the
- * eye is 20pt of drawing, which is less than half the 44pt minimum, and it
- * sits right beside the text it would otherwise be easy to tap by mistake.
+ * The colour is passed explicitly rather than taken from the button's
+ * palette: `tertiary`'s foreground is the accent, which is right for a
+ * button that reads as an action, and too loud for a control sitting inside
+ * a field it isn't the subject of.
  */
 export default function VisibilityToggle({
   visible,
@@ -32,33 +30,17 @@ export default function VisibilityToggle({
 }: Props) {
   const { t } = useLocale();
   const theme = useTheme();
-  const { spacing } = useSizes();
-  const styles = useStyles();
 
   return (
-    <Pressable
-      onPress={onPress}
+    <IconButton
+      label={t(visible ? "input.password.hide" : "input.password.show")}
       disabled={disabled}
-      style={styles.toggle}
-      {...controlA11yProps({
-        label: t(visible ? "input.password.hide" : "input.password.show"),
-        disabled: disabled ?? false,
-      })}
+      onPress={onPress}
     >
       <Icon
         name={visible ? "eye-off" : "eye"}
-        size={spacing.x20}
         color={theme.colors.textSecondary}
       />
-    </Pressable>
+    </IconButton>
   );
 }
-
-const useStyles = createStyles(({ sizes }) => ({
-  toggle: {
-    width: sizes.elementHeightMd,
-    height: sizes.elementHeightMd,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-}));

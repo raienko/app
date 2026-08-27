@@ -37,6 +37,10 @@ type Props = (VectorIconProps | CustomTypeProps | DefaultTypeProps) &
  * Defaults to theme.colors.text when `color` isn't passed — override it like
  * any other prop.
  *
+ * A `Button` fills both `color` and `size` in for an icon passed as its
+ * child, so an icon on a filled button is legible without the call site
+ * restating the button's own colour — see `withIconDefaults`.
+ *
  * @example <Icon type="Feather" name="home" color="red" size={units(24)} />
  * @example <Icon type="custom" name="logo" size={units(24)} />
  * @example <Icon name="home" /> // type omitted -> DEFAULT_ICON_TYPE (Feather)
@@ -68,3 +72,5 @@ export default function Icon({
     />
   );
 }
+
+export { default as withIconDefaults } from "./with-icon-defaults";

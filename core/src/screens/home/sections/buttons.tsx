@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { View } from "react-native";
 
-import Button, { type ButtonSize, type ButtonType } from "@/components/button";
+import Button, {
+  IconButton,
+  type ButtonSize,
+  type ButtonType,
+} from "@/components/button";
+import Icon from "@/components/icon";
 import { Column } from "@/components/grid";
 import Text from "@/components/text";
 import { createStyles, useSizes } from "@/features/responsive";
@@ -11,6 +16,7 @@ import Readout from "./readout";
 
 const TYPES: ButtonType[] = ["primary", "secondary", "tertiary"];
 const SIZES: ButtonSize[] = ["small", "medium", "large", "auto"];
+const ICON_SIZES = ["small", "medium", "large"] as const;
 
 /**
  * The full type × size matrix, plus the states that cut across both.
@@ -19,6 +25,10 @@ const SIZES: ButtonSize[] = ["small", "medium", "large", "auto"];
  * filled accent, filled neutral, unfilled — and the sizes line up in
  * columns, which is the easiest way to see that `auto` is the only one that
  * doesn't reserve a touch target.
+ *
+ * `IconButton` follows, drawing from the same palette and the same heights,
+ * which is the point of it sharing them: put one beside a `Button` of the
+ * same type and size and they match.
  */
 export default function ButtonsSection() {
   const theme = useTheme();
@@ -75,6 +85,42 @@ export default function ButtonsSection() {
             onPress={() => {}}
           />
         ))}
+      </View>
+
+      <Text value="IconButton — same palette, square" type="headline" />
+      <View style={styles.row}>
+        {TYPES.map((type) => (
+          <IconButton
+            key={type}
+            label={`${type} icon button`}
+            type={type}
+            onPress={() => setPressCount((n) => n + 1)}
+          >
+            <Icon name="star" />
+          </IconButton>
+        ))}
+        {/* Beside a Button of the same type and size, to show they line up. */}
+        <Button value="secondary" type="secondary" onPress={() => {}} />
+      </View>
+
+      <View style={styles.row}>
+        {ICON_SIZES.map((size) => (
+          <IconButton
+            key={size}
+            label={`${size} icon button`}
+            type="secondary"
+            size={size}
+            onPress={() => setPressCount((n) => n + 1)}
+          >
+            <Icon name="heart" />
+          </IconButton>
+        ))}
+        <IconButton label="Selected icon button" type="secondary" selected>
+          <Icon name="check" />
+        </IconButton>
+        <IconButton label="Disabled icon button" type="primary" disabled>
+          <Icon name="slash" />
+        </IconButton>
       </View>
 
       <Readout label="presses" value={String(pressCount)} />
