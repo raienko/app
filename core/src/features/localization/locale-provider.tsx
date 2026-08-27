@@ -30,7 +30,9 @@ export default function LocaleProvider({ children }: Props) {
   const preference = localePreference.useValue() ?? "system";
   const osLocale = useOsLocale();
   const locale = preference === "system" ? osLocale : preference;
-  const isRTL = LOCALES.find((entry) => entry.code === locale)?.rtl ?? false;
+  const info = LOCALES.find((entry) => entry.code === locale);
+  const isRTL = info?.rtl ?? false;
+  const weekStartsOn = info?.weekStartsOn ?? 1;
 
   const t = useCallback(
     (key: TranslationKey, params?: Record<string, string | number>) =>
@@ -43,8 +45,8 @@ export default function LocaleProvider({ children }: Props) {
   }, []);
 
   const value = useMemo<Locale>(
-    () => ({ locale, isRTL, preference, setPreference, t }),
-    [locale, isRTL, preference, setPreference, t],
+    () => ({ locale, isRTL, weekStartsOn, preference, setPreference, t }),
+    [locale, isRTL, weekStartsOn, preference, setPreference, t],
   );
 
   return (

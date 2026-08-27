@@ -9,21 +9,23 @@ import { createStyles } from "@/features/responsive";
 
 import Readout from "./readout";
 
-const COUNTRIES = [
-  { value: "uk", label: "United Kingdom" },
-  { value: "ua", label: "Ukraine" },
-  { value: "es", label: "Spain" },
-  { value: "jp", label: "Japan" },
-  { value: "cn", label: "China" },
-];
+// Values are stable codes; the visible labels come from the translations,
+// so the list follows the app's language like every other string here.
+const COUNTRY_CODES = ["uk", "ua", "es", "jp", "cn"] as const;
+
+// Hoisted out of render: a fresh `new Date()` every render is a new
+// `maxDate` for the picker on every render, which keeps it re-syncing.
+const TODAY = new Date();
 
 /**
  * Every input variation at once, each showing what's specific to it:
  * `text` with a label, slot and helper text; `numeric` with min/max
  * clamping and its own number keyboard; `email` with live validation
  * driving the error state; `select` picking from a list in a Modal instead
- * of being typed into. One field is disabled, and "Focus email" exercises
- * ref forwarding through the variation to the RN TextInput.
+ * of being typed into; `datetime` in all three of its modes, one of them
+ * bounded so the disabled days are visible. One field is
+ * disabled, and "Focus email" exercises ref forwarding through the
+ * variation to the RN TextInput.
  */
 export default function InputsSection() {
   const { t } = useLocale();
@@ -33,7 +35,15 @@ export default function InputsSection() {
   const [email, setEmail] = useState("");
   const [secret, setSecret] = useState("");
   const [country, setCountry] = useState<string | null>(null);
+  const [startsAt, setStartsAt] = useState<Date | null>(null);
+  const [birthday, setBirthday] = useState<Date | null>(null);
+  const [alarm, setAlarm] = useState<Date | null>(null);
   const emailRef = useRef<RNTextInputInstance>(null);
+
+  const countries = COUNTRY_CODES.map((code) => ({
+    value: code,
+    label: t(`input.country.options.${code}`),
+  }));
 
   const emailError =
     email && !email.includes("@") ? t("input.email.error") : undefined;
@@ -57,7 +67,7 @@ export default function InputsSection() {
         min={0}
         max={120}
         leftSlot={<Icon name="hash" />}
-        helperText="0–120, non-digits stripped as you type"
+        helperText={t("input.age.helper")}
       />
       <Input
         ref={emailRef}
@@ -70,7 +80,7 @@ export default function InputsSection() {
         error={emailError}
       />
       <Input
-        label="Password"
+        label={t("input.password.label")}
         placeholder="••••••••"
         value={secret}
         onChange={setSecret}
@@ -79,17 +89,47 @@ export default function InputsSection() {
       />
       <Input
         type="select"
-        label="Country"
-        placeholder="Pick a country"
+        label={t("input.country.label")}
+        placeholder={t("input.country.placeholder")}
         value={country}
         onChange={setCountry}
-        options={COUNTRIES}
+        options={countries}
         leftSlot={<Icon name="globe" />}
-        helperText="Opens a bottom-sheet Modal — tap the backdrop to keep the current pick"
+        helperText={t("input.country.helper")}
       />
       <Input
-        label="Disabled"
-        placeholder="not editable"
+        type="datetime"
+        label={t("input.startsAt.label")}
+        placeholder={t("input.startsAt.placeholder")}
+        value={startsAt}
+        onChange={setStartsAt}
+        leftSlot={<Icon name="calendar" />}
+        helperText={t("input.startsAt.helper")}
+      />
+      <Input
+        type="datetime"
+        mode="date"
+        label={t("input.birthday.label")}
+        placeholder={t("input.birthday.placeholder")}
+        value={birthday}
+        onChange={setBirthday}
+        max={TODAY}
+        leftSlot={<Icon name="gift" />}
+        helperText={t("input.birthday.helper")}
+      />
+      <Input
+        type="datetime"
+        mode="time"
+        label={t("input.alarm.label")}
+        placeholder={t("input.alarm.placeholder")}
+        value={alarm}
+        onChange={setAlarm}
+        leftSlot={<Icon name="clock" />}
+        helperText={t("input.alarm.helper")}
+      />
+      <Input
+        label={t("input.disabled.label")}
+        placeholder={t("input.disabled.placeholder")}
         value=""
         onChange={() => {}}
         disabled
@@ -101,12 +141,19 @@ export default function InputsSection() {
         onPress={() => emailRef.current?.focus()}
       />
 
+      {/* Readout labels stay untranslated on purpose: each one names the
+          piece of state above it (`name`, `startsAt`, ...), so it's an
+          identifier being echoed back, not copy. */}
       <Readout label="name" value={name || "—"} />
       <Readout label="age" value={age === null ? "—" : String(age)} />
       <Readout label="email" value={email || "—"} />
       {/* The stored value, not the label — the point of an option's `value`
           being separate from what it displays. */}
       <Readout label="country" value={country ?? "—"} />
+      <Readout
+        label="startsAt"
+        value={startsAt ? startsAt.toISOString() : "—"}
+      />
     </View>
   );
 }

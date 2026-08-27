@@ -1,6 +1,8 @@
 {
   "common": {
-    "close": "关闭"
+    "close": "关闭",
+    "cancel": "取消",
+    "done": "完成"
   },
   "home": {
     "summary": "姓名：{{name}} / 年龄：{{age}} / 邮箱：{{email}}"
@@ -13,14 +15,49 @@
     },
     "age": {
       "label": "年龄",
-      "placeholder": "0"
+      "placeholder": "0",
+      "helper": "0–120，输入时会自动去除非数字字符"
     },
     "email": {
       "label": "邮箱",
       "placeholder": "ada@example.com",
       "error": "请输入有效的邮箱地址"
     },
-    "focusEmail": "聚焦邮箱输入框"
+    "focusEmail": "聚焦邮箱输入框",
+    "password": {
+      "label": "密码"
+    },
+    "disabled": {
+      "label": "已禁用",
+      "placeholder": "不可编辑"
+    },
+    "country": {
+      "label": "国家/地区",
+      "placeholder": "选择国家/地区",
+      "helper": "打开底部弹层 — 点按背景可保留当前选择",
+      "options": {
+        "uk": "英国",
+        "ua": "乌克兰",
+        "es": "西班牙",
+        "jp": "日本",
+        "cn": "中国"
+      }
+    },
+    "startsAt": {
+      "label": "开始时间",
+      "placeholder": "选择日期和时间",
+      "helper": "日期和时间会暂存为草稿，直到你点按“完成”"
+    },
+    "birthday": {
+      "label": "生日",
+      "placeholder": "选择日期",
+      "helper": "仅日期，且不能选择未来的日子"
+    },
+    "alarm": {
+      "label": "闹钟",
+      "placeholder": "选择时间",
+      "helper": "仅时间 — 日历会完全隐藏"
+    }
   },
   "modal": {
     "popup": {

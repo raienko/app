@@ -15,23 +15,63 @@ export type LocaleInfo = {
   /** The language's own name for itself — what a LocaleSwitcher should actually show. */
   nativeName: string;
   rtl: boolean;
+  /**
+   * Which day a calendar week starts on, as a `Date.getDay()` index
+   * (0 = Sunday). Hand-authored for the same reason `rtl` is: `Intl` has no
+   * portable way to ask (`Intl.Locale.prototype.getWeekInfo` isn't
+   * available everywhere this app runs), and the answer is a property of
+   * the locale rather than of whatever component happens to draw a
+   * calendar.
+   */
+  weekStartsOn: number;
 };
 
 // Hand-authored (native names/rtl-ness aren't derivable from translations.ts),
 // but cross-checked against it below so a locale can't drift out of sync —
 // same fail-fast-on-load idea as theme/types.ts's THEME_PREFERENCES.
 export const LOCALES: LocaleInfo[] = [
-  { code: "en", englishName: "English", nativeName: "English", rtl: false },
+  {
+    code: "en",
+    englishName: "English",
+    nativeName: "English",
+    rtl: false,
+    weekStartsOn: 0,
+  },
   {
     code: "uk",
     englishName: "Ukrainian",
     nativeName: "Українська",
     rtl: false,
+    weekStartsOn: 1,
   },
-  { code: "es", englishName: "Spanish", nativeName: "Español", rtl: false },
-  { code: "zh", englishName: "Chinese", nativeName: "中文", rtl: false },
-  { code: "ja", englishName: "Japanese", nativeName: "日本語", rtl: false },
-  { code: "ar", englishName: "Arabic", nativeName: "العربية", rtl: true },
+  {
+    code: "es",
+    englishName: "Spanish",
+    nativeName: "Español",
+    rtl: false,
+    weekStartsOn: 1,
+  },
+  {
+    code: "zh",
+    englishName: "Chinese",
+    nativeName: "中文",
+    rtl: false,
+    weekStartsOn: 1,
+  },
+  {
+    code: "ja",
+    englishName: "Japanese",
+    nativeName: "日本語",
+    rtl: false,
+    weekStartsOn: 0,
+  },
+  {
+    code: "ar",
+    englishName: "Arabic",
+    nativeName: "العربية",
+    rtl: true,
+    weekStartsOn: 6,
+  },
 ];
 
 const localeCodes = new Set(LOCALES.map((locale) => locale.code));
@@ -54,6 +94,8 @@ export type Locale = {
   /** The resolved locale actually in effect (preference "system" resolved against the device). */
   locale: LocaleCode;
   isRTL: boolean;
+  /** The active locale's `LocaleInfo.weekStartsOn` — 0 = Sunday. */
+  weekStartsOn: number;
   preference: LocalePreference;
   setPreference: (preference: LocalePreference) => void;
   t: (key: TranslationKey, params?: Record<string, string | number>) => string;

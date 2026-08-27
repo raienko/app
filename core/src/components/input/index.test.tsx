@@ -73,4 +73,25 @@ describe(`${Component.displayName} smoke test`, () => {
 
     expect(onChange).toHaveBeenCalledWith("jp");
   });
+
+  it("routes to the datetime variation when type='datetime'", async () => {
+    const onChange = jest.fn();
+    await render(
+      <Component
+        type="datetime"
+        mode="date"
+        label="Starts"
+        value={new Date(2026, 7, 27)}
+        onChange={onChange}
+      />,
+    );
+
+    fireEvent.press(screen.getByLabelText("Starts"));
+    await waitFor(() => {
+      expect(screen.getByTestId("calendar")).toBeTruthy();
+    });
+    fireEvent.press(screen.getByRole("button", { name: "Done" }));
+
+    expect(onChange).toHaveBeenCalledWith(new Date(2026, 7, 27));
+  });
 });

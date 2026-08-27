@@ -7,6 +7,7 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 // object itself), matching its default export.
 // eslint-disable-next-line @typescript-eslint/no-require-imports -- see comment above
 const env = require("./src/constants/env");
+const storybookEnabled = process.env.STORYBOOK_ENABLED === "true";
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
@@ -40,7 +41,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     "expo-router",
     "expo-localization",
-    "@react-native-community/datetimepicker",
+    ...(storybookEnabled ? ["@react-native-community/datetimepicker"] : []),
     "@react-native-vector-icons/feather",
     "@react-native-vector-icons/material-icons",
     "@react-native-vector-icons/ionicons",

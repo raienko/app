@@ -1,6 +1,8 @@
 {
   "common": {
-    "close": "閉じる"
+    "close": "閉じる",
+    "cancel": "キャンセル",
+    "done": "完了"
   },
   "home": {
     "summary": "名前: {{name}} / 年齢: {{age}} / メール: {{email}}"
@@ -13,14 +15,49 @@
     },
     "age": {
       "label": "年齢",
-      "placeholder": "0"
+      "placeholder": "0",
+      "helper": "0〜120、入力時に数字以外は削除されます"
     },
     "email": {
       "label": "メールアドレス",
       "placeholder": "ada@example.com",
       "error": "有効なメールアドレスを入力してください"
     },
-    "focusEmail": "メール欄にフォーカス"
+    "focusEmail": "メール欄にフォーカス",
+    "password": {
+      "label": "パスワード"
+    },
+    "disabled": {
+      "label": "無効",
+      "placeholder": "編集できません"
+    },
+    "country": {
+      "label": "国",
+      "placeholder": "国を選択",
+      "helper": "ボトムシートを開きます — 背景をタップすると現在の選択が保持されます",
+      "options": {
+        "uk": "イギリス",
+        "ua": "ウクライナ",
+        "es": "スペイン",
+        "jp": "日本",
+        "cn": "中国"
+      }
+    },
+    "startsAt": {
+      "label": "開始日時",
+      "placeholder": "日付と時刻を選択",
+      "helper": "日付と時刻は「完了」を押すまで下書きとして保持されます"
+    },
+    "birthday": {
+      "label": "誕生日",
+      "placeholder": "日付を選択",
+      "helper": "日付のみ。未来の日は選択できません"
+    },
+    "alarm": {
+      "label": "アラーム",
+      "placeholder": "時刻を選択",
+      "helper": "時刻のみ — カレンダーは表示されません"
+    }
   },
   "modal": {
     "popup": {

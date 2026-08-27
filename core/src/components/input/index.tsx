@@ -6,6 +6,7 @@ import {
 } from "react";
 import type { TextInput as RNTextInputInstance } from "react-native";
 
+import DateTimeInput from "./datetime";
 import EmailInput from "./email";
 import NumericInput from "./numeric";
 import SelectInput from "./select";
@@ -41,12 +42,13 @@ function renderVariant<P>(
  * is rendered), so `<Input ref={...} />` can be focused/blurred
  * imperatively. The exception is `select`, which has no text field to
  * forward to — its value is picked in a Modal, not typed — so its ref
- * stays `null`.
+ * stays `null`. Same for `datetime`.
  *
  * @example <Input value={text} onChange={setText} label="Name" />
  * @example <Input type="numeric" value={age} onChange={setAge} min={0} max={120} />
  * @example <Input type="email" value={email} onChange={setEmail} />
  * @example <Input type="select" value={country} onChange={setCountry} options={COUNTRIES} />
+ * @example <Input type="datetime" value={when} onChange={setWhen} mode="date" />
  * @example <Input value={query} onChange={setQuery} leftSlot={<Icon name="search" />} />
  */
 const Input = forwardRef<RNTextInputInstance, InputProps>(
@@ -58,6 +60,8 @@ const Input = forwardRef<RNTextInputInstance, InputProps>(
         return renderVariant(EmailInput, props, ref);
       case "select":
         return renderVariant(SelectInput, props, ref);
+      case "datetime":
+        return renderVariant(DateTimeInput, props, ref);
       default:
         return renderVariant(TextInput, props, ref);
     }
@@ -71,4 +75,4 @@ export default Input;
 // Re-exported so a call site declaring an options array (or a wrapper's
 // props) can reach them through this folder's entry point, rather than
 // importing from ./types directly.
-export type { InputProps, SelectOption } from "./types";
+export type { DateTimeMode, InputProps, SelectOption } from "./types";

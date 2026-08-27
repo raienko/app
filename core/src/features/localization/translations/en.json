@@ -1,6 +1,8 @@
 {
   "common": {
-    "close": "Close"
+    "close": "Close",
+    "cancel": "Cancel",
+    "done": "Done"
   },
   "home": {
     "summary": "name: {{name}} / age: {{age}} / email: {{email}}"
@@ -13,14 +15,49 @@
     },
     "age": {
       "label": "Age",
-      "placeholder": "0"
+      "placeholder": "0",
+      "helper": "0–120, non-digits stripped as you type"
     },
     "email": {
       "label": "Email",
       "placeholder": "ada@example.com",
       "error": "Enter a valid email"
     },
-    "focusEmail": "Focus email"
+    "focusEmail": "Focus email",
+    "password": {
+      "label": "Password"
+    },
+    "disabled": {
+      "label": "Disabled",
+      "placeholder": "not editable"
+    },
+    "country": {
+      "label": "Country",
+      "placeholder": "Pick a country",
+      "helper": "Opens a bottom-sheet Modal — tap the backdrop to keep the current pick",
+      "options": {
+        "uk": "United Kingdom",
+        "ua": "Ukraine",
+        "es": "Spain",
+        "jp": "Japan",
+        "cn": "China"
+      }
+    },
+    "startsAt": {
+      "label": "Starts at",
+      "placeholder": "Pick a date and time",
+      "helper": "Date + time, staged in a draft until you press Done"
+    },
+    "birthday": {
+      "label": "Birthday",
+      "placeholder": "Pick a day",
+      "helper": "Date only, and nothing in the future is selectable"
+    },
+    "alarm": {
+      "label": "Alarm",
+      "placeholder": "Pick a time",
+      "helper": "Time only — the calendar is hidden entirely"
+    }
   },
   "modal": {
     "popup": {

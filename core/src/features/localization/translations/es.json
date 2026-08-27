@@ -1,6 +1,8 @@
 {
   "common": {
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "cancel": "Cancelar",
+    "done": "Hecho"
   },
   "home": {
     "summary": "nombre: {{name}} / edad: {{age}} / email: {{email}}"
@@ -13,14 +15,49 @@
     },
     "age": {
       "label": "Edad",
-      "placeholder": "0"
+      "placeholder": "0",
+      "helper": "0–120, los caracteres no numéricos se eliminan al escribir"
     },
     "email": {
       "label": "Correo electrónico",
       "placeholder": "ada@example.com",
       "error": "Introduce un correo electrónico válido"
     },
-    "focusEmail": "Enfocar correo"
+    "focusEmail": "Enfocar correo",
+    "password": {
+      "label": "Contraseña"
+    },
+    "disabled": {
+      "label": "Deshabilitado",
+      "placeholder": "no editable"
+    },
+    "country": {
+      "label": "País",
+      "placeholder": "Elige un país",
+      "helper": "Abre un panel inferior: toca el fondo para conservar la selección actual",
+      "options": {
+        "uk": "Reino Unido",
+        "ua": "Ucrania",
+        "es": "España",
+        "jp": "Japón",
+        "cn": "China"
+      }
+    },
+    "startsAt": {
+      "label": "Comienza a las",
+      "placeholder": "Elige fecha y hora",
+      "helper": "Fecha y hora, en borrador hasta que pulses Hecho"
+    },
+    "birthday": {
+      "label": "Cumpleaños",
+      "placeholder": "Elige un día",
+      "helper": "Solo fecha, y no se puede elegir el futuro"
+    },
+    "alarm": {
+      "label": "Alarma",
+      "placeholder": "Elige una hora",
+      "helper": "Solo hora: el calendario se oculta por completo"
+    }
   },
   "modal": {
     "popup": {

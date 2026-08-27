@@ -72,10 +72,33 @@ export type SelectInputTypeProps = {
   options: SelectOption[];
 };
 
+/**
+ * Which parts of a moment a `datetime` field asks for. Defaults to
+ * `"datetime"`; the other two hide the half they don't need.
+ */
+export type DateTimeMode = "date" | "time" | "datetime";
+
+export type DateTimeInputTypeProps = {
+  type: "datetime";
+  /** `null` when nothing is picked yet — the field then shows its placeholder. */
+  value: Date | null;
+  /**
+   * Fires once per confirmed pick, never mid-edit: the sheet stages taps in
+   * a draft and only reports on "Done".
+   */
+  onChange: (value: Date) => void;
+  mode?: DateTimeMode;
+  /** Earliest selectable moment. Days, hours and minutes fully before it are disabled. */
+  min?: Date;
+  /** Latest selectable moment. Days, hours and minutes fully after it are disabled. */
+  max?: Date;
+};
+
 export type InputProps = (
   | TextInputTypeProps
   | NumericInputTypeProps
   | EmailInputTypeProps
   | SelectInputTypeProps
+  | DateTimeInputTypeProps
 ) &
   CommonInputProps;
