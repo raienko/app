@@ -88,7 +88,7 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "jest",
+    "test": "jest --silent",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "secretlint": "secretlint \"**/*\"",
