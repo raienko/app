@@ -1,4 +1,4 @@
-require("@expo/env").load(__dirname);
+require("@expo/env").load(__dirname, { silent: true });
 
 jest.mock(
   "react-native-safe-area-context",
