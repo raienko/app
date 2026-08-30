@@ -11,6 +11,7 @@ import DateTimeInput from "./datetime";
 import EmailInput from "./email";
 import NumericInput from "./numeric";
 import PasswordInput from "./password";
+import PhoneInput from "./phone";
 import SelectInput from "./select";
 import TextInput from "./text";
 import type { InputProps } from "./types";
@@ -53,6 +54,7 @@ function renderVariant<P>(
  * @example <Input type="datetime" value={when} onChange={setWhen} mode="date" />
  * @example <Input type="password" value={password} onChange={setPassword} />
  * @example <Input type="code" value={code} onChange={setCode} onComplete={verify} />
+ * @example <Input type="phone" defaultCountry="US" value={phone} onChange={setPhone} />
  * @example <Input value={query} onChange={setQuery} leftSlot={<Icon name="search" />} />
  */
 const Input = forwardRef<RNTextInputInstance, InputProps>(
@@ -70,6 +72,8 @@ const Input = forwardRef<RNTextInputInstance, InputProps>(
         return renderVariant(PasswordInput, props, ref);
       case "code":
         return renderVariant(CodeInput, props, ref);
+      case "phone":
+        return renderVariant(PhoneInput, props, ref);
       default:
         return renderVariant(TextInput, props, ref);
     }
@@ -83,4 +87,9 @@ export default Input;
 // Re-exported so a call site declaring an options array (or a wrapper's
 // props) can reach them through this folder's entry point, rather than
 // importing from ./types directly.
-export type { DateTimeMode, InputProps, SelectOption } from "./types";
+export type {
+  DateTimeMode,
+  InputProps,
+  PhoneCountryCode,
+  SelectOption,
+} from "./types";

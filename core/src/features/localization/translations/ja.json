@@ -63,6 +63,17 @@
     "code": {
       "label": "確認コード",
       "helper": "6 桁 — iOS はキーボードの上に SMS のコードを表示します"
+    },
+    "phone": {
+      "label": "電話番号",
+      "placeholder": "(213) 373-4253",
+      "helper": "入力時に区切られ、国際形式で保存されます",
+      "countryPicker": {
+        "label": "国番号",
+        "title": "国または地域",
+        "search": "国または国番号を検索",
+        "empty": "国が見つかりません"
+      }
     }
   },
   "modal": {

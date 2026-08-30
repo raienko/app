@@ -63,6 +63,17 @@
     "code": {
       "label": "Verification code",
       "helper": "6 digits — iOS offers a texted code above the keyboard"
+    },
+    "phone": {
+      "label": "Phone",
+      "placeholder": "(213) 373-4253",
+      "helper": "Grouped as you type and stored in international format",
+      "countryPicker": {
+        "label": "Country calling code",
+        "title": "Country or region",
+        "search": "Search country or calling code",
+        "empty": "No countries found"
+      }
     }
   },
   "modal": {

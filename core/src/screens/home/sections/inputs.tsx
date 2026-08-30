@@ -37,6 +37,7 @@ export default function InputsSection() {
   const [email, setEmail] = useState("");
   const [secret, setSecret] = useState("");
   const [code, setCode] = useState("");
+  const [phone, setPhone] = useState<string | null>(null);
   const [country, setCountry] = useState<string | null>(null);
   const [startsAt, setStartsAt] = useState<Date | null>(null);
   const [birthday, setBirthday] = useState<Date | null>(null);
@@ -89,6 +90,15 @@ export default function InputsSection() {
         value={secret}
         onChange={setSecret}
         leftSlot={<Icon name="lock" />}
+      />
+      <Input
+        type="phone"
+        defaultCountry="US"
+        label={t("input.phone.label")}
+        placeholder={t("input.phone.placeholder")}
+        value={phone}
+        onChange={setPhone}
+        helperText={t("input.phone.helper")}
       />
       <Input
         type="code"
@@ -160,6 +170,7 @@ export default function InputsSection() {
       {/* The stored value, not the label — the point of an option's `value`
           being separate from what it displays. */}
       <Readout label="country" value={country ?? "—"} />
+      <Readout label="phone" value={phone ?? "—"} />
       <Readout
         label="startsAt"
         value={startsAt ? startsAt.toISOString() : "—"}

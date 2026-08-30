@@ -63,6 +63,17 @@
     "code": {
       "label": "验证码",
       "helper": "6 位数字 — iOS 会在键盘上方提供短信中的验证码"
+    },
+    "phone": {
+      "label": "电话",
+      "placeholder": "(213) 373-4253",
+      "helper": "输入时自动分组，并以国际格式保存",
+      "countryPicker": {
+        "label": "国家/地区代码",
+        "title": "国家或地区",
+        "search": "搜索国家或地区代码",
+        "empty": "未找到国家或地区"
+      }
     }
   },
   "modal": {

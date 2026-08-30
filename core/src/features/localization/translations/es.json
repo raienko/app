@@ -63,6 +63,17 @@
     "code": {
       "label": "Código de verificación",
       "helper": "6 dígitos: iOS ofrece el código del SMS sobre el teclado"
+    },
+    "phone": {
+      "label": "Teléfono",
+      "placeholder": "(213) 373-4253",
+      "helper": "Se agrupa al escribir y se guarda en formato internacional",
+      "countryPicker": {
+        "label": "Prefijo internacional",
+        "title": "País o región",
+        "search": "Buscar país o prefijo",
+        "empty": "No se encontraron países"
+      }
     }
   },
   "modal": {

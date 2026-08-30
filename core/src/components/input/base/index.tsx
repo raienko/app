@@ -37,6 +37,8 @@ export type BaseInputProps = CommonInputProps & {
    * nickname box.
    */
   autoComplete?: RNTextInputProps["autoComplete"];
+  /** Explicitly include fields such as phone in Android's autofill structure. */
+  importantForAutofill?: RNTextInputProps["importantForAutofill"];
   /**
    * Turns the field into a button: it stops being typed into and instead
    * displays `value` (or `placeholder`, when empty) as read-only text,
@@ -79,6 +81,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
       keyboardType = "default",
       secureTextEntry,
       autoComplete,
+      importantForAutofill,
       autoCapitalize = "none",
       autoCorrect = false,
       error,
@@ -147,6 +150,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
         keyboardType={keyboardType}
         secureTextEntry={secureTextEntry}
         autoComplete={autoComplete}
+        importantForAutofill={importantForAutofill}
         autoCapitalize={autoCapitalize}
         autoCorrect={autoCorrect}
       />
@@ -219,13 +223,23 @@ const useStyles = createStyles(
     input: {
       ...typography.callout,
       flex: 1,
+      // Web inputs default to `min-width: auto`, so a long unbroken value
+      // can force this flex child wider than the field. Zero lets it shrink
+      // beside slots; the input itself then scrolls its text horizontally.
+      minWidth: 0,
       padding: 0,
+      // Browsers draw their own focus outline inside our styled field. The
+      // field's focused background is the design-system focus treatment.
+      outlineColor: "transparent",
+      outlineStyle: "solid",
+      outlineWidth: 0,
       writingDirection: isRTL ? "rtl" : "ltr",
     },
     // The press-mode host *is* our Text component, so it only needs the
     // layout half of the above — `type="callout"` carries the type scale.
     text: {
       flex: 1,
+      minWidth: 0,
       writingDirection: isRTL ? "rtl" : "ltr",
     },
   }),

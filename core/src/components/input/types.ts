@@ -1,3 +1,4 @@
+import type { CountryCode } from "libphonenumber-js";
 import type { ReactNode } from "react";
 import type { StyleProp, TextInputProps, ViewStyle } from "react-native";
 
@@ -89,6 +90,30 @@ export type CodeInputTypeProps = {
   autoCorrect?: never;
 };
 
+export type PhoneInputTypeProps = {
+  type: "phone";
+  /**
+   * The number in E.164 (`+12133734253`) once it's a valid one, and `null`
+   * until then — so a caller can tell a finished number from a half-typed
+   * one without parsing anything itself.
+   */
+  value: string | null;
+  onChange: (value: string | null) => void;
+  /**
+   * Initial region for national input, as an ISO 3166-1 alpha-2 code. The
+   * built-in picker and international-number detection own it after mount.
+   * Without a default, the picker starts unselected and only international
+   * input can be understood until the user chooses a country.
+   */
+  defaultCountry?: CountryCode;
+  /** Fires for both an explicit picker choice and a detected international number. */
+  onCountryChange?: (country: CountryCode) => void;
+  /** Reserved for the built-in country calling-code picker. */
+  leftSlot?: never;
+};
+
+export type PhoneCountryCode = CountryCode;
+
 export type PasswordInputTypeProps = {
   type: "password";
   value: string;
@@ -160,5 +185,6 @@ export type InputProps = (
   | DateTimeInputTypeProps
   | PasswordInputTypeProps
   | CodeInputTypeProps
+  | PhoneInputTypeProps
 ) &
   CommonInputProps;

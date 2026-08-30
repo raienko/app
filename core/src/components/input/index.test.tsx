@@ -124,4 +124,21 @@ describe(`${Component.displayName} smoke test`, () => {
 
     expect(onChange).toHaveBeenCalledWith("123");
   });
+
+  it("routes to the phone variation when type='phone'", async () => {
+    const onChange = jest.fn();
+    await render(
+      <Component
+        type="phone"
+        label="Phone"
+        defaultCountry="US"
+        value={null}
+        onChange={onChange}
+      />,
+    );
+
+    await fireEvent.changeText(screen.getByLabelText("Phone"), "2133734253");
+
+    expect(onChange).toHaveBeenLastCalledWith("+12133734253");
+  });
 });

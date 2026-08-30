@@ -63,6 +63,23 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(input.props.autoCorrect).toBe(false);
   });
 
+  it("keeps long values inside the field without a browser focus outline", async () => {
+    await render(
+      <Component
+        value="123123123123123123123123"
+        onChangeText={() => {}}
+        label="Phone"
+      />,
+    );
+
+    expect(screen.getByLabelText("Phone")).toHaveStyle({
+      minWidth: 0,
+      outlineColor: "transparent",
+      outlineStyle: "solid",
+      outlineWidth: 0,
+    });
+  });
+
   it("lets autoCapitalize and autoCorrect be overridden", async () => {
     await render(
       <Component
