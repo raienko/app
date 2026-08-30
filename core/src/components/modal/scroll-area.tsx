@@ -42,6 +42,7 @@ export default function ModalScrollArea({ position, children }: Props) {
   return (
     <ScrollView
       style={scrollStyle}
+      keyboardShouldPersistTaps="always"
       showsVerticalScrollIndicator={false}
       contentContainerStyle={contentContainerStyle}
     >
