@@ -46,6 +46,49 @@ export type EmailInputTypeProps = {
   onChange: (value: string) => void;
 };
 
+export type CodeCharset = "numeric" | "alphanumeric";
+
+export type CodeInputTypeProps = {
+  type: "code";
+  /**
+   * What's been entered so far — shorter than `length` while it's being
+   * filled. Only ever characters from `charset`: anything else the OS or a
+   * paste supplies is dropped, the same way `numeric` strips as you type.
+   */
+  value: string;
+  onChange: (value: string) => void;
+  /** How many characters the code has. Defaults to 6. */
+  length?: number;
+  /**
+   * Fires once the last character lands, with the finished code — the moment
+   * a verification screen wants to submit, and the reason a caller doesn't
+   * have to watch `value.length` themselves.
+   */
+  onComplete?: (value: string) => void;
+  /**
+   * What the code is made of. Defaults to `"numeric"`, which is what a
+   * texted code almost always is and what gets the number pad;
+   * `"alphanumeric"` takes letters too and asks for the normal keyboard.
+   *
+   * Either way anything outside the set is dropped, so a pasted code
+   * arrives clean whatever the keyboard allowed.
+   */
+  charset?: CodeCharset;
+  /**
+   * The rest of `CommonInputProps` that this variation has no use for, made
+   * unpassable rather than quietly ignored.
+   *
+   * There is nowhere to put a slot in a row of boxes, empty boxes already
+   * are the placeholder, and capitalisation and correction follow from
+   * `charset` rather than being the caller's to set.
+   */
+  placeholder?: never;
+  leftSlot?: never;
+  rightSlot?: never;
+  autoCapitalize?: never;
+  autoCorrect?: never;
+};
+
 export type PasswordInputTypeProps = {
   type: "password";
   value: string;
@@ -116,5 +159,6 @@ export type InputProps = (
   | SelectInputTypeProps
   | DateTimeInputTypeProps
   | PasswordInputTypeProps
+  | CodeInputTypeProps
 ) &
   CommonInputProps;

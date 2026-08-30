@@ -113,4 +113,15 @@ describe(`${Component.displayName} smoke test`, () => {
 
     expect(onChange).toHaveBeenCalledWith("hunter2");
   });
+
+  it("routes to the code variation when type='code'", async () => {
+    const onChange = jest.fn();
+    await render(
+      <Component type="code" label="Code" value="" onChange={onChange} />,
+    );
+
+    await fireEvent.changeText(screen.getByLabelText("Code"), "1a2b3c");
+
+    expect(onChange).toHaveBeenCalledWith("123");
+  });
 });

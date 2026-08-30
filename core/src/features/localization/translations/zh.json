@@ -59,6 +59,10 @@
       "label": "闹钟",
       "placeholder": "选择时间",
       "helper": "仅时间 — 日历会完全隐藏"
+    },
+    "code": {
+      "label": "验证码",
+      "helper": "6 位数字 — iOS 会在键盘上方提供短信中的验证码"
     }
   },
   "modal": {

@@ -12,6 +12,7 @@ import { controlA11yProps, fieldA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
+import FormField from "../form-field";
 import type { CommonInputProps } from "../types";
 
 export type BaseInputProps = CommonInputProps & {
@@ -93,8 +94,6 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     const styles = useStyles();
     const [focused, setFocused] = useState(false);
 
-    const helper = error ?? helperText;
-
     const fieldStyle = [
       styles.field,
       {
@@ -154,8 +153,12 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     );
 
     return (
-      <View style={[styles.container, style]}>
-        {label ? <Text value={label} type="footnote" /> : null}
+      <FormField
+        label={label}
+        error={error}
+        helperText={helperText}
+        style={style}
+      >
         {onPress ? (
           <Pressable
             style={fieldStyle}
@@ -183,16 +186,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
             {rightSlot}
           </View>
         )}
-        {helper ? (
-          <Text
-            value={helper}
-            type="caption1"
-            style={{
-              color: error ? theme.colors.error : theme.colors.textSecondary,
-            }}
-          />
-        ) : null}
-      </View>
+      </FormField>
     );
   },
 );
@@ -210,9 +204,6 @@ export default BaseInput;
 // override was a real bug: an 11px label kept body's 19px line height.
 const useStyles = createStyles(
   ({ isRTL, spacing, radius, sizes, typography }) => ({
-    container: {
-      gap: spacing.x8,
-    },
     field: {
       flexDirection: isRTL ? "row-reverse" : "row",
       alignItems: "center",

@@ -59,6 +59,10 @@
       "label": "Alarma",
       "placeholder": "Elige una hora",
       "helper": "Solo hora: el calendario se oculta por completo"
+    },
+    "code": {
+      "label": "Código de verificación",
+      "helper": "6 dígitos: iOS ofrece el código del SMS sobre el teclado"
     }
   },
   "modal": {

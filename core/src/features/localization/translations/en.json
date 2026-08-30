@@ -59,6 +59,10 @@
       "label": "Alarm",
       "placeholder": "Pick a time",
       "helper": "Time only — the calendar is hidden entirely"
+    },
+    "code": {
+      "label": "Verification code",
+      "helper": "6 digits — iOS offers a texted code above the keyboard"
     }
   },
   "modal": {

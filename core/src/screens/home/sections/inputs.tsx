@@ -23,6 +23,7 @@ const TODAY = new Date();
  * clamping and its own number keyboard; `email` with live validation
  * driving the error state; `select` picking from a list in a Modal instead
  * of being typed into; `password` masked behind an eye that unmasks it;
+ * `code` as a row of boxes over one real field, so the OS can autofill it;
  * `datetime` in all three of its modes, one of them bounded so the disabled
  * days are visible. One field is
  * disabled, and "Focus email" exercises ref forwarding through the
@@ -35,6 +36,7 @@ export default function InputsSection() {
   const [age, setAge] = useState<number | null>(null);
   const [email, setEmail] = useState("");
   const [secret, setSecret] = useState("");
+  const [code, setCode] = useState("");
   const [country, setCountry] = useState<string | null>(null);
   const [startsAt, setStartsAt] = useState<Date | null>(null);
   const [birthday, setBirthday] = useState<Date | null>(null);
@@ -87,6 +89,13 @@ export default function InputsSection() {
         value={secret}
         onChange={setSecret}
         leftSlot={<Icon name="lock" />}
+      />
+      <Input
+        type="code"
+        label={t("input.code.label")}
+        value={code}
+        onChange={setCode}
+        helperText={t("input.code.helper")}
       />
       <Input
         type="select"
