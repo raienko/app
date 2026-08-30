@@ -13,15 +13,10 @@ type Props = {
 /**
  * The eye in a password field's right slot.
  *
- * Its accessible name is the *action* ("Show password") rather than the
- * state, because that's what a screen reader user is choosing to do — and
- * it's the one label that stays unambiguous when the icon has flipped but
- * the announcement hasn't been re-read.
- *
- * The colour is passed explicitly rather than taken from the button's
- * palette: `tertiary`'s foreground is the accent, which is right for a
- * button that reads as an action, and too loud for a control sitting inside
- * a field it isn't the subject of.
+ * Its accessible name is the action ("Show password") rather than the state,
+ * so it stays unambiguous when the icon has flipped but the announcement
+ * hasn't been re-read. The hit area is a full touch target because the eye
+ * is 20pt of drawing sitting right beside the text.
  */
 export default function VisibilityToggle({
   visible,

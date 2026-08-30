@@ -10,16 +10,12 @@ type Props = Omit<PasswordInputTypeProps, "type"> & CommonInputProps;
 /**
  * A masked field with an eye in its right slot to unmask it.
  *
- * Plain string in, string out like `text` — what it adds is the masking, the
- * toggle, and the `autoComplete` hint that lets a password manager recognise
- * the field. All three together, which is why masking isn't offered
- * separately anywhere else: on its own it gives you a field you can hide but
- * never unhide, and that no password manager can fill.
+ * Masking, the toggle and the `autoComplete` hint together — which is why
+ * masking isn't offered separately anywhere else: on its own it gives you a
+ * field you can hide but never unhide, and that no password manager can fill.
  *
- * Whether the password is showing is deliberately *not* a prop. It's a
- * momentary display concern that resets whenever the field is unmounted,
- * and hoisting it would invite it being persisted — which is how a password
- * ends up on screen in a screenshot or a session restore.
+ * Whether the password is showing is deliberately not a prop. It's momentary
+ * display state, and hoisting it invites it being persisted.
  *
  * @example <Input type="password" value={password} onChange={setPassword} label="Password" />
  * @example <Input type="password" newPassword value={password} onChange={setPassword} />
