@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import { Observe, ObserveRoot } from "expo-observe";
+import { useEffect, type ReactNode } from "react";
 
 import Providers from "./providers";
 
@@ -17,7 +18,14 @@ type Props = {
  *   (analytics init, push notification listeners, app-state listeners, ...) —
  *   set those up here via useEffect once there's a concrete one to add.
  */
-export default function Root({ children }: Props) {
+function Root({ children }: Props) {
+  useEffect(() => {
+    Observe.configure({
+      integrations: { "expo-router": true },
+      dispatchInDebug: false,
+    });
+  }, []);
+
   return (
     <Providers>
       {children}
@@ -26,3 +34,5 @@ export default function Root({ children }: Props) {
     </Providers>
   );
 }
+
+export default ObserveRoot.wrap(Root);

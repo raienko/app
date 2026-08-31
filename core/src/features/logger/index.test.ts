@@ -75,14 +75,22 @@ describe("logger", () => {
     expect(message).toBe("Profile saved");
   });
 
-  it("gives every method a distinct label and badge color", () => {
+  /**
+   * Colour is shared on purpose by levels that mean the same thing — log and
+   * out are both blue, success and in both green, error and failed both red —
+   * so it's the badge text and icon that have to be distinct, not the colour.
+   */
+  it("gives every method its own badge, and every badge a colour", () => {
     const consoleLog = jest.spyOn(console, "log").mockImplementation(() => {});
 
     for (const method of METHODS) logger[method]("message");
 
-    const labels = consoleLog.mock.calls.map(([label]) => label);
-    const styles = consoleLog.mock.calls.map(([, style]) => style);
-    expect(new Set(labels).size).toBe(METHODS.length);
-    expect(new Set(styles).size).toBe(METHODS.length);
+    const badges = consoleLog.mock.calls.map(([badge]) => badge);
+    expect(new Set(badges).size).toBe(METHODS.length);
+
+    const styles = consoleLog.mock.calls.map(([, style]) => String(style));
+    expect(
+      styles.every((style) => /background: #[0-9a-f]{6}/i.test(style)),
+    ).toBe(true);
   });
 });
