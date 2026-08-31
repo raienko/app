@@ -51,7 +51,7 @@ import type { ModalHandle as ModalHandleType, ModalProps } from "./types";
  * - globally, via `id`, from anywhere — no ref needed:
  *   `Modal.show("x")` / `Modal.hide("x")`, backed by ./event-bus.ts (built
  *   on the generic @/features/event-bus). ./registry.ts tracks which ids are
- *   currently mounted purely to `console.warn` in dev on a typo'd/stale id
+ *   currently mounted purely to log a dev warning on a typo'd/stale id
  *   or two instances accidentally sharing one id — both fail silently
  *   otherwise (a broadcast with no matching listener is a harmless no-op).
  *

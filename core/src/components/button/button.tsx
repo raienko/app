@@ -14,11 +14,6 @@ import { useTheme } from "@/features/theme";
 
 import { TYPE_COLORS, type ButtonSize, type ButtonType } from "./palette";
 
-// Re-exported so a call site keeps importing them from this folder's entry
-// point rather than reaching past it into ./palette.
-export { default as IconButton } from "./icon-button";
-export type { ButtonSize, ButtonType } from "./palette";
-
 /**
  * Which step of the type scale each size sets its label in.
  *

@@ -14,6 +14,7 @@ import GridSection from "./sections/grid";
 import IconsSection from "./sections/icons";
 import InputsSection from "./sections/inputs";
 import LocalizationSection from "./sections/localization";
+import LoggerSection from "./sections/logger";
 import ModalsSection from "./sections/modals";
 import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
@@ -45,6 +46,7 @@ const SECTIONS: {
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.modals", Component: ModalsSection },
   { title: "showcase.storage", Component: StorageSection },
+  { title: "showcase.logger", Component: LoggerSection },
   { title: "showcase.utilities", Component: UtilitiesSection },
 ];
 

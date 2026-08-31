@@ -7,7 +7,7 @@ import {
   type ReactNode,
 } from "react";
 
-import Icon from "./index";
+import Icon from "./icon";
 
 type IconProps = ComponentProps<typeof Icon>;
 

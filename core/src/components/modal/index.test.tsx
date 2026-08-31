@@ -62,7 +62,7 @@ describe(`${Component.displayName} smoke test`, () => {
   });
 
   it("only reacts to its own id", async () => {
-    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    const warn = jest.spyOn(console, "log").mockImplementation(() => {});
     await render(
       <Component id="test-this-one">
         <RNText>content</RNText>
@@ -75,6 +75,9 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(screen.queryByText("content")).toBeNull();
     // no <Modal id="some-other-id" /> is mounted — dev warning, not silence.
     expect(warn).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.any(String),
       expect.stringContaining('Modal.show("some-other-id")'),
     );
     warn.mockRestore();
@@ -158,7 +161,7 @@ describe(`${Component.displayName} smoke test`, () => {
   });
 
   it("warns when a second instance mounts with an id already in use", async () => {
-    const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+    const warn = jest.spyOn(console, "log").mockImplementation(() => {});
     await render(
       <>
         <Component id="test-duplicate">
@@ -171,6 +174,9 @@ describe(`${Component.displayName} smoke test`, () => {
     );
 
     expect(warn).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.any(String),
       expect.stringContaining('more than one <Modal id="test-duplicate" />'),
     );
     warn.mockRestore();

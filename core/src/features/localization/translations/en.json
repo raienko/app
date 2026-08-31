@@ -116,6 +116,7 @@
     "inputs": "Inputs",
     "modals": "Modals",
     "storage": "Storage",
+    "logger": "Logger",
     "utilities": "Utilities",
     "sampleSentence": "The quick brown fox jumps over the lazy dog."
   }

@@ -116,6 +116,7 @@
     "inputs": "入力フィールド",
     "modals": "モーダル",
     "storage": "ストレージ",
+    "logger": "ロガー",
     "utilities": "ユーティリティ",
     "sampleSentence": "素早い茶色の狐が怠け者の犬を飛び越えた。"
   }

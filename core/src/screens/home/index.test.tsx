@@ -15,6 +15,7 @@ const SECTION_TITLES = [
   "Inputs",
   "Modals",
   "Storage",
+  "Logger",
   "Utilities",
 ];
 

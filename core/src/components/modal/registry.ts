@@ -1,10 +1,13 @@
+import logger from "@/features/logger";
+
 /**
  * Tracks which `<Modal id="..." />` instances are currently mounted, purely
  * for dev-time warnings. `Modal.show(id)`/`Modal.hide(id)` don't need this
  * to *work* — they just emit on the event bus, and a broadcast with no
  * listener is already a harmless no-op — but that also means a typo'd or
  * stale id, or two instances accidentally sharing one id, would otherwise
- * fail completely silently.
+ * fail completely silently. The shared logger keeps these warnings styled
+ * and strips them from production output.
  */
 const mountedIds = new Map<string, number>();
 
@@ -12,8 +15,8 @@ const mountedIds = new Map<string, number>();
 export function registerModalId(id: string): () => void {
   const count = mountedIds.get(id) ?? 0;
 
-  if (count > 0 && __DEV__) {
-    console.warn(
+  if (count > 0) {
+    logger.warn(
       `Modal: more than one <Modal id="${id}" /> is mounted at once — ` +
         `Modal.show("${id}")/Modal.hide("${id}") (and a ref on either) will affect both together.`,
     );
@@ -32,8 +35,8 @@ export function registerModalId(id: string): () => void {
 }
 
 export function warnIfModalIdNotMounted(action: "show" | "hide", id: string) {
-  if (__DEV__ && !mountedIds.has(id)) {
-    console.warn(
+  if (!mountedIds.has(id)) {
+    logger.warn(
       `Modal.${action}("${id}"): no <Modal id="${id}" /> is currently mounted — this call did nothing.`,
     );
   }

@@ -116,6 +116,7 @@
     "inputs": "Campos de entrada",
     "modals": "Ventanas modales",
     "storage": "Almacenamiento",
+    "logger": "Registro",
     "utilities": "Utilidades",
     "sampleSentence": "El veloz murciélago hindú comía feliz cardillo y kiwi."
   }

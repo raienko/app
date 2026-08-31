@@ -72,5 +72,3 @@ export default function Icon({
     />
   );
 }
-
-export { default as withIconDefaults } from "./with-icon-defaults";

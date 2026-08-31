@@ -116,6 +116,7 @@
     "inputs": "输入框",
     "modals": "模态框",
     "storage": "存储",
+    "logger": "日志",
     "utilities": "实用工具",
     "sampleSentence": "敏捷的棕色狐狸跳过了那只懒狗。"
   }
