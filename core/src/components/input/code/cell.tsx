@@ -39,13 +39,12 @@ export default function CodeCell({ index, character, active, invalid }: Props) {
           // A resting box needs a visible border for the reason Button's
           // `secondary` does: its fill is `backgroundElement` and it sits on
           // surfaces using that same token, so a fill-only box vanishes.
-          // `textSecondary` because the neighbouring grey is 1.19:1 against
-          // it, under the 3:1 WCAG 1.4.11 wants for a control's only edge.
+          // The semantic border token clears 3:1 against every app surface.
           borderColor: invalid
             ? theme.colors.error
             : active
-              ? theme.colors.primary
-              : theme.colors.textSecondary,
+              ? theme.colors.focus
+              : theme.colors.border,
         },
       ]}
     >

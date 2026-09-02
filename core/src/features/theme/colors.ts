@@ -11,7 +11,18 @@ export type ThemeColors = {
   textSecondary: string;
   backgroundElement: string;
   backgroundElementSelected: string;
+  /** Default visible boundary for controls and content surfaces. */
+  border: string;
+  /** Muted fill for controls that are unavailable for interaction. */
+  disabled: string;
   error: string;
+  success: string;
+  warning: string;
+  info: string;
+  /** Scrim color behind overlays; the overlay controls its own opacity. */
+  overlay: string;
+  /** Keyboard/screen-reader focus indicator. */
+  focus: string;
   /** Accent used for high-emphasis actions — see Button's `primary` type. */
   primary: string;
   /** Text/icon colour that sits legibly on `primary`. */
@@ -26,7 +37,14 @@ const REQUIRED_KEYS: (keyof ThemeColors)[] = [
   "textSecondary",
   "backgroundElement",
   "backgroundElementSelected",
+  "border",
+  "disabled",
   "error",
+  "success",
+  "warning",
+  "info",
+  "overlay",
+  "focus",
   "primary",
   "onPrimary",
 ];

@@ -104,6 +104,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
           ? theme.colors.backgroundElementSelected
           : theme.colors.backgroundElement,
         opacity: disabled ? 0.5 : 1,
+        borderColor: focused ? theme.colors.focus : "transparent",
       },
       error ? { borderColor: theme.colors.error } : null,
     ];

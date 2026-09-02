@@ -5,7 +5,7 @@ import Animated, {
 } from "react-native-reanimated";
 
 import { controlA11yProps } from "@/features/accessibility";
-import { createStyles } from "@/features/responsive";
+import { useTheme } from "@/features/theme";
 
 const BACKDROP_MAX_OPACITY = 0.5;
 
@@ -22,7 +22,7 @@ type Props = {
  * that types without a backdrop (`fullscreen`) simply don't render.
  */
 export default function ModalBackdrop({ progress, onDismiss }: Props) {
-  const styles = useStyles();
+  const theme = useTheme();
 
   const backdropStyle = useAnimatedStyle(() => ({
     opacity: progress.value * BACKDROP_MAX_OPACITY,
@@ -38,16 +38,12 @@ export default function ModalBackdrop({ progress, onDismiss }: Props) {
       {...controlA11yProps({ label: "Dismiss" })}
     >
       <Animated.View
-        style={[StyleSheet.absoluteFill, styles.backdrop, backdropStyle]}
+        style={[
+          StyleSheet.absoluteFill,
+          { backgroundColor: theme.colors.overlay },
+          backdropStyle,
+        ]}
       />
     </Pressable>
   );
 }
-
-const useStyles = createStyles(() => ({
-  // The one deliberate exception to sourcing color from theme.colors — a
-  // dimming scrim is conventionally black regardless of theme.
-  backdrop: {
-    backgroundColor: "#000",
-  },
-}));

@@ -29,11 +29,11 @@ export type ButtonType = "primary" | "secondary" | "tertiary";
  * The border gives it an edge on any surface without changing the fill every
  * existing button in the app already has.
  *
- * That border is `textSecondary` rather than the more obvious
+ * That border is the semantic `border` token rather than the more obvious
  * `backgroundElementSelected`: on a `backgroundElement` surface — the exact
  * case the border exists for — the two neighbouring greys contrast at 1.19:1,
  * far under the 3:1 WCAG 1.4.11 asks of a boundary that is the only thing
- * marking the control. `textSecondary` clears it in both schemes.
+ * marking the control. `border` clears it in both schemes.
  */
 export const TYPE_COLORS: Record<
   ButtonType,
@@ -54,7 +54,7 @@ export const TYPE_COLORS: Record<
   secondary: {
     background: "backgroundElement",
     backgroundSelected: "backgroundElementSelected",
-    border: "textSecondary",
+    border: "border",
     label: "text",
   },
   tertiary: {

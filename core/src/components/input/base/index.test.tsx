@@ -1,6 +1,7 @@
 import { createRef } from "react";
 import { Text as RNText, type TextInput } from "react-native";
 
+import { colors } from "@/features/theme/colors";
 import { fireEvent, render, screen, waitFor } from "@/root/testing";
 
 import Component from "./index";
@@ -176,11 +177,13 @@ describe(`${Component.displayName} smoke test`, () => {
     await waitFor(() => {
       expect(onFocus).toHaveBeenCalledTimes(1);
     });
+    expect(input.parent).toHaveStyle({ borderColor: colors.light.focus });
 
     await fireEvent(input, "blur");
     await waitFor(() => {
       expect(onBlur).toHaveBeenCalledTimes(1);
     });
+    expect(input.parent).toHaveStyle({ borderColor: "transparent" });
   });
 
   describe("press mode (onPress)", () => {

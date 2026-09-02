@@ -37,7 +37,7 @@ export default function ImagePickerSection() {
         accessibilityLabel={
           image ? "Replace selected image" : "Choose an image"
         }
-        style={[styles.trigger, { borderColor: theme.colors.textSecondary }]}
+        style={[styles.trigger, { borderColor: theme.colors.border }]}
         onChange={setImage}
       >
         {image ? (

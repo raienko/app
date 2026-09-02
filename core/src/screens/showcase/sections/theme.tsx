@@ -34,7 +34,7 @@ export default function ThemeSection() {
                 styles.chip,
                 {
                   backgroundColor: value,
-                  borderColor: theme.colors.textSecondary,
+                  borderColor: theme.colors.border,
                 },
               ]}
             />

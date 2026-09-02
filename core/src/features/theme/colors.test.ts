@@ -56,6 +56,13 @@ const BOUNDARY_SURFACES: (keyof ThemeColors)[] = [
   "backgroundElementSelected",
 ];
 
+const STATUS_COLORS: (keyof ThemeColors)[] = [
+  "error",
+  "success",
+  "warning",
+  "info",
+];
+
 describe("palette contrast", () => {
   describe.each(SCHEMES)("%s", (scheme) => {
     const palette = colors[scheme];
@@ -79,24 +86,29 @@ describe("palette contrast", () => {
       ).toBeGreaterThanOrEqual(TEXT_MINIMUM);
     });
 
-    it.each(TEXT_SURFACES)("reads `error` on %s", (surface) => {
-      expect(contrast(palette.error, palette[surface])).toBeGreaterThanOrEqual(
-        TEXT_MINIMUM,
-      );
+    it.each(STATUS_COLORS)("reads `%s` on app surfaces", (color) => {
+      for (const surface of TEXT_SURFACES) {
+        expect(
+          contrast(palette[color], palette[surface]),
+        ).toBeGreaterThanOrEqual(TEXT_MINIMUM);
+      }
     });
 
     /**
-     * `textSecondary` is Button's `secondary` border. On a
+     * `border` is Button's `secondary` border. On a
      * `backgroundElement` surface that outline is the only thing separating
      * the control from what's behind it, since its fill is that same token.
      */
-    it.each(BOUNDARY_SURFACES)(
-      "shows a `textSecondary` boundary on %s",
-      (surface) => {
-        expect(
-          contrast(palette.textSecondary, palette[surface]),
-        ).toBeGreaterThanOrEqual(BOUNDARY_MINIMUM);
-      },
-    );
+    it.each(BOUNDARY_SURFACES)("shows a `border` boundary on %s", (surface) => {
+      expect(contrast(palette.border, palette[surface])).toBeGreaterThanOrEqual(
+        BOUNDARY_MINIMUM,
+      );
+    });
+
+    it.each(BOUNDARY_SURFACES)("shows a `focus` indicator on %s", (surface) => {
+      expect(contrast(palette.focus, palette[surface])).toBeGreaterThanOrEqual(
+        BOUNDARY_MINIMUM,
+      );
+    });
   });
 });

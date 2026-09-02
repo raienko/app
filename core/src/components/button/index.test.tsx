@@ -70,6 +70,7 @@ describe("Button type", () => {
     await render(<Component value="plain" onPress={() => {}} />);
 
     expect(boxOf("plain").backgroundColor).toBe(palette.backgroundElement);
+    expect(boxOf("plain").borderColor).toBe(palette.border);
     expect(labelOf("plain").color).toBe(palette.text);
   });
 
