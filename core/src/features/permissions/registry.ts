@@ -1,15 +1,19 @@
 import camera from "./camera";
 import gallery from "./gallery";
+import notifications from "./notifications";
 
 async function refresh() {
-  const [cameraResponse, galleryResponse] = await Promise.all([
-    camera.refresh(),
-    gallery.refresh(),
-  ]);
+  const [cameraResponse, galleryResponse, notificationsResponse] =
+    await Promise.all([
+      camera.refresh(),
+      gallery.refresh(),
+      notifications.refresh(),
+    ]);
 
   return {
     camera: cameraResponse,
     gallery: galleryResponse,
+    notifications: notificationsResponse,
   };
 }
 
@@ -17,6 +21,7 @@ async function refresh() {
 const permissions = {
   camera,
   gallery,
+  notifications,
   refresh,
 };
 

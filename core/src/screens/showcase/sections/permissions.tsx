@@ -98,6 +98,10 @@ export default function PermissionsSection() {
       />
       <PermissionCard name="camera" permission={permissions.camera} />
       <PermissionCard name="gallery" permission={permissions.gallery} />
+      <PermissionCard
+        name="notifications"
+        permission={permissions.notifications}
+      />
     </View>
   );
 }
