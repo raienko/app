@@ -38,6 +38,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     output: "static",
     favicon: "./assets/images/favicon.png",
   },
+  extra: {
+    ...config.extra,
+    eas: {
+      ...config.extra?.eas,
+      projectId: env.projectId || 0,
+    },
+  },
   plugins: [
     "expo-router",
     "expo-localization",

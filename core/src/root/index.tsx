@@ -1,7 +1,7 @@
-import { Observe, ObserveRoot } from "expo-observe";
-import { useEffect, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 import Providers from "./providers";
+import withObserve from "./with-observe";
 
 export { default as Providers } from "./providers";
 
@@ -19,13 +19,6 @@ type Props = {
  *   set those up here via useEffect once there's a concrete one to add.
  */
 function Root({ children }: Props) {
-  useEffect(() => {
-    Observe.configure({
-      integrations: { "expo-router": true },
-      dispatchInDebug: false,
-    });
-  }, []);
-
   return (
     <Providers>
       {children}
@@ -35,4 +28,4 @@ function Root({ children }: Props) {
   );
 }
 
-export default ObserveRoot.wrap(Root);
+export default withObserve(Root);

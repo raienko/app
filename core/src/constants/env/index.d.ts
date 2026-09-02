@@ -3,6 +3,7 @@ declare const env: {
   readonly appSlug: string;
   readonly appScheme: string;
   readonly appBundleId: string;
+  readonly projectId: string | undefined;
 };
 
 export default env;

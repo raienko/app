@@ -19,6 +19,11 @@ function required(key, value) {
   return value;
 }
 
+function optional(value) {
+  const normalized = value?.trim();
+  return normalized || undefined;
+}
+
 const env = {
   appName: required("EXPO_PUBLIC_APP_NAME", process.env.EXPO_PUBLIC_APP_NAME),
   appSlug: required("EXPO_PUBLIC_APP_SLUG", process.env.EXPO_PUBLIC_APP_SLUG),
@@ -30,6 +35,7 @@ const env = {
     "EXPO_PUBLIC_APP_BUNDLE_ID",
     process.env.EXPO_PUBLIC_APP_BUNDLE_ID,
   ),
+  projectId: optional(process.env.EXPO_PUBLIC_EAS_PROJECT_ID),
 };
 
 module.exports = env;
