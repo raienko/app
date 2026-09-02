@@ -17,8 +17,8 @@ export default function withObserve<Props extends Record<string, unknown>>(
   if (!env.projectId) return Component;
 
   try {
-     
     const { Observe, ObserveRoot } =
+      // eslint-disable-next-line @typescript-eslint/no-require-imports
       require("expo-observe") as ExpoObserveModule;
 
     Observe.configure({
