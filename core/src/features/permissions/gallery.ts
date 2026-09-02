@@ -4,7 +4,7 @@ import {
   type MediaLibraryPermissionResponse,
 } from "expo-image-picker";
 
-import Permission from "../permission";
+import Permission from "./permission";
 
 const galleryPermission = new Permission<MediaLibraryPermissionResponse>(
   "gallery",

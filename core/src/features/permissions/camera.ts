@@ -4,7 +4,7 @@ import {
   type CameraPermissionResponse,
 } from "expo-image-picker";
 
-import Permission from "../permission";
+import Permission from "./permission";
 
 const cameraPermission = new Permission<CameraPermissionResponse>("camera", {
   get: getCameraPermissionsAsync,
