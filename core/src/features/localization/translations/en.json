@@ -112,6 +112,7 @@
     "icons": "Icons",
     "buttons": "Buttons",
     "inputs": "Inputs",
+    "imagePicker": "Image picker",
     "modals": "Modals",
     "permissions": "Permissions",
     "storage": "Storage",

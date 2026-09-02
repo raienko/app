@@ -12,6 +12,7 @@ import AccessibilitySection from "./sections/accessibility";
 import ButtonsSection from "./sections/buttons";
 import GridSection from "./sections/grid";
 import IconsSection from "./sections/icons";
+import ImagePickerSection from "./sections/image-picker";
 import InputsSection from "./sections/inputs";
 import LocalizationSection from "./sections/localization";
 import LoggerSection from "./sections/logger";
@@ -45,6 +46,7 @@ const SECTIONS: {
   { title: "showcase.icons", Component: IconsSection },
   { title: "showcase.buttons", Component: ButtonsSection },
   { title: "showcase.inputs", Component: InputsSection },
+  { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },
   { title: "showcase.permissions", Component: PermissionsSection },
   { title: "showcase.storage", Component: StorageSection },

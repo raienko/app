@@ -83,6 +83,7 @@ export default function ModalsSection() {
           onPress={() => Modal.hide("showcase-actions")}
         />
         <Button
+          type="secondary"
           value={t("common.close")}
           onPress={() => Modal.hide("showcase-actions")}
         />

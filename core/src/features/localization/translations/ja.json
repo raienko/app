@@ -112,6 +112,7 @@
     "icons": "アイコン",
     "buttons": "ボタン",
     "inputs": "入力フィールド",
+    "imagePicker": "画像ピッカー",
     "modals": "モーダル",
     "permissions": "権限",
     "storage": "ストレージ",

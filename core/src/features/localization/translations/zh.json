@@ -112,6 +112,7 @@
     "icons": "图标",
     "buttons": "按钮",
     "inputs": "输入框",
+    "imagePicker": "图片选择器",
     "modals": "模态框",
     "permissions": "权限",
     "storage": "存储",
