@@ -14,6 +14,7 @@ const SECTION_TITLES = [
   "Buttons",
   "Inputs",
   "Modals",
+  "Permissions",
   "Storage",
   "Logger",
   "Utilities",

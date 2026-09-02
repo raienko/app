@@ -4,9 +4,6 @@
     "cancel": "Скасувати",
     "done": "Готово"
   },
-  "home": {
-    "summary": "ім'я: {{name}} / вік: {{age}} / email: {{email}}"
-  },
   "input": {
     "name": {
       "label": "Ім'я",
@@ -105,6 +102,7 @@
     "system": "Системна"
   },
   "showcase": {
+    "summary": "ім'я: {{name}} / вік: {{age}} / email: {{email}}",
     "typography": "Типографіка",
     "theme": "Тема та кольори",
     "localization": "Локалізація",
@@ -115,6 +113,7 @@
     "buttons": "Кнопки",
     "inputs": "Поля введення",
     "modals": "Модальні вікна",
+    "permissions": "Дозволи",
     "storage": "Сховище",
     "logger": "Журнал",
     "utilities": "Утиліти",

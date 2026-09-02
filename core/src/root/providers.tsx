@@ -5,6 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AccessibilityProvider } from "@/features/accessibility";
 import { LocaleProvider } from "@/features/localization";
+import { Permissions } from "@/features/permissions";
 import { ThemeProvider } from "@/features/theme";
 
 type Props = {
@@ -27,9 +28,11 @@ export default function Providers({ children }: Props) {
     <GestureHandlerRootView style={styles.flex}>
       <SafeAreaProvider>
         <AccessibilityProvider>
-          <ThemeProvider>
-            <LocaleProvider>{children}</LocaleProvider>
-          </ThemeProvider>
+          <Permissions>
+            <ThemeProvider>
+              <LocaleProvider>{children}</LocaleProvider>
+            </ThemeProvider>
+          </Permissions>
         </AccessibilityProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>

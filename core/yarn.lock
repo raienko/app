@@ -5303,6 +5303,18 @@ expo-glass-effect@57.0.1, expo-glass-effect@^57.0.1:
   resolved "https://registry.yarnpkg.com/expo-glass-effect/-/expo-glass-effect-57.0.1.tgz#8829b8f3f801589266bd1c75fdfed4a6d73cf9d8"
   integrity sha512-m/n8maxqNcHk6ZDhuqXBfD5Kt1Iz3M8xykVgdB0iSCIXvF70IqWXmQhX8Psswhrp8eZ+3r0mAD0Jh/2gFA3QaA==
 
+expo-image-loader@~57.0.1:
+  version "57.0.1"
+  resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-57.0.1.tgz#b031dc3e62ac09004f3e436d7081487236791f53"
+  integrity sha512-uhrZKLT/cTl2mXyR28kPpVkS5O+PK9N1QA/07IFM4f5T4g0lTW1JHT3NEWwEEsGFldPmVX4j7LwUVVZxE+woug==
+
+expo-image-picker@~57.0.15:
+  version "57.0.15"
+  resolved "https://registry.yarnpkg.com/expo-image-picker/-/expo-image-picker-57.0.15.tgz#99b82809ae5425cfbd2f518cd9f2acde9078e5c3"
+  integrity sha512-sTPIlN6v7/PQqOpRp6VFKTpvfFHE5xqkg+Pi5Ccem80HMNPrPtcT/CU9dZRBgM3MntEZ9GOrArDb5eRY5/HIoA==
+  dependencies:
+    expo-image-loader "~57.0.1"
+
 expo-image@57.0.3:
   version "57.0.3"
   resolved "https://registry.yarnpkg.com/expo-image/-/expo-image-57.0.3.tgz#f6f57208a5107bfee3e4b8674febb6792006c319"
@@ -5366,7 +5378,7 @@ expo-modules-jsi@~57.0.5:
   resolved "https://registry.yarnpkg.com/expo-modules-jsi/-/expo-modules-jsi-57.0.5.tgz#cd7fd231ba23e31c673d27ca959372d02559ef33"
   integrity sha512-NQF7MUF0j3rQHV8KJqETYA1SrJr3USvQ/AWEhODo+unMRFBDP9BKpn8+aNGGmx6fa2XLnqC2qulVw4DT6Gp13Q==
 
-expo-observe@~57.0.17:
+expo-observe@57.0.17:
   version "57.0.17"
   resolved "https://registry.yarnpkg.com/expo-observe/-/expo-observe-57.0.17.tgz#d25e029e903074f3e09bc44ae9c6e9c0a432d480"
   integrity sha512-tbC1jRmXN//O+CA9ghM0O2yjNnW1YlyCf4l1qACJ5vC0RtuIwqikpWUFxWLdHxosr8HlTFFDtlJnTKQI6ZFNIw==

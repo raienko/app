@@ -16,6 +16,7 @@ import InputsSection from "./sections/inputs";
 import LocalizationSection from "./sections/localization";
 import LoggerSection from "./sections/logger";
 import ModalsSection from "./sections/modals";
+import PermissionsSection from "./sections/permissions";
 import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
 import ThemeSection from "./sections/theme";
@@ -45,12 +46,13 @@ const SECTIONS: {
   { title: "showcase.buttons", Component: ButtonsSection },
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.modals", Component: ModalsSection },
+  { title: "showcase.permissions", Component: PermissionsSection },
   { title: "showcase.storage", Component: StorageSection },
   { title: "showcase.logger", Component: LoggerSection },
   { title: "showcase.utilities", Component: UtilitiesSection },
 ];
 
-export default function Home() {
+export default function Showcase() {
   const { t } = useLocale();
   const { spacing } = useSizes();
   const styles = useStyles();
@@ -58,7 +60,7 @@ export default function Home() {
   return (
     <Screen scrollable style={styles.container}>
       <View style={styles.title}>
-        <Icon name="home" size={spacing.x24} />
+        <Icon name="grid" size={spacing.x24} />
         {/* The screen's own title, so it takes the page-title type — which
             is also what makes it the top-level heading. */}
         <Text value={env.appName} type="largeTitle" />

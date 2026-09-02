@@ -11,12 +11,16 @@ describe("translate", () => {
 
   it("interpolates {{token}} placeholders", () => {
     expect(
-      translate("en", "home.summary", { name: "Ada", age: 30, email: "a@b.c" }),
+      translate("en", "showcase.summary", {
+        name: "Ada",
+        age: 30,
+        email: "a@b.c",
+      }),
     ).toBe("name: Ada / age: 30 / email: a@b.c");
   });
 
   it("leaves an unmatched placeholder untouched", () => {
-    expect(translate("en", "home.summary", {})).toBe(
+    expect(translate("en", "showcase.summary", {})).toBe(
       "name: {{name}} / age: {{age}} / email: {{email}}",
     );
   });

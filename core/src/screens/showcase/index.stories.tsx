@@ -1,7 +1,7 @@
 import Component from "./index";
 
 const meta = {
-  title: "screens/Home",
+  title: "screens/Showcase",
   component: Component,
 };
 

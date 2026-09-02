@@ -48,6 +48,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   plugins: [
     "expo-router",
     "expo-localization",
+    [
+      "expo-image-picker",
+      {
+        photosPermission: `Allow ${env.appName} to choose images from your photo library.`,
+        cameraPermission: `Allow ${env.appName} to take photos.`,
+        microphonePermission: false,
+      },
+    ],
     ...(storybookEnabled ? ["@react-native-community/datetimepicker"] : []),
     "@react-native-vector-icons/feather",
     "@react-native-vector-icons/material-icons",

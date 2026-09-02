@@ -4,9 +4,6 @@
     "cancel": "取消",
     "done": "完成"
   },
-  "home": {
-    "summary": "姓名：{{name}} / 年龄：{{age}} / 邮箱：{{email}}"
-  },
   "input": {
     "name": {
       "label": "姓名",
@@ -105,6 +102,7 @@
     "system": "跟随系统"
   },
   "showcase": {
+    "summary": "姓名：{{name}} / 年龄：{{age}} / 邮箱：{{email}}",
     "typography": "排版",
     "theme": "主题与颜色",
     "localization": "本地化",
@@ -115,6 +113,7 @@
     "buttons": "按钮",
     "inputs": "输入框",
     "modals": "模态框",
+    "permissions": "权限",
     "storage": "存储",
     "logger": "日志",
     "utilities": "实用工具",
