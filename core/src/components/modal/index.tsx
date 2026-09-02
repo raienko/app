@@ -15,6 +15,7 @@ import Animated, {
 import If from "@/components/if";
 import { useAnimationDuration } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
+import { wait } from "@/utils";
 
 import ModalBackdrop from "./backdrop";
 import { MODAL_TYPE_CONFIG } from "./config";
@@ -49,7 +50,8 @@ import type { ModalHandle as ModalHandleType, ModalProps } from "./types";
  * - locally, via a ref: `<Modal ref={ref} id="x">...</Modal>`, then
  *   `ref.current.show()` / `.hide()`
  * - globally, via `id`, from anywhere — no ref needed:
- *   `Modal.show("x")` / `Modal.hide("x")`, backed by ./event-bus.ts (built
+ *   `await Modal.show("x")` / `await Modal.hide("x")`, backed by
+ *   ./event-bus.ts (built
  *   on the generic @/features/event-bus). ./registry.ts tracks which ids are
  *   currently mounted purely to log a dev warning on a typo'd/stale id
  *   or two instances accidentally sharing one id — both fail silently
@@ -178,8 +180,8 @@ const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
 });
 
 type ModalStatic = {
-  show: (id: string) => void;
-  hide: (id: string) => void;
+  show: (id: string) => Promise<void>;
+  hide: (id: string) => Promise<void>;
 };
 
 const Modal = ModalComponent as typeof ModalComponent & ModalStatic;
@@ -188,13 +190,15 @@ const Modal = ModalComponent as typeof ModalComponent & ModalStatic;
 // set explicitly so `describe(`${Component.displayName} smoke test`, ...)`
 // still works the same way it does for every non-forwardRef component here.
 Modal.displayName = "Modal";
-Modal.show = (id: string) => {
+Modal.show = async (id: string) => {
   warnIfModalIdNotMounted("show", id);
   modalEventBus.emit("show", id);
+  await wait(ANIMATION_DURATION);
 };
-Modal.hide = (id: string) => {
+Modal.hide = async (id: string) => {
   warnIfModalIdNotMounted("hide", id);
   modalEventBus.emit("hide", id);
+  await wait(ANIMATION_DURATION);
 };
 
 export default Modal;

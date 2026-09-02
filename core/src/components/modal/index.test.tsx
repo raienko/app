@@ -3,6 +3,7 @@ import { Text as RNText } from "react-native";
 
 import { act, fireEvent, render, screen, waitFor } from "@/root/testing";
 
+import { ANIMATION_DURATION } from "./constants";
 import Component from "./index";
 import type { ModalHandle } from "./types";
 
@@ -243,6 +244,41 @@ describe(`${Component.displayName} smoke test`, () => {
       await waitFor(() => {
         expect(screen.queryByText("content")).toBeTruthy();
       });
+    },
+  );
+});
+
+describe(`${Component.displayName} async static API`, () => {
+  beforeEach(() => {
+    jest.useFakeTimers();
+  });
+
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
+  it.each(["show", "hide"] as const)(
+    "resolves %s after the modal animation duration",
+    async (action) => {
+      const warn = jest.spyOn(console, "log").mockImplementation(() => {});
+      let resolved = false;
+
+      const completion = Component[action]("test-async").then(() => {
+        resolved = true;
+      });
+
+      await Promise.resolve();
+      expect(resolved).toBe(false);
+
+      jest.advanceTimersByTime(ANIMATION_DURATION - 1);
+      await Promise.resolve();
+      expect(resolved).toBe(false);
+
+      jest.advanceTimersByTime(1);
+      await completion;
+      expect(resolved).toBe(true);
+
+      warn.mockRestore();
     },
   );
 });
