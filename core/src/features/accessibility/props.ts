@@ -137,6 +137,29 @@ export function checkboxA11yProps({
   };
 }
 
+type SwitchOptions = {
+  /** The visible label that names the switch. */
+  label: string;
+  value: boolean;
+  disabled?: boolean;
+};
+
+/** Native and web accessibility state for an app-owned switch. */
+export function switchA11yProps({
+  label,
+  value,
+  disabled = false,
+}: SwitchOptions): AccessibilityProps {
+  return {
+    accessibilityRole: "switch",
+    role: "switch",
+    accessibilityLabel: label,
+    accessibilityState: { checked: value, disabled },
+    "aria-checked": value,
+    "aria-disabled": disabled,
+  };
+}
+
 type FieldOptions = {
   /** A field's visible label, or its placeholder when it has no label. */
   label?: string;

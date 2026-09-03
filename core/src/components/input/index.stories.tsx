@@ -76,6 +76,24 @@ export function Checklist() {
   );
 }
 
+export function SwitchGroup() {
+  const [value, setValue] = useState<string[]>(["security"]);
+  return (
+    <Component
+      type="switchGroup"
+      label="Notifications"
+      value={value}
+      onChange={setValue}
+      groupSwitch
+      options={[
+        { value: "product", label: "Product updates" },
+        { value: "security", label: "Security alerts" },
+        { value: "marketing", label: "Marketing" },
+      ]}
+    />
+  );
+}
+
 // Controlled demo — Storybook args don't feed back into a controlled
 // TextInput's value, so this story owns its own state. See ./text and
 // ./numeric for each variation's own story set.

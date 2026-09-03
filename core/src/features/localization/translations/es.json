@@ -84,6 +84,16 @@
         "research": "Investigación",
         "unavailable": "Opción no disponible"
       }
+    },
+    "switchGroup": {
+      "label": "Notificaciones",
+      "helper": "Cada canal se puede controlar por separado",
+      "options": {
+        "product": "Novedades del producto",
+        "security": "Alertas de seguridad",
+        "marketing": "Marketing",
+        "managed": "Gestionado por tu organización"
+      }
     }
   },
   "modal": {
@@ -140,6 +150,7 @@
     "icons": "Iconos",
     "buttons": "Botones",
     "checkboxes": "Casillas",
+    "switches": "Interruptores",
     "inputs": "Campos de entrada",
     "imagePicker": "Selector de imágenes",
     "modals": "Ventanas modales",
@@ -156,5 +167,10 @@
     "custom": "Casilla personalizada",
     "expo": "Casilla de Expo UI",
     "disabled": "Deshabilitada y marcada"
+  },
+  "switch": {
+    "custom": "Interruptor personalizado",
+    "expo": "Interruptor de Expo UI",
+    "disabled": "Deshabilitado y activado"
   }
 }

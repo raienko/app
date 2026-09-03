@@ -23,6 +23,7 @@ import PermissionsSection from "./sections/permissions";
 import PopupsSection from "./sections/popups";
 import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
+import SwitchesSection from "./sections/switches";
 import ThemeSection from "./sections/theme";
 import ToastsSection from "./sections/toasts";
 import TypographySection from "./sections/typography";
@@ -50,6 +51,7 @@ const SECTIONS: {
   { title: "showcase.icons", Component: IconsSection },
   { title: "showcase.buttons", Component: ButtonsSection },
   { title: "showcase.checkboxes", Component: CheckboxesSection },
+  { title: "showcase.switches", Component: SwitchesSection },
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },

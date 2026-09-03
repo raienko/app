@@ -184,6 +184,44 @@ export type ChecklistInputTypeProps = {
   onBlur?: never;
 };
 
+/** One independently controlled setting in a `switchGroup`. */
+export type SwitchGroupOption = {
+  value: string;
+  label: string;
+  disabled?: boolean;
+  testID?: string;
+};
+
+type SwitchGroupControlProps =
+  | {
+      groupSwitch?: false;
+      groupSwitchTestID?: never;
+    }
+  | {
+      /** Makes the group's labelled header control every enabled option. */
+      groupSwitch: true;
+      /** Required because it is also the master switch's accessible name. */
+      label: string;
+      groupSwitchTestID?: string;
+    };
+
+export type SwitchGroupInputTypeProps = {
+  type: "switchGroup";
+  /** Values of every option currently switched on. */
+  value: string[];
+  onChange: (value: string[]) => void;
+  options: SwitchGroupOption[];
+  /** Chooses the implementation used by every switch, including groupSwitch. */
+  switchType?: ComponentType;
+  placeholder?: never;
+  leftSlot?: never;
+  rightSlot?: never;
+  autoCapitalize?: never;
+  autoCorrect?: never;
+  onFocus?: never;
+  onBlur?: never;
+} & SwitchGroupControlProps;
+
 /**
  * Which parts of a moment a `datetime` field asks for. Defaults to
  * `"datetime"`; the other two hide the half they don't need.
@@ -212,6 +250,7 @@ export type InputProps = (
   | EmailInputTypeProps
   | SelectInputTypeProps
   | ChecklistInputTypeProps
+  | SwitchGroupInputTypeProps
   | DateTimeInputTypeProps
   | PasswordInputTypeProps
   | CodeInputTypeProps

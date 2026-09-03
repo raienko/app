@@ -84,6 +84,16 @@
         "research": "リサーチ",
         "unavailable": "選択できない項目"
       }
+    },
+    "switchGroup": {
+      "label": "通知",
+      "helper": "各通知チャンネルを個別に設定できます",
+      "options": {
+        "product": "製品アップデート",
+        "security": "セキュリティ通知",
+        "marketing": "マーケティング",
+        "managed": "組織によって管理されています"
+      }
     }
   },
   "modal": {
@@ -140,6 +150,7 @@
     "icons": "アイコン",
     "buttons": "ボタン",
     "checkboxes": "チェックボックス",
+    "switches": "スイッチ",
     "inputs": "入力フィールド",
     "imagePicker": "画像ピッカー",
     "modals": "モーダル",
@@ -156,5 +167,10 @@
     "custom": "カスタムチェックボックス",
     "expo": "Expo UIチェックボックス",
     "disabled": "無効・選択済み"
+  },
+  "switch": {
+    "custom": "カスタムスイッチ",
+    "expo": "Expo UIスイッチ",
+    "disabled": "無効・オン"
   }
 }

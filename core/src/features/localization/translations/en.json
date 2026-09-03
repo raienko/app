@@ -84,6 +84,16 @@
         "research": "Research",
         "unavailable": "Unavailable option"
       }
+    },
+    "switchGroup": {
+      "label": "Notifications",
+      "helper": "Each channel can be controlled separately",
+      "options": {
+        "product": "Product updates",
+        "security": "Security alerts",
+        "marketing": "Marketing",
+        "managed": "Managed by your organization"
+      }
     }
   },
   "modal": {
@@ -140,6 +150,7 @@
     "icons": "Icons",
     "buttons": "Buttons",
     "checkboxes": "Checkboxes",
+    "switches": "Switches",
     "inputs": "Inputs",
     "imagePicker": "Image picker",
     "modals": "Modals",
@@ -156,5 +167,10 @@
     "custom": "Custom checkbox",
     "expo": "Expo UI checkbox",
     "disabled": "Disabled and checked"
+  },
+  "switch": {
+    "custom": "Custom switch",
+    "expo": "Expo UI switch",
+    "disabled": "Disabled and on"
   }
 }

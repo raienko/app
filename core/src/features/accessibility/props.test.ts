@@ -3,6 +3,7 @@ import {
   controlA11yProps,
   fieldA11yProps,
   statusA11yProps,
+  switchA11yProps,
 } from "./props";
 
 describe("checkboxA11yProps", () => {
@@ -31,6 +32,26 @@ describe("checkboxA11yProps", () => {
 
     expect(props["aria-checked"]).toBe(false);
     expect(props["aria-disabled"]).toBe(true);
+  });
+});
+
+describe("switchA11yProps", () => {
+  it("exposes the switch role, name, and current state", () => {
+    const props = switchA11yProps({
+      label: "Notifications",
+      value: true,
+      disabled: false,
+    });
+
+    expect(props.accessibilityRole).toBe("switch");
+    expect(props.role).toBe("switch");
+    expect(props.accessibilityLabel).toBe("Notifications");
+    expect(props.accessibilityState).toEqual({
+      checked: true,
+      disabled: false,
+    });
+    expect(props["aria-checked"]).toBe(true);
+    expect(props["aria-disabled"]).toBe(false);
   });
 });
 

@@ -13,6 +13,7 @@ import Readout from "./readout";
 // so the list follows the app's language like every other string here.
 const COUNTRY_CODES = ["uk", "ua", "es", "jp", "cn"] as const;
 const INTEREST_CODES = ["design", "engineering", "research"] as const;
+const NOTIFICATION_CODES = ["product", "security", "marketing"] as const;
 
 // Hoisted out of render: a fresh `new Date()` every render is a new
 // `maxDate` for the picker on every render, which keeps it re-syncing.
@@ -41,6 +42,9 @@ export default function InputsSection() {
   const [phone, setPhone] = useState<string | null>(null);
   const [country, setCountry] = useState<string | null>(null);
   const [interests, setInterests] = useState<string[]>(["design"]);
+  const [notificationSettings, setNotificationSettings] = useState<string[]>([
+    "security",
+  ]);
   const [startsAt, setStartsAt] = useState<Date | null>(null);
   const [birthday, setBirthday] = useState<Date | null>(null);
   const [alarm, setAlarm] = useState<Date | null>(null);
@@ -58,6 +62,17 @@ export default function InputsSection() {
     {
       value: "unavailable",
       label: t("input.checklist.options.unavailable"),
+      disabled: true,
+    },
+  ];
+  const notificationOptions = [
+    ...NOTIFICATION_CODES.map((code) => ({
+      value: code,
+      label: t(`input.switchGroup.options.${code}`),
+    })),
+    {
+      value: "managed",
+      label: t("input.switchGroup.options.managed"),
       disabled: true,
     },
   ];
@@ -139,6 +154,16 @@ export default function InputsSection() {
         helperText={t("input.checklist.helper")}
       />
       <Input
+        type="switchGroup"
+        label={t("input.switchGroup.label")}
+        value={notificationSettings}
+        onChange={setNotificationSettings}
+        options={notificationOptions}
+        groupSwitch
+        helperText={t("input.switchGroup.helper")}
+        switchType="expo"
+      />
+      <Input
         type="datetime"
         label={t("input.startsAt.label")}
         placeholder={t("input.startsAt.placeholder")}
@@ -192,6 +217,10 @@ export default function InputsSection() {
           being separate from what it displays. */}
       <Readout label="country" value={country ?? "—"} />
       <Readout label="interests" value={interests.join(", ") || "—"} />
+      <Readout
+        label="notificationSettings"
+        value={notificationSettings.join(", ") || "—"}
+      />
       <Readout label="phone" value={phone ?? "—"} />
       <Readout
         label="startsAt"

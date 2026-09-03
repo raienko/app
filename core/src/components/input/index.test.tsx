@@ -142,6 +142,25 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(onChange).toHaveBeenCalledWith(["design"]);
   });
 
+  it("routes to the switch-group variation when type='switchGroup'", async () => {
+    const onChange = jest.fn();
+    await render(
+      <Component
+        type="switchGroup"
+        label="Notifications"
+        value={[]}
+        onChange={onChange}
+        options={[{ value: "product", label: "Product updates" }]}
+      />,
+    );
+
+    await fireEvent.press(
+      screen.getByRole("switch", { name: "Product updates" }),
+    );
+
+    expect(onChange).toHaveBeenCalledWith(["product"]);
+  });
+
   it("routes to the phone variation when type='phone'", async () => {
     const onChange = jest.fn();
     await render(
