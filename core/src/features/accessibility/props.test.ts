@@ -2,6 +2,7 @@ import {
   checkboxA11yProps,
   controlA11yProps,
   fieldA11yProps,
+  radioA11yProps,
   statusA11yProps,
   switchA11yProps,
 } from "./props";
@@ -46,6 +47,26 @@ describe("switchA11yProps", () => {
     expect(props.accessibilityRole).toBe("switch");
     expect(props.role).toBe("switch");
     expect(props.accessibilityLabel).toBe("Notifications");
+    expect(props.accessibilityState).toEqual({
+      checked: true,
+      disabled: false,
+    });
+    expect(props["aria-checked"]).toBe(true);
+    expect(props["aria-disabled"]).toBe(false);
+  });
+});
+
+describe("radioA11yProps", () => {
+  it("exposes the radio role, name, checked state, and disabled state", () => {
+    const props = radioA11yProps({
+      label: "Monthly",
+      checked: true,
+      disabled: false,
+    });
+
+    expect(props.accessibilityRole).toBe("radio");
+    expect(props.role).toBe("radio");
+    expect(props.accessibilityLabel).toBe("Monthly");
     expect(props.accessibilityState).toEqual({
       checked: true,
       disabled: false,

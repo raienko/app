@@ -161,6 +161,23 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(onChange).toHaveBeenCalledWith(["product"]);
   });
 
+  it("routes to the radio-group variation when type='radioGroup'", async () => {
+    const onChange = jest.fn();
+    await render(
+      <Component
+        type="radioGroup"
+        label="Plan"
+        value={null}
+        onChange={onChange}
+        options={[{ value: "pro", label: "Pro" }]}
+      />,
+    );
+
+    await fireEvent.press(screen.getByRole("radio", { name: "Pro" }));
+
+    expect(onChange).toHaveBeenCalledWith("pro");
+  });
+
   it("routes to the phone variation when type='phone'", async () => {
     const onChange = jest.fn();
     await render(

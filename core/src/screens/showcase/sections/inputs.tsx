@@ -14,6 +14,7 @@ import Readout from "./readout";
 const COUNTRY_CODES = ["uk", "ua", "es", "jp", "cn"] as const;
 const INTEREST_CODES = ["design", "engineering", "research"] as const;
 const NOTIFICATION_CODES = ["product", "security", "marketing"] as const;
+const PLAN_CODES = ["free", "pro", "business"] as const;
 
 // Hoisted out of render: a fresh `new Date()` every render is a new
 // `maxDate` for the picker on every render, which keeps it re-syncing.
@@ -45,6 +46,7 @@ export default function InputsSection() {
   const [notificationSettings, setNotificationSettings] = useState<string[]>([
     "security",
   ]);
+  const [plan, setPlan] = useState<string | null>("pro");
   const [startsAt, setStartsAt] = useState<Date | null>(null);
   const [birthday, setBirthday] = useState<Date | null>(null);
   const [alarm, setAlarm] = useState<Date | null>(null);
@@ -73,6 +75,17 @@ export default function InputsSection() {
     {
       value: "managed",
       label: t("input.switchGroup.options.managed"),
+      disabled: true,
+    },
+  ];
+  const planOptions = [
+    ...PLAN_CODES.map((code) => ({
+      value: code,
+      label: t(`input.radioGroup.options.${code}`),
+    })),
+    {
+      value: "enterprise",
+      label: t("input.radioGroup.options.enterprise"),
       disabled: true,
     },
   ];
@@ -164,6 +177,15 @@ export default function InputsSection() {
         switchType="expo"
       />
       <Input
+        type="radioGroup"
+        label={t("input.radioGroup.label")}
+        value={plan}
+        onChange={setPlan}
+        options={planOptions}
+        helperText={t("input.radioGroup.helper")}
+        radioType="expo"
+      />
+      <Input
         type="datetime"
         label={t("input.startsAt.label")}
         placeholder={t("input.startsAt.placeholder")}
@@ -221,6 +243,7 @@ export default function InputsSection() {
         label="notificationSettings"
         value={notificationSettings.join(", ") || "—"}
       />
+      <Readout label="plan" value={plan ?? "—"} />
       <Readout label="phone" value={phone ?? "—"} />
       <Readout
         label="startsAt"

@@ -94,6 +94,16 @@
         "marketing": "التسويق",
         "managed": "تديره مؤسستك"
       }
+    },
+    "radioGroup": {
+      "label": "الخطة",
+      "helper": "اختر خيارًا واحدًا",
+      "options": {
+        "free": "مجاني",
+        "pro": "احترافي",
+        "business": "أعمال",
+        "enterprise": "تواصل مع المبيعات"
+      }
     }
   },
   "modal": {
@@ -150,6 +160,7 @@
     "icons": "الأيقونات",
     "buttons": "الأزرار",
     "checkboxes": "مربعات الاختيار",
+    "radioButtons": "أزرار الاختيار",
     "switches": "مفاتيح التبديل",
     "inputs": "حقول الإدخال",
     "imagePicker": "منتقي الصور",
@@ -167,6 +178,11 @@
     "custom": "مربع اختيار مخصص",
     "expo": "مربع اختيار Expo UI",
     "disabled": "معطل ومحدد"
+  },
+  "radioButton": {
+    "custom": "زر اختيار مخصص",
+    "expo": "زر اختيار بنمط Expo",
+    "disabled": "زر اختيار معطل"
   },
   "switch": {
     "custom": "مفتاح تبديل مخصص",

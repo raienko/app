@@ -21,6 +21,7 @@ import LoggerSection from "./sections/logger";
 import ModalsSection from "./sections/modals";
 import PermissionsSection from "./sections/permissions";
 import PopupsSection from "./sections/popups";
+import RadioButtonsSection from "./sections/radio-buttons";
 import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
 import SwitchesSection from "./sections/switches";
@@ -51,6 +52,7 @@ const SECTIONS: {
   { title: "showcase.icons", Component: IconsSection },
   { title: "showcase.buttons", Component: ButtonsSection },
   { title: "showcase.checkboxes", Component: CheckboxesSection },
+  { title: "showcase.radioButtons", Component: RadioButtonsSection },
   { title: "showcase.switches", Component: SwitchesSection },
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },

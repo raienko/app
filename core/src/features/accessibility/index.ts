@@ -10,6 +10,7 @@ export {
   controlA11yProps,
   fieldA11yProps,
   headingA11yProps,
+  radioA11yProps,
   statusA11yProps,
   switchA11yProps,
   type HeadingLevel,

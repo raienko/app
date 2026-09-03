@@ -13,6 +13,7 @@ import EmailInput from "./email";
 import NumericInput from "./numeric";
 import PasswordInput from "./password";
 import PhoneInput from "./phone";
+import RadioGroupInput from "./radio-group";
 import SelectInput from "./select";
 import SwitchGroupInput from "./switch-group";
 import TextInput from "./text";
@@ -59,6 +60,7 @@ function renderVariant<P>(
  * @example <Input type="phone" defaultCountry="US" value={phone} onChange={setPhone} />
  * @example <Input type="checklist" value={topics} onChange={setTopics} options={options} />
  * @example <Input type="switchGroup" value={settings} onChange={setSettings} options={options} />
+ * @example <Input type="radioGroup" value={plan} onChange={setPlan} options={options} />
  * @example <Input value={query} onChange={setQuery} leftSlot={<Icon name="search" />} />
  */
 const Input = forwardRef<RNTextInputInstance, InputProps>(
@@ -80,6 +82,8 @@ const Input = forwardRef<RNTextInputInstance, InputProps>(
         return renderVariant(ChecklistInput, props, ref);
       case "switchGroup":
         return renderVariant(SwitchGroupInput, props, ref);
+      case "radioGroup":
+        return renderVariant(RadioGroupInput, props, ref);
       case "phone":
         return renderVariant(PhoneInput, props, ref);
       default:
@@ -100,6 +104,8 @@ export type {
   DateTimeMode,
   InputProps,
   PhoneCountryCode,
+  RadioGroupOption,
+  RadioGroupInputTypeProps,
   SelectOption,
   SwitchGroupOption,
 } from "./types";

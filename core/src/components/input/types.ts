@@ -222,6 +222,32 @@ export type SwitchGroupInputTypeProps = {
   onBlur?: never;
 } & SwitchGroupControlProps;
 
+/** One mutually exclusive choice in a `radioGroup`. */
+export type RadioGroupOption = {
+  value: string;
+  label: string;
+  disabled?: boolean;
+  testID?: string;
+};
+
+export type RadioGroupInputTypeProps = {
+  type: "radioGroup";
+  /** `null` means no option is currently selected. */
+  value: string | null;
+  /** Reports the newly selected option's value. */
+  onChange: (value: string) => void;
+  options: RadioGroupOption[];
+  /** Chooses the radio implementation used by every option. */
+  radioType?: ComponentType;
+  placeholder?: never;
+  leftSlot?: never;
+  rightSlot?: never;
+  autoCapitalize?: never;
+  autoCorrect?: never;
+  onFocus?: never;
+  onBlur?: never;
+};
+
 /**
  * Which parts of a moment a `datetime` field asks for. Defaults to
  * `"datetime"`; the other two hide the half they don't need.
@@ -251,6 +277,7 @@ export type InputProps = (
   | SelectInputTypeProps
   | ChecklistInputTypeProps
   | SwitchGroupInputTypeProps
+  | RadioGroupInputTypeProps
   | DateTimeInputTypeProps
   | PasswordInputTypeProps
   | CodeInputTypeProps

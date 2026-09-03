@@ -160,6 +160,29 @@ export function switchA11yProps({
   };
 }
 
+type RadioOptions = {
+  /** The visible label that names this option within its radio group. */
+  label: string;
+  checked: boolean;
+  disabled?: boolean;
+};
+
+/** Native and web accessibility state for one app-owned radio option. */
+export function radioA11yProps({
+  label,
+  checked,
+  disabled = false,
+}: RadioOptions): AccessibilityProps {
+  return {
+    accessibilityRole: "radio",
+    role: "radio",
+    accessibilityLabel: label,
+    accessibilityState: { checked, disabled },
+    "aria-checked": checked,
+    "aria-disabled": disabled,
+  };
+}
+
 type FieldOptions = {
   /** A field's visible label, or its placeholder when it has no label. */
   label?: string;

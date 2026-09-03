@@ -94,6 +94,16 @@
         "marketing": "マーケティング",
         "managed": "組織によって管理されています"
       }
+    },
+    "radioGroup": {
+      "label": "プラン",
+      "helper": "1つ選択してください",
+      "options": {
+        "free": "無料",
+        "pro": "プロ",
+        "business": "ビジネス",
+        "enterprise": "営業に問い合わせ"
+      }
     }
   },
   "modal": {
@@ -150,6 +160,7 @@
     "icons": "アイコン",
     "buttons": "ボタン",
     "checkboxes": "チェックボックス",
+    "radioButtons": "ラジオボタン",
     "switches": "スイッチ",
     "inputs": "入力フィールド",
     "imagePicker": "画像ピッカー",
@@ -167,6 +178,11 @@
     "custom": "カスタムチェックボックス",
     "expo": "Expo UIチェックボックス",
     "disabled": "無効・選択済み"
+  },
+  "radioButton": {
+    "custom": "カスタムラジオボタン",
+    "expo": "Expoスタイルのラジオボタン",
+    "disabled": "無効なラジオボタン"
   },
   "switch": {
     "custom": "カスタムスイッチ",

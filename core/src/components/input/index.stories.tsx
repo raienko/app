@@ -94,6 +94,23 @@ export function SwitchGroup() {
   );
 }
 
+export function RadioGroup() {
+  const [value, setValue] = useState<string | null>("pro");
+  return (
+    <Component
+      type="radioGroup"
+      label="Plan"
+      value={value}
+      onChange={setValue}
+      options={[
+        { value: "free", label: "Free" },
+        { value: "pro", label: "Pro" },
+        { value: "enterprise", label: "Contact sales", disabled: true },
+      ]}
+    />
+  );
+}
+
 // Controlled demo — Storybook args don't feed back into a controlled
 // TextInput's value, so this story owns its own state. See ./text and
 // ./numeric for each variation's own story set.

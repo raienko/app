@@ -94,6 +94,16 @@
         "marketing": "Marketing",
         "managed": "Managed by your organization"
       }
+    },
+    "radioGroup": {
+      "label": "Plan",
+      "helper": "Choose one option",
+      "options": {
+        "free": "Free",
+        "pro": "Pro",
+        "business": "Business",
+        "enterprise": "Contact sales"
+      }
     }
   },
   "modal": {
@@ -150,6 +160,7 @@
     "icons": "Icons",
     "buttons": "Buttons",
     "checkboxes": "Checkboxes",
+    "radioButtons": "Radio buttons",
     "switches": "Switches",
     "inputs": "Inputs",
     "imagePicker": "Image picker",
@@ -167,6 +178,11 @@
     "custom": "Custom checkbox",
     "expo": "Expo UI checkbox",
     "disabled": "Disabled and checked"
+  },
+  "radioButton": {
+    "custom": "Custom radio button",
+    "expo": "Expo-style radio button",
+    "disabled": "Disabled radio button"
   },
   "switch": {
     "custom": "Custom switch",

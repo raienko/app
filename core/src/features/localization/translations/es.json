@@ -94,6 +94,16 @@
         "marketing": "Marketing",
         "managed": "Gestionado por tu organización"
       }
+    },
+    "radioGroup": {
+      "label": "Plan",
+      "helper": "Elige una opción",
+      "options": {
+        "free": "Gratis",
+        "pro": "Pro",
+        "business": "Negocios",
+        "enterprise": "Contactar con ventas"
+      }
     }
   },
   "modal": {
@@ -150,6 +160,7 @@
     "icons": "Iconos",
     "buttons": "Botones",
     "checkboxes": "Casillas",
+    "radioButtons": "Botones de opción",
     "switches": "Interruptores",
     "inputs": "Campos de entrada",
     "imagePicker": "Selector de imágenes",
@@ -167,6 +178,11 @@
     "custom": "Casilla personalizada",
     "expo": "Casilla de Expo UI",
     "disabled": "Deshabilitada y marcada"
+  },
+  "radioButton": {
+    "custom": "Botón de opción personalizado",
+    "expo": "Botón de opción estilo Expo",
+    "disabled": "Botón de opción deshabilitado"
   },
   "switch": {
     "custom": "Interruptor personalizado",
