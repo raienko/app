@@ -63,6 +63,37 @@ describe(`${Component.name} smoke test`, () => {
     await fireEvent.press(screen.getByText("nope"));
     expect(onPress).not.toHaveBeenCalled();
   });
+
+  it("shows a loading indicator, reports busy, and blocks onPress", async () => {
+    const onPress = jest.fn();
+    await render(<Component value="saving" loading onPress={onPress} />);
+
+    const button = screen.getByRole("button", { name: "saving" });
+
+    expect(button).toBeBusy();
+    expect(button).toBeDisabled();
+    expect(screen.getByTestId("button-loading")).toBeOnTheScreen();
+
+    await fireEvent.press(button);
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
+  it("removes the loading indicator and re-enables presses when loading ends", async () => {
+    const onPress = jest.fn();
+    const view = await render(
+      <Component value="save" loading onPress={onPress} />,
+    );
+
+    await view.rerender(<Component value="save" onPress={onPress} />);
+
+    const button = screen.getByRole("button", { name: "save" });
+    expect(button).not.toBeBusy();
+    expect(button).toBeEnabled();
+    expect(screen.queryByTestId("button-loading")).not.toBeOnTheScreen();
+
+    await fireEvent.press(button);
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe("Button type", () => {

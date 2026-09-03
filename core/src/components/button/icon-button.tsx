@@ -31,6 +31,8 @@ type Props = Omit<PressableProps, "children" | "style"> & {
   size?: IconButtonSize;
   /** One of several choices (a segmented option) — also announced as such. */
   selected?: boolean;
+  /** Shows a spinner in place of the icon and blocks presses. */
+  loading?: boolean;
   style?: StyleProp<ViewStyle>;
 };
 

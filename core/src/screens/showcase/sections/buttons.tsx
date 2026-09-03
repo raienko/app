@@ -87,6 +87,19 @@ export default function ButtonsSection() {
         ))}
       </View>
 
+      <Text value="Loading" type="headline" />
+      <View style={styles.row}>
+        {TYPES.map((type) => (
+          <Button
+            key={type}
+            value={type}
+            type={type}
+            loading
+            onPress={() => setPressCount((n) => n + 1)}
+          />
+        ))}
+      </View>
+
       <Text value="IconButton — same palette, square" type="headline" />
       <View style={styles.row}>
         {TYPES.map((type) => (

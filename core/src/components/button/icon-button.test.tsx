@@ -93,6 +93,23 @@ describe(`${Component.name} smoke test`, () => {
     expect(button.props.accessibilityState.disabled).toBe(true);
   });
 
+  it("inherits Button's loading state", async () => {
+    const onPress = jest.fn();
+    await render(
+      <Component label="Saving" loading onPress={onPress}>
+        <Icon name="check" />
+      </Component>,
+    );
+
+    const button = screen.getByRole("button", { name: "Saving" });
+    expect(button).toBeBusy();
+    expect(button).toBeDisabled();
+    expect(screen.getByTestId("button-loading")).toBeOnTheScreen();
+
+    await fireEvent.press(button);
+    expect(onPress).not.toHaveBeenCalled();
+  });
+
   /**
    * The headline behaviour: the icon takes the button's foreground without
    * the call site restating it, which is what a hand-rolled Pressable + Icon

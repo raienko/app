@@ -1,12 +1,15 @@
 import type { ReactNode } from "react";
 import {
+  ActivityIndicator,
   Pressable,
+  View,
   type PressableProps,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
 
 import { withIconDefaults } from "@/components/icon";
+import If from "@/components/if";
 import Text from "@/components/text";
 import { controlA11yProps } from "@/features/accessibility";
 import { createStyles, type TypographyToken } from "@/features/responsive";
@@ -68,6 +71,8 @@ type Props = Omit<PressableProps, "children" | "style"> &
     size?: ButtonSize;
     /** One of several choices (a segmented option) — also announced as such. */
     selected?: boolean;
+    /** Shows a spinner, preserves the button's size, and blocks presses. */
+    loading?: boolean;
     style?: StyleProp<ViewStyle>;
   };
 
@@ -78,6 +83,7 @@ export default function Button({
   type = "secondary",
   size = "medium",
   selected = false,
+  loading = false,
   disabled,
   style,
   ...props
@@ -89,6 +95,17 @@ export default function Button({
   const background = selected ? palette.backgroundSelected : palette.background;
   const foreground =
     selected && palette.labelSelected ? palette.labelSelected : palette.label;
+  const isDisabled = disabled || loading;
+
+  const content = children ? (
+    withIconDefaults(children, { color: theme.colors[foreground] })
+  ) : (
+    <Text
+      value={value as string}
+      type={SIZE_TEXT[size]}
+      style={{ color: theme.colors[foreground] }}
+    />
+  );
 
   return (
     <Pressable
@@ -97,7 +114,12 @@ export default function Button({
       // the app reads as an anonymous group to a screen reader. A labelled
       // button derives its name from the Text child, so `label` is only
       // passed when there is one.
-      {...controlA11yProps({ label, disabled: disabled ?? false, selected })}
+      {...controlA11yProps({
+        label,
+        disabled: isDisabled,
+        selected,
+        busy: loading ? true : undefined,
+      })}
       style={[
         styles.button,
         styles[size],
@@ -112,20 +134,22 @@ export default function Button({
         },
         style,
       ]}
-      disabled={disabled}
+      disabled={isDisabled}
       {...props}
     >
-      {/* An icon child is filled in with the same palette entry the label
-          would have used, so the call site doesn't repeat it. */}
-      {children ? (
-        withIconDefaults(children, { color: theme.colors[foreground] })
-      ) : (
-        <Text
-          value={value as string}
-          type={SIZE_TEXT[size]}
-          style={{ color: theme.colors[foreground] }}
-        />
-      )}
+      <View style={styles.content}>
+        {/* Keep content laid out while loading so changing state never
+            changes the button's width or height. It also keeps the original
+            text available as the accessible name. */}
+        <View style={loading ? styles.loadingContent : null}>{content}</View>
+        <If condition={loading}>
+          <ActivityIndicator
+            testID="button-loading"
+            color={theme.colors[foreground]}
+            style={styles.loadingIndicator}
+          />
+        </If>
+      </View>
     </Pressable>
   );
 }
@@ -139,6 +163,16 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
     // bordered and an unbordered type are the same size and don't shift
     // layout when swapped.
     borderWidth: spacing.x1,
+  },
+  content: {
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  loadingContent: {
+    opacity: 0,
+  },
+  loadingIndicator: {
+    position: "absolute",
   },
   // One entry per size rather than an inline object, so the whole set goes
   // through StyleSheet.create once instead of being rebuilt per render.

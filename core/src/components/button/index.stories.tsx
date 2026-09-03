@@ -46,3 +46,7 @@ export const Selected = {
 export const Disabled = {
   args: { value: "Disabled", disabled: true, onPress: () => {} },
 };
+
+export const Loading = {
+  args: { value: "Loading", loading: true, onPress: () => {} },
+};
