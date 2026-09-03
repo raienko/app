@@ -15,6 +15,7 @@ const SECTION_TITLES = [
   "Checkboxes",
   "Radio buttons",
   "Switches",
+  "Sliders",
   "State views",
   "Inputs",
   "Image picker",

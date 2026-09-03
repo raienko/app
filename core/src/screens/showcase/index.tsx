@@ -25,6 +25,7 @@ import RadioButtonsSection from "./sections/radio-buttons";
 import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
 import StateViewsSection from "./sections/state-views";
+import SlidersSection from "./sections/sliders";
 import SwitchesSection from "./sections/switches";
 import ThemeSection from "./sections/theme";
 import ToastsSection from "./sections/toasts";
@@ -55,6 +56,7 @@ const SECTIONS: {
   { title: "showcase.checkboxes", Component: CheckboxesSection },
   { title: "showcase.radioButtons", Component: RadioButtonsSection },
   { title: "showcase.switches", Component: SwitchesSection },
+  { title: "showcase.sliders", Component: SlidersSection },
   { title: "showcase.stateViews", Component: StateViewsSection },
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },

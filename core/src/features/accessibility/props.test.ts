@@ -3,9 +3,37 @@ import {
   controlA11yProps,
   fieldA11yProps,
   radioA11yProps,
+  sliderA11yProps,
   statusA11yProps,
   switchA11yProps,
 } from "./props";
+
+describe("sliderA11yProps", () => {
+  it("exposes adjustable native semantics and an ARIA range", () => {
+    const props = sliderA11yProps({
+      label: "Minimum price",
+      value: 25,
+      valueText: "$25",
+      min: 0,
+      max: 100,
+      disabled: false,
+    });
+
+    expect(props.accessibilityRole).toBe("adjustable");
+    expect(props.role).toBe("slider");
+    expect(props.accessibilityLabel).toBe("Minimum price");
+    expect(props.accessibilityValue).toEqual({
+      min: 0,
+      max: 100,
+      now: 25,
+      text: "$25",
+    });
+    expect(props["aria-valuemin"]).toBe(0);
+    expect(props["aria-valuemax"]).toBe(100);
+    expect(props["aria-valuenow"]).toBe(25);
+    expect(props["aria-valuetext"]).toBe("$25");
+  });
+});
 
 describe("checkboxA11yProps", () => {
   it("exposes a checkbox's name, checked state, and disabled state", () => {

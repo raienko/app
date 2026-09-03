@@ -11,6 +11,7 @@ export {
   fieldA11yProps,
   headingA11yProps,
   radioA11yProps,
+  sliderA11yProps,
   statusA11yProps,
   switchA11yProps,
   type HeadingLevel,

@@ -104,6 +104,12 @@
         "business": "Business",
         "enterprise": "Contact sales"
       }
+    },
+    "range": {
+      "label": "Budget",
+      "helper": "Choose the minimum and maximum",
+      "minimum": "Minimum budget",
+      "maximum": "Maximum budget"
     }
   },
   "modal": {
@@ -169,6 +175,7 @@
     "checkboxes": "Checkboxes",
     "radioButtons": "Radio buttons",
     "switches": "Switches",
+    "sliders": "Sliders",
     "stateViews": "State views",
     "inputs": "Inputs",
     "imagePicker": "Image picker",
@@ -196,5 +203,14 @@
     "custom": "Custom switch",
     "expo": "Expo UI switch",
     "disabled": "Disabled and on"
+  },
+  "slider": {
+    "custom": "Custom slider",
+    "expo": "Expo UI slider",
+    "multiple": "Multiple thumbs",
+    "multipleFirst": "First value",
+    "multipleSecond": "Second value",
+    "multipleThird": "Third value",
+    "disabled": "Disabled slider"
   }
 }

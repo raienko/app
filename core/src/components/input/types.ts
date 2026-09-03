@@ -248,6 +248,36 @@ export type RadioGroupInputTypeProps = {
   onBlur?: never;
 };
 
+type RangeInputSharedProps = {
+  type: "range";
+  min?: number;
+  max?: number;
+  step?: number;
+  /** Chooses Expo UI for one thumb; multi-thumb values use the custom slider. */
+  sliderType?: ComponentType;
+  thumbLabels?: string[];
+  formatValue?: (value: number, index: number) => string;
+  /** Required because every adjustable thumb needs an accessible name. */
+  label: string;
+  placeholder?: never;
+  leftSlot?: never;
+  rightSlot?: never;
+  autoCapitalize?: never;
+  autoCorrect?: never;
+};
+
+export type RangeInputTypeProps = RangeInputSharedProps &
+  (
+    | {
+        value: number;
+        onChange: (value: number) => void;
+      }
+    | {
+        value: number[];
+        onChange: (value: number[]) => void;
+      }
+  );
+
 /**
  * Which parts of a moment a `datetime` field asks for. Defaults to
  * `"datetime"`; the other two hide the half they don't need.
@@ -278,6 +308,7 @@ export type InputProps = (
   | ChecklistInputTypeProps
   | SwitchGroupInputTypeProps
   | RadioGroupInputTypeProps
+  | RangeInputTypeProps
   | DateTimeInputTypeProps
   | PasswordInputTypeProps
   | CodeInputTypeProps

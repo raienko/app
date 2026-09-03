@@ -216,6 +216,53 @@ export function fieldA11yProps({
   };
 }
 
+type SliderOptions = {
+  label: string;
+  value: number;
+  valueText: string;
+  min: number;
+  max: number;
+  disabled?: boolean;
+  hint?: string;
+};
+
+type SliderAccessibilityProps = AccessibilityProps & {
+  accessible: true;
+  role: "slider";
+  "aria-valuemin": number;
+  "aria-valuemax": number;
+  "aria-valuenow": number;
+  "aria-valuetext": string;
+  "aria-disabled": boolean;
+};
+
+/** Native adjustable semantics plus the equivalent ARIA range contract. */
+export function sliderA11yProps({
+  label,
+  value,
+  valueText,
+  min,
+  max,
+  disabled = false,
+  hint,
+}: SliderOptions): SliderAccessibilityProps {
+  return {
+    accessible: true,
+    accessibilityRole: "adjustable",
+    role: "slider",
+    accessibilityLabel: label,
+    accessibilityValue: { min, max, now: value, text: valueText },
+    accessibilityState: { disabled },
+    accessibilityActions: [{ name: "increment" }, { name: "decrement" }],
+    ...(hint === undefined ? null : { accessibilityHint: hint }),
+    "aria-valuemin": min,
+    "aria-valuemax": max,
+    "aria-valuenow": value,
+    "aria-valuetext": valueText,
+    "aria-disabled": disabled,
+  };
+}
+
 type StatusOptions = {
   /**
    * How urgently the message should reach a screen reader. `"polite"` waits

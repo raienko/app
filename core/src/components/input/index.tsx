@@ -14,6 +14,7 @@ import NumericInput from "./numeric";
 import PasswordInput from "./password";
 import PhoneInput from "./phone";
 import RadioGroupInput from "./radio-group";
+import RangeInput from "./range";
 import SelectInput from "./select";
 import SwitchGroupInput from "./switch-group";
 import TextInput from "./text";
@@ -48,7 +49,7 @@ function renderVariant<P>(
  * is rendered), so `<Input ref={...} />` can be focused/blurred
  * imperatively. The exception is `select`, which has no text field to
  * forward to — its value is picked in a Modal, not typed — so its ref
- * stays `null`. Same for `datetime`.
+ * stays `null`. Same for `datetime`, groups, and `range`.
  *
  * @example <Input value={text} onChange={setText} label="Name" />
  * @example <Input type="numeric" value={age} onChange={setAge} min={0} max={120} />
@@ -61,6 +62,7 @@ function renderVariant<P>(
  * @example <Input type="checklist" value={topics} onChange={setTopics} options={options} />
  * @example <Input type="switchGroup" value={settings} onChange={setSettings} options={options} />
  * @example <Input type="radioGroup" value={plan} onChange={setPlan} options={options} />
+ * @example <Input type="range" value={[20, 80]} onChange={setRange} min={0} max={100} />
  * @example <Input value={query} onChange={setQuery} leftSlot={<Icon name="search" />} />
  */
 const Input = forwardRef<RNTextInputInstance, InputProps>(
@@ -84,6 +86,8 @@ const Input = forwardRef<RNTextInputInstance, InputProps>(
         return renderVariant(SwitchGroupInput, props, ref);
       case "radioGroup":
         return renderVariant(RadioGroupInput, props, ref);
+      case "range":
+        return renderVariant(RangeInput, props, ref);
       case "phone":
         return renderVariant(PhoneInput, props, ref);
       default:
@@ -106,6 +110,7 @@ export type {
   PhoneCountryCode,
   RadioGroupOption,
   RadioGroupInputTypeProps,
+  RangeInputTypeProps,
   SelectOption,
   SwitchGroupOption,
 } from "./types";

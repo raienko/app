@@ -104,6 +104,12 @@
         "business": "商务版",
         "enterprise": "联系销售团队"
       }
+    },
+    "range": {
+      "label": "预算",
+      "helper": "选择最小值和最大值",
+      "minimum": "最低预算",
+      "maximum": "最高预算"
     }
   },
   "modal": {
@@ -169,6 +175,7 @@
     "checkboxes": "复选框",
     "radioButtons": "单选按钮",
     "switches": "开关",
+    "sliders": "滑块",
     "stateViews": "状态视图",
     "inputs": "输入框",
     "imagePicker": "图片选择器",
@@ -196,5 +203,14 @@
     "custom": "自定义开关",
     "expo": "Expo UI 开关",
     "disabled": "已禁用且开启"
+  },
+  "slider": {
+    "custom": "自定义滑块",
+    "expo": "Expo UI 滑块",
+    "multiple": "多个滑块",
+    "multipleFirst": "第一个值",
+    "multipleSecond": "第二个值",
+    "multipleThird": "第三个值",
+    "disabled": "已禁用的滑块"
   }
 }

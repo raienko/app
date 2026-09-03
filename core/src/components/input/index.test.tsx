@@ -178,6 +178,30 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(onChange).toHaveBeenCalledWith("pro");
   });
 
+  it("routes to the range variation when type='range'", async () => {
+    const onChange = jest.fn();
+    await render(
+      <Component
+        type="range"
+        label="Budget"
+        value={[20, 80]}
+        onChange={onChange}
+        min={0}
+        max={100}
+        step={10}
+        thumbLabels={["Minimum budget", "Maximum budget"]}
+      />,
+    );
+
+    await fireEvent(
+      screen.getByRole("slider", { name: "Minimum budget" }),
+      "accessibilityAction",
+      { nativeEvent: { actionName: "increment" } },
+    );
+
+    expect(onChange).toHaveBeenCalledWith([30, 80]);
+  });
+
   it("routes to the phone variation when type='phone'", async () => {
     const onChange = jest.fn();
     await render(

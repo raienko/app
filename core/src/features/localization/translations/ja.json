@@ -104,6 +104,12 @@
         "business": "ビジネス",
         "enterprise": "営業に問い合わせ"
       }
+    },
+    "range": {
+      "label": "予算",
+      "helper": "最小値と最大値を選択",
+      "minimum": "最小予算",
+      "maximum": "最大予算"
     }
   },
   "modal": {
@@ -169,6 +175,7 @@
     "checkboxes": "チェックボックス",
     "radioButtons": "ラジオボタン",
     "switches": "スイッチ",
+    "sliders": "スライダー",
     "stateViews": "状態ビュー",
     "inputs": "入力フィールド",
     "imagePicker": "画像ピッカー",
@@ -196,5 +203,14 @@
     "custom": "カスタムスイッチ",
     "expo": "Expo UIスイッチ",
     "disabled": "無効・オン"
+  },
+  "slider": {
+    "custom": "カスタムスライダー",
+    "expo": "Expo UIスライダー",
+    "multiple": "複数のつまみ",
+    "multipleFirst": "1番目の値",
+    "multipleSecond": "2番目の値",
+    "multipleThird": "3番目の値",
+    "disabled": "無効なスライダー"
   }
 }

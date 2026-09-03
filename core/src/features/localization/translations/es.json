@@ -104,6 +104,12 @@
         "business": "Negocios",
         "enterprise": "Contactar con ventas"
       }
+    },
+    "range": {
+      "label": "Presupuesto",
+      "helper": "Elige el mínimo y el máximo",
+      "minimum": "Presupuesto mínimo",
+      "maximum": "Presupuesto máximo"
     }
   },
   "modal": {
@@ -169,6 +175,7 @@
     "checkboxes": "Casillas",
     "radioButtons": "Botones de opción",
     "switches": "Interruptores",
+    "sliders": "Deslizadores",
     "stateViews": "Estados",
     "inputs": "Campos de entrada",
     "imagePicker": "Selector de imágenes",
@@ -196,5 +203,14 @@
     "custom": "Interruptor personalizado",
     "expo": "Interruptor de Expo UI",
     "disabled": "Deshabilitado y activado"
+  },
+  "slider": {
+    "custom": "Deslizador personalizado",
+    "expo": "Deslizador de Expo UI",
+    "multiple": "Varios controles",
+    "multipleFirst": "Primer valor",
+    "multipleSecond": "Segundo valor",
+    "multipleThird": "Tercer valor",
+    "disabled": "Deslizador deshabilitado"
   }
 }

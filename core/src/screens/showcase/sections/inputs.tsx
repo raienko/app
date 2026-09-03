@@ -47,6 +47,7 @@ export default function InputsSection() {
     "security",
   ]);
   const [plan, setPlan] = useState<string | null>("pro");
+  const [budget, setBudget] = useState([20, 80]);
   const [startsAt, setStartsAt] = useState<Date | null>(null);
   const [birthday, setBirthday] = useState<Date | null>(null);
   const [alarm, setAlarm] = useState<Date | null>(null);
@@ -186,6 +187,17 @@ export default function InputsSection() {
         radioType="expo"
       />
       <Input
+        type="range"
+        label={t("input.range.label")}
+        value={budget}
+        onChange={setBudget}
+        min={0}
+        max={100}
+        step={5}
+        thumbLabels={[t("input.range.minimum"), t("input.range.maximum")]}
+        helperText={t("input.range.helper")}
+      />
+      <Input
         type="datetime"
         label={t("input.startsAt.label")}
         placeholder={t("input.startsAt.placeholder")}
@@ -244,6 +256,7 @@ export default function InputsSection() {
         value={notificationSettings.join(", ") || "—"}
       />
       <Readout label="plan" value={plan ?? "—"} />
+      <Readout label="budget" value={budget.join("–")} />
       <Readout label="phone" value={phone ?? "—"} />
       <Readout
         label="startsAt"
