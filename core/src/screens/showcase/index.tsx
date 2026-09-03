@@ -26,6 +26,7 @@ import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
 import StateViewsSection from "./sections/state-views";
 import SlidersSection from "./sections/sliders";
+import SpacerSection from "./sections/spacer";
 import SwitchesSection from "./sections/switches";
 import ThemeSection from "./sections/theme";
 import ToastsSection from "./sections/toasts";
@@ -51,6 +52,7 @@ const SECTIONS: {
   { title: "showcase.accessibility", Component: AccessibilitySection },
   { title: "showcase.responsive", Component: ResponsiveSection },
   { title: "showcase.grid", Component: GridSection },
+  { title: "showcase.spacer", Component: SpacerSection },
   { title: "showcase.icons", Component: IconsSection },
   { title: "showcase.buttons", Component: ButtonsSection },
   { title: "showcase.checkboxes", Component: CheckboxesSection },

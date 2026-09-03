@@ -303,3 +303,30 @@ export function statusA11yProps({
     ...(label === undefined ? null : { accessibilityLabel: label }),
   };
 }
+
+/**
+ * The accessibility props for something that exists only visually and has
+ * nothing to say — a `Spacer`, a decorative rule, an icon sitting beside a
+ * label that already names it. Without them a purely presentational node
+ * still becomes a stop a screen-reader user has to swipe past, announced as
+ * an empty element.
+ *
+ * Four spellings, and as with the rest of this file no single one covers
+ * every platform: `accessible: false` keeps it from becoming an element in
+ * the first place, `accessibilityElementsHidden` hides it *and its
+ * descendants* on iOS, `importantForAccessibility="no-hide-descendants"` is
+ * Android's equivalent, and `aria-hidden` is what react-native-web turns
+ * into the real DOM attribute. Setting only one leaves it announced on
+ * whichever platforms the others cover.
+ *
+ * @example
+ * <View {...disabledA11yProps()} style={{ height: 16 }} />
+ */
+export function disabledA11yProps(): AccessibilityProps {
+  return {
+    accessible: false,
+    accessibilityElementsHidden: true,
+    importantForAccessibility: "no-hide-descendants",
+    "aria-hidden": true,
+  };
+}

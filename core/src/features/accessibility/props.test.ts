@@ -1,6 +1,7 @@
 import {
   checkboxA11yProps,
   controlA11yProps,
+  disabledA11yProps,
   fieldA11yProps,
   radioA11yProps,
   sliderA11yProps,
@@ -216,5 +217,27 @@ describe("statusA11yProps", () => {
       "accessibilityLabel",
       "Error, Could not save",
     );
+  });
+});
+
+describe("disabledA11yProps", () => {
+  // One spelling per platform, so a purely visual node isn't a stop a
+  // screen-reader user has to swipe past on whichever one was left out.
+  it("hides the node on every platform at once", () => {
+    const props = disabledA11yProps();
+
+    expect(props.accessible).toBe(false);
+    expect(props.accessibilityElementsHidden).toBe(true);
+    expect(props.importantForAccessibility).toBe("no-hide-descendants");
+    expect(props["aria-hidden"]).toBe(true);
+  });
+
+  it("says nothing — no role, name, or state to announce", () => {
+    const props = disabledA11yProps();
+
+    expect(props).not.toHaveProperty("accessibilityRole");
+    expect(props).not.toHaveProperty("role");
+    expect(props).not.toHaveProperty("accessibilityLabel");
+    expect(props).not.toHaveProperty("accessibilityState");
   });
 });

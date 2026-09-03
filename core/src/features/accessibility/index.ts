@@ -8,6 +8,7 @@ export {
 export {
   checkboxA11yProps,
   controlA11yProps,
+  disabledA11yProps,
   fieldA11yProps,
   headingA11yProps,
   radioA11yProps,

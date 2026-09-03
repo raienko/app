@@ -27,7 +27,7 @@ export {
   useTypography,
   type Responsive,
 } from "./use-responsive";
-export { createSizes, type Sizes } from "./sizes";
+export { createSizes, type Sizes, type SpacingToken } from "./sizes";
 export {
   createTypography,
   TYPOGRAPHY_TOKENS,

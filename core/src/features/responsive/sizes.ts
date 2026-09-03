@@ -90,6 +90,14 @@ function scale<T extends Record<string, number>>(
   ) as Scaled<T>;
 }
 
+/**
+ * The spacing scale's step names (`"x8"`, `"x16"`, ...). Exported so a
+ * component can take a step *by name* as a prop — `Spacer` does — and get
+ * the same typo-is-a-tsc-error guarantee a `spacing.x8` lookup already has,
+ * instead of accepting a bare number that skips the scale entirely.
+ */
+export type SpacingToken = keyof typeof RAW_SPACING;
+
 export type Sizes = {
   spacing: Scaled<typeof RAW_SPACING>;
   radius: Scaled<typeof RAW_RADIUS>;

@@ -84,6 +84,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Accessibility    | A live readout of every OS flag, `fontScale`, and `duration()`                                  |
 | Responsive units | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes             |
 | Grid             | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                    |
+| Spacer           | A gap between two blocks, switchable across all three directions and the spacing scale          |
 | Icons            | One glyph from each of the five families, the custom SVG set, colour and size overrides         |
 | Buttons          | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row |
 | Inputs           | Text, numeric, email, password, code, phone, select and date/time variations                    |
@@ -209,6 +210,7 @@ Two halves: **reading** what the user has turned on at the OS level, and **writi
 - **Both `accessibilityState` and `aria-*` are emitted, on purpose.** `accessibilityState` is what native reads and what testing-library asserts against; react-native-web 0.21 renders only the `aria-*` form. State set through `accessibilityState` alone therefore reaches native correctly and produces _nothing_ in the DOM — a gap the Jest suite can't see, since RNTL reads the React prop rather than the rendered output. Caught by inspecting a real rendered button (`role=button` present, `aria-selected` absent) and now covered by a test that asserts the `aria-*` mirror specifically. The Showcase exercises these states across its interactive sections.
 - **`headingA11yProps(level)`** marks text as a heading so screen-reader users can navigate by structure (VoiceOver's rotor, TalkBack's heading navigation) instead of reading top to bottom. It emits three spellings because no single one covers both platforms: `accessibilityRole="header"` for native, `role="heading"` for react-native-web (which turns it into a real `<h1>`–`<h6>` element), and `aria-level` to pick which one. That last prop isn't in RN's typings at all, and omitting it doesn't degrade gracefully — react-native-web falls back to `<h1>` for _every_ heading, flattening the outline the role exists to convey. `Text` applies this automatically; see below.
 - **`fieldA11yProps()`** carries a field's `error` as its `accessibilityHint`, which VoiceOver/TalkBack read after the label. RN has no "invalid" accessibility state to set — that's an ARIA concept with no React Native equivalent (`accessibilityInvalid` type-checks only because a spread suppresses excess-property checking, and does nothing at runtime) — so a hint is the portable way to announce _why_ a field is wrong instead of leaving the red border as the only signal.
+- **`decorativeA11yProps()`** is the opposite instruction: hide this from assistive technology entirely. It takes four spellings to say once — `accessible: false` so it never becomes an element, `accessibilityElementsHidden` (iOS) and `importantForAccessibility="no-hide-descendants"` (Android) to hide it _and its descendants_, and `aria-hidden` for the DOM react-native-web renders — and setting only some of them leaves the node announced on whichever platforms the rest covered. It's for things that exist only visually and have nothing to say: `Spacer` (below), a decorative rule, an icon beside a label that already names it. Without it a purely presentational node is still a stop a screen-reader user has to swipe past, announced as an empty element.
 
 ### Responsive units — `src/features/responsive`
 
@@ -531,6 +533,24 @@ Three pieces: **`Row`** places cells across and divides into `columns` (default 
 **The layout arithmetic is not in the components.** `createGridMetrics(columns, gap)` and its hook `useGridMetrics()` live in `features/responsive` and return the whole calculation — the resolved column count, the gap, each cell's half-gap `cellPadding`, the container's cancelling `edgeOffset`, and `widthFor(n)` for a cell's percentage width (clamped, so an over-wide or zero request can't produce a broken value). `Row` calls the hook and shares the result with its cells through context; `Cell` does no arithmetic of its own. Anything else that wants to sit on the same grid without being inside a `<Row>` — a standalone card that should be a third of the screen, a modal sized to eight columns — can call it directly. The pure function is covered by its own tests, including that a full line of cells sums to exactly 100%.
 
 **`ResponsiveValue<T>` / `resolveResponsive()`** (`features/responsive`) are the primitive underneath, and are useful well beyond the grid: a value that's either fixed or a per-breakpoint map, resolved **mobile-first**. A breakpoint with no entry inherits the nearest narrower one that has one, so `{ phone: 12, tablet: 6 }` means 12 on phone _and_ foldable, then 6 on tablet _and_ desktop — a map only names the widths where something actually changes. It never cascades downward: `{ desktop: 4 }` on a phone falls back rather than reaching up. `BREAKPOINT_ORDER` drives the cascade and is derived by sorting `BREAKPOINTS` on its own thresholds, so a new breakpoint slots in at the right place without the order being restated.
+
+### `Spacer` — `src/components/spacer`
+
+```tsx
+import Spacer from "@/components/spacer";
+
+<Spacer />                                    // 16pt vertical (the default)
+<Spacer size="x8" />                           // a step of the spacing scale, by name
+<Spacer direction="horizontal" size="x24" />
+<Spacer direction="both" size={10} />          // off-scale px, still unit-scaled
+```
+
+An explicit gap between two elements — the version of a margin you can see in the tree, for the places a parent's `gap` can't express: an uneven step inside an otherwise evenly-spaced stack, or a gap between two siblings that neither of them owns.
+
+- **`direction`** (`"vertical" | "horizontal" | "both"`, default `"vertical"`) picks which axes the gap occupies. The unused axis is left **unset rather than zeroed**, so a vertical spacer dropped into a row container takes no width of its own instead of forcing a 0-sized box into the layout. A gap only separates anything along its parent's own main axis, which is what the showcase section makes visible by switching the stage between a row and a column.
+- **`size`** takes a spacing-scale step _by name_ (`"x8"`, `"x16"`, …, exported as `SpacingToken` from `@/features/responsive`) so a step that isn't in the scale is a `tsc` error rather than a silent typo — the same guarantee a `spacing.x8` lookup already has. A raw px number is accepted for a gap the scale genuinely doesn't have, and goes through `units()` like every other size in the app. Defaults to `"x16"`.
+- **Prefer the parent's `gap` when the spacing is uniform** — it says "these are evenly spaced" once instead of once per gap. The two compose rather than replace each other: a `Spacer` inside a `gap`'d container adds the container's gap on _both_ sides of it.
+- **It is deliberately invisible to assistive technology.** A spacer carries nothing a screen-reader user could act on, so it spreads `decorativeA11yProps()` (above) and is hidden on every platform at once. Two things make that structural rather than a convention: the props are spread **after** the caller's, so an override can't undo the one guarantee the component makes, and every prop that would give it something to say (`accessible`, `accessibilityLabel`, `role`, the hide flags themselves, …) is `Omit`ted from its props type, so passing one is a `tsc` error rather than something you'd find later with VoiceOver. Its test suite asserts this from both sides: with `includeHiddenElements` a query finds the node, and _without_ it — which is what a screen reader effectively does — the same query returns nothing.
 
 ### `Screen` — `src/components/screen`
 

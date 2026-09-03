@@ -10,6 +10,7 @@ const SECTION_TITLES = [
   "Accessibility",
   "Responsive units",
   "Grid",
+  "Spacer",
   "Icons",
   "Buttons",
   "Checkboxes",
