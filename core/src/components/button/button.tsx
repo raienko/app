@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
 import {
-  ActivityIndicator,
   Pressable,
   View,
   type PressableProps,
@@ -10,6 +9,7 @@ import {
 
 import { withIconDefaults } from "@/components/icon";
 import If from "@/components/if";
+import Spinner from "@/components/spinner";
 import Text from "@/components/text";
 import { controlA11yProps } from "@/features/accessibility";
 import { createStyles, type TypographyToken } from "@/features/responsive";
@@ -143,8 +143,9 @@ export default function Button({
             text available as the accessible name. */}
         <View style={loading ? styles.loadingContent : null}>{content}</View>
         <If condition={loading}>
-          <ActivityIndicator
+          <Spinner
             testID="button-loading"
+            label={null}
             color={theme.colors[foreground]}
             style={styles.loadingIndicator}
           />

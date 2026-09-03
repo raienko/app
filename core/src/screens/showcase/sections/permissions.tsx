@@ -53,13 +53,15 @@ function PermissionCard<Response extends PermissionResponse>({
       />
       <View style={styles.actions}>
         <Button
-          value={pending === "refresh" ? "refreshing…" : "refresh"}
-          disabled={pending !== undefined}
+          value="refresh"
+          loading={pending === "refresh"}
+          disabled={pending !== undefined && pending !== "refresh"}
           onPress={() => void run("refresh")}
         />
         <Button
-          value={pending === "request" ? "requesting…" : "request"}
-          disabled={pending !== undefined}
+          value="request"
+          loading={pending === "request"}
+          disabled={pending !== undefined && pending !== "request"}
           onPress={() => void run("request")}
         />
       </View>
@@ -92,8 +94,8 @@ export default function PermissionsSection() {
         style={{ color: theme.colors.textSecondary }}
       />
       <Button
-        value={refreshingAll ? "refreshing all…" : "refresh all"}
-        disabled={refreshingAll}
+        value="refresh all"
+        loading={refreshingAll}
         onPress={() => void refreshAll()}
       />
       <PermissionCard name="camera" permission={permissions.camera} />
