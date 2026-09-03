@@ -131,6 +131,9 @@
       "content": "Modal a pantalla completa"
     }
   },
+  "carousel": {
+    "slide": "Diapositiva {{current}} de {{total}}"
+  },
   "toast": {
     "success": "Éxito",
     "error": "Error",
@@ -180,6 +183,7 @@
     "stateViews": "Estados",
     "inputs": "Campos de entrada",
     "images": "Imágenes",
+    "carousel": "Carrusel",
     "imagePicker": "Selector de imágenes",
     "modals": "Ventanas modales",
     "popups": "Diálogos emergentes",

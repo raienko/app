@@ -131,6 +131,9 @@
       "content": "全屏模态框"
     }
   },
+  "carousel": {
+    "slide": "第 {{current}} 张，共 {{total}} 张"
+  },
   "toast": {
     "success": "成功",
     "error": "错误",
@@ -180,6 +183,7 @@
     "stateViews": "状态视图",
     "inputs": "输入框",
     "images": "图片",
+    "carousel": "轮播",
     "imagePicker": "图片选择器",
     "modals": "模态框",
     "popups": "弹出对话框",

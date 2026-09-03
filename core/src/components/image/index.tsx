@@ -146,6 +146,15 @@ function ImageComponent({
   decorative,
   style,
   onError,
+  // Browsers make every <img> a native HTML5 drag source, and starting one
+  // cancels the pointer stream any gesture is reading — so an image inside
+  // a `Carousel`, a swipeable row or a draggable sheet silently kills the
+  // drag the moment the pointer moves. (Observed as a pan that fires
+  // `begin` then `end` with a translation of 0, right after the browser's
+  // own `dragstart`.) Native has no equivalent concept, so defaulting this
+  // off is also what makes web behave the way the other platforms already
+  // do. Pass `draggable` to opt back in.
+  draggable = false,
   ...props
 }: Props) {
   const key = sourceKey(source);
@@ -188,6 +197,7 @@ function ImageComponent({
       // expo-image's own prop, separate from accessibilityLabel: this is
       // what lands in the DOM's `alt` attribute on web.
       alt={alt}
+      draggable={draggable}
       source={showFallback ? fallback : source}
       style={style}
       // A failing fallback would otherwise loop: error -> setFailedKey ->

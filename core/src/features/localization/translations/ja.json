@@ -131,6 +131,9 @@
       "content": "フルスクリーンモーダル"
     }
   },
+  "carousel": {
+    "slide": "{{total}} 枚中 {{current}} 枚目"
+  },
   "toast": {
     "success": "成功",
     "error": "エラー",
@@ -180,6 +183,7 @@
     "stateViews": "状態ビュー",
     "inputs": "入力フィールド",
     "images": "画像",
+    "carousel": "カルーセル",
     "imagePicker": "画像ピッカー",
     "modals": "モーダル",
     "popups": "ポップアップ",

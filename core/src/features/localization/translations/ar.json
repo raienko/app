@@ -131,6 +131,9 @@
       "content": "نافذة ملء الشاشة"
     }
   },
+  "carousel": {
+    "slide": "الشريحة {{current}} من {{total}}"
+  },
   "toast": {
     "success": "نجاح",
     "error": "خطأ",
@@ -180,6 +183,7 @@
     "stateViews": "حالات العرض",
     "inputs": "حقول الإدخال",
     "images": "الصور",
+    "carousel": "دوّار",
     "imagePicker": "منتقي الصور",
     "modals": "النوافذ المنبثقة",
     "popups": "مربعات الحوار",

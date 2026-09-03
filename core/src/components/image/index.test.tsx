@@ -63,6 +63,23 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(props.accessibilityLabel).toBe("A photo");
   });
 
+  // Browsers make every <img> a native HTML5 drag source, and starting one
+  // cancels the pointer stream a gesture is reading — which silently killed
+  // dragging a `Carousel` whose slides were images. Observed directly: the
+  // pan fired `begin` then `end` with a translation of 0, right after the
+  // browser's own `dragstart`.
+  it("is not a native drag source on web", async () => {
+    await render(<Component source={REMOTE} alt="A photo" />);
+
+    expect(image().props.draggable).toBe(false);
+  });
+
+  it("lets a caller opt back into dragging", async () => {
+    await render(<Component source={REMOTE} alt="A photo" draggable />);
+
+    expect(image().props.draggable).toBe(true);
+  });
+
   it("hides a decorative image from assistive technology entirely", async () => {
     await render(<Component source={REMOTE} decorative />);
     const { props } = image();

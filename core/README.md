@@ -89,6 +89,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Buttons          | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row  |
 | Inputs           | Text, numeric, email, password, code, phone, select and date/time variations                     |
 | Images           | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls |
+| Carousel         | Slides with pagination you can switch off live, and the position it announces                    |
 | Image picker     | Camera/gallery selection through a pressable trigger or the static API                           |
 | Modals           | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                  |
 | Permissions      | Persisted camera, gallery and notification permission state and actions                          |
@@ -519,8 +520,39 @@ A wrapper over [`expo-image`](https://docs.expo.dev/versions/v57.0.0/sdk/image/)
 - **`placeholder` and `fallback` are different things, and both are worth having.** A placeholder is what `expo-image` shows _while_ the real image loads and drops when it arrives; a fallback is what's shown when the real image is never going to arrive.
 - **A failed source recovers when the source changes**, because the failure is recorded as a key derived from the source's _value_, not a boolean. That's not incidental: a call site passing `source={{ uri }}` makes a new object every render, so an identity-keyed reset would clear the flag right after each error and re-render into the same failing load forever.
 - **Accessibility can't be forgotten.** `alt` and `decorative` are a union, not two optional props, so an image with neither is a `tsc` error — the same construction that makes an unnamed `IconButton` one. A described image gets `imageA11yProps()` (above) plus `expo-image`'s `alt`; a decorative one gets `disabledA11yProps()` and leaves the accessibility tree entirely. Every accessibility prop the component owns is `Omit`ted from its props type, so a caller can't half-override the set. **The description stays on the fallback too** — the image is gone, but what it was _for_ is still what the user needs to know about that spot, so it announces something missing rather than silently vanishing. Verified in the rendered DOM: a described image is `role="img"` with `alt="…"` on the `<img>`, a decorative one is `aria-hidden="true"` with neither, and a fallback placeholder keeps `role="img"` and its label.
+- **Images are not native drag sources on web** (`draggable={false}` by default; pass `draggable` to opt back in). Browsers make every `<img>` an HTML5 drag source, and starting one cancels the pointer stream any gesture is reading — which silently broke dragging a `Carousel` whose slides were images. Traced in the browser: the pan fired `begin` then `end` with a translation of `0`, immediately after the browser's own `dragstart`; with the flag off the same drag runs uninterrupted. Native has no equivalent concept, so defaulting it off is also what makes web behave the way iOS and Android already did.
 - **`Image.preload(urls, options?)`** warms the cache for images about to be needed — the next page of a feed, the photos behind a screen one tap away. Only remote URLs benefit; a `require()`d asset is in the bundle already. It resolves `false` if _any_ URL fails, and nothing treats that as fatal: a warm cache is an optimization, and a failed preload just means the image is fetched at render as it would have been anyway.
 - **`Image.cacheClear(target?)`** empties `expo-image`'s caches — after a sign-out when images are user-scoped, or from a "clear cached data" setting. Both caches by default; `"memory"` or `"disk"` narrows it. It resolves `false` on web (which has no cache of `expo-image`'s own) and on Android when the activity is gone, so `false` means "nothing was cleared", not "something broke" — which is exactly what the Showcase shows when you press it in a browser.
+
+### `Carousel` — `src/components/carousel`
+
+```tsx
+import Carousel from "@/components/carousel";
+
+<Carousel
+  data={photos}
+  label="Trip photos"
+  slideLabel={(photo) => photo.caption}
+  renderItem={({ item }) => <Image source={item.url} alt={item.caption} />}
+  style={styles.carousel}       // must give it a height — see below
+  loop
+/>
+
+<Carousel data={steps} label="Onboarding" hasPagination={false} renderItem={renderStep} />
+```
+
+A wrapper over [`react-native-reanimated-carousel`](https://rn-carousel.dev/) (v5, whose peer deps — Reanimated 4, Worklets, Gesture Handler — this project already had). `loop`, `autoplay`, `itemSize`, `layout`, `animation`, `snapMode`, `orientation` and the render callbacks are the library's own API, passed straight through; the wrapper adds pagination and accessibility.
+
+- **`hasPagination`** (default `true`) shows one dot per slide. On by default because a carousel's remaining content is off-screen by definition — without dots nothing says it exists or how much of it there is. The dots are the library's own `Pagination`, so each one tracks the same `progress` shared value the slides animate with and grows _as you drag_ rather than snapping when the slide settles; `pagination.tsx` only supplies this app's colours, spacing and language. The active dot is **wider as well as recoloured**, so the current slide isn't signalled by colour alone (WCAG 1.4.1).
+- **`style` has to give the carousel a height.** Its slides are absolutely positioned — that's how the library animates them — so they can't stretch their container the way ordinary children would, and an unsized carousel renders as an empty box. The dots share that same box.
+- **A carousel is driven by a pan gesture, which no screen reader can perform.** Left alone it's a region whose content silently changes and that a VoiceOver or TalkBack user can never move through. Two things fix that, both on by default:
+  - The region is `accessibilityRole="adjustable"` with increment/decrement actions wired to the carousel's own `next()`/`prev()`, so the native swipe-up/swipe-down gesture changes slides. Its `accessibilityValue` carries the position, which both platforms re-announce as it changes. A one-slide carousel gets neither — offering gestures that can't do anything is worse than offering none.
+  - The pagination dots are real buttons that jump straight to a slide. That's the ARIA "slide picker" pattern and the one navigation path that behaves identically everywhere, which is why turning pagination off is a visual decision worth making deliberately.
+- **On web the region is additionally `role="group"` with `aria-roledescription="carousel"`** — the ARIA authoring-practices spelling for exactly this widget, which native has no equivalent of. Same two-spellings-because-neither-covers-both split as the rest of `@/features/accessibility`. Verified in the rendered DOM, along with the announcement updating live: pressing the fourth dot moved `aria-valuetext` to `"A forest road in the fog, Slide 4 of 4"`.
+- **`slideLabel(item, index)`** names what's _on_ a slide. The active slide's own content is already reachable — the library mounts every slide at once but marks all but the current one `aria-hidden`, confirmed in the DOM — so this isn't rescuing hidden content. It names the two things that _describe_ the carousel rather than being it: the region's announcement becomes "A pug wrapped in a blanket, Slide 2 of 4", and each dot says where it goes instead of only which number it is. Without it both fall back to the position alone.
+- **Known gap, web only:** the library's dots set their current-slide state through `accessibilityState={{ selected }}` and nothing else, and react-native-web 0.21 renders only the `aria-*` form — the same finding this project already documented for `Button` — so `aria-selected` never reaches the DOM. Native is unaffected. It degrades rather than breaks: the region's own `aria-valuetext` still announces which slide is current, so the information is available, just not from the dot itself. Patching it needs `patch-package` against the library's minified `lib/` build (its unminified `src/` is not what the bundler resolves — verified), which didn't seem worth the maintenance for a redundancy gap; say the word and it's a small patch.
+- **Images inside slides must not be native drag sources.** An `<img>` that the browser can drag hijacks the pan the moment the pointer moves, so the carousel just snaps back — this is why `Image` now ships `draggable={false}` (above). A slide rendering a raw `expo-image` or `<img>` of its own needs the same flag.
+- **Jest can't drive it.** Under `react-native-reanimated/mock` nothing animates, so the library never settles a slide and `onSnapToItem` never fires. The tests cover every piece of wiring the wrapper owns — the region's accessibility props, the pagination, and that the controls reach the library's handle (spying on the very object `useImperativeHandle` hands the caller) — and the parts that need real motion are verified in the browser instead.
 
 ### `Grid` — `src/components/grid`
 

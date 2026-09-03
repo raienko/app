@@ -131,6 +131,9 @@
       "content": "Fullscreen modal"
     }
   },
+  "carousel": {
+    "slide": "Slide {{current}} of {{total}}"
+  },
   "toast": {
     "success": "Success",
     "error": "Error",
@@ -180,6 +183,7 @@
     "stateViews": "State views",
     "inputs": "Inputs",
     "images": "Images",
+    "carousel": "Carousel",
     "imagePicker": "Image picker",
     "modals": "Modals",
     "popups": "Popups",
