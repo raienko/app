@@ -4,6 +4,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ToastsProvider } from "@/components/toast";
+import { StateViewsProvider } from "@/components/state-view";
 import { AccessibilityProvider } from "@/features/accessibility";
 import { DeepLinks } from "@/features/deep-links";
 import { LocaleProvider } from "@/features/localization";
@@ -33,9 +34,10 @@ type Props = {
  * `Toast.show()` should see a toast, which it only can if the thing that
  * renders them is part of the shared tree.
  *
- * `ToastsProvider` is innermost so its overlay sits above every screen and
- * can read the theme, locale and safe-area insets the ones above it
- * provide.
+ * StateViewsProvider uses a native fullscreen Modal, so its blocking state
+ * remains above screen content, toasts, and any modal that was already open.
+ * Both overlay providers can read the theme, locale and safe-area insets
+ * provided above them.
  *
  * GestureHandlerRootView is here (rather than only where a gesture is used,
  * e.g. Modal's bottom-sheet swipe-to-dismiss) because react-native-gesture-handler
@@ -51,7 +53,9 @@ export default function Providers({ children }: Props) {
             <DeepLinks>
               <ThemeProvider>
                 <LocaleProvider>
-                  <ToastsProvider>{children}</ToastsProvider>
+                  <ToastsProvider>
+                    <StateViewsProvider>{children}</StateViewsProvider>
+                  </ToastsProvider>
                 </LocaleProvider>
               </ThemeProvider>
             </DeepLinks>

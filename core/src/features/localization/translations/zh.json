@@ -140,6 +140,13 @@
       "expiring": "这条将在三秒后消失。"
     }
   },
+  "stateView": {
+    "loading": "正在加载",
+    "empty": "这里暂时没有内容",
+    "error": "出了点问题",
+    "success": "全部完成",
+    "offline": "你已离线"
+  },
   "theme": {
     "light": "浅色",
     "dark": "深色",
@@ -162,6 +169,7 @@
     "checkboxes": "复选框",
     "radioButtons": "单选按钮",
     "switches": "开关",
+    "stateViews": "状态视图",
     "inputs": "输入框",
     "imagePicker": "图片选择器",
     "modals": "模态框",

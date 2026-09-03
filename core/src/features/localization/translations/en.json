@@ -140,6 +140,13 @@
       "expiring": "This one expires in three seconds."
     }
   },
+  "stateView": {
+    "loading": "Loading",
+    "empty": "Nothing here yet",
+    "error": "Something went wrong",
+    "success": "All done",
+    "offline": "You're offline"
+  },
   "theme": {
     "light": "Light",
     "dark": "Dark",
@@ -162,6 +169,7 @@
     "checkboxes": "Checkboxes",
     "radioButtons": "Radio buttons",
     "switches": "Switches",
+    "stateViews": "State views",
     "inputs": "Inputs",
     "imagePicker": "Image picker",
     "modals": "Modals",

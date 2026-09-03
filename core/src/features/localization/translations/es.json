@@ -140,6 +140,13 @@
       "expiring": "Este caduca en tres segundos."
     }
   },
+  "stateView": {
+    "loading": "Cargando",
+    "empty": "Aún no hay nada aquí",
+    "error": "Algo salió mal",
+    "success": "Todo listo",
+    "offline": "No tienes conexión"
+  },
   "theme": {
     "light": "Claro",
     "dark": "Oscuro",
@@ -162,6 +169,7 @@
     "checkboxes": "Casillas",
     "radioButtons": "Botones de opción",
     "switches": "Interruptores",
+    "stateViews": "Estados",
     "inputs": "Campos de entrada",
     "imagePicker": "Selector de imágenes",
     "modals": "Ventanas modales",

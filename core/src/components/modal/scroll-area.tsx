@@ -36,6 +36,7 @@ export default function ModalScrollArea({ position, children }: Props) {
   const scrollStyle = position === "fullscreen" ? styles.flex : styles.shrink;
   const contentContainerStyle = [
     styles.container,
+    position === "fullscreen" && styles.grow,
     position === "bottom" && { paddingBottom: insets.bottom + units(10) },
   ];
 
@@ -60,5 +61,8 @@ const useStyles = createStyles(({ spacing }) => ({
   },
   container: {
     gap: spacing.x8,
+  },
+  grow: {
+    flexGrow: 1,
   },
 }));

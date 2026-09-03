@@ -140,6 +140,13 @@
       "expiring": "これは3秒後に消えます。"
     }
   },
+  "stateView": {
+    "loading": "読み込み中",
+    "empty": "まだ何もありません",
+    "error": "問題が発生しました",
+    "success": "完了しました",
+    "offline": "オフラインです"
+  },
   "theme": {
     "light": "ライト",
     "dark": "ダーク",
@@ -162,6 +169,7 @@
     "checkboxes": "チェックボックス",
     "radioButtons": "ラジオボタン",
     "switches": "スイッチ",
+    "stateViews": "状態ビュー",
     "inputs": "入力フィールド",
     "imagePicker": "画像ピッカー",
     "modals": "モーダル",
