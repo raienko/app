@@ -19,6 +19,7 @@ const SECTION_TITLES = [
   "Sliders",
   "State views",
   "Inputs",
+  "Images",
   "Image picker",
   "Modals",
   "Popups",

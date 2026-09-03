@@ -76,25 +76,26 @@ internal API into application code.
 
 The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are ordered foundations-first — the styleguides and app-wide settings everything else is built on, then the components that consume them.
 
-| Section          | What it demonstrates                                                                            |
-| ---------------- | ----------------------------------------------------------------------------------------------- |
-| Typography       | All 11 type-scale entries at their own size, with the title sizes as real headings              |
-| Theme & colors   | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                   |
-| Localization     | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                      |
-| Accessibility    | A live readout of every OS flag, `fontScale`, and `duration()`                                  |
-| Responsive units | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes             |
-| Grid             | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                    |
-| Spacer           | A gap between two blocks, switchable across all three directions and the spacing scale          |
-| Icons            | One glyph from each of the five families, the custom SVG set, colour and size overrides         |
-| Buttons          | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row |
-| Inputs           | Text, numeric, email, password, code, phone, select and date/time variations                    |
-| Image picker     | Camera/gallery selection through a pressable trigger or the static API                          |
-| Modals           | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                 |
-| Permissions      | Persisted camera, gallery and notification permission state and actions                         |
-| Deep links       | Dispatching a link by URL, the registered patterns, and a gate holding one back                 |
-| Storage          | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`     |
-| Logger           | Every logger method and structured metadata                                                     |
-| Utilities        | `If` toggling content, and a scoped event bus emitting and counting pings                       |
+| Section          | What it demonstrates                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------ |
+| Typography       | All 11 type-scale entries at their own size, with the title sizes as real headings               |
+| Theme & colors   | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                    |
+| Localization     | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                       |
+| Accessibility    | A live readout of every OS flag, `fontScale`, and `duration()`                                   |
+| Responsive units | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes              |
+| Grid             | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                     |
+| Spacer           | A gap between two blocks, switchable across all three directions and the spacing scale           |
+| Icons            | One glyph from each of the five families, the custom SVG set, colour and size overrides          |
+| Buttons          | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row  |
+| Inputs           | Text, numeric, email, password, code, phone, select and date/time variations                     |
+| Images           | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls |
+| Image picker     | Camera/gallery selection through a pressable trigger or the static API                           |
+| Modals           | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                  |
+| Permissions      | Persisted camera, gallery and notification permission state and actions                          |
+| Deep links       | Dispatching a link by URL, the registered patterns, and a gate holding one back                  |
+| Storage          | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`      |
+| Logger           | Every logger method and structured metadata                                                      |
+| Utilities        | `If` toggling content, and a scoped event bus emitting and counting pings                        |
 
 Each section is its own file under `src/screens/showcase/sections/`. They're screen-local — the showcase is their only consumer — but split for the same reason `Modal`'s internals are: one file per concern beats one large screen file. The section list itself is a table in `screens/showcase/index.tsx`, so adding one is an entry there plus a file.
 
@@ -210,7 +211,8 @@ Two halves: **reading** what the user has turned on at the OS level, and **writi
 - **Both `accessibilityState` and `aria-*` are emitted, on purpose.** `accessibilityState` is what native reads and what testing-library asserts against; react-native-web 0.21 renders only the `aria-*` form. State set through `accessibilityState` alone therefore reaches native correctly and produces _nothing_ in the DOM — a gap the Jest suite can't see, since RNTL reads the React prop rather than the rendered output. Caught by inspecting a real rendered button (`role=button` present, `aria-selected` absent) and now covered by a test that asserts the `aria-*` mirror specifically. The Showcase exercises these states across its interactive sections.
 - **`headingA11yProps(level)`** marks text as a heading so screen-reader users can navigate by structure (VoiceOver's rotor, TalkBack's heading navigation) instead of reading top to bottom. It emits three spellings because no single one covers both platforms: `accessibilityRole="header"` for native, `role="heading"` for react-native-web (which turns it into a real `<h1>`–`<h6>` element), and `aria-level` to pick which one. That last prop isn't in RN's typings at all, and omitting it doesn't degrade gracefully — react-native-web falls back to `<h1>` for _every_ heading, flattening the outline the role exists to convey. `Text` applies this automatically; see below.
 - **`fieldA11yProps()`** carries a field's `error` as its `accessibilityHint`, which VoiceOver/TalkBack read after the label. RN has no "invalid" accessibility state to set — that's an ARIA concept with no React Native equivalent (`accessibilityInvalid` type-checks only because a spread suppresses excess-property checking, and does nothing at runtime) — so a hint is the portable way to announce _why_ a field is wrong instead of leaving the red border as the only signal.
-- **`decorativeA11yProps()`** is the opposite instruction: hide this from assistive technology entirely. It takes four spellings to say once — `accessible: false` so it never becomes an element, `accessibilityElementsHidden` (iOS) and `importantForAccessibility="no-hide-descendants"` (Android) to hide it _and its descendants_, and `aria-hidden` for the DOM react-native-web renders — and setting only some of them leaves the node announced on whichever platforms the rest covered. It's for things that exist only visually and have nothing to say: `Spacer` (below), a decorative rule, an icon beside a label that already names it. Without it a purely presentational node is still a stop a screen-reader user has to swipe past, announced as an empty element.
+- **`disabledA11yProps()`** is the opposite instruction: hide this from assistive technology entirely. It takes four spellings to say once — `accessible: false` so it never becomes an element, `accessibilityElementsHidden` (iOS) and `importantForAccessibility="no-hide-descendants"` (Android) to hide it _and its descendants_, and `aria-hidden` for the DOM react-native-web renders — and setting only some of them leaves the node announced on whichever platforms the rest covered. It's for things that exist only visually and have nothing to say: `Spacer` (below), a decorative rule, an icon beside a label that already names it. Without it a purely presentational node is still a stop a screen-reader user has to swipe past, announced as an empty element.
+- **`imageA11yProps({ label })`** names an image. An image is the one control-shaped thing with no text of its own to derive a name from, and `expo-image` defaults `accessible` to `false` — so an image left alone isn't an accessibility element on iOS or Android at all, and an undescribed one is announced as something a screen-reader user can neither read nor knowingly skip. It sets `accessible: true` alongside the usual two role spellings (`accessibilityRole="image"` for native, `role="img"` for react-native-web). `Image` (below) pairs it with `expo-image`'s own `alt`, which is what becomes the DOM `alt` attribute.
 
 ### Responsive units — `src/features/responsive`
 
@@ -497,6 +499,29 @@ import Accordion from "@/components/accordion";
 
 A titled, collapsible section — tapping the header toggles `children` between hidden and shown. The chevron on the right (via `Icon`) rotates 180° between collapsed/open with a Reanimated `withTiming`, rather than swapping between two separate icon assets, so there's only ever one glyph to keep in sync with state. `defaultOpen` (default `false`) controls the initial state. Content itself shows/hides instantly via `If` (above), not height-animated — animating to/from an unmeasured "auto" height is the fiddly part of building an accordion, and not worth taking on until there's a real need for that extra polish. The Showcase wraps each demo section in one.
 
+### `Image` — `src/components/image`
+
+```tsx
+import Image from "@/components/image";
+
+<Image source={user.avatarUrl} alt={`${user.name}'s avatar`} style={styles.avatar} />
+<Image source={require("...")} decorative style={styles.texture} />
+<Image source={url} fallback={DEFAULT_AVATAR} alt="Profile photo" />
+
+// from anywhere — no instance needed:
+await Image.preload([urlA, urlB]);
+await Image.cacheClear();
+```
+
+A wrapper over [`expo-image`](https://docs.expo.dev/versions/v57.0.0/sdk/image/) that adds the three things every call site would otherwise repeat. Everything else — `contentFit`, `transition`, `cachePolicy`, `placeholder`, `priority`, the load callbacks — is `expo-image`'s own API passed straight through; this is a wrapper, not a redesign.
+
+- **A fallback for when there's nothing to show.** Kicks in when `source` is missing (`null`, `undefined`, `""`, `[]`) _or_ fails to load. `""` is the one worth naming: it's what a record with no picture looks like straight out of an API, and a plain `expo-image` sits on it forever loading nothing. The default fallback is a **themed placeholder** (`fallback.tsx`) rather than a bundled PNG — a fixed placeholder asset is one set of greys, so whichever scheme it wasn't drawn for gets a light patch in a dark UI exactly where something already went wrong. Pass `fallback={source}` for a specific picture instead (a default avatar, a branded product shot), or `fallback={null}` to render nothing.
+- **`placeholder` and `fallback` are different things, and both are worth having.** A placeholder is what `expo-image` shows _while_ the real image loads and drops when it arrives; a fallback is what's shown when the real image is never going to arrive.
+- **A failed source recovers when the source changes**, because the failure is recorded as a key derived from the source's _value_, not a boolean. That's not incidental: a call site passing `source={{ uri }}` makes a new object every render, so an identity-keyed reset would clear the flag right after each error and re-render into the same failing load forever.
+- **Accessibility can't be forgotten.** `alt` and `decorative` are a union, not two optional props, so an image with neither is a `tsc` error — the same construction that makes an unnamed `IconButton` one. A described image gets `imageA11yProps()` (above) plus `expo-image`'s `alt`; a decorative one gets `disabledA11yProps()` and leaves the accessibility tree entirely. Every accessibility prop the component owns is `Omit`ted from its props type, so a caller can't half-override the set. **The description stays on the fallback too** — the image is gone, but what it was _for_ is still what the user needs to know about that spot, so it announces something missing rather than silently vanishing. Verified in the rendered DOM: a described image is `role="img"` with `alt="…"` on the `<img>`, a decorative one is `aria-hidden="true"` with neither, and a fallback placeholder keeps `role="img"` and its label.
+- **`Image.preload(urls, options?)`** warms the cache for images about to be needed — the next page of a feed, the photos behind a screen one tap away. Only remote URLs benefit; a `require()`d asset is in the bundle already. It resolves `false` if _any_ URL fails, and nothing treats that as fatal: a warm cache is an optimization, and a failed preload just means the image is fetched at render as it would have been anyway.
+- **`Image.cacheClear(target?)`** empties `expo-image`'s caches — after a sign-out when images are user-scoped, or from a "clear cached data" setting. Both caches by default; `"memory"` or `"disk"` narrows it. It resolves `false` on web (which has no cache of `expo-image`'s own) and on Android when the activity is gone, so `false` means "nothing was cleared", not "something broke" — which is exactly what the Showcase shows when you press it in a browser.
+
 ### `Grid` — `src/components/grid`
 
 ```tsx
@@ -550,7 +575,7 @@ An explicit gap between two elements — the version of a margin you can see in 
 - **`direction`** (`"vertical" | "horizontal" | "both"`, default `"vertical"`) picks which axes the gap occupies. The unused axis is left **unset rather than zeroed**, so a vertical spacer dropped into a row container takes no width of its own instead of forcing a 0-sized box into the layout. A gap only separates anything along its parent's own main axis, which is what the showcase section makes visible by switching the stage between a row and a column.
 - **`size`** takes a spacing-scale step _by name_ (`"x8"`, `"x16"`, …, exported as `SpacingToken` from `@/features/responsive`) so a step that isn't in the scale is a `tsc` error rather than a silent typo — the same guarantee a `spacing.x8` lookup already has. A raw px number is accepted for a gap the scale genuinely doesn't have, and goes through `units()` like every other size in the app. Defaults to `"x16"`.
 - **Prefer the parent's `gap` when the spacing is uniform** — it says "these are evenly spaced" once instead of once per gap. The two compose rather than replace each other: a `Spacer` inside a `gap`'d container adds the container's gap on _both_ sides of it.
-- **It is deliberately invisible to assistive technology.** A spacer carries nothing a screen-reader user could act on, so it spreads `decorativeA11yProps()` (above) and is hidden on every platform at once. Two things make that structural rather than a convention: the props are spread **after** the caller's, so an override can't undo the one guarantee the component makes, and every prop that would give it something to say (`accessible`, `accessibilityLabel`, `role`, the hide flags themselves, …) is `Omit`ted from its props type, so passing one is a `tsc` error rather than something you'd find later with VoiceOver. Its test suite asserts this from both sides: with `includeHiddenElements` a query finds the node, and _without_ it — which is what a screen reader effectively does — the same query returns nothing.
+- **It is deliberately invisible to assistive technology.** A spacer carries nothing a screen-reader user could act on, so it spreads `disabledA11yProps()` (above) and is hidden on every platform at once. Two things make that structural rather than a convention: the props are spread **after** the caller's, so an override can't undo the one guarantee the component makes, and every prop that would give it something to say (`accessible`, `accessibilityLabel`, `role`, the hide flags themselves, …) is `Omit`ted from its props type, so passing one is a `tsc` error rather than something you'd find later with VoiceOver. Its test suite asserts this from both sides: with `includeHiddenElements` a query finds the node, and _without_ it — which is what a screen reader effectively does — the same query returns nothing.
 
 ### `Screen` — `src/components/screen`
 

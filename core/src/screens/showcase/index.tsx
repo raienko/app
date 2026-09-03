@@ -15,6 +15,7 @@ import DeepLinksSection from "./sections/deep-links";
 import GridSection from "./sections/grid";
 import IconsSection from "./sections/icons";
 import ImagePickerSection from "./sections/image-picker";
+import ImagesSection from "./sections/images";
 import InputsSection from "./sections/inputs";
 import LocalizationSection from "./sections/localization";
 import LoggerSection from "./sections/logger";
@@ -61,6 +62,7 @@ const SECTIONS: {
   { title: "showcase.sliders", Component: SlidersSection },
   { title: "showcase.stateViews", Component: StateViewsSection },
   { title: "showcase.inputs", Component: InputsSection },
+  { title: "showcase.images", Component: ImagesSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },
   { title: "showcase.popups", Component: PopupsSection },

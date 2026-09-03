@@ -304,6 +304,40 @@ export function statusA11yProps({
   };
 }
 
+type ImageOptions = {
+  /**
+   * What the image conveys, in words — not "photo of" or the file's name.
+   * An image with nothing to convey isn't described, it's hidden: use
+   * `disabledA11yProps()` below instead.
+   */
+  label: string;
+};
+
+/**
+ * The accessibility props for an image that carries meaning. An image is
+ * the one control-shaped thing with no text of its own to derive a name
+ * from, so an undescribed one is announced as an anonymous element that a
+ * screen-reader user can neither read nor skip past knowingly.
+ *
+ * `accessible: true` is deliberate rather than redundant: `expo-image`
+ * defaults it to `false`, so an image left alone isn't an accessibility
+ * element on iOS or Android at all. `accessibilityRole="image"` is what
+ * native announces and `role="img"` is what react-native-web renders — the
+ * same two-spelling split as everything else here.
+ *
+ * Callers should also pass the label to `expo-image`'s own `alt`, which is
+ * what puts it in the DOM's `alt` attribute for web crawlers and link
+ * traversal — see `Image`.
+ */
+export function imageA11yProps({ label }: ImageOptions): AccessibilityProps {
+  return {
+    accessible: true,
+    accessibilityRole: "image",
+    role: "img",
+    accessibilityLabel: label,
+  };
+}
+
 /**
  * The accessibility props for something that exists only visually and has
  * nothing to say — a `Spacer`, a decorative rule, an icon sitting beside a
