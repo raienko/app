@@ -2,6 +2,8 @@
   "common": {
     "close": "关闭",
     "cancel": "取消",
+    "confirm": "确认",
+    "ok": "好",
     "done": "完成"
   },
   "input": {
@@ -129,6 +131,7 @@
     "inputs": "输入框",
     "imagePicker": "图片选择器",
     "modals": "模态框",
+    "popups": "弹出对话框",
     "toasts": "轻提示",
     "permissions": "权限",
     "deepLinks": "深层链接",

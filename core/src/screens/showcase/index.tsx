@@ -19,6 +19,7 @@ import LocalizationSection from "./sections/localization";
 import LoggerSection from "./sections/logger";
 import ModalsSection from "./sections/modals";
 import PermissionsSection from "./sections/permissions";
+import PopupsSection from "./sections/popups";
 import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
 import ThemeSection from "./sections/theme";
@@ -50,6 +51,7 @@ const SECTIONS: {
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },
+  { title: "showcase.popups", Component: PopupsSection },
   { title: "showcase.toasts", Component: ToastsSection },
   { title: "showcase.permissions", Component: PermissionsSection },
   { title: "showcase.deepLinks", Component: DeepLinksSection },

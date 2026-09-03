@@ -2,6 +2,8 @@
   "common": {
     "close": "Close",
     "cancel": "Cancel",
+    "confirm": "Confirm",
+    "ok": "OK",
     "done": "Done"
   },
   "input": {
@@ -129,6 +131,7 @@
     "inputs": "Inputs",
     "imagePicker": "Image picker",
     "modals": "Modals",
+    "popups": "Popups",
     "toasts": "Toasts",
     "permissions": "Permissions",
     "deepLinks": "Deep links",

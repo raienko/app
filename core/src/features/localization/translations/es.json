@@ -2,6 +2,8 @@
   "common": {
     "close": "Cerrar",
     "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "ok": "Aceptar",
     "done": "Hecho"
   },
   "input": {
@@ -129,6 +131,7 @@
     "inputs": "Campos de entrada",
     "imagePicker": "Selector de imágenes",
     "modals": "Ventanas modales",
+    "popups": "Diálogos emergentes",
     "toasts": "Avisos",
     "permissions": "Permisos",
     "deepLinks": "Enlaces profundos",

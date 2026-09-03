@@ -2,6 +2,8 @@
   "common": {
     "close": "閉じる",
     "cancel": "キャンセル",
+    "confirm": "確認",
+    "ok": "OK",
     "done": "完了"
   },
   "input": {
@@ -129,6 +131,7 @@
     "inputs": "入力フィールド",
     "imagePicker": "画像ピッカー",
     "modals": "モーダル",
+    "popups": "ポップアップ",
     "toasts": "トースト",
     "permissions": "権限",
     "deepLinks": "ディープリンク",
