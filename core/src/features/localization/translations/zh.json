@@ -115,6 +115,7 @@
     "imagePicker": "图片选择器",
     "modals": "模态框",
     "permissions": "权限",
+    "deepLinks": "深层链接",
     "storage": "存储",
     "logger": "日志",
     "utilities": "实用工具",

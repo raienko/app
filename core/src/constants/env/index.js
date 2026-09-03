@@ -24,6 +24,14 @@ function optional(value) {
   return normalized || undefined;
 }
 
+/** A comma-separated var as a list, with blanks and stray spaces dropped. */
+function list(value) {
+  return (value ?? "")
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
+}
+
 const env = {
   appName: required("EXPO_PUBLIC_APP_NAME", process.env.EXPO_PUBLIC_APP_NAME),
   appSlug: required("EXPO_PUBLIC_APP_SLUG", process.env.EXPO_PUBLIC_APP_SLUG),
@@ -36,6 +44,12 @@ const env = {
     process.env.EXPO_PUBLIC_APP_BUNDLE_ID,
   ),
   projectId: optional(process.env.EXPO_PUBLIC_EAS_PROJECT_ID),
+  // Domains this app is allowed to open universal links (iOS) and app links
+  // (Android) for. Read twice: app.config.ts turns them into the native
+  // associated-domain/intent-filter entries that make the OS deliver those
+  // links here at all, and @/features/deep-links checks incoming URLs
+  // against them so a link for someone else's site opens in the browser.
+  appLinkDomains: list(process.env.EXPO_PUBLIC_APP_LINK_DOMAINS),
 };
 
 module.exports = env;

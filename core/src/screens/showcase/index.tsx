@@ -10,6 +10,7 @@ import { createStyles, useSizes } from "@/features/responsive";
 
 import AccessibilitySection from "./sections/accessibility";
 import ButtonsSection from "./sections/buttons";
+import DeepLinksSection from "./sections/deep-links";
 import GridSection from "./sections/grid";
 import IconsSection from "./sections/icons";
 import ImagePickerSection from "./sections/image-picker";
@@ -49,6 +50,7 @@ const SECTIONS: {
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },
   { title: "showcase.permissions", Component: PermissionsSection },
+  { title: "showcase.deepLinks", Component: DeepLinksSection },
   { title: "showcase.storage", Component: StorageSection },
   { title: "showcase.logger", Component: LoggerSection },
   { title: "showcase.utilities", Component: UtilitiesSection },

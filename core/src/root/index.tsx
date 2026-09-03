@@ -17,6 +17,8 @@ type Props = {
  * - global listeners/services that should run for the lifetime of the app
  *   (analytics init, push notification listeners, app-state listeners, ...) —
  *   set those up here via useEffect once there's a concrete one to add.
+ *   Ones that Storybook and Jest should get too go in providers.tsx
+ *   instead, next to `Permissions` and `DeepLinks`.
  */
 function Root({ children }: Props) {
   return (

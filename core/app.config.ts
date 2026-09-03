@@ -9,6 +9,38 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 const env = require("./src/constants/env");
 const storybookEnabled = process.env.STORYBOOK_ENABLED === "true";
 
+// Universal links (iOS) and app links (Android) only ever reach the app if
+// the OS knows the app claims those domains, so both native declarations are
+// generated from the one list in EXPO_PUBLIC_APP_LINK_DOMAINS. Left out
+// entirely when it's empty: an empty associatedDomains array is not the same
+// as no entitlement, and an intent filter with no data is a filter that
+// matches nothing. Custom-scheme deep links (`scheme` above) need none of
+// this and work either way.
+const appLinkDomains: string[] = env.appLinkDomains;
+
+const iosAppLinks =
+  appLinkDomains.length > 0
+    ? {
+        associatedDomains: appLinkDomains.map((domain) => `applinks:${domain}`),
+      }
+    : {};
+
+const androidAppLinks =
+  appLinkDomains.length > 0
+    ? {
+        intentFilters: [
+          {
+            action: "VIEW",
+            // Verified against /.well-known/assetlinks.json on each domain,
+            // which is what lets the link open the app without a chooser.
+            autoVerify: true,
+            category: ["BROWSABLE", "DEFAULT"],
+            data: appLinkDomains.map((host) => ({ scheme: "https", host })),
+          },
+        ],
+      }
+    : {};
+
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: env.appName,
@@ -22,6 +54,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config.ios,
     bundleIdentifier: env.appBundleId,
     icon: "./assets/expo.icon",
+    ...iosAppLinks,
   },
   android: {
     ...config.android,
@@ -33,9 +66,10 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       monochromeImage: "./assets/images/android-icon-monochrome.png",
     },
     predictiveBackGestureEnabled: false,
+    ...androidAppLinks,
   },
   web: {
-    output: "static",
+    output: "single",
     favicon: "./assets/images/favicon.png",
   },
   extra: {

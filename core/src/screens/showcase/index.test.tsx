@@ -16,6 +16,7 @@ const SECTION_TITLES = [
   "Image picker",
   "Modals",
   "Permissions",
+  "Deep links",
   "Storage",
   "Logger",
   "Utilities",

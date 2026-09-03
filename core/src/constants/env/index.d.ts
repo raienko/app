@@ -4,6 +4,9 @@ declare const env: {
   readonly appScheme: string;
   readonly appBundleId: string;
   readonly projectId: string | undefined;
+  readonly appLinkDomains: readonly string[];
 };
+
+export type Env = typeof env;
 
 export default env;

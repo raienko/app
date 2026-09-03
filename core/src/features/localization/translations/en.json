@@ -115,6 +115,7 @@
     "imagePicker": "Image picker",
     "modals": "Modals",
     "permissions": "Permissions",
+    "deepLinks": "Deep links",
     "storage": "Storage",
     "logger": "Logger",
     "utilities": "Utilities",
