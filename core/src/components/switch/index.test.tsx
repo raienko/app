@@ -43,17 +43,27 @@ describe(`${Component.name} smoke test`, () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it("renders the Expo UI variation through the same public API", async () => {
+  it("renders and changes the Expo variation through the same public API", async () => {
+    const user = userEvent.setup();
+    const onChange = jest.fn();
     await render(
       <Component
         type="expo"
         label="Expo option"
         value
-        onChange={() => {}}
+        onChange={onChange}
         testID="expo-switch"
       />,
     );
 
-    expect(screen.getByTestId("expo-switch")).toBeOnTheScreen();
+    const control = screen.getByRole("switch", {
+      name: "Expo option",
+      checked: true,
+    });
+    expect(control).toBe(screen.getByTestId("expo-switch"));
+
+    await user.press(control);
+
+    expect(onChange).toHaveBeenCalledWith(false);
   });
 });

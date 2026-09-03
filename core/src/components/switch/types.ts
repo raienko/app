@@ -15,3 +15,7 @@ export type SwitchProps = ComponentTypeProps & {
 };
 
 export type SwitchImplementationProps = Omit<SwitchProps, "type">;
+
+export type SwitchIndicatorProps = Pick<SwitchProps, "value"> & {
+  disabled: boolean;
+};
