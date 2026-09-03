@@ -59,6 +59,23 @@ export function Password() {
   );
 }
 
+export function Checklist() {
+  const [value, setValue] = useState<string[]>(["design"]);
+  return (
+    <Component
+      type="checklist"
+      label="Interests"
+      value={value}
+      onChange={setValue}
+      options={[
+        { value: "design", label: "Design" },
+        { value: "engineering", label: "Engineering" },
+        { value: "research", label: "Research" },
+      ]}
+    />
+  );
+}
+
 // Controlled demo — Storybook args don't feed back into a controlled
 // TextInput's value, so this story owns its own state. See ./text and
 // ./numeric for each variation's own story set.

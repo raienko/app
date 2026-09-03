@@ -74,6 +74,16 @@
         "search": "国または国番号を検索",
         "empty": "国が見つかりません"
       }
+    },
+    "checklist": {
+      "label": "興味",
+      "helper": "該当するものをすべて選択してください",
+      "options": {
+        "design": "デザイン",
+        "engineering": "エンジニアリング",
+        "research": "リサーチ",
+        "unavailable": "選択できない項目"
+      }
     }
   },
   "modal": {
@@ -129,6 +139,7 @@
     "grid": "グリッド",
     "icons": "アイコン",
     "buttons": "ボタン",
+    "checkboxes": "チェックボックス",
     "inputs": "入力フィールド",
     "imagePicker": "画像ピッカー",
     "modals": "モーダル",
@@ -140,5 +151,10 @@
     "logger": "ロガー",
     "utilities": "ユーティリティ",
     "sampleSentence": "素早い茶色の狐が怠け者の犬を飛び越えた。"
+  },
+  "checkbox": {
+    "custom": "カスタムチェックボックス",
+    "expo": "Expo UIチェックボックス",
+    "disabled": "無効・選択済み"
   }
 }

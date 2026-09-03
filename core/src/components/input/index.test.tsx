@@ -125,6 +125,23 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(onChange).toHaveBeenCalledWith("123");
   });
 
+  it("routes to the checklist variation when type='checklist'", async () => {
+    const onChange = jest.fn();
+    await render(
+      <Component
+        type="checklist"
+        label="Interests"
+        value={[]}
+        onChange={onChange}
+        options={[{ value: "design", label: "Design" }]}
+      />,
+    );
+
+    await fireEvent.press(screen.getByRole("checkbox", { name: "Design" }));
+
+    expect(onChange).toHaveBeenCalledWith(["design"]);
+  });
+
   it("routes to the phone variation when type='phone'", async () => {
     const onChange = jest.fn();
     await render(

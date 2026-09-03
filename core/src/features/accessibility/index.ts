@@ -6,6 +6,7 @@ export {
   useFontScale,
 } from "./hooks";
 export {
+  checkboxA11yProps,
   controlA11yProps,
   fieldA11yProps,
   headingA11yProps,

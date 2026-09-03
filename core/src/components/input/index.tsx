@@ -7,6 +7,7 @@ import {
 import type { TextInput as RNTextInputInstance } from "react-native";
 
 import CodeInput from "./code";
+import ChecklistInput from "./checklist";
 import DateTimeInput from "./datetime";
 import EmailInput from "./email";
 import NumericInput from "./numeric";
@@ -55,6 +56,7 @@ function renderVariant<P>(
  * @example <Input type="password" value={password} onChange={setPassword} />
  * @example <Input type="code" value={code} onChange={setCode} onComplete={verify} />
  * @example <Input type="phone" defaultCountry="US" value={phone} onChange={setPhone} />
+ * @example <Input type="checklist" value={topics} onChange={setTopics} options={options} />
  * @example <Input value={query} onChange={setQuery} leftSlot={<Icon name="search" />} />
  */
 const Input = forwardRef<RNTextInputInstance, InputProps>(
@@ -72,6 +74,8 @@ const Input = forwardRef<RNTextInputInstance, InputProps>(
         return renderVariant(PasswordInput, props, ref);
       case "code":
         return renderVariant(CodeInput, props, ref);
+      case "checklist":
+        return renderVariant(ChecklistInput, props, ref);
       case "phone":
         return renderVariant(PhoneInput, props, ref);
       default:
@@ -88,6 +92,7 @@ export default Input;
 // props) can reach them through this folder's entry point, rather than
 // importing from ./types directly.
 export type {
+  ChecklistOption,
   DateTimeMode,
   InputProps,
   PhoneCountryCode,

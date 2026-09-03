@@ -106,6 +106,37 @@ export function controlA11yProps({
   };
 }
 
+type CheckboxOptions = {
+  /** The visible label that names the checkbox. */
+  label: string;
+  checked: boolean;
+  disabled?: boolean;
+};
+
+/**
+ * The native and web accessibility contract for a custom checkbox.
+ *
+ * A checkbox is not a button with a selected state: assistive technology
+ * has a dedicated checkbox role and checked state, and both need to be
+ * exposed. As with the other helpers in this file, both React Native and
+ * ARIA spellings are emitted because each platform consumes a different
+ * half of the pair.
+ */
+export function checkboxA11yProps({
+  label,
+  checked,
+  disabled = false,
+}: CheckboxOptions): AccessibilityProps {
+  return {
+    accessibilityRole: "checkbox",
+    role: "checkbox",
+    accessibilityLabel: label,
+    accessibilityState: { checked, disabled },
+    "aria-checked": checked,
+    "aria-disabled": disabled,
+  };
+}
+
 type FieldOptions = {
   /** A field's visible label, or its placeholder when it has no label. */
   label?: string;

@@ -1,4 +1,38 @@
-import { controlA11yProps, fieldA11yProps, statusA11yProps } from "./props";
+import {
+  checkboxA11yProps,
+  controlA11yProps,
+  fieldA11yProps,
+  statusA11yProps,
+} from "./props";
+
+describe("checkboxA11yProps", () => {
+  it("exposes a checkbox's name, checked state, and disabled state", () => {
+    const props = checkboxA11yProps({
+      label: "Accept terms",
+      checked: true,
+      disabled: false,
+    });
+
+    expect(props.accessibilityRole).toBe("checkbox");
+    expect(props.role).toBe("checkbox");
+    expect(props.accessibilityLabel).toBe("Accept terms");
+    expect(props.accessibilityState).toEqual({
+      checked: true,
+      disabled: false,
+    });
+  });
+
+  it("mirrors checkbox state to aria-* for web", () => {
+    const props = checkboxA11yProps({
+      label: "Accept terms",
+      checked: false,
+      disabled: true,
+    });
+
+    expect(props["aria-checked"]).toBe(false);
+    expect(props["aria-disabled"]).toBe(true);
+  });
+});
 
 describe("controlA11yProps", () => {
   it("always marks the element as a button", () => {

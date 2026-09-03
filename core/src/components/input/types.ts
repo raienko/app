@@ -2,6 +2,8 @@ import type { CountryCode } from "libphonenumber-js";
 import type { ReactNode } from "react";
 import type { StyleProp, TextInputProps, ViewStyle } from "react-native";
 
+import type { ComponentType } from "@/components/types";
+
 /**
  * Shared across every input variation. Type-specific props (value/onChange's
  * exact shape, plus whatever extras that type needs) live in that type's own
@@ -155,6 +157,33 @@ export type SelectInputTypeProps = {
   options: SelectOption[];
 };
 
+/** One independently selectable item in a `checklist`. */
+export type ChecklistOption = {
+  value: string;
+  label: string;
+  disabled?: boolean;
+  testID?: string;
+};
+
+export type ChecklistInputTypeProps = {
+  type: "checklist";
+  /** The values of every currently checked option. */
+  value: string[];
+  /** Reports a new array whenever one option is checked or unchecked. */
+  onChange: (value: string[]) => void;
+  options: ChecklistOption[];
+  /** Chooses the implementation used by every checkbox in the list. */
+  checkboxType?: ComponentType;
+  /** A checklist has no editable text surface for these common input props. */
+  placeholder?: never;
+  leftSlot?: never;
+  rightSlot?: never;
+  autoCapitalize?: never;
+  autoCorrect?: never;
+  onFocus?: never;
+  onBlur?: never;
+};
+
 /**
  * Which parts of a moment a `datetime` field asks for. Defaults to
  * `"datetime"`; the other two hide the half they don't need.
@@ -182,6 +211,7 @@ export type InputProps = (
   | NumericInputTypeProps
   | EmailInputTypeProps
   | SelectInputTypeProps
+  | ChecklistInputTypeProps
   | DateTimeInputTypeProps
   | PasswordInputTypeProps
   | CodeInputTypeProps

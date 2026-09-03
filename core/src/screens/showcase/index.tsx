@@ -10,6 +10,7 @@ import { createStyles, useSizes } from "@/features/responsive";
 
 import AccessibilitySection from "./sections/accessibility";
 import ButtonsSection from "./sections/buttons";
+import CheckboxesSection from "./sections/checkboxes";
 import DeepLinksSection from "./sections/deep-links";
 import GridSection from "./sections/grid";
 import IconsSection from "./sections/icons";
@@ -48,6 +49,7 @@ const SECTIONS: {
   { title: "showcase.grid", Component: GridSection },
   { title: "showcase.icons", Component: IconsSection },
   { title: "showcase.buttons", Component: ButtonsSection },
+  { title: "showcase.checkboxes", Component: CheckboxesSection },
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },

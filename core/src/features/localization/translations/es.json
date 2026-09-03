@@ -74,6 +74,16 @@
         "search": "Buscar país o prefijo",
         "empty": "No se encontraron países"
       }
+    },
+    "checklist": {
+      "label": "Intereses",
+      "helper": "Elige todas las opciones que correspondan",
+      "options": {
+        "design": "Diseño",
+        "engineering": "Ingeniería",
+        "research": "Investigación",
+        "unavailable": "Opción no disponible"
+      }
     }
   },
   "modal": {
@@ -129,6 +139,7 @@
     "grid": "Cuadrícula",
     "icons": "Iconos",
     "buttons": "Botones",
+    "checkboxes": "Casillas",
     "inputs": "Campos de entrada",
     "imagePicker": "Selector de imágenes",
     "modals": "Ventanas modales",
@@ -140,5 +151,10 @@
     "logger": "Registro",
     "utilities": "Utilidades",
     "sampleSentence": "El veloz murciélago hindú comía feliz cardillo y kiwi."
+  },
+  "checkbox": {
+    "custom": "Casilla personalizada",
+    "expo": "Casilla de Expo UI",
+    "disabled": "Deshabilitada y marcada"
   }
 }

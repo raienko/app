@@ -74,6 +74,16 @@
         "search": "Search country or calling code",
         "empty": "No countries found"
       }
+    },
+    "checklist": {
+      "label": "Interests",
+      "helper": "Choose as many as apply",
+      "options": {
+        "design": "Design",
+        "engineering": "Engineering",
+        "research": "Research",
+        "unavailable": "Unavailable option"
+      }
     }
   },
   "modal": {
@@ -129,6 +139,7 @@
     "grid": "Grid",
     "icons": "Icons",
     "buttons": "Buttons",
+    "checkboxes": "Checkboxes",
     "inputs": "Inputs",
     "imagePicker": "Image picker",
     "modals": "Modals",
@@ -140,5 +151,10 @@
     "logger": "Logger",
     "utilities": "Utilities",
     "sampleSentence": "The quick brown fox jumps over the lazy dog."
+  },
+  "checkbox": {
+    "custom": "Custom checkbox",
+    "expo": "Expo UI checkbox",
+    "disabled": "Disabled and checked"
   }
 }

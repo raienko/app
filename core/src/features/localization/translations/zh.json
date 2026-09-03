@@ -74,6 +74,16 @@
         "search": "搜索国家或地区代码",
         "empty": "未找到国家或地区"
       }
+    },
+    "checklist": {
+      "label": "兴趣",
+      "helper": "请选择所有适用项",
+      "options": {
+        "design": "设计",
+        "engineering": "工程",
+        "research": "研究",
+        "unavailable": "不可用选项"
+      }
     }
   },
   "modal": {
@@ -129,6 +139,7 @@
     "grid": "栅格",
     "icons": "图标",
     "buttons": "按钮",
+    "checkboxes": "复选框",
     "inputs": "输入框",
     "imagePicker": "图片选择器",
     "modals": "模态框",
@@ -140,5 +151,10 @@
     "logger": "日志",
     "utilities": "实用工具",
     "sampleSentence": "敏捷的棕色狐狸跳过了那只懒狗。"
+  },
+  "checkbox": {
+    "custom": "自定义复选框",
+    "expo": "Expo UI 复选框",
+    "disabled": "已禁用且选中"
   }
 }
