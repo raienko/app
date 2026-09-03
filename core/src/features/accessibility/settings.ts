@@ -1,5 +1,7 @@
 import { AccessibilityInfo } from "react-native";
 
+import readScreenReaderEnabled from "./screen-reader";
+
 /**
  * Every OS accessibility flag this app reacts to, as data: which
  * `AccessibilityInfo` query reads it, and which event fires when the user
@@ -15,7 +17,7 @@ import { AccessibilityInfo } from "react-native";
 export const ACCESSIBILITY_FLAGS = {
   /** VoiceOver (iOS) / TalkBack (Android) is running. */
   isScreenReaderEnabled: {
-    query: () => AccessibilityInfo.isScreenReaderEnabled(),
+    query: readScreenReaderEnabled,
     event: "screenReaderChanged",
   },
   /** "Reduce Motion" — animations should be shortened or skipped. */

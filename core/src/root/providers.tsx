@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+import { ToastsProvider } from "@/components/toast";
 import { AccessibilityProvider } from "@/features/accessibility";
 import { DeepLinks } from "@/features/deep-links";
 import { LocaleProvider } from "@/features/localization";
@@ -19,13 +20,22 @@ type Props = {
  * provider is added in exactly one place and every screen, test, and story
  * picks it up automatically — see src/root/index.tsx and src/root/testing.tsx.
  *
- * Not every entry is a context provider: `Permissions` and `DeepLinks` own
- * app-lifetime lifecycle rather than a value — keeping the OS permission
- * snapshots fresh, and subscribing to incoming links. They live here so
- * they're mounted exactly once, wrapping everything, on the same "add it in
- * one place" terms as the providers. Neither does anything in Storybook or
- * Jest: their state lives outside React (a LocalValue, a singleton), and
- * the deep-link pipeline stays gated shut without a navigator to route into.
+ * Not every entry is a context provider: `Permissions`, `DeepLinks` and
+ * `ToastsProvider` own app-lifetime lifecycle or overlay UI rather than a
+ * value — keeping the OS permission snapshots fresh, subscribing to
+ * incoming links, and rendering whatever toasts are currently up. They live
+ * here so they're mounted exactly once, wrapping everything, on the same
+ * "add it in one place" terms as the providers. The first two do nothing in
+ * Storybook or Jest: their state lives outside React (a LocalValue, a
+ * singleton), and the deep-link pipeline stays gated shut without a
+ * navigator to route into. `ToastsProvider` is the exception that earns its
+ * place here rather than in `Root` — a story or a test that calls
+ * `Toast.show()` should see a toast, which it only can if the thing that
+ * renders them is part of the shared tree.
+ *
+ * `ToastsProvider` is innermost so its overlay sits above every screen and
+ * can read the theme, locale and safe-area insets the ones above it
+ * provide.
  *
  * GestureHandlerRootView is here (rather than only where a gesture is used,
  * e.g. Modal's bottom-sheet swipe-to-dismiss) because react-native-gesture-handler
@@ -40,7 +50,9 @@ export default function Providers({ children }: Props) {
           <Permissions>
             <DeepLinks>
               <ThemeProvider>
-                <LocaleProvider>{children}</LocaleProvider>
+                <LocaleProvider>
+                  <ToastsProvider>{children}</ToastsProvider>
+                </LocaleProvider>
               </ThemeProvider>
             </DeepLinks>
           </Permissions>

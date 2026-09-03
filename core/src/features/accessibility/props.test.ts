@@ -1,4 +1,4 @@
-import { controlA11yProps, fieldA11yProps } from "./props";
+import { controlA11yProps, fieldA11yProps, statusA11yProps } from "./props";
 
 describe("controlA11yProps", () => {
   it("always marks the element as a button", () => {
@@ -83,6 +83,34 @@ describe("fieldA11yProps", () => {
   it("has no hint when there is no error", () => {
     expect(fieldA11yProps({ label: "Email" })).not.toHaveProperty(
       "accessibilityHint",
+    );
+  });
+});
+
+describe("statusA11yProps", () => {
+  it("announces politely by default", () => {
+    const props = statusA11yProps();
+
+    expect(props.accessibilityLiveRegion).toBe("polite");
+    expect(props["aria-live"]).toBe("polite");
+    expect(props.role).toBe("status");
+  });
+
+  // Interrupting is exactly as rude as it sounds, so only something the
+  // user has to act on now should ask for it.
+  it("interrupts only when asked to", () => {
+    const props = statusA11yProps({ urgency: "assertive" });
+
+    expect(props.accessibilityLiveRegion).toBe("assertive");
+    expect(props["aria-live"]).toBe("assertive");
+    expect(props.role).toBe("alert");
+  });
+
+  it("omits the label when the region's own text is the whole message", () => {
+    expect(statusA11yProps()).not.toHaveProperty("accessibilityLabel");
+    expect(statusA11yProps({ label: "Error, Could not save" })).toHaveProperty(
+      "accessibilityLabel",
+      "Error, Could not save",
     );
   });
 });

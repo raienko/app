@@ -92,6 +92,21 @@
       "content": "全屏模态框"
     }
   },
+  "toast": {
+    "success": "成功",
+    "error": "错误",
+    "warning": "警告",
+    "info": "信息",
+    "openHint": "打开关联页面",
+    "showcase": {
+      "message": "你的更改已保存。",
+      "errorTitle": "上传失败",
+      "errorMessage": "点按查看出了什么问题。",
+      "action": "查看",
+      "sticky": "这条会一直显示，直到你关闭它。",
+      "expiring": "这条将在三秒后消失。"
+    }
+  },
   "theme": {
     "light": "浅色",
     "dark": "深色",
@@ -114,6 +129,7 @@
     "inputs": "输入框",
     "imagePicker": "图片选择器",
     "modals": "模态框",
+    "toasts": "轻提示",
     "permissions": "权限",
     "deepLinks": "深层链接",
     "storage": "存储",

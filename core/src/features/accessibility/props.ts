@@ -138,3 +138,44 @@ export function fieldA11yProps({
     ...(error === undefined ? null : { accessibilityHint: error }),
   };
 }
+
+type StatusOptions = {
+  /**
+   * How urgently the message should reach a screen reader. `"polite"` waits
+   * for a pause in whatever is being read; `"assertive"` interrupts it.
+   * Reserve assertive for something the user has to act on now — an error —
+   * since interrupting is exactly as rude as it sounds.
+   */
+  urgency?: "polite" | "assertive";
+  /**
+   * What a screen reader announces instead of the region's own text. Useful
+   * when the visible copy isn't the whole message — a `Toast` prefixes its
+   * type ("Error, ...") because the colour and icon that convey it visually
+   * say nothing out loud.
+   */
+  label?: string;
+};
+
+/**
+ * The accessibility props for a region that appears (or changes) on its own
+ * and should be announced without the user having to go find it — a toast,
+ * an inline validation summary, a "saved" confirmation.
+ *
+ * Three spellings again, and again none of them covers everything:
+ * `accessibilityLiveRegion` is Android's, `aria-live` is what
+ * react-native-web turns into a real live region, and `role`
+ * (`"status"`/`"alert"`) is what iOS VoiceOver and the DOM both understand.
+ * iOS has no live-region concept at all, so a caller that must be heard
+ * there announces explicitly on top of this — see `Toast`.
+ */
+export function statusA11yProps({
+  urgency = "polite",
+  label,
+}: StatusOptions = {}): AccessibilityProps {
+  return {
+    accessibilityLiveRegion: urgency,
+    "aria-live": urgency,
+    role: urgency === "assertive" ? "alert" : "status",
+    ...(label === undefined ? null : { accessibilityLabel: label }),
+  };
+}

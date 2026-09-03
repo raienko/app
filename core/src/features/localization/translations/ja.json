@@ -92,6 +92,21 @@
       "content": "フルスクリーンモーダル"
     }
   },
+  "toast": {
+    "success": "成功",
+    "error": "エラー",
+    "warning": "警告",
+    "info": "情報",
+    "openHint": "リンク先の画面を開きます",
+    "showcase": {
+      "message": "変更を保存しました。",
+      "errorTitle": "アップロードに失敗しました",
+      "errorMessage": "タップして原因を確認してください。",
+      "action": "表示",
+      "sticky": "これは閉じるまで表示され続けます。",
+      "expiring": "これは3秒後に消えます。"
+    }
+  },
   "theme": {
     "light": "ライト",
     "dark": "ダーク",
@@ -114,6 +129,7 @@
     "inputs": "入力フィールド",
     "imagePicker": "画像ピッカー",
     "modals": "モーダル",
+    "toasts": "トースト",
     "permissions": "権限",
     "deepLinks": "ディープリンク",
     "storage": "ストレージ",

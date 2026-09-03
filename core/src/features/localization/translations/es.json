@@ -92,6 +92,21 @@
       "content": "Modal a pantalla completa"
     }
   },
+  "toast": {
+    "success": "Éxito",
+    "error": "Error",
+    "warning": "Advertencia",
+    "info": "Información",
+    "openHint": "Abre la pantalla enlazada",
+    "showcase": {
+      "message": "Se han guardado tus cambios.",
+      "errorTitle": "Error al subir",
+      "errorMessage": "Toca para ver qué ha fallado.",
+      "action": "Ver",
+      "sticky": "Este permanece hasta que lo cierres.",
+      "expiring": "Este caduca en tres segundos."
+    }
+  },
   "theme": {
     "light": "Claro",
     "dark": "Oscuro",
@@ -114,6 +129,7 @@
     "inputs": "Campos de entrada",
     "imagePicker": "Selector de imágenes",
     "modals": "Ventanas modales",
+    "toasts": "Avisos",
     "permissions": "Permisos",
     "deepLinks": "Enlaces profundos",
     "storage": "Almacenamiento",

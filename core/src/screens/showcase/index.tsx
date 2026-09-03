@@ -22,6 +22,7 @@ import PermissionsSection from "./sections/permissions";
 import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
 import ThemeSection from "./sections/theme";
+import ToastsSection from "./sections/toasts";
 import TypographySection from "./sections/typography";
 import UtilitiesSection from "./sections/utilities";
 
@@ -49,6 +50,7 @@ const SECTIONS: {
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },
+  { title: "showcase.toasts", Component: ToastsSection },
   { title: "showcase.permissions", Component: PermissionsSection },
   { title: "showcase.deepLinks", Component: DeepLinksSection },
   { title: "showcase.storage", Component: StorageSection },

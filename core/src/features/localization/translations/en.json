@@ -92,6 +92,21 @@
       "content": "Fullscreen modal"
     }
   },
+  "toast": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information",
+    "openHint": "Opens the linked screen",
+    "showcase": {
+      "message": "Your changes have been saved.",
+      "errorTitle": "Upload failed",
+      "errorMessage": "Tap to see what went wrong.",
+      "action": "View",
+      "sticky": "This one stays until you close it.",
+      "expiring": "This one expires in three seconds."
+    }
+  },
   "theme": {
     "light": "Light",
     "dark": "Dark",
@@ -114,6 +129,7 @@
     "inputs": "Inputs",
     "imagePicker": "Image picker",
     "modals": "Modals",
+    "toasts": "Toasts",
     "permissions": "Permissions",
     "deepLinks": "Deep links",
     "storage": "Storage",

@@ -9,6 +9,7 @@ export {
   controlA11yProps,
   fieldA11yProps,
   headingA11yProps,
+  statusA11yProps,
   type HeadingLevel,
 } from "./props";
 export { ACCESSIBILITY_FLAGS } from "./settings";

@@ -6,3 +6,7 @@
  */
 export { default } from "./icon";
 export { default as withIconDefaults } from "./with-icon-defaults";
+// The glyph-name types, so a component that stores an icon name as *data*
+// (Toast's per-type config, say) can type that field without reaching
+// into this folder's internals.
+export type { IconNameByType, IconSetType } from "./icon-sets";
