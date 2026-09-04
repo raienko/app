@@ -1,5 +1,6 @@
 import {
   translations,
+  type AppTranslationKey,
   type LocaleCode,
   type TranslationKey,
 } from "./translations";
@@ -126,5 +127,8 @@ export type Locale = {
   weekStartsOn: number;
   preference: LocalePreference;
   setPreference: (preference: LocalePreference) => void;
-  t: (key: TranslationKey, params?: Record<string, string | number>) => string;
+  t: (
+    key: TranslationKey | AppTranslationKey,
+    params?: Record<string, string | number>,
+  ) => string;
 };

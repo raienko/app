@@ -63,7 +63,7 @@ const REQUIRED_KEYS: (keyof ThemeColors)[] = [
   "onPrimary",
 ];
 
-function validate(
+export function validatePalette(
   scheme: ColorScheme,
   palette: Partial<ThemeColors>,
 ): ThemeColors {
@@ -76,6 +76,25 @@ function validate(
 }
 
 export const colors: Record<ColorScheme, ThemeColors> = {
-  light: validate("light", rawColors.light),
-  dark: validate("dark", rawColors.dark),
+  light: validatePalette("light", rawColors.light),
+  dark: validatePalette("dark", rawColors.dark),
 };
+
+export type ThemeOverrides = Partial<{
+  light: Partial<ThemeColors>;
+  dark: Partial<ThemeColors>;
+}>;
+
+/**
+ * Returns an application palette layered over immutable core defaults. Every
+ * scheme is validated after composition, so an incomplete app override still
+ * receives core fallbacks while malformed values fail early.
+ */
+export function composePalette(
+  overrides?: ThemeOverrides,
+): Record<ColorScheme, ThemeColors> {
+  return {
+    light: validatePalette("light", { ...colors.light, ...overrides?.light }),
+    dark: validatePalette("dark", { ...colors.dark, ...overrides?.dark }),
+  };
+}

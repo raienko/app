@@ -1027,6 +1027,26 @@ import { render, screen } from "@/root/testing";
 
 That `render` is a drop-in replacement that already wraps the tree in `Providers`. Adding a new provider in `providers.tsx` — a state provider, an auth provider, whatever comes next — makes it available to the real app, every Storybook story, and every test's `render()` in one edit; no per-file changes needed. (`src/root/index.test.tsx` is the one exception — it tests `Root` itself, so it renders unwrapped, via `@testing-library/react-native` directly.)
 
+`Root` and `Providers` also accept an optional `config` object. Core defaults remain intact; an app can layer in its palette tokens and its own namespaced strings without editing `core`:
+
+```tsx
+<Root
+  config={{
+    theme: { overrides: { light: { primary: "#2a6dff" } } },
+    locale: {
+      translations: {
+        en: { app: { home: { title: "Home" } } },
+        uk: { app: { home: { title: "Головна" } } },
+      },
+    },
+  }}
+>
+  <Stack />
+</Root>
+```
+
+Theme overrides are partial and fall back to the core palette. Locale catalogs are deep-merged per shipped locale; app-owned keys must be nested under `app.*`, while core strings can be intentionally overridden when necessary.
+
 It's not a route or a reusable UI component — it's app composition root, kept separate from `components/` for that reason.
 
 ## Scripts

@@ -7,12 +7,21 @@ import { ToastsProvider } from "@/components/toast";
 import { StateViewsProvider } from "@/components/state-view";
 import { AccessibilityProvider } from "@/features/accessibility";
 import { DeepLinks } from "@/features/deep-links";
-import { LocaleProvider } from "@/features/localization";
+import {
+  LocaleProvider,
+  type LocaleProviderConfig,
+} from "@/features/localization";
 import { Permissions } from "@/features/permissions";
-import { ThemeProvider } from "@/features/theme";
+import { ThemeProvider, type ThemeProviderConfig } from "@/features/theme";
+
+export type ProvidersConfig = {
+  theme?: ThemeProviderConfig;
+  locale?: LocaleProviderConfig;
+};
 
 type Props = {
   children: ReactNode;
+  config?: ProvidersConfig;
 };
 
 /**
@@ -44,15 +53,15 @@ type Props = {
  * requires exactly one, wrapping the whole app, to reliably capture touches
  * on Android — not just wherever a gesture happens to be defined.
  */
-export default function Providers({ children }: Props) {
+export default function Providers({ children, config }: Props) {
   return (
     <GestureHandlerRootView style={styles.flex}>
       <SafeAreaProvider>
         <AccessibilityProvider>
           <Permissions>
             <DeepLinks>
-              <ThemeProvider>
-                <LocaleProvider>
+              <ThemeProvider config={config?.theme}>
+                <LocaleProvider config={config?.locale}>
                   <ToastsProvider>
                     <StateViewsProvider>{children}</StateViewsProvider>
                   </ToastsProvider>

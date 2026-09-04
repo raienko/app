@@ -4,13 +4,25 @@ import { LocalValue } from "@/features/storage";
 
 import LocaleContext from "./context";
 import useOsLocale from "./os-locale";
-import { translate, type TranslationKey } from "./translations";
+import {
+  composeTranslations,
+  translate,
+  type AppTranslationKey,
+  type TranslationKey,
+  type TranslationOverrides,
+} from "./translations";
 import { LOCALES, type Locale, type LocalePreference } from "./types";
 
 const localePreference = new LocalValue<LocalePreference>("locale-preference");
 
+export type LocaleProviderConfig = {
+  /** App translations layered over the built-in catalog for matching locales. */
+  translations?: TranslationOverrides;
+};
+
 type Props = {
   children: ReactNode;
+  config?: LocaleProviderConfig;
 };
 
 /**
@@ -26,7 +38,7 @@ type Props = {
  * Same shape as `ThemeProvider`: a stored preference of
  * `<concrete value> | "system"`, with `"system"` deferring to the OS.
  */
-export default function LocaleProvider({ children }: Props) {
+export default function LocaleProvider({ children, config }: Props) {
   const preference = localePreference.useValue() ?? "system";
   const osLocale = useOsLocale();
   const locale = preference === "system" ? osLocale : preference;
@@ -34,10 +46,16 @@ export default function LocaleProvider({ children }: Props) {
   const isRTL = info?.rtl ?? false;
   const weekStartsOn = info?.weekStartsOn ?? 1;
 
+  const catalog = useMemo(
+    () => composeTranslations(config?.translations),
+    [config?.translations],
+  );
   const t = useCallback(
-    (key: TranslationKey, params?: Record<string, string | number>) =>
-      translate(locale, key, params),
-    [locale],
+    (
+      key: TranslationKey | AppTranslationKey,
+      params?: Record<string, string | number>,
+    ) => translate(locale, key, params, catalog),
+    [catalog, locale],
   );
 
   const setPreference = useCallback((next: LocalePreference) => {

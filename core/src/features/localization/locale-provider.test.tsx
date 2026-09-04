@@ -5,6 +5,7 @@ import { LocalValue } from "@/features/storage";
 import { fireEvent, render, screen, waitFor } from "@/root/testing";
 
 import { useLocale } from "./hooks";
+import LocaleProvider from "./locale-provider";
 
 const mockUseLocales = jest.fn<{ languageCode: string | null }[], []>(() => [
   { languageCode: "es" },
@@ -23,6 +24,11 @@ function Probe() {
       <Pressable testID="pick-system" onPress={() => setPreference("system")} />
     </>
   );
+}
+
+function TranslationProbe() {
+  const { t } = useLocale();
+  return <Text value={t("app.home.title")} />;
 }
 
 describe("LocaleProvider", () => {
@@ -85,5 +91,21 @@ describe("LocaleProvider", () => {
 
     await fireEvent.press(screen.getByTestId("pick-system"));
     await waitFor(() => expect(screen.getByText("locale:es")).toBeTruthy());
+  });
+
+  it("makes app translations from its config available through t", async () => {
+    mockUseLocales.mockReturnValue([{ languageCode: "en" }]);
+
+    await render(
+      <LocaleProvider
+        config={{
+          translations: { en: { app: { home: { title: "Configured home" } } } },
+        }}
+      >
+        <TranslationProbe />
+      </LocaleProvider>,
+    );
+
+    expect(screen.getByText("Configured home")).toBeTruthy();
   });
 });

@@ -109,11 +109,6 @@ export default function Button({
 
   return (
     <Pressable
-      // Announced as a button, with its selected/disabled state — a plain
-      // Pressable has no role of its own, so without this every button in
-      // the app reads as an anonymous group to a screen reader. A labelled
-      // button derives its name from the Text child, so `label` is only
-      // passed when there is one.
       {...controlA11yProps({
         label,
         disabled: isDisabled,
@@ -160,9 +155,6 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
     borderRadius: radius.x8,
     alignItems: "center",
     justifyContent: "center",
-    // Always present, transparent unless the type asks for one — so a
-    // bordered and an unbordered type are the same size and don't shift
-    // layout when swapped.
     borderWidth: spacing.x1,
   },
   content: {
@@ -175,13 +167,6 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
   loadingIndicator: {
     position: "absolute",
   },
-  // One entry per size rather than an inline object, so the whole set goes
-  // through StyleSheet.create once instead of being rebuilt per render.
-  //
-  // `auto` is the odd one out on purpose: it sets no minHeight and hugs its
-  // label, for a button that has to sit inline with text or in a tight row.
-  // That puts it below the 44pt touch-target minimum by definition, so it's
-  // the one size to avoid for a primary action.
   small: {
     minHeight: sizes.elementHeightSm,
     paddingHorizontal: spacing.x12,

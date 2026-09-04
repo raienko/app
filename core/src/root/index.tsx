@@ -2,11 +2,17 @@ import type { ReactNode } from "react";
 
 import Providers from "./providers";
 import withObserve from "./with-observe";
+import type { ProvidersConfig } from "./providers";
 
 export { default as Providers } from "./providers";
+export type { ProvidersConfig } from "./providers";
+
+export type RootConfig = ProvidersConfig;
 
 type Props = {
   children: ReactNode;
+  /** Provider-specific app configuration; omitted values keep core defaults. */
+  config?: RootConfig;
 };
 
 /**
@@ -22,9 +28,9 @@ type Props = {
  *   Ones that Storybook and Jest should get too go in providers.tsx
  *   instead, next to `Permissions` and `DeepLinks`.
  */
-function Root({ children }: Props) {
+function Root({ children, config }: Props) {
   return (
-    <Providers>
+    <Providers config={config}>
       {children}
 
       {/* Global overlay UI the real app alone needs goes here. */}

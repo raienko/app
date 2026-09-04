@@ -27,6 +27,10 @@ type Flatten<T, Prefix extends string = ""> = T extends string
     }[keyof T & string];
 
 export type TranslationKey = Flatten<typeof en>;
+export type AppTranslationKey = `app.${string}`;
+export type TranslationOverrides = Partial<
+  Record<LocaleCode, Record<string, unknown>>
+>;
 
 const raw: Record<LocaleCode, unknown> = {
   en,
@@ -82,17 +86,67 @@ export const translations: Record<
   ]),
 ) as Record<LocaleCode, Record<string, unknown>>;
 
+function validateLeaves(value: unknown, path = "translations"): void {
+  if (typeof value === "string") return;
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new Error(`${path} must contain objects with string leaves`);
+  }
+  for (const [key, child] of Object.entries(value)) {
+    validateLeaves(child, `${path}.${key}`);
+  }
+}
+
+function mergeCatalog(
+  base: Record<string, unknown>,
+  overrides: Record<string, unknown>,
+): Record<string, unknown> {
+  const merged: Record<string, unknown> = { ...base };
+  for (const [key, overrideValue] of Object.entries(overrides)) {
+    const baseValue = base[key];
+    merged[key] =
+      baseValue &&
+      typeof baseValue === "object" &&
+      !Array.isArray(baseValue) &&
+      overrideValue &&
+      typeof overrideValue === "object" &&
+      !Array.isArray(overrideValue)
+        ? mergeCatalog(
+            baseValue as Record<string, unknown>,
+            overrideValue as Record<string, unknown>,
+          )
+        : overrideValue;
+  }
+  return merged;
+}
+
+/** Deep-merges app catalogs without mutating core translations or the input. */
+export function composeTranslations(
+  overrides?: TranslationOverrides,
+): Record<LocaleCode, Record<string, unknown>> {
+  if (overrides) validateLeaves(overrides);
+
+  return Object.fromEntries(
+    (
+      Object.entries(translations) as [LocaleCode, Record<string, unknown>][]
+    ).map(([locale, catalog]) => [
+      locale,
+      mergeCatalog(catalog, overrides?.[locale] ?? {}),
+    ]),
+  ) as Record<LocaleCode, Record<string, unknown>>;
+}
+
 export function translate(
   locale: LocaleCode,
-  key: TranslationKey,
+  key: TranslationKey | AppTranslationKey,
   params?: Record<string, string | number>,
+  catalog: Record<LocaleCode, Record<string, unknown>> = translations,
 ): string {
   const value = key.split(".").reduce<unknown>((node, segment) => {
     if (node && typeof node === "object") {
       return (node as Record<string, unknown>)[segment];
     }
     return undefined;
-  }, translations[locale]);
+  }, catalog[locale]);
 
   if (typeof value !== "string") {
     throw new Error(`Missing translation for "${key}" in locale "${locale}"`);

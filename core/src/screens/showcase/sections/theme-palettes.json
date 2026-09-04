@@ -1,0 +1,14 @@
+{
+  "violet": {
+    "overrides": {
+      "light": { "primary": "#6d28d9", "focus": "#6d28d9" },
+      "dark": { "primary": "#c4b5fd", "focus": "#c4b5fd" }
+    }
+  },
+  "amber": {
+    "overrides": {
+      "light": { "primary": "#b45309", "focus": "#b45309" },
+      "dark": { "primary": "#fbbf24", "focus": "#fbbf24" }
+    }
+  }
+}
