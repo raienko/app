@@ -20,10 +20,10 @@ function isLocalePreference(value: string): value is LocalePreference {
 }
 
 /**
- * One field, not a row of buttons: seven languages is already more than a
- * segmented control reads as, and the list only grows as translations are
- * added — so the choice goes in a Modal (via `<Input type="select">`) and
- * the switcher itself stays one line high.
+ * One field, not a row of buttons: the list is already past what a
+ * segmented control reads as, and it only grows as translations are added —
+ * so the choice goes in a Modal (via `<Input type="select">`) and the
+ * switcher itself stays one line high however many languages ship.
  *
  * Each language is listed in its own name rather than translated, so
  * someone who can't read the current locale can still find theirs. Only

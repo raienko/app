@@ -1,7 +1,11 @@
 import moment from "moment";
 import "moment/locale/ar";
+import "moment/locale/de";
 import "moment/locale/es";
+import "moment/locale/fr";
+import "moment/locale/it";
 import "moment/locale/ja";
+import "moment/locale/pt";
 import "moment/locale/uk";
 import "moment/locale/zh-cn";
 import type { DatePickerBaseProps } from "react-native-ui-datepicker";
@@ -32,6 +36,10 @@ const MOMENT_LOCALE: Record<LocaleCode, string> = {
   en: "en",
   uk: "uk",
   es: "es",
+  fr: "fr",
+  pt: "pt",
+  de: "de",
+  it: "it",
   zh: "zh-cn",
   ja: "ja",
   ar: "ar",

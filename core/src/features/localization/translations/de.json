@@ -1,0 +1,225 @@
+{
+  "common": {
+    "close": "Schließen",
+    "cancel": "Abbrechen",
+    "confirm": "Bestätigen",
+    "ok": "OK",
+    "loading": "Wird geladen",
+    "done": "Fertig"
+  },
+  "input": {
+    "name": {
+      "label": "Name",
+      "placeholder": "Ada Lovelace",
+      "helper": "Dies wird in deinem Profil angezeigt"
+    },
+    "age": {
+      "label": "Alter",
+      "placeholder": "0",
+      "helper": "0–120, Nicht-Ziffern werden bei der Eingabe entfernt"
+    },
+    "email": {
+      "label": "E-Mail",
+      "placeholder": "ada@example.com",
+      "error": "Gib eine gültige E-Mail-Adresse ein"
+    },
+    "focusEmail": "E-Mail-Feld fokussieren",
+    "password": {
+      "label": "Passwort",
+      "show": "Passwort anzeigen",
+      "hide": "Passwort ausblenden"
+    },
+    "disabled": {
+      "label": "Deaktiviert",
+      "placeholder": "nicht bearbeitbar"
+    },
+    "country": {
+      "label": "Land",
+      "placeholder": "Land auswählen",
+      "helper": "Öffnet ein Modal von unten — tippe auf den Hintergrund, um die aktuelle Auswahl zu behalten",
+      "options": {
+        "uk": "Vereinigtes Königreich",
+        "ua": "Ukraine",
+        "es": "Spanien",
+        "jp": "Japan",
+        "cn": "China"
+      }
+    },
+    "startsAt": {
+      "label": "Beginnt um",
+      "placeholder": "Datum und Uhrzeit auswählen",
+      "helper": "Datum + Uhrzeit, als Entwurf gespeichert, bis du auf Fertig tippst"
+    },
+    "birthday": {
+      "label": "Geburtstag",
+      "placeholder": "Tag auswählen",
+      "helper": "Nur Datum, und nichts in der Zukunft ist auswählbar"
+    },
+    "alarm": {
+      "label": "Wecker",
+      "placeholder": "Uhrzeit auswählen",
+      "helper": "Nur Uhrzeit — der Kalender wird vollständig ausgeblendet"
+    },
+    "code": {
+      "label": "Bestätigungscode",
+      "helper": "6 Ziffern — iOS bietet den per SMS erhaltenen Code über der Tastatur an"
+    },
+    "phone": {
+      "label": "Telefon",
+      "placeholder": "(213) 373-4253",
+      "helper": "Bei der Eingabe gruppiert und im internationalen Format gespeichert",
+      "countryPicker": {
+        "label": "Ländervorwahl",
+        "title": "Land oder Region",
+        "search": "Land oder Vorwahl suchen",
+        "empty": "Keine Länder gefunden"
+      }
+    },
+    "checklist": {
+      "label": "Interessen",
+      "helper": "Wähle alles Zutreffende aus",
+      "options": {
+        "design": "Design",
+        "engineering": "Technik",
+        "research": "Forschung",
+        "unavailable": "Nicht verfügbare Option"
+      }
+    },
+    "switchGroup": {
+      "label": "Benachrichtigungen",
+      "helper": "Jeder Kanal kann einzeln gesteuert werden",
+      "options": {
+        "product": "Produktneuheiten",
+        "security": "Sicherheitswarnungen",
+        "marketing": "Marketing",
+        "managed": "Von deiner Organisation verwaltet"
+      }
+    },
+    "radioGroup": {
+      "label": "Tarif",
+      "helper": "Wähle eine Option",
+      "options": {
+        "free": "Kostenlos",
+        "pro": "Pro",
+        "business": "Business",
+        "enterprise": "Vertrieb kontaktieren"
+      }
+    },
+    "range": {
+      "label": "Budget",
+      "helper": "Wähle Minimum und Maximum",
+      "minimum": "Mindestbudget",
+      "maximum": "Maximalbudget"
+    }
+  },
+  "modal": {
+    "popup": {
+      "trigger": "Pop-up",
+      "content": "Pop-up-Modal"
+    },
+    "bottomSheet": {
+      "trigger": "Bottom Sheet",
+      "content": "Modal von unten"
+    },
+    "actions": {
+      "trigger": "Aktionen",
+      "optionA": "Option A",
+      "optionB": "Option B"
+    },
+    "fullscreen": {
+      "trigger": "Vollbild",
+      "content": "Vollbild-Modal"
+    }
+  },
+  "carousel": {
+    "slide": "Folie {{current}} von {{total}}"
+  },
+  "toast": {
+    "success": "Erfolg",
+    "error": "Fehler",
+    "warning": "Warnung",
+    "info": "Information",
+    "openHint": "Öffnet den verknüpften Bildschirm",
+    "showcase": {
+      "message": "Deine Änderungen wurden gespeichert.",
+      "errorTitle": "Upload fehlgeschlagen",
+      "errorMessage": "Tippe, um zu sehen, was schiefgelaufen ist.",
+      "action": "Ansehen",
+      "sticky": "Dieser bleibt, bis du ihn schließt.",
+      "expiring": "Dieser läuft in drei Sekunden ab."
+    }
+  },
+  "stateView": {
+    "loading": "Wird geladen",
+    "empty": "Hier ist noch nichts",
+    "error": "Etwas ist schiefgelaufen",
+    "success": "Alles erledigt",
+    "offline": "Du bist offline"
+  },
+  "theme": {
+    "light": "Hell",
+    "dark": "Dunkel",
+    "system": "System"
+  },
+  "locale": {
+    "label": "Sprache",
+    "system": "System"
+  },
+  "showcase": {
+    "summary": "Name: {{name}} / Alter: {{age}} / E-Mail: {{email}}",
+    "typography": "Typografie",
+    "theme": "Design und Farben",
+    "localization": "Lokalisierung",
+    "accessibility": "Barrierefreiheit",
+    "responsive": "Responsive Einheiten",
+    "grid": "Raster",
+    "spacer": "Abstandhalter",
+    "icons": "Symbole",
+    "buttons": "Schaltflächen",
+    "checkboxes": "Kontrollkästchen",
+    "radioButtons": "Optionsfelder",
+    "switches": "Schalter",
+    "sliders": "Schieberegler",
+    "progress": "Fortschritt",
+    "segmentedControl": "Segmentierte Steuerung",
+    "stateViews": "Zustandsansichten",
+    "inputs": "Eingabefelder",
+    "images": "Bilder",
+    "cards": "Karten",
+    "carousel": "Karussell",
+    "imagePicker": "Bildauswahl",
+    "modals": "Modale",
+    "popups": "Pop-ups",
+    "toasts": "Toasts",
+    "permissions": "Berechtigungen",
+    "deepLinks": "Deeplinks",
+    "storage": "Speicher",
+    "logger": "Protokollierung",
+    "utilities": "Hilfsmittel",
+    "sampleSentence": "Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich."
+  },
+  "checkbox": {
+    "custom": "Eigenes Kontrollkästchen",
+    "expo": "Expo-UI-Kontrollkästchen",
+    "disabled": "Deaktiviert und ausgewählt"
+  },
+  "radioButton": {
+    "custom": "Eigenes Optionsfeld",
+    "expo": "Optionsfeld im Expo-Stil",
+    "disabled": "Deaktiviertes Optionsfeld"
+  },
+  "switch": {
+    "custom": "Eigener Schalter",
+    "expo": "Expo-UI-Schalter",
+    "disabled": "Deaktiviert und eingeschaltet"
+  },
+  "slider": {
+    "custom": "Eigener Schieberegler",
+    "expo": "Expo-UI-Schieberegler",
+    "multiple": "Mehrere Regler",
+    "multipleFirst": "Erster Wert",
+    "multipleSecond": "Zweiter Wert",
+    "multipleThird": "Dritter Wert",
+    "disabled": "Deaktivierter Schieberegler"
+  }
+}

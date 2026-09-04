@@ -12,6 +12,10 @@ describe("formatValue", () => {
   it("follows the locale for the date", () => {
     expect(formatValue(VALUE, "uk", "date")).toBe("27 серп 2026 р.");
     expect(formatValue(VALUE, "es", "date")).toBe("27 de ago. de 2026");
+    expect(formatValue(VALUE, "fr", "date")).toBe("27 août 2026");
+    expect(formatValue(VALUE, "pt", "date")).toBe("27 de ago de 2026");
+    expect(formatValue(VALUE, "de", "date")).toBe("27. Aug. 2026");
+    expect(formatValue(VALUE, "it", "date")).toBe("27 ago 2026");
     expect(formatValue(VALUE, "ja", "datetime")).toBe("2026年8月27日 14:30");
   });
 
@@ -31,6 +35,10 @@ describe("formatValue", () => {
     ["en", "14:30"],
     ["uk", "14:30"],
     ["es", "14:30"],
+    ["fr", "14:30"],
+    ["pt", "14:30"],
+    ["de", "14:30"],
+    ["it", "14:30"],
     ["zh", "14:30"],
     ["ja", "14:30"],
     ["ar", "١٤:٣٠"],

@@ -1,0 +1,225 @@
+{
+  "common": {
+    "close": "Fechar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "ok": "OK",
+    "loading": "A carregar",
+    "done": "Concluído"
+  },
+  "input": {
+    "name": {
+      "label": "Nome",
+      "placeholder": "Ada Lovelace",
+      "helper": "Isto é apresentado no seu perfil"
+    },
+    "age": {
+      "label": "Idade",
+      "placeholder": "0",
+      "helper": "0–120, os caracteres não numéricos são removidos ao escrever"
+    },
+    "email": {
+      "label": "E-mail",
+      "placeholder": "ada@example.com",
+      "error": "Introduza um e-mail válido"
+    },
+    "focusEmail": "Focar o e-mail",
+    "password": {
+      "label": "Palavra-passe",
+      "show": "Mostrar palavra-passe",
+      "hide": "Ocultar palavra-passe"
+    },
+    "disabled": {
+      "label": "Desativado",
+      "placeholder": "não editável"
+    },
+    "country": {
+      "label": "País",
+      "placeholder": "Escolha um país",
+      "helper": "Abre uma janela modal inferior — toque no fundo para manter a escolha atual",
+      "options": {
+        "uk": "Reino Unido",
+        "ua": "Ucrânia",
+        "es": "Espanha",
+        "jp": "Japão",
+        "cn": "China"
+      }
+    },
+    "startsAt": {
+      "label": "Começa às",
+      "placeholder": "Escolha uma data e uma hora",
+      "helper": "Data + hora, guardadas como rascunho até premir Concluído"
+    },
+    "birthday": {
+      "label": "Data de nascimento",
+      "placeholder": "Escolha um dia",
+      "helper": "Apenas data, e nada no futuro é selecionável"
+    },
+    "alarm": {
+      "label": "Alarme",
+      "placeholder": "Escolha uma hora",
+      "helper": "Apenas hora — o calendário fica totalmente oculto"
+    },
+    "code": {
+      "label": "Código de verificação",
+      "helper": "6 dígitos — o iOS sugere o código recebido por SMS acima do teclado"
+    },
+    "phone": {
+      "label": "Telefone",
+      "placeholder": "(213) 373-4253",
+      "helper": "Agrupado ao escrever e guardado em formato internacional",
+      "countryPicker": {
+        "label": "Indicativo do país",
+        "title": "País ou região",
+        "search": "Procurar país ou indicativo",
+        "empty": "Nenhum país encontrado"
+      }
+    },
+    "checklist": {
+      "label": "Interesses",
+      "helper": "Escolha todas as que se apliquem",
+      "options": {
+        "design": "Design",
+        "engineering": "Engenharia",
+        "research": "Investigação",
+        "unavailable": "Opção indisponível"
+      }
+    },
+    "switchGroup": {
+      "label": "Notificações",
+      "helper": "Cada canal pode ser controlado separadamente",
+      "options": {
+        "product": "Novidades do produto",
+        "security": "Alertas de segurança",
+        "marketing": "Marketing",
+        "managed": "Gerido pela sua organização"
+      }
+    },
+    "radioGroup": {
+      "label": "Plano",
+      "helper": "Escolha uma opção",
+      "options": {
+        "free": "Gratuito",
+        "pro": "Pro",
+        "business": "Empresas",
+        "enterprise": "Contactar vendas"
+      }
+    },
+    "range": {
+      "label": "Orçamento",
+      "helper": "Escolha o mínimo e o máximo",
+      "minimum": "Orçamento mínimo",
+      "maximum": "Orçamento máximo"
+    }
+  },
+  "modal": {
+    "popup": {
+      "trigger": "Janela",
+      "content": "Janela modal"
+    },
+    "bottomSheet": {
+      "trigger": "Folha inferior",
+      "content": "Janela modal inferior"
+    },
+    "actions": {
+      "trigger": "Ações",
+      "optionA": "Opção A",
+      "optionB": "Opção B"
+    },
+    "fullscreen": {
+      "trigger": "Ecrã inteiro",
+      "content": "Janela modal em ecrã inteiro"
+    }
+  },
+  "carousel": {
+    "slide": "Slide {{current}} de {{total}}"
+  },
+  "toast": {
+    "success": "Sucesso",
+    "error": "Erro",
+    "warning": "Aviso",
+    "info": "Informação",
+    "openHint": "Abre o ecrã ligado",
+    "showcase": {
+      "message": "As suas alterações foram guardadas.",
+      "errorTitle": "Falha no envio",
+      "errorMessage": "Toque para ver o que correu mal.",
+      "action": "Ver",
+      "sticky": "Este fica até o fechar.",
+      "expiring": "Este expira dentro de três segundos."
+    }
+  },
+  "stateView": {
+    "loading": "A carregar",
+    "empty": "Ainda não há nada aqui",
+    "error": "Algo correu mal",
+    "success": "Tudo pronto",
+    "offline": "Está offline"
+  },
+  "theme": {
+    "light": "Claro",
+    "dark": "Escuro",
+    "system": "Sistema"
+  },
+  "locale": {
+    "label": "Idioma",
+    "system": "Sistema"
+  },
+  "showcase": {
+    "summary": "nome: {{name}} / idade: {{age}} / e-mail: {{email}}",
+    "typography": "Tipografia",
+    "theme": "Tema e cores",
+    "localization": "Localização",
+    "accessibility": "Acessibilidade",
+    "responsive": "Unidades adaptáveis",
+    "grid": "Grelha",
+    "spacer": "Espaçador",
+    "icons": "Ícones",
+    "buttons": "Botões",
+    "checkboxes": "Caixas de verificação",
+    "radioButtons": "Botões de opção",
+    "switches": "Interruptores",
+    "sliders": "Controlos deslizantes",
+    "progress": "Progresso",
+    "segmentedControl": "Controlo segmentado",
+    "stateViews": "Vistas de estado",
+    "inputs": "Campos de entrada",
+    "images": "Imagens",
+    "cards": "Cartões",
+    "carousel": "Carrossel",
+    "imagePicker": "Seletor de imagens",
+    "modals": "Janelas modais",
+    "popups": "Popups",
+    "toasts": "Toasts",
+    "permissions": "Permissões",
+    "deepLinks": "Ligações profundas",
+    "storage": "Armazenamento",
+    "logger": "Registo",
+    "utilities": "Utilitários",
+    "sampleSentence": "Um pequeno jabuti xereta viu dez cegonhas felizes."
+  },
+  "checkbox": {
+    "custom": "Caixa de verificação personalizada",
+    "expo": "Caixa de verificação Expo UI",
+    "disabled": "Desativada e selecionada"
+  },
+  "radioButton": {
+    "custom": "Botão de opção personalizado",
+    "expo": "Botão de opção estilo Expo",
+    "disabled": "Botão de opção desativado"
+  },
+  "switch": {
+    "custom": "Interruptor personalizado",
+    "expo": "Interruptor Expo UI",
+    "disabled": "Desativado e ligado"
+  },
+  "slider": {
+    "custom": "Controlo deslizante personalizado",
+    "expo": "Controlo deslizante Expo UI",
+    "multiple": "Vários manípulos",
+    "multipleFirst": "Primeiro valor",
+    "multipleSecond": "Segundo valor",
+    "multipleThird": "Terceiro valor",
+    "disabled": "Controlo deslizante desativado"
+  }
+}

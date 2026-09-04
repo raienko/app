@@ -1,7 +1,11 @@
 import ar from "./translations/ar.json";
+import de from "./translations/de.json";
 import en from "./translations/en.json";
 import es from "./translations/es.json";
+import fr from "./translations/fr.json";
+import it from "./translations/it.json";
 import ja from "./translations/ja.json";
+import pt from "./translations/pt.json";
 import uk from "./translations/uk.json";
 import zh from "./translations/zh.json";
 
@@ -9,7 +13,8 @@ import zh from "./translations/zh.json";
 // file — en.json is the source of truth for which keys must exist, and
 // every other locale is validated against it below (same
 // validate-on-load idea as theme/colors.ts).
-export type LocaleCode = "en" | "uk" | "es" | "zh" | "ja" | "ar";
+export type LocaleCode =
+  "en" | "uk" | "es" | "fr" | "pt" | "de" | "it" | "zh" | "ja" | "ar";
 
 type Flatten<T, Prefix extends string = ""> = T extends string
   ? Prefix extends `${infer Head}.`
@@ -23,7 +28,18 @@ type Flatten<T, Prefix extends string = ""> = T extends string
 
 export type TranslationKey = Flatten<typeof en>;
 
-const raw: Record<LocaleCode, unknown> = { en, uk, es, zh, ja, ar };
+const raw: Record<LocaleCode, unknown> = {
+  en,
+  uk,
+  es,
+  fr,
+  pt,
+  de,
+  it,
+  zh,
+  ja,
+  ar,
+};
 
 function flattenKeys(value: unknown, prefix = ""): string[] {
   if (typeof value === "string") {

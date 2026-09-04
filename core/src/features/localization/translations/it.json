@@ -1,0 +1,225 @@
+{
+  "common": {
+    "close": "Chiudi",
+    "cancel": "Annulla",
+    "confirm": "Conferma",
+    "ok": "OK",
+    "loading": "Caricamento",
+    "done": "Fatto"
+  },
+  "input": {
+    "name": {
+      "label": "Nome",
+      "placeholder": "Ada Lovelace",
+      "helper": "Questo viene mostrato sul tuo profilo"
+    },
+    "age": {
+      "label": "Età",
+      "placeholder": "0",
+      "helper": "0–120, i caratteri non numerici vengono rimossi mentre scrivi"
+    },
+    "email": {
+      "label": "E-mail",
+      "placeholder": "ada@example.com",
+      "error": "Inserisci un indirizzo e-mail valido"
+    },
+    "focusEmail": "Attiva il campo e-mail",
+    "password": {
+      "label": "Password",
+      "show": "Mostra password",
+      "hide": "Nascondi password"
+    },
+    "disabled": {
+      "label": "Disattivato",
+      "placeholder": "non modificabile"
+    },
+    "country": {
+      "label": "Paese",
+      "placeholder": "Scegli un paese",
+      "helper": "Apre una finestra modale dal basso — tocca lo sfondo per mantenere la scelta attuale",
+      "options": {
+        "uk": "Regno Unito",
+        "ua": "Ucraina",
+        "es": "Spagna",
+        "jp": "Giappone",
+        "cn": "Cina"
+      }
+    },
+    "startsAt": {
+      "label": "Inizia alle",
+      "placeholder": "Scegli data e ora",
+      "helper": "Data + ora, tenute in una bozza finché non premi Fatto"
+    },
+    "birthday": {
+      "label": "Data di nascita",
+      "placeholder": "Scegli un giorno",
+      "helper": "Solo data, e niente nel futuro è selezionabile"
+    },
+    "alarm": {
+      "label": "Sveglia",
+      "placeholder": "Scegli un orario",
+      "helper": "Solo ora — il calendario è completamente nascosto"
+    },
+    "code": {
+      "label": "Codice di verifica",
+      "helper": "6 cifre — iOS propone il codice ricevuto via SMS sopra la tastiera"
+    },
+    "phone": {
+      "label": "Telefono",
+      "placeholder": "(213) 373-4253",
+      "helper": "Raggruppato mentre scrivi e salvato in formato internazionale",
+      "countryPicker": {
+        "label": "Prefisso telefonico del paese",
+        "title": "Paese o regione",
+        "search": "Cerca paese o prefisso",
+        "empty": "Nessun paese trovato"
+      }
+    },
+    "checklist": {
+      "label": "Interessi",
+      "helper": "Scegli tutto ciò che si applica",
+      "options": {
+        "design": "Design",
+        "engineering": "Ingegneria",
+        "research": "Ricerca",
+        "unavailable": "Opzione non disponibile"
+      }
+    },
+    "switchGroup": {
+      "label": "Notifiche",
+      "helper": "Ogni canale può essere gestito separatamente",
+      "options": {
+        "product": "Novità sul prodotto",
+        "security": "Avvisi di sicurezza",
+        "marketing": "Marketing",
+        "managed": "Gestito dalla tua organizzazione"
+      }
+    },
+    "radioGroup": {
+      "label": "Piano",
+      "helper": "Scegli un'opzione",
+      "options": {
+        "free": "Gratuito",
+        "pro": "Pro",
+        "business": "Business",
+        "enterprise": "Contatta le vendite"
+      }
+    },
+    "range": {
+      "label": "Budget",
+      "helper": "Scegli il minimo e il massimo",
+      "minimum": "Budget minimo",
+      "maximum": "Budget massimo"
+    }
+  },
+  "modal": {
+    "popup": {
+      "trigger": "Popup",
+      "content": "Finestra popup"
+    },
+    "bottomSheet": {
+      "trigger": "Foglio inferiore",
+      "content": "Finestra modale dal basso"
+    },
+    "actions": {
+      "trigger": "Azioni",
+      "optionA": "Opzione A",
+      "optionB": "Opzione B"
+    },
+    "fullscreen": {
+      "trigger": "Schermo intero",
+      "content": "Finestra modale a schermo intero"
+    }
+  },
+  "carousel": {
+    "slide": "Diapositiva {{current}} di {{total}}"
+  },
+  "toast": {
+    "success": "Operazione riuscita",
+    "error": "Errore",
+    "warning": "Avviso",
+    "info": "Informazione",
+    "openHint": "Apre la schermata collegata",
+    "showcase": {
+      "message": "Le tue modifiche sono state salvate.",
+      "errorTitle": "Caricamento non riuscito",
+      "errorMessage": "Tocca per vedere cosa è andato storto.",
+      "action": "Visualizza",
+      "sticky": "Questo resta finché non lo chiudi.",
+      "expiring": "Questo scade tra tre secondi."
+    }
+  },
+  "stateView": {
+    "loading": "Caricamento",
+    "empty": "Qui non c'è ancora nulla",
+    "error": "Qualcosa è andato storto",
+    "success": "Tutto fatto",
+    "offline": "Sei offline"
+  },
+  "theme": {
+    "light": "Chiaro",
+    "dark": "Scuro",
+    "system": "Sistema"
+  },
+  "locale": {
+    "label": "Lingua",
+    "system": "Sistema"
+  },
+  "showcase": {
+    "summary": "nome: {{name}} / età: {{age}} / e-mail: {{email}}",
+    "typography": "Tipografia",
+    "theme": "Tema e colori",
+    "localization": "Localizzazione",
+    "accessibility": "Accessibilità",
+    "responsive": "Unità adattive",
+    "grid": "Griglia",
+    "spacer": "Spaziatore",
+    "icons": "Icone",
+    "buttons": "Pulsanti",
+    "checkboxes": "Caselle di controllo",
+    "radioButtons": "Pulsanti di opzione",
+    "switches": "Interruttori",
+    "sliders": "Cursori",
+    "progress": "Avanzamento",
+    "segmentedControl": "Controllo segmentato",
+    "stateViews": "Viste di stato",
+    "inputs": "Campi di inserimento",
+    "images": "Immagini",
+    "cards": "Schede",
+    "carousel": "Carosello",
+    "imagePicker": "Selettore di immagini",
+    "modals": "Finestre modali",
+    "popups": "Popup",
+    "toasts": "Toast",
+    "permissions": "Autorizzazioni",
+    "deepLinks": "Deep link",
+    "storage": "Archiviazione",
+    "logger": "Registro",
+    "utilities": "Utilità",
+    "sampleSentence": "Pranzo d'acqua fa volti sghembi."
+  },
+  "checkbox": {
+    "custom": "Casella di controllo personalizzata",
+    "expo": "Casella di controllo Expo UI",
+    "disabled": "Disattivata e selezionata"
+  },
+  "radioButton": {
+    "custom": "Pulsante di opzione personalizzato",
+    "expo": "Pulsante di opzione in stile Expo",
+    "disabled": "Pulsante di opzione disattivato"
+  },
+  "switch": {
+    "custom": "Interruttore personalizzato",
+    "expo": "Interruttore Expo UI",
+    "disabled": "Disattivato e acceso"
+  },
+  "slider": {
+    "custom": "Cursore personalizzato",
+    "expo": "Cursore Expo UI",
+    "multiple": "Più maniglie",
+    "multipleFirst": "Primo valore",
+    "multipleSecond": "Secondo valore",
+    "multipleThird": "Terzo valore",
+    "disabled": "Cursore disattivato"
+  }
+}
