@@ -10,6 +10,7 @@ import CodeInput from "./code";
 import ChecklistInput from "./checklist";
 import DateTimeInput from "./datetime";
 import EmailInput from "./email";
+import FileInput from "./file";
 import NumericInput from "./numeric";
 import PasswordInput from "./password";
 import PhoneInput from "./phone";
@@ -49,7 +50,7 @@ function renderVariant<P>(
  * is rendered), so `<Input ref={...} />` can be focused/blurred
  * imperatively. The exception is `select`, which has no text field to
  * forward to — its value is picked in a Modal, not typed — so its ref
- * stays `null`. Same for `datetime`, groups, and `range`.
+ * stays `null`. Same for `file`, `datetime`, groups, and `range`.
  *
  * @example <Input value={text} onChange={setText} label="Name" />
  * @example <Input type="numeric" value={age} onChange={setAge} min={0} max={120} />
@@ -58,6 +59,7 @@ function renderVariant<P>(
  * @example <Input type="datetime" value={when} onChange={setWhen} mode="date" />
  * @example <Input type="password" value={password} onChange={setPassword} />
  * @example <Input type="code" value={code} onChange={setCode} onComplete={verify} />
+ * @example <Input type="file" value={file} onChange={setFile} label="Attachment" />
  * @example <Input type="phone" defaultCountry="US" value={phone} onChange={setPhone} />
  * @example <Input type="checklist" value={topics} onChange={setTopics} options={options} />
  * @example <Input type="switchGroup" value={settings} onChange={setSettings} options={options} />
@@ -74,6 +76,8 @@ const Input = forwardRef<RNTextInputInstance, InputProps>(
         return renderVariant(EmailInput, props, ref);
       case "select":
         return renderVariant(SelectInput, props, ref);
+      case "file":
+        return renderVariant(FileInput, props, ref);
       case "datetime":
         return renderVariant(DateTimeInput, props, ref);
       case "password":

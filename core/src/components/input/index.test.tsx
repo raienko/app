@@ -50,6 +50,20 @@ describe(`${Component.displayName} smoke test`, () => {
     );
   });
 
+  it("routes to the file variation when type='file'", async () => {
+    await render(
+      <Component
+        type="file"
+        label="Attachment"
+        placeholder="Choose a file"
+        value={null}
+        onChange={jest.fn()}
+      />,
+    );
+
+    expect(screen.getByText("Choose a file")).toBeTruthy();
+  });
+
   it("routes to the select variation when type='select'", async () => {
     const onChange = jest.fn();
     await render(

@@ -202,6 +202,7 @@
     "carousel": "轮播",
     "mediaPlayer": "媒体播放器",
     "imagePicker": "图片选择器",
+    "filePicker": "文件选择器",
     "modals": "模态框",
     "popups": "弹出对话框",
     "toasts": "轻提示",

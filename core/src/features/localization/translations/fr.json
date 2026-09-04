@@ -202,6 +202,7 @@
     "carousel": "Carrousel",
     "mediaPlayer": "Lecteur multimédia",
     "imagePicker": "Sélecteur d’images",
+    "filePicker": "Sélecteur de fichiers",
     "modals": "Fenêtres modales",
     "popups": "Popups",
     "toasts": "Toasts",

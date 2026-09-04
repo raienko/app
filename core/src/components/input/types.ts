@@ -1,3 +1,4 @@
+import type { DocumentPickerAsset } from "expo-document-picker";
 import type { CountryCode } from "libphonenumber-js";
 import type { ReactNode } from "react";
 import type { StyleProp, TextInputProps, ViewStyle } from "react-native";
@@ -300,6 +301,31 @@ export type DateTimeInputTypeProps = {
   max?: Date;
 };
 
+/** What `expo-document-picker` reports back, re-exported for call sites. */
+export type FileInputAsset = DocumentPickerAsset;
+
+export type FileInputTypeProps = {
+  type: "file";
+  /** `null` until a file is chosen — the field then shows its placeholder. */
+  value: FileInputAsset | null;
+  /**
+   * Only ever called with a chosen file. It can't report `null`, because
+   * picking is the only thing that fires it — a field that should be
+   * clearable wants its own clear control beside it, the same shape
+   * `select` has.
+   */
+  onChange: (value: FileInputAsset) => void;
+  /**
+   * Passed through to the picker: `type` for the MIME types on offer,
+   * `copyToCacheDirectory` for whether the file is copied somewhere the
+   * rest of Expo can read straight away.
+   */
+  options?: {
+    type?: string | string[];
+    copyToCacheDirectory?: boolean;
+  };
+};
+
 export type InputProps = (
   | TextInputTypeProps
   | NumericInputTypeProps
@@ -313,5 +339,6 @@ export type InputProps = (
   | PasswordInputTypeProps
   | CodeInputTypeProps
   | PhoneInputTypeProps
+  | FileInputTypeProps
 ) &
   CommonInputProps;

@@ -99,6 +99,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Carousel          | Slides with pagination you can switch off live, and the position it announces                     |
 | Media player      | Video and audio behind one transport, switchable live, with native controls as an escape hatch    |
 | Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web |
+| File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker         |
 | Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                   |
 | Permissions       | Persisted camera, gallery and notification permission state and actions                           |
 | Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                   |
@@ -426,6 +427,30 @@ A bottom tab bar for an Expo Router `Tabs` navigator, in two shapes: `sticky` (d
 - **Accessibility is a `tablist` of `tab`s**, not a row of buttons: a tab tells a screen reader that picking it swaps the view rather than performing an action, and that it belongs to the set its parent declares — which is what makes position announcements work. Each tab's whole column is the touch target, since a tab bar's most common miss is a hit area the size of the glyph.
 - **Not yet wired into this app's routing.** The showcase is a single route, and adding a `(tabs)` group would restructure the app rather than add a component — so the Showcase demonstrates it over a bounded scrolling stage instead, which is also the only way to show what the space hook is for.
 
+### `FilePicker` — `src/components/file-picker`
+
+```tsx
+import FilePicker from "@/components/file-picker";
+
+<FilePicker
+  id="attachment"
+  onChange={setFile}
+  options={{ type: "application/pdf" }}
+>
+  <Text value="Choose a file" />
+</FilePicker>;
+
+FilePicker.open("attachment"); // from anywhere, no ref needed
+```
+
+Wraps whatever you give it in a pressable that opens the system file browser, and reports the chosen file. Built on `expo-document-picker`.
+
+- **Simpler than `ImagePicker`, because the platform is.** There's no camera to offer as an alternative and no permission to request first, so there's no chooser sheet in between — a press goes straight to the system UI on every platform, which is the shape `ImagePicker` only has on web.
+- **`multiple` is fixed, not forwarded.** `onChange` reports one asset, so a caller never has to narrow between one file and several. A multi-select picker would be a different component.
+- **Mounted without `children` it's headless**: it renders nothing and only answers to `FilePicker.open(id)`. That's not a curiosity — it's how `Input`'s `file` variation drives it, since a pressable field can't be nested inside a pressable wrapper (React Native has no touch bubbling; the inner one wins).
+- **`FilePicker.open(id)` is synchronous and returns nothing**, unlike `Modal.show`. Browsers only allow a file dialog to open from the user activation that asked for it, so it has to run inside the press handler that called it with nothing awaited first; the chosen file arrives through that instance's `onChange` exactly as it does for a press. Verified in the browser across all four entry points — the component's own trigger, the static, the field, and a PDF-restricted field — each opening one `<input type="file" multiple="false">` with the right `accept`.
+- **A press while the browser is already open is ignored**, so two pickers can't stack; the one the user is looking at wins.
+
 ### `Icon` — `src/components/icon`
 
 ```tsx
@@ -483,6 +508,7 @@ src/components/input/
   code/           CodeInput — type="code", one-time-code entry
   phone/          PhoneInput — type="phone", country selection + E.164 output
   select/         SelectInput — type="select", modal option selection
+  file/           FileInput — type="file", system file browser via FilePicker
   datetime/       DateTimeInput — type="datetime", date/time/datetime modes
 ```
 
@@ -493,6 +519,7 @@ src/components/input/
 - Resyncing the buffered text when `value` changes from outside (e.g. that clamp round-trip above) happens **during render**, not in a `useEffect` — React's documented pattern for adjusting state from a prop change without an extra render pass. A `useEffect` calling `setState` synchronously in its body is also an ESLint error in this project's `react-hooks/set-state-in-effect` rule, which caught the first draft of this hook.
 - Focus and disabled states are handled centrally — focus uses the semantic `focus` border plus `backgroundElementSelected`, while disabled controls use muted presentation without changing their public behavior.
 - **`error`/`helperText`**: `helperText` renders under the field in `theme.colors.textSecondary`; `error` (also a string) replaces it, renders in `theme.colors.error`, and switches the field's border to that color too (`error` — a new key in `palette.json`/`ThemeColors`, `#dc2626`/`#f87171` light/dark — same swap-the-palette-file extensibility as every other color). Both live on `CommonInputProps`, so every variation gets them for free. Verified live: an invalid `Email` value renders a red border and "Enter a valid email" in place of blank helper text.
+- **`type="file"` is `FilePicker` behind a field.** It shows the chosen file's own `name`, never its `uri` — a cache path on native, a blob URL on web, meaningless to whoever reads the field — and falls back to the placeholder with nothing picked, the same shape `select` has. The picker is mounted _beside_ the field rather than around it: React Native has no touch bubbling, so a pressable field nested inside a pressable wrapper simply swallows every press. The field's `onPress` calls `FilePicker.open(id)` instead, which the bus delivers synchronously, so a browser still counts the press as the user activation that opened the dialog.
 - **Ref forwarding**: typed variations forward their ref to the underlying RN `TextInput`, so a caller can use `.focus()`/`.blur()`. Press-mode variations such as select and datetime deliberately keep a null text-input ref because their value is picked rather than typed.
 - **Accessibility**: the RN `TextInput` gets `accessibilityLabel={label ?? placeholder}` (a sibling `Text` isn't auto-associated with a field the way HTML's `<label for>` is) and `accessibilityState={{ disabled }}`, so a screen reader announces the field's name and disabled state without extra wiring per variation.
 - **`onFocus`/`onBlur`** are plain optional callbacks on `CommonInputProps` — `BaseInput` still owns the focus-triggered background swap internally, but now also calls a consumer's `onFocus`/`onBlur` alongside it, e.g. for running validation when a field is left.

@@ -202,6 +202,7 @@
     "carousel": "Carousel",
     "mediaPlayer": "Media player",
     "imagePicker": "Image picker",
+    "filePicker": "File picker",
     "modals": "Modals",
     "popups": "Popups",
     "toasts": "Toasts",

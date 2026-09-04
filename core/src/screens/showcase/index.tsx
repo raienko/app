@@ -14,6 +14,7 @@ import CardSection from "./sections/card";
 import CarouselSection from "./sections/carousel";
 import CheckboxesSection from "./sections/checkboxes";
 import DeepLinksSection from "./sections/deep-links";
+import FilePickerSection from "./sections/file-picker";
 import GridSection from "./sections/grid";
 import HeaderSection from "./sections/header";
 import IconsSection from "./sections/icons";
@@ -82,6 +83,7 @@ const SECTIONS: {
   { title: "showcase.carousel", Component: CarouselSection },
   { title: "showcase.mediaPlayer", Component: MediaPlayerSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
+  { title: "showcase.filePicker", Component: FilePickerSection },
   { title: "showcase.modals", Component: ModalsSection },
   { title: "showcase.popups", Component: PopupsSection },
   { title: "showcase.toasts", Component: ToastsSection },
