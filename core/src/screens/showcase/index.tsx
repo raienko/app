@@ -41,6 +41,7 @@ import SlidersSection from "./sections/sliders";
 import SpacerSection from "./sections/spacer";
 import SwitchesSection from "./sections/switches";
 import TabBarSection from "./sections/tab-bar";
+import TagsSection from "./sections/tags";
 import ThemeSection from "./sections/theme";
 import ToastsSection from "./sections/toasts";
 import TypographySection from "./sections/typography";
@@ -70,6 +71,7 @@ const SECTIONS: {
   { title: "showcase.divider", Component: DividerSection },
   { title: "showcase.icons", Component: IconsSection },
   { title: "showcase.buttons", Component: ButtonsSection },
+  { title: "showcase.tags", Component: TagsSection },
   { title: "showcase.header", Component: HeaderSection },
   { title: "showcase.tabBar", Component: TabBarSection },
   { title: "showcase.checkboxes", Component: CheckboxesSection },

@@ -200,6 +200,7 @@
     "divider": "Separador",
     "icons": "Ícones",
     "buttons": "Botões",
+    "tags": "Etiquetas",
     "header": "Cabeçalho",
     "tabBar": "Barra de separadores",
     "checkboxes": "Caixas de verificação",
@@ -251,5 +252,8 @@
     "multipleSecond": "Segundo valor",
     "multipleThird": "Terceiro valor",
     "disabled": "Controlo deslizante desativado"
+  },
+  "tag": {
+    "remove": "Remover {{value}}"
   }
 }

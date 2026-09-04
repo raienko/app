@@ -200,6 +200,7 @@
     "divider": "Divider",
     "icons": "Icons",
     "buttons": "Buttons",
+    "tags": "Tags",
     "header": "Header",
     "tabBar": "Tab bar",
     "checkboxes": "Checkboxes",
@@ -251,5 +252,8 @@
     "multipleSecond": "Second value",
     "multipleThird": "Third value",
     "disabled": "Disabled slider"
+  },
+  "tag": {
+    "remove": "Remove {{value}}"
   }
 }

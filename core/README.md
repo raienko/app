@@ -89,6 +89,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Divider           | Both orientations, a labelled rule, and the inset switchable against a list                       |
 | Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides           |
 | Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row   |
+| Tags              | All three shapes, both sizes, the two-control pill, disabled, and truncation                      |
 | Progress          | A live determinate bar, custom value wording, and the indeterminate state                         |
 | Segmented control | Both implementations side by side, a disabled option, and a disabled control                      |
 | Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding           |
@@ -689,6 +690,27 @@ One row in a list: something on the left, text in the middle, something on the r
 - **`onPress` makes the whole row one control**, named from its own text (`label` overrides), with `selected` and `disabled` announced. Right for a row that navigates; wrong for a row that _holds_ a control — `accessible` groups the children into one announcement, so an `IconButton` in the right slot of a pressable row becomes unreachable. Give the button the interaction and leave the row inert. Both halves are covered by tests, and verified in the browser: the rows announce as buttons with `aria-selected` tracking the pick, and the remove button inside an inert row is still reachable and still fires.
 - **`Switch`, `Checkbox` and `RadioButton` don't go in a slot at all.** Each is already a full labelled row (they share `BinaryControlRow`), so nesting one puts its label beside this row's title and says everything twice — caught the first time the Showcase rendered a "Notifications" row with the word in it twice. They replace a `ListItem` rather than sitting inside one.
 - **Title, subtitle and custom middle content are a union**, so a `subtitle` with no `title` to sub, or a custom element competing with a title, won't compile — the same construction `Header` uses.
+
+### `Tag` — `src/components/tag`
+
+```tsx
+import Tag from "@/components/tag";
+
+<Tag value="Design" />                                   // static: content, not a control
+<Tag value="Unread" onPress={toggle} selected={unread} /> // a filter chip
+<Tag value="Ada Lovelace" onClose={() => remove(ada)} />  // removable
+<Tag value="Draft" icon={<Icon name="edit-3" />} size="small" />
+```
+
+A short piece of text in a pill: a keyword on an article, an applied filter, one of the recipients in a "To:" field. Three shapes out of two props — neither is static, `onPress` makes the body a control that can be `selected`, `onClose` adds the remove button — and both props together give one pill with two controls in it.
+
+- **The remove button is its own target, never part of the body's.** A pressable body groups its children into one announcement, so a remove button _inside_ it would be unreachable to a screen reader, and the whole pill would carry two meanings on one tap — "apply this filter" and "delete it" — with no way to choose. They sit side by side instead, each with its own name; the test asserts exactly two controls and that pressing one never fires the other. Same rule `ListItem` states for a row that holds a control.
+- **The remove button names what it removes** — "Remove Ada Lovelace", not "Close". A row of tags is a row of identical ✕ glyphs otherwise, and which one you're on is exactly what a screen-reader user can't see. The wording is a translation key (`tag.remove`, interpolating the value) in all ten locales, with `closeLabel` for product wording that differs.
+- **`selected`, `label` and `closeLabel` are unions with the props they belong to**, so a static tag that reports itself as selected, or a `closeLabel` with no remove button to name, is a `tsc` error rather than a state nothing reads — the same construction `ListItem` uses for its inert/pressable split.
+- **Both halves take the pill's full height**, so neither target is a fraction of what it looks like, and `size` defaults to `"medium"` — the 44pt touch target every other control in the app defaults to. `"small"` is the compact 32pt pill, best kept for static tags.
+- **`borderRadius` is `radius.x16`**, which is exactly half `elementHeightSm`: both go through the same `units()`, so a small tag is a true pill and a medium one is near enough. Text that outgrows the min height under large dynamic type rounds off as a rect instead, which is the graceful end of that trade.
+- **It sizes itself to its own text** (`alignSelf: "flex-start"`), unlike `Card` and `ListItem` which stretch — a tag is a word, and a row of them should read as a row. A tag longer than its container truncates rather than overflowing it: the body shrinks and the remove button never does.
+- Colours come from the same tokens `Button`'s `secondary` uses — `backgroundElement` over a `border` edge — and a selected tag is `primary` with `onPrimary` on it, the pair that exists precisely to stay legible together.
 
 ### `Card` — `src/components/card`
 

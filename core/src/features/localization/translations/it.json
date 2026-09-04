@@ -200,6 +200,7 @@
     "divider": "Separatore",
     "icons": "Icone",
     "buttons": "Pulsanti",
+    "tags": "Tag",
     "header": "Intestazione",
     "tabBar": "Barra delle schede",
     "checkboxes": "Caselle di controllo",
@@ -251,5 +252,8 @@
     "multipleSecond": "Secondo valore",
     "multipleThird": "Terzo valore",
     "disabled": "Cursore disattivato"
+  },
+  "tag": {
+    "remove": "Rimuovi {{value}}"
   }
 }

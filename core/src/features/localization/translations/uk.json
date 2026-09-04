@@ -200,6 +200,7 @@
     "divider": "Роздільник",
     "icons": "Іконки",
     "buttons": "Кнопки",
+    "tags": "Теги",
     "header": "Шапка",
     "tabBar": "Панель вкладок",
     "checkboxes": "Прапорці",
@@ -251,5 +252,8 @@
     "multipleSecond": "Друге значення",
     "multipleThird": "Третє значення",
     "disabled": "Вимкнений повзунок"
+  },
+  "tag": {
+    "remove": "Видалити «{{value}}»"
   }
 }

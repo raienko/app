@@ -200,6 +200,7 @@
     "divider": "区切り線",
     "icons": "アイコン",
     "buttons": "ボタン",
+    "tags": "タグ",
     "header": "ヘッダー",
     "tabBar": "タブバー",
     "checkboxes": "チェックボックス",
@@ -251,5 +252,8 @@
     "multipleSecond": "2番目の値",
     "multipleThird": "3番目の値",
     "disabled": "無効なスライダー"
+  },
+  "tag": {
+    "remove": "{{value}} を削除"
   }
 }

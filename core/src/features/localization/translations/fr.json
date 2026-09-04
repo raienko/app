@@ -200,6 +200,7 @@
     "divider": "Séparateur",
     "icons": "Icônes",
     "buttons": "Boutons",
+    "tags": "Étiquettes",
     "header": "En-tête",
     "tabBar": "Barre d’onglets",
     "checkboxes": "Cases à cocher",
@@ -251,5 +252,8 @@
     "multipleSecond": "Deuxième valeur",
     "multipleThird": "Troisième valeur",
     "disabled": "Curseur désactivé"
+  },
+  "tag": {
+    "remove": "Supprimer {{value}}"
   }
 }

@@ -15,6 +15,7 @@ const SECTION_TITLES = [
   "Divider",
   "Icons",
   "Buttons",
+  "Tags",
   "Header",
   "Tab bar",
   "Checkboxes",

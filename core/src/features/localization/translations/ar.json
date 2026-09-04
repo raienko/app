@@ -200,6 +200,7 @@
     "divider": "فاصل",
     "icons": "الأيقونات",
     "buttons": "الأزرار",
+    "tags": "الوسوم",
     "header": "الترويسة",
     "tabBar": "شريط التبويبات",
     "checkboxes": "مربعات الاختيار",
@@ -251,5 +252,8 @@
     "multipleSecond": "القيمة الثانية",
     "multipleThird": "القيمة الثالثة",
     "disabled": "شريط تمرير معطل"
+  },
+  "tag": {
+    "remove": "إزالة {{value}}"
   }
 }

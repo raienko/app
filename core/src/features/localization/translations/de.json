@@ -200,6 +200,7 @@
     "divider": "Trennlinie",
     "icons": "Symbole",
     "buttons": "Schaltflächen",
+    "tags": "Tags",
     "header": "Kopfzeile",
     "tabBar": "Tab-Leiste",
     "checkboxes": "Kontrollkästchen",
@@ -251,5 +252,8 @@
     "multipleSecond": "Zweiter Wert",
     "multipleThird": "Dritter Wert",
     "disabled": "Deaktivierter Schieberegler"
+  },
+  "tag": {
+    "remove": "{{value}} entfernen"
   }
 }
