@@ -9,6 +9,7 @@ import { useLocale, type TranslationKey } from "@/features/localization";
 import { createStyles, useSizes } from "@/features/responsive";
 
 import AccessibilitySection from "./sections/accessibility";
+import AvatarsSection from "./sections/avatars";
 import BadgesSection from "./sections/badges";
 import ButtonsSection from "./sections/buttons";
 import CardSection from "./sections/card";
@@ -74,6 +75,7 @@ const SECTIONS: {
   { title: "showcase.buttons", Component: ButtonsSection },
   { title: "showcase.tags", Component: TagsSection },
   { title: "showcase.badges", Component: BadgesSection },
+  { title: "showcase.avatars", Component: AvatarsSection },
   { title: "showcase.header", Component: HeaderSection },
   { title: "showcase.tabBar", Component: TabBarSection },
   { title: "showcase.checkboxes", Component: CheckboxesSection },
