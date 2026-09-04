@@ -180,6 +180,7 @@
     "radioButtons": "ラジオボタン",
     "switches": "スイッチ",
     "sliders": "スライダー",
+    "segmentedControl": "セグメンテッドコントロール",
     "stateViews": "状態ビュー",
     "inputs": "入力フィールド",
     "images": "画像",

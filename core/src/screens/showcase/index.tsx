@@ -27,6 +27,7 @@ import RadioButtonsSection from "./sections/radio-buttons";
 import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
 import StateViewsSection from "./sections/state-views";
+import SegmentedControlSection from "./sections/segmented-control";
 import SlidersSection from "./sections/sliders";
 import SpacerSection from "./sections/spacer";
 import SwitchesSection from "./sections/switches";
@@ -61,6 +62,7 @@ const SECTIONS: {
   { title: "showcase.radioButtons", Component: RadioButtonsSection },
   { title: "showcase.switches", Component: SwitchesSection },
   { title: "showcase.sliders", Component: SlidersSection },
+  { title: "showcase.segmentedControl", Component: SegmentedControlSection },
   { title: "showcase.stateViews", Component: StateViewsSection },
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.images", Component: ImagesSection },

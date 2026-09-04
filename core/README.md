@@ -76,27 +76,28 @@ internal API into application code.
 
 The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are ordered foundations-first — the styleguides and app-wide settings everything else is built on, then the components that consume them.
 
-| Section          | What it demonstrates                                                                             |
-| ---------------- | ------------------------------------------------------------------------------------------------ |
-| Typography       | All 11 type-scale entries at their own size, with the title sizes as real headings               |
-| Theme & colors   | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                    |
-| Localization     | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                       |
-| Accessibility    | A live readout of every OS flag, `fontScale`, and `duration()`                                   |
-| Responsive units | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes              |
-| Grid             | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                     |
-| Spacer           | A gap between two blocks, switchable across all three directions and the spacing scale           |
-| Icons            | One glyph from each of the five families, the custom SVG set, colour and size overrides          |
-| Buttons          | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row  |
-| Inputs           | Text, numeric, email, password, code, phone, select and date/time variations                     |
-| Images           | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls |
-| Carousel         | Slides with pagination you can switch off live, and the position it announces                    |
-| Image picker     | Camera/gallery selection through a pressable trigger or the static API                           |
-| Modals           | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                  |
-| Permissions      | Persisted camera, gallery and notification permission state and actions                          |
-| Deep links       | Dispatching a link by URL, the registered patterns, and a gate holding one back                  |
-| Storage          | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`      |
-| Logger           | Every logger method and structured metadata                                                      |
-| Utilities        | `If` toggling content, and a scoped event bus emitting and counting pings                        |
+| Section           | What it demonstrates                                                                             |
+| ----------------- | ------------------------------------------------------------------------------------------------ |
+| Typography        | All 11 type-scale entries at their own size, with the title sizes as real headings               |
+| Theme & colors    | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                    |
+| Localization      | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                       |
+| Accessibility     | A live readout of every OS flag, `fontScale`, and `duration()`                                   |
+| Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes              |
+| Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                     |
+| Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale           |
+| Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides          |
+| Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row  |
+| Segmented control | Both implementations side by side, a disabled option, and a disabled control                     |
+| Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                     |
+| Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls |
+| Carousel          | Slides with pagination you can switch off live, and the position it announces                    |
+| Image picker      | Camera/gallery selection through a pressable trigger or the static API                           |
+| Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                  |
+| Permissions       | Persisted camera, gallery and notification permission state and actions                          |
+| Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                  |
+| Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`      |
+| Logger            | Every logger method and structured metadata                                                      |
+| Utilities         | `If` toggling content, and a scoped event bus emitting and counting pings                        |
 
 Each section is its own file under `src/screens/showcase/sections/`. They're screen-local — the showcase is their only consumer — but split for the same reason `Modal`'s internals are: one file per concern beats one large screen file. The section list itself is a table in `screens/showcase/index.tsx`, so adding one is an entry there plus a file.
 
@@ -214,6 +215,7 @@ Two halves: **reading** what the user has turned on at the OS level, and **writi
 - **`fieldA11yProps()`** carries a field's `error` as its `accessibilityHint`, which VoiceOver/TalkBack read after the label. RN has no "invalid" accessibility state to set — that's an ARIA concept with no React Native equivalent (`accessibilityInvalid` type-checks only because a spread suppresses excess-property checking, and does nothing at runtime) — so a hint is the portable way to announce _why_ a field is wrong instead of leaving the red border as the only signal.
 - **`disabledA11yProps()`** is the opposite instruction: hide this from assistive technology entirely. It takes four spellings to say once — `accessible: false` so it never becomes an element, `accessibilityElementsHidden` (iOS) and `importantForAccessibility="no-hide-descendants"` (Android) to hide it _and its descendants_, and `aria-hidden` for the DOM react-native-web renders — and setting only some of them leaves the node announced on whichever platforms the rest covered. It's for things that exist only visually and have nothing to say: `Spacer` (below), a decorative rule, an icon beside a label that already names it. Without it a purely presentational node is still a stop a screen-reader user has to swipe past, announced as an empty element.
 - **`imageA11yProps({ label })`** names an image. An image is the one control-shaped thing with no text of its own to derive a name from, and `expo-image` defaults `accessible` to `false` — so an image left alone isn't an accessibility element on iOS or Android at all, and an undescribed one is announced as something a screen-reader user can neither read nor knowingly skip. It sets `accessible: true` alongside the usual two role spellings (`accessibilityRole="image"` for native, `role="img"` for react-native-web). `Image` (below) pairs it with `expo-image`'s own `alt`, which is what becomes the DOM `alt` attribute.
+- **`radioGroupA11yProps({ label })`** names the container around a set of mutually exclusive options — a `SegmentedControl`, a radio list. Without it each option announces alone with nothing saying what the choice _is_: a screen reader reads "Day, selected, radio button" and never mentions it's the view mode. The role also tells assistive technology the options belong together, which is what makes position announcements and group navigation work. Pair it with `radioA11yProps()` on each option.
 
 ### Responsive units — `src/features/responsive`
 
@@ -553,6 +555,34 @@ A wrapper over [`react-native-reanimated-carousel`](https://rn-carousel.dev/) (v
 - **Known gap, web only:** the library's dots set their current-slide state through `accessibilityState={{ selected }}` and nothing else, and react-native-web 0.21 renders only the `aria-*` form — the same finding this project already documented for `Button` — so `aria-selected` never reaches the DOM. Native is unaffected. It degrades rather than breaks: the region's own `aria-valuetext` still announces which slide is current, so the information is available, just not from the dot itself. Patching it needs `patch-package` against the library's minified `lib/` build (its unminified `src/` is not what the bundler resolves — verified), which didn't seem worth the maintenance for a redundancy gap; say the word and it's a small patch.
 - **Images inside slides must not be native drag sources.** An `<img>` that the browser can drag hijacks the pan the moment the pointer moves, so the carousel just snaps back — this is why `Image` now ships `draggable={false}` (above). A slide rendering a raw `expo-image` or `<img>` of its own needs the same flag.
 - **Jest can't drive it.** Under `react-native-reanimated/mock` nothing animates, so the library never settles a slide and `onSnapToItem` never fires. The tests cover every piece of wiring the wrapper owns — the region's accessibility props, the pagination, and that the controls reach the library's handle (spying on the very object `useImperativeHandle` hands the caller) — and the parts that need real motion are verified in the browser instead.
+
+### `SegmentedControl` — `src/components/segmented-control`
+
+```tsx
+import SegmentedControl from "@/components/segmented-control";
+
+<SegmentedControl
+  label="View"
+  value={view}
+  onChange={setView}
+  options={[
+    { value: "day", label: "Day" },
+    { value: "week", label: "Week" },
+    { value: "month", label: "Month" },
+  ]}
+/>
+
+<SegmentedControl type="expo" label="View" value={view} onChange={setView} options={options} />
+```
+
+A row of mutually exclusive options with exactly one chosen — for switching between a handful of views or modes, where a `Select` would hide the alternatives behind a tap and a radio list would spend a whole column on them. App-owned by default, with Expo UI's platform control (`@expo/ui/community/segmented-control`) behind `type="expo"`, the same switch `Switch`, `Checkbox`, `RadioButton` and `Slider` use.
+
+- **`options` follows `SelectOption`'s split**: `value` is what `onChange` reports and what `value` is matched against, `label` is the only thing shown — so the stored value stays a stable code while the visible text is free to be translated. A `value` matching no option leaves everything unselected rather than throwing, the same degrade-don't-crash rule `Select`'s placeholder follows, so a stale value out of storage doesn't take the screen down.
+- **Pressing the current segment reports nothing.** It isn't a change, and firing `onChange` for a value the caller already holds turns an idle tap into a state update — and, for a call site that persists on change, into a write.
+- **Accessibility is a `radiogroup` of radios, not a row of buttons.** Each segment announces as a radio with its checked state, inside a group named by the required `label`; a screen reader then says what the choice is for, which option this is, and whether it's checked. Announcing each as an unrelated "button, selected" would lose the fact that picking one unpicks the rest. Verified in the rendered DOM: `role="radiogroup"` with `aria-label` on the track, `role="radio"` with `aria-checked` on every segment, and `aria-disabled` on both.
+- **The selected pill is `primary`/`onPrimary`, not iOS's lighter "raised card on a grey track".** That shade of the idea would put `background` on `backgroundElement` — the same 1.19:1 pairing `Button`'s palette already rejected — far under the 3:1 WCAG 1.4.11 asks of the only thing marking which option is chosen. Selection is also a fill _appearing_ rather than a hue changing, so it survives greyscale and a colour-blindness filter.
+- **A single option can be disabled** (`options[n].disabled`) as well as the whole control. A disabled segment is dimmed as well as unpressable — one unavailable choice among available ones is otherwise indistinguishable until you tap it and nothing happens.
+- **Two things `type="expo"` can't do**, by the native control's design rather than an oversight: it addresses segments by index off a flat `values: string[]` (so `value` is resolved to an index in and back out — going through the index rather than its `onValueChange`, which reports the visible _label_, keeps two same-labelled options distinguishable and leaves the label free to be translated), and it has no per-option `enabled`, so `options[n].disabled` is ignored there. Reach for the custom implementation when one choice needs to be unavailable.
 
 ### `Grid` — `src/components/grid`
 

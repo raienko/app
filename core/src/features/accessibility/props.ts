@@ -183,6 +183,37 @@ export function radioA11yProps({
   };
 }
 
+type RadioGroupOptions = {
+  /** What the whole set of choices is for — "View", "Sort by", "Plan". */
+  label: string;
+  disabled?: boolean;
+};
+
+/**
+ * The accessibility props for the container around a set of mutually
+ * exclusive options — a `SegmentedControl`, a radio list.
+ *
+ * Without it each option announces on its own with nothing saying what the
+ * choice *is*: a screen reader reads "Day, selected, radio button" and
+ * never mentions that this is the view mode. The role also tells assistive
+ * technology the options belong together, which is what makes "2 of 3"
+ * position announcements and group navigation work.
+ *
+ * Pair it with `radioA11yProps()` on each option.
+ */
+export function radioGroupA11yProps({
+  label,
+  disabled = false,
+}: RadioGroupOptions): AccessibilityProps {
+  return {
+    accessibilityRole: "radiogroup",
+    role: "radiogroup",
+    accessibilityLabel: label,
+    accessibilityState: { disabled },
+    "aria-disabled": disabled,
+  };
+}
+
 type FieldOptions = {
   /** A field's visible label, or its placeholder when it has no label. */
   label?: string;

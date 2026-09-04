@@ -180,6 +180,7 @@
     "radioButtons": "Botones de opción",
     "switches": "Interruptores",
     "sliders": "Deslizadores",
+    "segmentedControl": "Control segmentado",
     "stateViews": "Estados",
     "inputs": "Campos de entrada",
     "images": "Imágenes",

@@ -13,6 +13,7 @@ export {
   headingA11yProps,
   imageA11yProps,
   radioA11yProps,
+  radioGroupA11yProps,
   sliderA11yProps,
   statusA11yProps,
   switchA11yProps,
