@@ -180,6 +180,7 @@
     "radioButtons": "أزرار الاختيار",
     "switches": "مفاتيح التبديل",
     "sliders": "أشرطة التمرير",
+    "progress": "التقدم",
     "segmentedControl": "عنصر تحكم مقسَّم",
     "stateViews": "حالات العرض",
     "inputs": "حقول الإدخال",

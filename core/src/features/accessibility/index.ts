@@ -12,6 +12,7 @@ export {
   fieldA11yProps,
   headingA11yProps,
   imageA11yProps,
+  progressA11yProps,
   radioA11yProps,
   radioGroupA11yProps,
   sliderA11yProps,

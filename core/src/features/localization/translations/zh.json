@@ -180,6 +180,7 @@
     "radioButtons": "单选按钮",
     "switches": "开关",
     "sliders": "滑块",
+    "progress": "进度",
     "segmentedControl": "分段控件",
     "stateViews": "状态视图",
     "inputs": "输入框",

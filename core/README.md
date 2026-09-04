@@ -87,6 +87,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale           |
 | Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides          |
 | Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row  |
+| Progress          | A live determinate bar, custom value wording, and the indeterminate state                        |
 | Segmented control | Both implementations side by side, a disabled option, and a disabled control                     |
 | Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                     |
 | Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls |
@@ -217,6 +218,7 @@ Two halves: **reading** what the user has turned on at the OS level, and **writi
 - **`disabledA11yProps()`** is the opposite instruction: hide this from assistive technology entirely. It takes four spellings to say once — `accessible: false` so it never becomes an element, `accessibilityElementsHidden` (iOS) and `importantForAccessibility="no-hide-descendants"` (Android) to hide it _and its descendants_, and `aria-hidden` for the DOM react-native-web renders — and setting only some of them leaves the node announced on whichever platforms the rest covered. It's for things that exist only visually and have nothing to say: `Spacer` (below), a decorative rule, an icon beside a label that already names it. Without it a purely presentational node is still a stop a screen-reader user has to swipe past, announced as an empty element.
 - **`imageA11yProps({ label })`** names an image. An image is the one control-shaped thing with no text of its own to derive a name from, and `expo-image` defaults `accessible` to `false` — so an image left alone isn't an accessibility element on iOS or Android at all, and an undescribed one is announced as something a screen-reader user can neither read nor knowingly skip. It sets `accessible: true` alongside the usual two role spellings (`accessibilityRole="image"` for native, `role="img"` for react-native-web). `Image` (below) pairs it with `expo-image`'s own `alt`, which is what becomes the DOM `alt` attribute.
 - **`radioGroupA11yProps({ label })`** names the container around a set of mutually exclusive options — a `SegmentedControl`, a radio list. Without it each option announces alone with nothing saying what the choice _is_: a screen reader reads "Day, selected, radio button" and never mentions it's the view mode. The role also tells assistive technology the options belong together, which is what makes position announcements and group navigation work. Pair it with `radioA11yProps()` on each option.
+- **`progressA11yProps({ label, value, valueText })`** reports how far along something is. Its range is 0–100, not 0–1, because that is what both platforms read out as a percentage — a `now` of `0.42` is announced as "0.42", not "42%". Omitting `value` is meaningful rather than lazy: ARIA reads a missing `aria-valuenow` as "the total isn't known", so an indeterminate bar reports no figure and sets `busy` instead, which is a different claim from a bar sitting at 0%.
 
 ### Responsive units — `src/features/responsive`
 
@@ -487,6 +489,29 @@ Wraps RN's own `Modal` — already a native, full-window overlay, so no `Root` w
 - **`bottomSheet`/`actions` support drag-to-dismiss from a grabber handle** (`react-native-gesture-handler`'s `Gesture.Pan()` + `GestureDetector`, Reanimated-driven). Deliberately scoped to just the handle, not the whole sheet — wrapping the entire content (including the `ScrollView` above) in the pan gesture would fight the `ScrollView`'s own vertical scrolling for the same gesture. Dragging past 100px or with velocity over 800px/s dismisses (via the same `dismiss()`/`onDismiss` path as a backdrop tap); otherwise it snaps back. Verified live in-browser with simulated pointer drags: a 200px drag dismissed the sheet, a 20px drag snapped back without dismissing.
 - **`GestureHandlerRootView` now wraps the whole app**, added to `Providers` (`src/root/providers.tsx`) rather than only around Modal's gesture — gesture-handler needs exactly one, at the true root, to reliably capture touches on Android; wrapping it locally around just the drag handle would work inconsistently. `jest.setup.js` also needed `require("react-native-gesture-handler/jestSetup")` (gesture-handler's own recommended Jest setup) once any gesture was actually used.
 - **Composed from smaller pieces**, same folder-per-piece pattern as `Input`: `backdrop.tsx` (`ModalBackdrop`), `content.tsx` (`ModalContent` — position/animation styling + the fade/slide-up interpolation), `handle.tsx` (`ModalHandle` — the grabber and its pan gesture), and `scroll-area.tsx` (`ModalScrollArea` — the bounded, scrollable content region) each own one concern; `index.tsx` is the orchestrator that owns state (`nativeVisible`, `progress`/`dragY` shared values, the show/hide/dismiss callbacks) and composes the pieces, using `If` (above) for the parts that are conditional per `type` (backdrop, drag handle) instead of ternaries.
+
+### `ProgressBar` — `src/components/progress-bar`
+
+```tsx
+import ProgressBar from "@/components/progress-bar";
+
+<ProgressBar value={uploaded / total} label="Uploading photos" />
+<ProgressBar label="Checking for updates" />          // indeterminate
+<ProgressBar
+  value={step / steps}
+  label="Setup"
+  size="small"
+  formatValue={(v) => `Step ${Math.round(v * steps)} of ${steps}`}
+/>
+```
+
+A horizontal bar showing how far along a task is. `Spinner` stays the right answer for a wait that is short and shapeless — a bar earns its space by answering "how much longer", which is also why the indeterminate state is the weaker of the two and not the default.
+
+- **`value` is a 0–1 fraction, clamped.** A caller dividing by a total that turns out to be `0` gets an empty bar rather than a fill running off the end. `NaN` reads as `0`; an infinity is just past the end and pins to the right edge rather than being lumped in with it.
+- **Omitting `value` is a claim, not a missing prop.** It makes the bar indeterminate, which reports _no_ `aria-valuenow` at all and sets `busy` instead — a bar that can't say how far along it is says something different from one reporting 0%. Verified in the rendered DOM: the determinate bars carry `aria-valuenow` with `aria-valuetext` (`"35%"`, or a caller's `"Step 2 of 6"`) and no `aria-busy`; the indeterminate one carries `aria-busy="true"` and no value.
+- **Both states honour Reduce Motion, differently.** The determinate fill goes through `duration()`, so it lands on each new value instantly instead of gliding. The indeterminate sweep can't simply stop — the movement _is_ the signal that something is happening — so it becomes a cross-fade in place, which is the substitution Apple's own guidance names. Covered by tests that render with `isReduceMotionEnabled` mocked on and assert the bar fades full-width rather than sweeping a segment.
+- **The track is `backgroundElementSelected`, not `backgroundElement`** — the latter is what most raised surfaces already use, so an unfilled bar sitting on a `Card` would be invisible. Same trap `Button`'s `secondary` and `Card`'s `outlined` document.
+- **No `type="expo"` here.** Expo UI has a progress view for SwiftUI and one for Jetpack Compose, but nothing universal and nothing on web — three platform-specific implementations for a bar drawn from two `View`s isn't a trade worth making. `Switch`, `Checkbox`, `RadioButton`, `Slider` and `SegmentedControl` offer the switch because Expo UI ships one component that covers every platform.
 
 ### `Card` — `src/components/card`
 

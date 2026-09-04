@@ -17,6 +17,7 @@ const SECTION_TITLES = [
   "Radio buttons",
   "Switches",
   "Sliders",
+  "Progress",
   "Segmented control",
   "State views",
   "Inputs",

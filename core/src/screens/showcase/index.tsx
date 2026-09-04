@@ -24,6 +24,7 @@ import LoggerSection from "./sections/logger";
 import ModalsSection from "./sections/modals";
 import PermissionsSection from "./sections/permissions";
 import PopupsSection from "./sections/popups";
+import ProgressBarSection from "./sections/progress-bar";
 import RadioButtonsSection from "./sections/radio-buttons";
 import ResponsiveSection from "./sections/responsive";
 import StorageSection from "./sections/storage";
@@ -63,6 +64,7 @@ const SECTIONS: {
   { title: "showcase.radioButtons", Component: RadioButtonsSection },
   { title: "showcase.switches", Component: SwitchesSection },
   { title: "showcase.sliders", Component: SlidersSection },
+  { title: "showcase.progress", Component: ProgressBarSection },
   { title: "showcase.segmentedControl", Component: SegmentedControlSection },
   { title: "showcase.stateViews", Component: StateViewsSection },
   { title: "showcase.inputs", Component: InputsSection },
