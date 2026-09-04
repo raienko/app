@@ -1,291 +1,308 @@
 # Core codebase roadmap
 
-Last audited: 2026-09-04  
-Scope: `core/` (Expo SDK 57, React Native 0.86, React 19.2)  
-Planning assumption: estimates are for one engineer and should be re-estimated after Phase 0.
+Last audited: 2026-09-04
 
-## Executive assessment
+Scope: `core/` — Expo SDK 57, React Native 0.86, React 19.2
 
-The codebase is a strong application foundation and component showcase, but it is not yet a production-ready product shell. Its best qualities are strict TypeScript, centralized providers, typed component APIs, semantic theme and typography systems, unusually thorough unit tests, and accessibility behavior designed into components rather than added afterward.
+Planning assumption: estimates are for one engineer. Re-estimate after Step 01 and after the application-versus-library decision.
 
-The next work should not be a broad rewrite. The highest-value work is to make the existing quality reproducible in CI, remove native dependency ambiguity, harden persisted/global state, close the remaining localization and third-party-control gaps, then decide whether `core` is an application or a reusable design-system package. Performance changes should follow measurements; the current showcase bundle is useful as a baseline but is not representative of a real product route because it deliberately imports nearly everything.
+## How to use this guide
 
-### Current baseline
+| Priority                              | Meaning                                                                           | Scheduling rule                                                                                 |
+| ------------------------------------- | --------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| **P0 — Foundation**                   | A blocker for safe feature work, reliable collaboration, or reproducible delivery | Complete before broad product/UI expansion. Steps with the same dependency may run in parallel. |
+| **P1 — Product-ready core**           | Required for a coherent, accessible first product flow and trustworthy previews   | Complete before calling the component system or preview channel production-ready.               |
+| **P2 — Release readiness**            | Required before store submission or justified by measured product needs           | Start after real product routes and signed preview builds exist.                                |
+| **P3 — Continuous/product-triggered** | Recurring work or capabilities that need a concrete product requirement           | Schedule by cadence or only when the listed trigger exists.                                     |
 
-| Area                  | Observed state                                                              |
-| --------------------- | --------------------------------------------------------------------------- |
-| Source                | 361 TypeScript/TSX files; about 17.4k production lines and 10.4k test lines |
-| Tests                 | 88 suites and 737 tests pass                                                |
-| Coverage              | 79.1% statements, 79.1% branches, 70.4% functions, 80.6% lines              |
-| Static checks         | Lint, strict type-check, formatting, and secret scan pass                   |
-| Storybook             | 46 story files; production web Storybook build passes                       |
-| Production web export | 3.9 MB JS, about 951 KB gzipped; 5.4 MB total output                        |
-| Navigation            | One product route, currently the 31-section component showcase              |
-| Delivery              | Local Git hooks exist; no repository CI workflow or `eas.json` exists       |
+Follow step numbers within a priority unless the dependency column explicitly permits parallel work. A step is complete only when its “Done when” evidence exists; creating a file or dispatching a remote job is not completion by itself.
 
-The coverage percentages are optimistic because Jest has no `collectCoverageFrom` configuration; untouched source files are not part of the denominator. Establish representative collection before using the numbers as a gate.
+## Audited baseline
 
-## What is already working well
+| Area          | Current state                                                                          | Consequence                                                                                  |
+| ------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| Source        | 361 TypeScript/TSX files; about 17.4k production lines and 10.4k test lines            | The codebase is large enough to need explicit ownership and automated boundaries.            |
+| Tests         | 88 suites and 737 tests pass                                                           | Strong behavioral baseline, but no remote enforcement.                                       |
+| Coverage      | 79.1% statements, 79.1% branches, 70.4% functions, 80.6% lines                         | Optimistic because untouched source is absent from the denominator.                          |
+| Static checks | Lint, strict type-check, formatting, and local secret scan pass                        | Preserve these checks and make them required in CI.                                          |
+| Storybook     | 46 story files; production web Storybook build passes                                  | Good visual inventory; public-component coverage is not yet formally defined.                |
+| Web export    | 3.9 MB JavaScript, about 951 KB gzipped; 5.4 MB total                                  | Treat as a baseline only: the showcase deliberately imports nearly everything.               |
+| Navigation    | One product route containing 31 showcase sections                                      | Product startup and catalogue startup are currently the same thing.                          |
+| Delivery      | Git hooks exist; no repository CI workflow or `eas.json`                               | Builds, checks, previews, and releases are not reproducible remotely.                        |
+| Security      | Preferences and permission snapshots are stored; no authentication secrets are present | Establish policy before credentials, personal data, APIs, or analytics expand.               |
+| Agent policy  | `core/AGENTS.md` contains only the exact Expo SDK 57 documentation rule                | Add repository-wide scope, authority, handoff, and review rules before multi-agent adoption. |
 
-- Design-system boundaries are enforced by ESLint: application UI cannot import raw React Native `Text`, raw `expo-image`, direct Expo UI `Host`, hard-coded UI colors, or ad hoc typography declarations.
-- Third-party controls are generally behind app-owned adapters. `ExpoUIHost` supplies scheme, primary seed color, and layout direction; the date picker maps exposed color and text slots to semantic tokens.
-- Shared behavior is already factored at useful boundaries: `BinaryControlRow`, `BaseInput`, `Modal`, `createEventBus`, `LocalValue`, `Providers`, and the responsive/theme/accessibility helpers avoid obvious copy-paste implementations.
-- Accessibility coverage is substantially above a typical starter: semantic helpers, reduced-motion support, screen-reader-aware toast timing, keyboard behavior, adjustable controls, RTL behavior, and explicit control labels are tested.
-- Deep links have a centralized parser, route registry, readiness/auth-style gates, bounded queue, cold-start deduplication, and unit coverage.
-- Public components mostly have colocated tests and stories, and the Storybook environments share the same providers as the application.
+## Strengths to preserve
 
-Do not replace these systems with new libraries without a measured deficiency. In particular, do not add a state library, blanket memoization, a virtualized-list dependency, or a new overlay framework merely for consistency.
+| Existing strength                                                                                              | Rule for future steps                                                                                                |
+| -------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Semantic theme and typography systems with ESLint boundaries                                                   | All app-owned and third-party UI must continue to use semantic tokens and approved text components/adapters.         |
+| App-owned adapters around Expo/third-party controls                                                            | Extend the adapter or fall back to a custom implementation when the native control cannot honor the public contract. |
+| Shared seams such as `BaseInput`, `BinaryControlRow`, `Modal`, `createEventBus`, `LocalValue`, and `Providers` | Refactor only when tests show a genuinely shared responsibility; do not create a universal manager.                  |
+| Accessibility, RTL, reduced-motion, keyboard, and screen-reader coverage                                       | Treat these as acceptance criteria for every public UI component, not later polish.                                  |
+| Centralized deep-link parsing and routing                                                                      | Harden the boundary rather than adding a second link system.                                                         |
+| Colocated component tests and stories                                                                          | Keep the pattern and define which components are public versus internal.                                             |
 
-## Main risks and opportunities
+## Master execution guide
 
-| Priority | Finding                                             | Evidence and impact                                                                                                                                                                                                                                                           |
-| -------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| P0       | Quality is not enforced remotely                    | Pre-push hooks run lint, type-check, and tests, but there is no CI. Hooks can be skipped and do not validate a production export or Storybook build.                                                                                                                          |
-| P0       | Native dependency graph is not singular             | The install contains `react-native-screens` 4.26.2 at the root and 4.27.0 under Expo Router, plus `expo-constants` 57.0.13 at the root and 57.0.17 under notifications. Multiple JS copies around one autolinked native module can create hard-to-debug native/JS mismatches. |
-| P0       | Persisted data can crash startup                    | `StorageValue.parse()` calls `JSON.parse` without recovery or schema validation. Permission objects are read during module construction, so corrupt or old data can fail before the root UI mounts.                                                                           |
-| P0       | Build environment is not reproducible yet           | A production export failed until the required public variables were injected directly. `app.config.ts` also writes `extra.eas.projectId: 0` when no project ID exists instead of omitting the configuration.                                                                  |
-| P1       | Overlay completion contracts are timer-based        | `Modal.show/hide` and `Toast.show/hide` resolve after fixed delays instead of the actual transition lifecycle. This disagrees with reduced motion and is vulnerable to rapid show/hide/replacement sequences or unmounts.                                                     |
-| P1       | One reusable component bypasses localization        | `ImagePicker` owns the visible strings “Choose image”, “Gallery”, and “Camera” rather than using translation keys or injected labels. Errors are logged in development but cannot be surfaced through a public callback.                                                      |
-| P1       | Caught failures disappear in production             | The shared logger is intentionally development-only, but several components and services catch and swallow operational failures after logging. Those paths do not automatically become production telemetry or user-visible feedback.                                         |
-| P1       | One third-party adapter weakens its public contract | Expo segmented control cannot disable one segment. The adapter currently ignores per-option `disabled`, although the custom implementation supports it. Silent capability loss should become an automatic fallback, explicit validation, or documented type constraint.       |
-| P1       | Documentation is stale                              | The 919-line README still describes Moment locale registration and an `rtl.ts` reload flow that no longer exists. It also states that every component has a story, while `Popup` has none and some intentionally internal primitives should not require one.                  |
-| P1       | A patched dependency is release-critical            | `react-native-ui-datepicker` is patched for wheel timing and accessibility. The patch is justified, but upgrades need an explicit upstream/removal plan and device regression tests.                                                                                          |
-| P2       | The bundle imports the entire catalogue             | The only route eagerly imports all 31 showcase sections. The production web export includes 2,047 modules and cannot represent product startup performance.                                                                                                                   |
-| P2       | Icon assets are expensive                           | Seven vector-icon font assets total about 1.64 MB, including Font Awesome regular and brands even though the wrapper exposes its solid set.                                                                                                                                   |
-| P2       | Device behavior is not continuously verified        | Unit tests and web Storybook are strong, but there are no automated iOS/Android end-to-end, screenshot, deep-link, permissions, notification, or assistive-technology smoke tests.                                                                                            |
-| P2       | Production operations are incomplete                | Version is fixed at `0.0.1`; iOS build number and Android version code are absent; predictive back is disabled; release profiles, submission configuration, rollback policy, and observability verification are not documented.                                               |
+### P0 — Foundation
 
-## Phase 0 — Make the baseline trustworthy
+| Step   | Work item                                     | Depends on | Actions and deliverables                                                                                                                                                                                                                                                                                       | Done when                                                                                                                                                  | Lead / review                             | Estimate |
+| ------ | --------------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- | -------- |
+| **01** | Freeze the trustworthy baseline               | None       | Add one documented `check` command; record Node/Yarn versions, current tests, honest coverage inputs, Storybook/export commands, bundle baseline, dirty-worktree handling, and supported platforms; create a short decision register.                                                                          | A clean checkout can reproduce the recorded checks and artifacts with no ad hoc variables.                                                                 | Orchestrator + Test/QA                    | 1–2 days |
+| **02** | Decide repository role                        | 01         | Choose **application** or **reusable design-system package**; document public exports, ownership, dependency direction, route responsibility, and versioning consequences in an ADR.                                                                                                                           | The chosen architecture is documented and mechanically enforceable; new component work has a clear home.                                                   | Architecture / Documentation              | 1–2 days |
+| **03** | Add required GitHub CI                        | 01         | Implement `ci.yml` with frozen install; format, lint, type-check, Secretlint, representative Jest coverage, Expo config/dependency checks, web export, Storybook build, safe concurrency, explicit timeouts/permissions, and retained failure artifacts.                                                       | Secret-free PR checks pass on a clean hosted runner and required status names protect `main`.                                                              | CI/CD / Security + QA                     | 2–4 days |
+| **04** | Make builds and dependencies deterministic    | 01         | Pin/document Node and Yarn; validate required public config; omit invalid EAS config when project ID is absent; reconcile duplicate `react-native-screens` and `expo-constants`; audit unused direct dependencies; preserve SDK-compatible native versions.                                                    | Install leaves the lockfile unchanged; export/config checks pass; native-capable packages resolve to one compatible version or an owned exception.         | Dependency + Expo/Native / QA             | 2–3 days |
+| **05** | Establish security baseline                   | 01         | Create a data inventory, threat model, `SECURITY.md`, configuration classification, telemetry redaction rules, severity/exception policy, and owners; enable Dependabot, dependency review, CodeQL, secret scanning/push protection where available, action SHA pinning, and `CODEOWNERS` for sensitive paths. | Every current persisted/transmitted field is classified; CI detects new secrets and policy-breaking high-risk findings; exceptions have owner and expiry.  | Security / CI/CD                          | 2–4 days |
+| **06** | Establish minimum agent system                | 01         | Add root and scoped `AGENTS.md` guidance, preserve the SDK 57 exact-doc rule, define authority and instruction precedence, create role cards plus task/handoff/review templates, and trial the Orchestrator, QA, Security, and Expo/Native roles on one bounded task.                                          | One trial produces bounded ownership, no overlapping edits, structured handoffs, independent review, and passing combined checks.                          | Orchestrator / Human owner                | 2–3 days |
+| **07** | Harden persistence and secure-value readiness | 05         | Catch/quarantine malformed JSON; add registered storage keys, decoders, schema versions, migrations, defaults, retention/deletion ownership, and unavailable-storage handling; keep `LocalValue` non-sensitive; design/test an async `SecureValue` adapter before any credential is persisted.                 | Corrupt/old state cannot block startup; storage classification is enforced; secure storage has tested native lifecycle and no web `localStorage` fallback. | Reliability + Security / Expo/Native + QA | 3–5 days |
 
-Indicative effort: 2–4 days  
-Outcome: every change is checked the same way locally and remotely, and a clean checkout can produce deterministic artifacts.
+### P1 — Product-ready core
 
-### Work
+| Step   | Work item                                     | Depends on | Actions and deliverables                                                                                                                                                                                                                                                     | Done when                                                                                                                                          | Lead / review                                     | Estimate  |
+| ------ | --------------------------------------------- | ---------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------- |
+| **08** | Fix global UI lifecycle races                 | 03         | Replace fixed Modal/Toast waits with actual transition completion; define show/hide/replacement/unmount semantics; cover reduced motion, rapid actions, duplicate IDs, and provider teardown; extract only proven shared completion logic.                                   | Awaitable APIs represent actual completion and all race contracts pass focused tests.                                                              | Reliability / QA + Accessibility                  | 3–5 days  |
+| **09** | Harden links, media, errors, and telemetry    | 05, 07     | Allowlist external schemes/hosts; reject malformed/oversized link parameters; forbid sensitive URL data; validate media type/size/decode outcome and metadata retention; centralize production error reporting and redaction; verify a controlled preview error/route event. | Untrusted inputs fail safely, actionable errors remain observable, and sensitive payloads are absent from logs/telemetry.                          | Security + Reliability / Expo/Native + QA         | 3–5 days  |
+| **10** | Close current component-contract gaps         | 02, 03     | Localize ImagePicker copy; expose actionable failures; add the missing Popup story; resolve disabled segmented options by fallback/validation/type design; define the public-component manifest; separate build-time brand colors from runtime semantic colors.              | No public component has silent capability loss or untranslated owned copy; public story/test policy is enforceable.                                | Design System / Accessibility + QA                | 2–4 days  |
+| **11** | Implement UI Wave A — core primitives         | 02, 10     | Implement the UI queue U01–U07 in order: finish ListItem, Divider, Badge, Avatar, Chip, TextLink, and Section/FormSection. Reuse existing theme, typography, responsive, accessibility, and pressed/disabled behavior.                                                       | Each component meets the shared definition of done and introduces no duplicate primitive or raw third-party styling.                               | Design System / Accessibility + QA                | 5–8 days  |
+| **12** | Implement UI Wave B — forms and feedback      | 07, 10, 11 | Implement U08–U14 in order: public FormField contract, TextArea input variation, SearchField pattern, InlineAlert/Banner, Skeleton, Stepper, and NavigationListItem. Move the demo Counter out of the public component surface when Stepper replaces its useful behavior.    | The first product forms/lists can be built without raw React Native text/colors or one-off loading/error/status layouts.                           | Design System + Feature/Data / Accessibility + QA | 6–10 days |
+| **13** | Verify the complete UI contract               | 10–12      | Run the third-party/platform matrix across iOS, Android, and web: light/dark, LTR/RTL, dynamic type, keyboard/focus, enabled/disabled/selected/error/loading, reduced motion, VoiceOver/TalkBack, and stable visual-regression states.                                       | All public components have test/story coverage and any native typography/color limitation is encoded through adapter fallback, not comments alone. | Accessibility + Test/QA / Design System + Native  | 4–6 days  |
+| **14** | Build real product routes and data boundaries | 02, 07, 12 | Remove or lazy-load the showcase from production startup; keep routes thin; add loading/error/not-found recovery; define typed API, cancellation, retry/idempotency, session, cache/offline, and error-mapping boundaries before the first remote feature.                   | Production startup no longer imports the full catalogue and at least one real route exercises the component/data architecture.                     | Feature/Data + Architecture / Security + QA       | 5–10 days |
+| **15** | Add preview delivery                          | 03, 04, 14 | Add `eas.json` development/preview profiles and manual `native-build.yml`; use separate least-privilege preview credentials; add trusted-PR previews only after CI; introduce EAS Update only with deliberate runtime/channel policy.                                        | A maintainer can create a traceable iOS or Android preview from GitHub without local credentials; fork code never receives secrets.                | CI/CD + Expo/Native / Security + QA               | 3–5 days  |
 
-1. Add one non-mutating `check` script that runs formatting validation, lint, type-check, unit tests, and secret scanning.
-2. Add CI for supported Node/Yarn versions with:
-   - dependency install from the lockfile;
-   - `yarn check`;
-   - web Storybook production build;
-   - at least one Expo production export;
-   - retained test and bundle artifacts on failure.
-3. Configure Jest `collectCoverageFrom` for production `src/**/*.{ts,tsx}` while excluding declarations, generated files, tests, and stories. Record the honest baseline, set modest initial thresholds below it, then ratchet them upward rather than selecting an arbitrary target.
-4. Make build configuration deterministic:
-   - validate required variables before build with one documented command;
-   - ensure local export, CI, Storybook, and EAS use the same environment source;
-   - omit the EAS block when `EXPO_PUBLIC_EAS_PROJECT_ID` is absent instead of substituting `0`;
-   - validate bundle ID, scheme, link domains, and project ID formats;
-   - make the Node version explicit (`.node-version`, `.nvmrc`, or package `engines`).
-5. Reconcile native-capable package duplicates. Start with `react-native-screens` and `expo-constants`; use SDK-compatible versions/resolutions, regenerate the lockfile, and confirm one effective JS version per autolinked native module. Run the network-backed Expo dependency check when available.
-6. Audit direct dependencies with source search, `yarn why`, a production export, and native builds before removing anything. Initial candidates with no direct source imports include AsyncStorage, `expo-device`, `expo-status-bar`, and `expo-web-browser`. Keep packages required by configuration or peer/native integration, such as `expo-system-ui`, screens, worklets, and Nitro modules.
-7. Refresh the README immediately: replace the Moment/RTL-reload material, clarify which components are public versus internal, and correct the story/test policy. Move detailed subsystem design notes to `docs/` so the README remains an entry point.
+### P2 — Release readiness and measured expansion
 
-### Exit criteria
+| Step   | Work item                                             | Depends on | Actions and deliverables                                                                                                                                                                                                                                                                   | Done when                                                                                                                                      | Lead / review                                               | Estimate                      |
+| ------ | ----------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- | ----------------------------- |
+| **16** | Measure and optimize product performance              | 14         | Define route-specific startup, JS/assets, memory, frame, and web budgets; capture release-mode device traces; measure removing the showcase; audit icon fonts; split only heavyweight non-critical routes/features with evidence.                                                          | CI reports agreed budgets and every optimization has repeatable before/after evidence with no accessibility regression.                        | Performance / Feature owner + QA                            | 3–6 days                      |
+| **17** | Implement UI Wave C only when triggered               | 13, 14     | Select from U15–U24 based on real product flows: Tooltip, ContextMenu/Menu, routed FormSheet, SwipeActions, Combobox, FilePicker, DateRangeInput, DataTable, Pagination, and adaptive Sidebar/Breadcrumb navigation.                                                                       | Each selected component has at least two real consumers or a documented platform/product requirement; untriggered items remain unbuilt.        | Design System + Feature owner / Accessibility + QA + Native | Per component                 |
+| **18** | Add protected production build and submission         | 15         | Add `release.yml` with protected tags/manual dispatch, re-run gates, verify version/tag/config, serialize releases, trigger and wait for EAS build/submit results, record provenance, and initially target TestFlight/internal Play testing.                                               | A green release records exact commit, version/runtime, build/submission IDs, and authoritative results; dispatch acceptance alone cannot pass. | CI/CD + Expo/Native / Security + Human gate                 | 3–5 days                      |
+| **19** | Complete signed-device and security release assurance | 15, 18     | Test startup, navigation, inputs, overlays, links, permissions, notifications, RTL, dark mode, dynamic type, reduced motion, screen readers, backup/reinstall/biometric-key behavior, observability, rollback, and incident/credential-rotation procedures; review privacy/store metadata. | Signed iOS/Android candidates pass the matrix; MASVS evidence, rollback, incident contacts, and explicit store-promotion approval exist.       | Test/QA + Security / Native + Accessibility + Human gate    | 5–8 days plus store lead time |
 
-- CI passes from a clean checkout and blocks merges when any check fails.
-- The regular production export works through the documented command without ad hoc shell setup.
-- Coverage includes source files never imported by a test.
-- Native module version duplication is resolved or explicitly documented with a verified compatibility reason.
-- Setup and architecture documentation describe the code that exists today.
+### P3 — Continuous and product-triggered
 
-## Phase 1 — Harden persistence and global UI lifecycles
+| Step     | Cadence/trigger                               | Work                                                                                                                                                                       | Evidence                                                         |
+| -------- | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| **20.1** | Weekly                                        | Online Expo dependency validation, native-module duplication check, patch status, dependency/license/security scan, and bundle trend report.                               | Scheduled workflow summary with owned failures.                  |
+| **20.2** | Monthly                                       | Vulnerability triage, stale dependency review, security exception expiry, preview/release credential inventory, and test/bundle budget review.                             | Closed findings or time-bounded exceptions.                      |
+| **20.3** | Quarterly                                     | Agent instruction/permission/role review; access and data-retention review; credential rotation drill; roadmap re-prioritization.                                          | Reviewed policy diff, drill result, and updated next-step table. |
+| **20.4** | Every Expo/RN upgrade                         | Use exact versioned docs; reconcile native dependencies; retest the date-picker patch and remove it when upstream behavior is sufficient; run native/UI/security matrices. | Compatibility report, native builds, and patch decision.         |
+| **20.5** | Material architecture/data change or annually | Refresh threat model, MASVS mapping, ADRs, incident/rollback plan, and supported-platform matrix.                                                                          | Approved model/ADR changes and new tests.                        |
 
-Indicative effort: 4–7 days  
-Outcome: corrupted data, rapid user actions, reduced motion, and missing native services fail predictably instead of silently or by timing coincidence.
+## UI component implementation queue
 
-### Work
+### Existing inventory — extend instead of duplicate
 
-1. Make stored values safe and evolvable:
-   - catch malformed JSON and recover by resetting/quarantining the key;
-   - accept a per-value validator/decoder instead of trusting `T` after parsing;
-   - add schema versions and migrations for values whose shape can change;
-   - test corrupted JSON, obsolete shapes, migration failure, and unavailable web persistence;
-   - avoid module-import crashes from persisted permission state.
-2. Replace fixed overlay waits with completion signals:
-   - have modal enter/exit promises settle from Reanimated/native completion callbacks;
-   - have toast promises settle from store transition completion, including zero-duration reduced motion;
-   - define behavior for show-during-hide, hide-before-show-completes, replacement by ID, duplicate modal IDs, provider unmount, and repeated calls;
-   - keep Modal, Toast, Popup, StateView, and ImagePicker as separate domain APIs. Extract a shared transition/completion primitive only after their tests reveal truly identical behavior.
-3. Separate developer diagnostics from operational error reporting. Audit caught errors in ImagePicker, Popup, StateView actions, deep links, permissions, and image loading; report actionable failures to production telemetry with redaction, and expose outcomes/callbacks when the owning screen must decide whether to show inline state, a toast, or nothing.
-4. Harden deep-link trust boundaries:
-   - document which call sites may pass untrusted server/push URLs;
-   - allowlist external schemes that may be handed to the OS;
-   - add tests for malformed authorities, encoded path separators, repeated parameters, unsupported schemes, and hostile query keys;
-   - decide whether queued links should survive process death or intentionally remain memory-only.
-5. Make observability testable in production:
-   - verify EAS Observe receives a controlled error and route event in a preview build;
-   - report initialization failure somewhere diagnosable instead of silently losing all production telemetry;
-   - define redaction rules for deep-link parameters, image metadata, and permission state.
+| Capability            | Existing implementation                                                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| Foundations/layout    | Text, Icon, Image, Card, Accordion, Row/Column/Cell grid, Spacer, Screen, Header                                                            |
+| Actions/navigation    | Button, IconButton, BackButton, TabBar/NavigationTabBar                                                                                     |
+| Selection             | Checkbox, RadioButton, Switch, Slider, SegmentedControl                                                                                     |
+| Inputs                | Text, numeric, email, password, phone, verification code, select, date/time, checklist, radio group, switch group, single/multi-thumb range |
+| Feedback              | Spinner, ProgressBar, StateView, Toast                                                                                                      |
+| Overlays              | Modal with popup/bottom-sheet/actions/fullscreen modes; Popup with alert/confirm/prompt                                                     |
+| Media                 | Image, ImagePicker                                                                                                                          |
+| Content               | Carousel with its own accessible pagination                                                                                                 |
+| App/example utilities | LocaleSwitcher, ThemeSwitcher, Counter, If                                                                                                  |
 
-### Exit criteria
+### Ordered backlog
 
-- Bad persisted data cannot prevent the app from rendering a recoverable state.
-- Awaitable overlay methods represent actual completion on normal and reduced-motion paths.
-- Race-condition tests cover all global UI stores and static APIs.
-- External navigation and telemetry have documented data/trust policies.
+| ID      | Priority / master step | Component                                    | Contract and reason                                                                                                                                                                            | Dependencies / trigger                                                                                                 |
+| ------- | ---------------------- | -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| **U01** | P1 / 11                | **ListItem**                                 | Finish the current leading/content/trailing row with pressable and inert-control modes; add exports, tests, story, RTL, truncation, disabled/selected, and nested-control accessibility cases. | Existing in-progress files; preserve and review them before extending the component.                                   |
+| **U02** | P1 / 11                | **Divider / Separator**                      | Horizontal/vertical semantic separator with inset variants and native/web accessibility behavior; use border token and spacing only.                                                           | Needed by lists, menus, and sections.                                                                                  |
+| **U03** | P1 / 11                | **Badge / StatusBadge**                      | Text/count/status variants, maximum count formatting, semantic success/warning/error/info palettes, compact dynamic-type behavior, and accessible label.                                       | Reuse Text and theme tokens.                                                                                           |
+| **U04** | P1 / 11                | **Avatar**                                   | Image, initials, icon, deterministic fallback, size/status variants, alt/name contract, and loading/error behavior.                                                                            | Reuse Image and Badge; avoid a second image cache.                                                                     |
+| **U05** | P1 / 11                | **Chip / Tag**                               | Static, selectable, and removable contracts with pressed/focus/disabled states and compact text; do not mix navigation and removal in one target.                                              | Reuse Text/Icon and control accessibility helpers.                                                                     |
+| **U06** | P1 / 11                | **TextLink**                                 | Inline/external link styling with semantic color, underline/focus behavior, visited policy on web, external-link announcement, and disabled state.                                             | Compose Expo Router Link for internal navigation and Linking only through trusted URL policy.                          |
+| **U07** | P1 / 11                | **Section / FormSection**                    | Title, description, content, optional footer/action, consistent gaps and heading hierarchy; one grouping primitive for settings/forms/lists.                                                   | Reuse Text and layout tokens; no Card duplication.                                                                     |
+| **U08** | P1 / 12                | **Public FormField contract**                | Promote/refine the existing internal label/helper/error shell; stable IDs/associations on web, required/optional hint, error announcement, and arbitrary field child.                          | Existing `input/form-field.tsx`; preserve Input behavior.                                                              |
+| **U09** | P1 / 12                | **TextArea input variation**                 | Add multiline value/character-count/limit behavior to Input with correct top alignment, resizing policy, helper/error contract, and keyboard submission rules.                                 | Extend Input/BaseInput rather than creating a parallel form system.                                                    |
+| **U10** | P1 / 12                | **SearchField pattern**                      | Compose Input, search icon, clear action, result-count/status announcement, and submit/cancel semantics. Routed screens should use Expo Router native header search where it fits.             | Implement only shared visual/interaction behavior; debounce and filtering stay feature-owned.                          |
+| **U11** | P1 / 12                | **InlineAlert / Banner**                     | Persistent in-flow info/success/warning/error message with optional action/dismiss; distinct from ephemeral Toast and blocking Popup.                                                          | Reuse semantic status palette, Text, Icon, Button.                                                                     |
+| **U12** | P1 / 12                | **Skeleton**                                 | Shape/text-line primitives, grouped placeholder, reduced-motion/static fallback, semantic hiding, and theme-aware contrast.                                                                    | Use only where layout-preserving loading materially improves a real route; StateView remains full-state loading.       |
+| **U13** | P1 / 12                | **Stepper**                                  | Controlled numeric increment/decrement with min/max/step, editable-value decision, tabular numbers, disabled limits, and adjustable semantics.                                                 | Replace useful Counter behavior; move Counter to showcase/internal or remove it from public manifest.                  |
+| **U14** | P1 / 12                | **NavigationListItem**                       | Router-aware composition of ListItem with chevron, selected/current state, preview/context-menu hooks where supported, and external-link distinction.                                          | U01 + U06; do not add navigation logic to base ListItem.                                                               |
+| **U15** | P2 / 17                | **Tooltip / HelpPopover**                    | Keyboard, hover, focus, long-press, dismiss, placement, and screen-reader description contract.                                                                                                | Trigger: icon-only or unfamiliar controls cannot be explained by accessible labels alone.                              |
+| **U16** | P2 / 17                | **ContextMenu / Menu adapter**               | App-owned menu item model with icons, disabled/destructive/checked states and platform fallback.                                                                                               | Trigger: at least two overflow/context-action flows; validate exact SDK 57 APIs.                                       |
+| **U17** | P2 / 17                | **Routed FormSheet pattern**                 | Expo Router `formSheet` screen configuration, detents, footer, safe areas, keyboard behavior, and transparent/native styling.                                                                  | Trigger: a modal owns navigation or a multi-step form. Keep component-local Modal bottom sheets for transient content. |
+| **U18** | P2 / 17                | **SwipeActions row**                         | Leading/trailing actions, destructive confirmation, full keyboard/screen-reader alternative, RTL, gesture conflict, and reduced motion.                                                        | Trigger: a real list needs repeated quick actions; compose ListItem.                                                   |
+| **U19** | P3 / 17                | **Combobox / Autocomplete**                  | Async/local suggestions, keyboard navigation, highlighted option, empty/loading/error states, free-text policy, and virtualization threshold.                                                  | Trigger: Select is insufficient for a large/searchable domain.                                                         |
+| **U20** | P3 / 17                | **File / DocumentPicker**                    | File type/size validation, permission/error/cancel states, metadata minimization, upload progress, and cleanup.                                                                                | Trigger: non-image attachments; use Expo-supported picker and security media policy.                                   |
+| **U21** | P3 / 17                | **DateRangeInput**                           | Start/end ordering, min/max, timezone/date-only semantics, disabled days, localization, and accessible calendar interaction.                                                                   | Trigger: a booking/filter flow; compose date utilities instead of overloading numeric RangeInput.                      |
+| **U22** | P3 / 17                | **DataTable**                                | Responsive columns, row/header semantics, sort/select/actions, horizontal overflow, loading/empty/error, and virtualization boundary.                                                          | Trigger: tablet/web dense data that cannot be represented as cards/list items.                                         |
+| **U23** | P3 / 17                | **Pagination**                               | Controlled page/current/total, previous/next, compact overflow, keyboard and screen-reader semantics.                                                                                          | Trigger: paged remote data. Do not extract Carousel's dot pagination as a general API.                                 |
+| **U24** | P3 / 17                | **Adaptive Sidebar / Breadcrumb navigation** | Window-size-aware navigation rail/sidebar plus route-aware breadcrumb for tablet/web, with focus/current-page semantics.                                                                       | Trigger: product information architecture exceeds bottom-tab/stack patterns.                                           |
 
-## Phase 2 — Complete the design-system, localization, and accessibility contract
+### Duplicate-prevention decisions
 
-Indicative effort: 4–6 days  
-Outcome: public UI behaves consistently across implementation type, platform, theme, locale, keyboard, and assistive technology.
+| Requested capability                | Use/extend                                            | Do not create                                                                                   |
+| ----------------------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| Icon-only action                    | Existing `IconButton`                                 | A second icon-button primitive                                                                  |
+| Empty/loading/error page            | Existing `StateView` with product copy/children       | Separate EmptyState, ErrorState, and LoadingState components                                    |
+| Temporary notification              | Existing `Toast`                                      | Snackbar with the same lifecycle                                                                |
+| Alert/confirm/prompt                | Existing `Popup` over `Modal`                         | Separate AlertDialog and ConfirmDialog stores                                                   |
+| Component-local action/bottom sheet | Existing `Modal` `actions`/`bottomSheet` modes        | Another gesture sheet library without a measured limitation                                     |
+| Route-owned modal/form sheet        | Expo Router presentation pattern U17                  | Stretching global Modal into a navigation framework                                             |
+| Search field                        | Input composition U10 or native route header search   | A third unrelated search input                                                                  |
+| Single/multi select                 | Existing Select/Checklist/RadioGroup                  | New Picker/MultiSelect until search/scale requires Combobox                                     |
+| Date/time and numeric range         | Existing DateTimeInput and RangeInput                 | A second picker/slider facade                                                                   |
+| Tabs                                | Existing TabBar or a deliberate native-tabs migration | Two tab systems controlling the same route                                                      |
+| Carousel page dots                  | Existing Carousel pagination                          | Generic Pagination based on dots                                                                |
+| Counter/stepper                     | U13 Stepper; keep Counter showcase-only               | A public demo Counter and a separate production Stepper                                         |
+| Routed screen header                | Expo Router/React Navigation header when suitable     | Custom Header on every route; retain Header for standalone surfaces and explicit custom layouts |
 
-### Work
+### Definition of done for every public UI component
 
-1. Localize all component-owned copy. Begin with ImagePicker’s chooser title and source buttons. Prefer translation keys for built-in defaults while allowing callers to override product-specific wording.
-2. Define a public-component manifest. Require a focused behavior test and a visual story for every public visual component; allow internal orchestration primitives such as `BinaryControlRow` and `ExpoUIHost` to be covered through direct unit tests and their public consumers. Add the missing `Popup` story.
-3. Turn third-party adapter expectations into a test matrix for iOS, Android, and web:
-   - light and dark themes;
-   - LTR and RTL;
-   - minimum and maximum supported dynamic type;
-   - enabled, disabled, selected, error, and focus states;
-   - keyboard navigation on web;
-   - VoiceOver and TalkBack labels, roles, values, and actions.
-4. Resolve adapter capability gaps explicitly. For segmented control, either fall back to the custom implementation when an option is disabled, reject that prop combination in development/types, or change the public API so the loss cannot be silent. Record where a native control does not expose typography slots; use the custom implementation when exact app typography is a product requirement.
-5. Add visual regression snapshots for stable Storybook states. Prioritize inputs, date/time picker, Expo UI controls, overlays, RTL, dark theme, and large text. Keep behavioral assertions in Jest/device tests rather than relying on screenshots alone.
-6. Centralize build-time brand colors used by icons/splash separately from runtime semantic theme colors. Add a small validation test or config check so brand assets and app config do not drift unintentionally.
-7. Review component APIs for platform leakage. Product call sites should choose a semantic component behavior; implementation switches (`custom`/`expo`) should remain a deliberate design-system decision and not spread through screens.
+| Gate                 | Required evidence                                                                                                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| API                  | Controlled value/events where applicable; impossible prop combinations encoded in types; platform limitations are explicit or cause a tested fallback.                               |
+| Theme                | No hard-coded UI colors; all states use semantic tokens; light/dark and elevated-surface contrast are reviewed.                                                                      |
+| Typography           | Visible text renders through the app text/type-scale contract; third-party controls receive supported font/text styles or use the custom fallback when exact typography is required. |
+| Layout               | Phone/tablet/web, safe areas, LTR/RTL, long text, and min/max dynamic type are covered; no fixed size clips essential content.                                                       |
+| Interaction          | Default, pressed, focused, selected, disabled, loading, error, and reduced-motion behavior is defined where relevant.                                                                |
+| Accessibility        | Role, name, value/state, actions, focus order, target size, keyboard behavior, VoiceOver/TalkBack, and web semantics are tested.                                                     |
+| Localization         | Component-owned copy uses translation keys with caller overrides where product wording varies; formatting uses locale-aware helpers.                                                 |
+| Third-party boundary | Third-party UI is private behind an app adapter, receives semantic colors/type/direction, and has a capability matrix plus fallback.                                                 |
+| Verification         | Focused unit/interaction tests, one story per stable public state, visual regression for stable layouts, and real-device coverage for native-only behavior.                          |
+| Documentation        | Public export, concise examples, limits, ownership, and migration notes are current; internal primitives are not accidentally exported.                                              |
 
-### Exit criteria
+## Security and encryption control guide
 
-- No reusable component renders untranslated built-in copy.
-- Every public visual component has a story; every internal exception is intentional.
-- The third-party matrix passes on supported platforms, with limitations encoded rather than only documented in comments.
-- Theme/typography ESLint guardrails remain enabled with no new broad exceptions.
+| Control                        | Priority / step                 | Required implementation                                                                                                                                                            | Verification                                                                                      |
+| ------------------------------ | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Data classification            | P0 / 05                         | Record owner, purpose, source, storage, transmission, telemetry exposure, retention, deletion, backup, and privacy requirements for every field.                                   | Reviewed inventory changes with each new data class.                                              |
+| Non-sensitive preferences      | P0 / 07                         | `LocalValue` only; registered keys, validation, schema migration, corruption recovery, and owned deletion.                                                                         | Corrupt/old/unavailable-storage tests.                                                            |
+| Credentials and small secrets  | Before first auth feature / 07  | Async app-owned `SecureValue` backed by platform secure storage; no ordinary files, preference store, Redux persistence, URLs, logs, or web local storage fallback.                | Device lock, logout, uninstall/reinstall, backup/restore, biometric-change, and recovery tests.   |
+| Larger sensitive local payload | Product-triggered               | Minimize first; if unavoidable, use audited authenticated/envelope encryption with a per-install data key protected by Keychain/Keystore and a versioned rotation/recovery design. | Key never ships in source or sits beside ciphertext; rotation and failure recovery are exercised. |
+| Public/build configuration     | P0 / 04–05                      | Treat all `EXPO_PUBLIC_*` and app-bundle config as public; keep server/store/CI secrets in protected systems with separate preview/production identities.                          | Schema rejects secret-shaped public variables and missing required config.                        |
+| Network/auth                   | With first API feature / 09, 14 | HTTPS/TLS, typed requests/responses, timeouts/cancellation, retry/idempotency, server-side authorization, coordinated refresh/revocation, redacted diagnostics.                    | Negative/schema/auth-race/offline-expiry tests.                                                   |
+| Deep links/notifications       | P1 / 09                         | Validate scheme, verified host, route, redirect, shape, size, and decoding; never carry tokens/PII; use short-lived single-use auth codes if needed.                               | Hostile/malformed/encoded/repeated-param and signed-device cold/warm-link tests.                  |
+| Media/files                    | P1 / 09                         | Minimize permissions and metadata; validate type/size/dimensions/decode; private temp storage and cleanup on cancel/upload/logout/expiry.                                          | Denial/revocation, malformed file, EXIF, cache cleanup, and upload failure tests.                 |
+| Logs/telemetry                 | P0–P1 / 05, 09                  | Shared allowlist-first redaction; exclude authorization, raw links, image paths/metadata, notifications, form bodies, full request/response data, and arbitrary objects.           | Controlled preview events demonstrate useful diagnostics without sensitive fields.                |
+| CI/supply chain                | P0 / 03, 05                     | Least permissions, no secrets for untrusted PR code, SHA-pinned actions, dependency review, Dependabot, CodeQL, secret scanning, license/SBOM and native duplication review.       | Required checks and time-bounded exception register.                                              |
+| Release/incident               | P2 / 18–19                      | MASVS evidence, signed-device matrix, private reporting, token/key rotation, rollout halt, OTA/store rollback, user communication, and post-incident review.                       | Tabletop exercise and named human security/release sign-off.                                      |
 
-## Phase 3 — Choose and enforce the product architecture
+Encryption decisions are classification-driven. Do not encrypt every preference, add certificate pinning, block rooted devices, or add obfuscation without a documented threat and operational recovery plan. Platform secure storage is not the sole backup for irreplaceable user data.
 
-Indicative effort: 5–10 days, depending on product scope  
-Outcome: the repository has one clear role and production routes do not inherit showcase-only structure or dependencies.
+## GitHub Actions and EAS guide
 
-### Decision gate
+| Workflow               | Add at step            | Trigger                                                                  | Credential boundary                                                 | Required result                                                                                                                 |
+| ---------------------- | ---------------------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `ci.yml`               | 03                     | Pull requests, pushes to `main`, manual dispatch                         | None                                                                | Frozen install; quality, tests/coverage, web export, Storybook, dependency/config health; artifacts and stable required checks. |
+| `scheduled-health.yml` | 05/20                  | Weekly and manual                                                        | None unless an explicitly reviewed remote check requires it         | Dependency/native duplicate, patch, security/license, and bundle trend report.                                                  |
+| `native-build.yml`     | 15                     | Manual validated platform/profile input; optional selected `main` pushes | Preview GitHub environment and preview Expo identity                | Development/preview EAS build IDs and URLs with authoritative status ownership.                                                 |
+| `preview.yml`          | 15                     | Manual or trusted same-repository label/comment after CI                 | Preview environment                                                 | One updated PR summary/comment; EAS Update only for runtime-compatible JS/assets, native build otherwise.                       |
+| `release.yml`          | 18                     | Protected `v*` tag or protected manual dispatch from `main`              | Production environment, reviewer approval, production Expo identity | Re-run gates, serialize, verify version/config, build and submit, wait for results, record provenance.                          |
+| `web-deploy.yml`       | After hosting decision | Protected deployment trigger                                             | Hosting environment                                                 | Deploy already-validated web artifact independently of mobile store submission.                                                 |
 
-Choose one direction before adding substantial feature work:
+| Workflow rule           | Policy                                                                                                                                                                     |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Working directory/cache | Run app commands from `core/` and key caches from `core/yarn.lock`; do not restore `node_modules` as truth.                                                                |
+| Fork safety             | Fork PRs run secret-free checks only. Never check out untrusted PR heads in a privileged `pull_request_target` job.                                                        |
+| Permissions             | Default `GITHUB_TOKEN` to `contents: read`; grant narrow job-level write permissions only when required.                                                                   |
+| Credentials             | Separate preview/production Expo tokens; keep Apple/Google signing and submit credentials in EAS; prefer short-lived/OIDC access where supported.                          |
+| Actions                 | Pin third-party actions to full commit SHAs and let Dependabot propose reviewed updates.                                                                                   |
+| Concurrency             | Cancel superseded PR/preview runs; serialize and never auto-cancel production releases.                                                                                    |
+| Artifacts               | Short retention; never upload env files, signing material, service-account JSON, App Store keys, SecureStore dumps, EAS local state, or Atlas transformed source publicly. |
+| Promotion               | Start with TestFlight and Play internal testing; production promotion remains an explicit human approval until a reviewed automation policy says otherwise.                |
 
-- **Application:** keep components inside `core`, move the catalogue behind a development-only route or Storybook, and build product route groups/features around the existing providers.
-- **Reusable kit:** extract the design system into a package/workspace with explicit exports and peer dependencies; keep `core` as its example/test application.
+## Agent setup and orchestration guide
 
-Do not maintain a half-package/half-application layout: it makes dependency ownership, public APIs, and release responsibilities ambiguous.
+### Agent roster
 
-### Application path
+| Agent                            | Owns                                                                                              | Required partners/gates                                       |
+| -------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| **Orchestrator / Integrator**    | User outcome, task graph, file ownership, integration, final verification, unresolved-risk report | Cannot self-approve production or security exceptions.        |
+| **Codebase & Architecture**      | Boundaries, duplication, ADRs, application/package structure, public APIs                         | Domain owners + QA.                                           |
+| **Product Feature & Data**       | Screens, flows, domain state, typed API/data behavior                                             | Security for auth/storage/network; QA.                        |
+| **Design System & UI**           | Theme, typography, components, third-party adapters, Storybook                                    | Accessibility + QA; Native for platform controls.             |
+| **Accessibility & Localization** | Semantics, focus/keyboard, screen reader, motion, dynamic type, RTL, copy                         | Independent review for interaction-heavy UI.                  |
+| **Expo & Native Platform**       | Exact SDK/native guidance, app config, permissions, links, notifications, native builds           | Security + QA.                                                |
+| **Test & QA**                    | Risk-based Jest/RNTL/device/visual plans and reproducible defects                                 | Independent of implementation for cross-cutting/release work. |
+| **Security & Privacy**           | Threat/data flows, secure storage, secrets, links/media/network, dependency and CI security       | Independent sign-off for credential/privacy work.             |
+| **Reliability & Observability**  | Global stores/listeners, lifecycle races, error/retry/idempotency, telemetry and recovery         | Security reviews emitted data; QA.                            |
+| **Performance & Bundle**         | Startup, bundle/assets, memory, rendering and animation evidence                                  | Feature owner + Accessibility + QA.                           |
+| **CI/CD & Release**              | GitHub Actions, EAS profiles, provenance, preview, submission and rollback                        | Security + Native + QA; human production gate.                |
+| **Dependency & Upgrade**         | Package changes, SDK/RN upgrades, native duplicates, patches, licenses/advisories                 | Native + Security + QA + CI/CD.                               |
+| **Documentation & ADR**          | README, architecture, runbooks, changelog and verified commands                                   | Relevant domain owner.                                        |
 
-1. Create route groups for product flows and keep screens thin: route parsing and composition in `src/app`, screen UI in `src/screens`, domain behavior in feature modules.
-2. Add route-level error/not-found/loading behavior and a recoverable root error experience. Preserve EAS Observe integration as telemetry, not as the only user-facing failure mechanism.
-3. Define data-access boundaries before the first API feature: typed client, cancellation, retries, auth/session handling, cache policy, offline expectations, and error mapping. Do not introduce a global server-state library until those needs exist.
-4. Keep providers minimal and ordered by actual dependencies. Global listeners should expose teardown and test reset behavior.
+### Orchestration sequence
 
-### Reusable-kit path
+| Stage                     | Accountable role      | Required action                                                                                                                                                   | Output/gate                                         |
+| ------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| **1. Intake**             | Orchestrator          | Restate outcome; read root and nearest scoped instructions; inventory relevant files and user changes; classify risk and human gates.                             | Accepted task scope and risk class.                 |
+| **2. Task graph**         | Orchestrator          | Split only independently verifiable work; specify goal, non-goals, owned files, read-only dependencies, acceptance criteria, checks, evidence, and escalation.    | Bounded assignments and one writer per file.        |
+| **3. Fan-out**            | Orchestrator          | Use at most three specialists initially; parallelize disjoint work only; default to one delegation level.                                                         | No overlapping edits or coordination-only agents.   |
+| **4. Execution**          | Specialist            | Make the smallest cohesive change, preserve unrelated work, run focused checks, and report cross-scope needs before touching them.                                | Patch/report plus focused evidence.                 |
+| **5. Handoff**            | Specialist            | Return changed files, decisions, assumptions, exact results, risks, unresolved items, and next owner; findings include severity/evidence/impact/fix.              | Structured handoff, not raw speculation.            |
+| **6. Independent review** | Assigned reviewer     | Review security/privacy, accessibility, native, performance, or release aspects without becoming the sole approver of own high-risk work.                         | Findings resolved or explicitly owned.              |
+| **7. Integration**        | Orchestrator          | Review combined diff/contracts, resolve API conflicts, run complete relevant checks once, update docs, and distinguish automated from device/external validation. | Integratable change and final evidence.             |
+| **8. Human gate**         | Human owner           | Approve production submission/deployment, secret/signing access, destructive/irreversible work, security exceptions, or material product/architecture decisions.  | Explicit approval at the final meaningful boundary. |
+| **9. Learning**           | Orchestrator + owners | After release/failure, update tests, ADRs, instructions, routing, and roadmap; remove ineffective rules/roles.                                                    | Reviewed process change.                            |
 
-1. Publish only deliberate entry points; prevent consumers from importing component internals.
-2. Move host application packages to peer/dev dependencies where appropriate and test the supported version matrix.
-3. Add package API compatibility checks and a changelog/versioning policy.
-4. Keep Storybook and an example app as integration consumers of the package, not privileged internal paths.
+### Agent repository files
 
-### Cohesion refactors in either path
+| File                            | Purpose                                                                                                                             | Add at     |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- | ---------- |
+| Root `AGENTS.md`                | Layout, instruction priority, autonomy/safety, user-change preservation, authority, common checks, routing and handoff              | Step 06    |
+| `core/AGENTS.md`                | Preserve exact SDK 57 docs rule; add package/version commands, app/design boundaries, public config, tests, generated/native policy | Step 06    |
+| `core/src/components/AGENTS.md` | Semantic theme/typography, adapters, stories, public exports, accessibility definition of done                                      | Step 06/10 |
+| `core/src/features/AGENTS.md`   | State/storage/link/lifecycle contracts and teardown/reset rules                                                                     | Step 06/07 |
+| `core/src/app/AGENTS.md`        | Thin routes, native headers/search/sheets, navigation, environment access and error boundaries                                      | Step 06/14 |
+| `.github/AGENTS.md`             | Token permissions, SHA pinning, untrusted PRs, environments, concurrency and approvals                                              | Step 03/06 |
+| `core/patches/AGENTS.md`        | Upstream evidence, regeneration, device regression and removal criteria                                                             | Step 06    |
+| `docs/agents/*.md`              | Thirteen role cards plus task, handoff, finding, and authority templates                                                            | Step 06    |
 
-- Split `features/accessibility/props.ts`, input types, deep-link registry/URL code, and toast storage only when the resulting modules align with stable responsibilities. File length alone is not a reason to refactor.
-- Preserve the current useful seams (`BaseInput`, `BinaryControlRow`, `ExpoUIHost`, event bus, storage adapter). Avoid a “universal manager” that merges unrelated modal, toast, permission, link, and storage semantics.
-- Add architecture checks only for boundaries the chosen direction needs; do not add rules for hypothetical layers.
-
-### Exit criteria
-
-- `core` is explicitly an application or an example consumer of a package.
-- Production startup no longer imports the component catalogue.
-- Public imports and ownership boundaries are documented and mechanically enforced where practical.
-
-## Phase 4 — Optimize measured startup, bundle size, and interaction performance
-
-Indicative effort: 3–6 days for the first pass  
-Outcome: performance work is tied to budgets and product flows rather than intuition.
-
-### Measured baseline from this audit
-
-- Web production export: 3.9 MB JavaScript, approximately 951 KB gzipped.
-- Export output: 5.4 MB with 27 assets.
-- Icon fonts: approximately 1.64 MB across seven font files.
-- Largest transformed module groups reported by Expo Atlas include Reanimated (~763 KB), Expo Router (~460 KB), application source (~388 KB), React Native Web (~304 KB), libphonenumber (~229 KB), and Reanimated Carousel (~214 KB). These are transformed input sizes, not direct savings estimates.
-- All 31 showcase sections render under one `ScrollView`; this is intentionally worst-case catalogue behavior.
-
-### Work
-
-1. Define budgets for a real product route: cold start/TTI on representative low-end iOS and Android devices, JS bundle size per platform, peak memory, dropped frames in named interactions, and web Lighthouse targets.
-2. Capture repeatable release-mode traces before changing code. Store the command, device, build profile, route, and measurement so future comparisons are valid.
-3. Remove the showcase from production startup or lazy-load its sections. Profile again before changing individual components.
-4. Reduce icon cost:
-   - inventory glyphs used by the product rather than the showcase;
-   - prefer one primary family plus custom SVGs/subsets where it materially lowers assets;
-   - avoid bundling Font Awesome regular/brands when only solid is exposed;
-   - confirm visual and accessibility parity after any change.
-5. Route-split heavyweight optional features such as phone parsing, date/time picker, and carousel when product navigation makes them non-critical. Consider locale-pack lazy loading only if its measured cost is worth added loading/error states.
-6. Establish a supported carousel data-size contract. Profile large datasets and memory before deciding between limits, windowing, or a different implementation.
-7. Use React DevTools/Profiler and native performance tools to locate real rerenders and JS/UI-thread stalls. React Compiler is already enabled; do not layer manual memoization on every component.
-8. Add a lightweight CI bundle report and fail only on agreed regression budgets, not on absolute package-size guesses.
-
-### Exit criteria
-
-- Performance budgets and repeatable measurements exist for at least one product-critical flow.
-- Production startup does not pay for the entire showcase.
-- Bundle/asset regressions are visible in CI.
-- Every optimization has before/after evidence and no accessibility regression.
-
-## Phase 5 — Build, device, and release readiness
-
-Indicative effort: 5–8 days plus store review lead time  
-Outcome: preview and production artifacts are versioned, testable, observable, and recoverable.
-
-### Work
-
-1. Add `eas.json` profiles for development, preview/internal distribution, and production. Define environment ownership, credentials source, update channel/runtime policy, and submission behavior.
-2. Add a versioning policy covering app version, iOS build number, Android version code, and OTA runtime compatibility.
-3. Create a native smoke suite for both platforms covering startup, navigation, keyboard/input, modal/toast/state-view races, image permission flows, notifications, cold/warm deep links, RTL, dark mode, large text, reduced motion, and screen-reader basics.
-4. Verify universal/app-link association files on every configured domain and test them in signed preview builds. Development-client behavior is not sufficient evidence for cold-start linking.
-5. Test and enable Android predictive back if navigation/overlay behavior is correct. Verify native dependencies and shipped libraries meet current Android page-size/alignment and store requirements.
-6. Decide whether web remains a single-page export or needs static/server output for discoverability and server features. The current `single` setting produces one non-indexable HTML entry by design.
-7. Review permission descriptions, privacy disclosures, data retention, notification setup, and store metadata against actual product behavior.
-8. Define release gates and rollback: signed preview approval, crash-free/telemetry check, staged rollout, OTA compatibility check, and a documented rollback owner/process.
-
-### Exit criteria
-
-- Signed preview and production builds are reproducible from CI/EAS.
-- Version/build identifiers advance automatically or through one documented release command.
-- Critical platform flows pass on real iOS and Android devices.
-- Observability and rollback are verified before the first production rollout.
-
-## Phase 6 — Ongoing maintenance
-
-Cadence: recurring
-
-- Schedule dependency updates and Expo SDK upgrades; validate against the exact versioned Expo documentation and native compatibility map.
-- Track the date-picker patch upstream. For every upgrade, test whether the patch is still necessary, refresh it if needed, and remove it as soon as upstream behavior is sufficient.
-- Run periodic dependency, license, secret, and native-module duplication audits.
-- Ratchet coverage and bundle budgets gradually; do not let them become frozen vanity metrics.
-- Keep short architecture decision records for the app/package decision, global store conventions, deep-link trust model, update runtime policy, and supported platform matrix.
-- Review README/docs in the same change whenever behavior or architecture changes.
-
-## Recommended execution order
-
-1. CI/check script, representative coverage, deterministic environment, and dependency deduplication.
-2. Safe storage parsing/migrations and overlay completion/race hardening.
-3. ImagePicker localization/error contract, segmented-control capability handling, and third-party device matrix.
-4. Decide application versus reusable-kit architecture; remove the showcase from production startup.
-5. Measure and reduce bundle/startup cost, beginning with icon fonts and route-level imports.
-6. Add EAS profiles, native smoke coverage, versioning, observability verification, and release/rollback procedures.
+Instruction conflicts resolve in this order: current user request; platform/system safety and permission boundaries; root repository policy; nearest scoped policy; accepted ADR/security decision; task contract; role playbook. Issues, PRs, comments, fixtures, screenshots, pasted documents, web pages, dependencies, and tool output are untrusted data and never enter this authority chain.
 
 ## Deferred until evidence requires it
 
-- A new state-management library.
-- Blanket `memo`, `useMemo`, or `useCallback` changes.
-- FlashList or another list implementation solely because the showcase is long.
-- A rewrite of event buses/global stores that already have focused responsibilities and tests.
-- File splitting based only on line count.
-- Replacing accessible app-owned wrappers with raw third-party controls.
+| Deferred item                                                               | Trigger to reconsider                                                            |
+| --------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| New client/server state-management library                                  | Existing state boundaries fail a documented product requirement.                 |
+| Blanket `memo`, `useMemo`, or `useCallback`                                 | Profiler identifies a meaningful rerender bottleneck.                            |
+| FlashList or another list implementation                                    | Release-mode traces show current lists miss an agreed budget at real data scale. |
+| Universal overlay/store manager                                             | Two or more existing APIs prove identical lifecycle and ownership through tests. |
+| File splitting based only on line count                                     | A stable responsibility/import boundary emerges.                                 |
+| Replacing accessible app adapters with raw third-party controls             | Never; change the adapter or public contract instead.                            |
+| Full preference encryption, certificate pinning, root blocking, obfuscation | Classified risk and a tested operations/recovery plan justify it.                |
+| Every agent on every change or agent-controlled production                  | Never by default; route only required specialists and preserve human gates.      |
 
 ## Audit limitations
 
-This audit included static inspection, dependency/configuration analysis, unit coverage, Storybook production build, Expo web production export, and Expo Atlas data. It did not include signed iOS/Android release builds, real-device performance traces, VoiceOver/TalkBack sessions, live notification delivery, or verified universal-link domains. Those are explicit roadmap work rather than assumed successes.
+| Not verified in this audit                                     | Planned evidence     |
+| -------------------------------------------------------------- | -------------------- |
+| Signed iOS/Android release builds                              | Steps 15, 18, and 19 |
+| Real-device performance traces                                 | Step 16              |
+| VoiceOver/TalkBack and full dynamic-type sessions              | Steps 13 and 19      |
+| Backup/reinstall/biometric secure-key behavior                 | Steps 07 and 19      |
+| Live notification delivery and verified universal-link domains | Steps 09 and 19      |
+| Formal threat-model workshop or penetration test               | Steps 05 and 19      |
+| Store submission, staged rollout, and rollback                 | Steps 18 and 19      |
 
 ## Reference documentation
 
-- [Expo SDK 57 reference](https://docs.expo.dev/versions/v57.0.0/)
-- [Expo SDK 57 app configuration](https://docs.expo.dev/versions/v57.0.0/config/app/)
-- [Expo Atlas bundle analysis](https://docs.expo.dev/guides/analyzing-bundles/)
-- [EAS configuration](https://docs.expo.dev/eas/json/)
+| Topic                     | Reference                                                                                                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Expo SDK                  | [Expo SDK 57 reference](https://docs.expo.dev/versions/v57.0.0/)                                                                                                         |
+| Expo app config           | [Expo SDK 57 app configuration](https://docs.expo.dev/versions/v57.0.0/config/app/)                                                                                      |
+| Secure storage            | [Expo SDK 57 SecureStore](https://docs.expo.dev/versions/v57.0.0/sdk/securestore/)                                                                                       |
+| Expo environment security | [Environment variables in Expo](https://docs.expo.dev/guides/environment-variables/)                                                                                     |
+| Bundle analysis           | [Expo Atlas](https://docs.expo.dev/guides/analyzing-bundles/)                                                                                                            |
+| EAS configuration         | [EAS JSON](https://docs.expo.dev/eas/json/)                                                                                                                              |
+| CI builds                 | [Trigger EAS builds from CI](https://docs.expo.dev/build/building-on-ci/)                                                                                                |
+| GitHub/Expo integration   | [Expo GitHub Action](https://github.com/expo/expo-github-action)                                                                                                         |
+| Expo credentials          | [Expo programmatic access](https://docs.expo.dev/accounts/programmatic-access/)                                                                                          |
+| Submission                | [Automated EAS submissions](https://docs.expo.dev/build/automate-submissions/)                                                                                           |
+| GitHub environments       | [Deployment environments](https://docs.github.com/en/actions/reference/workflows-and-actions/deployments-and-environments)                                               |
+| Workflow security         | [GitHub Actions secure use](https://docs.github.com/en/actions/reference/security/secure-use)                                                                            |
+| Dependency security       | [GitHub dependency review](https://docs.github.com/en/code-security/how-tos/secure-your-supply-chain/manage-your-dependency-security/configure-dependency-review-action) |
+| Static security analysis  | [GitHub CodeQL](https://docs.github.com/en/code-security/concepts/code-scanning/codeql/codeql-code-scanning)                                                             |
+| Secret detection          | [GitHub secret scanning](https://docs.github.com/en/code-security/concepts/secret-security/secret-scanning)                                                              |
+| Mobile security baseline  | [OWASP MASVS](https://mas.owasp.org/MASVS/)                                                                                                                              |
+| Cryptography              | [OWASP MASVS cryptography controls](https://mas.owasp.org/MASVS/06-MASVS-CRYPTO/)                                                                                        |
+| React Native security     | [React Native security guidance](https://reactnative.dev/docs/security)                                                                                                  |
+| Apple secret storage      | [Apple Keychain Services](https://developer.apple.com/documentation/security/keychain-services)                                                                          |
+| Android key storage       | [Android Keystore](https://developer.android.com/privacy-and-security/keystore)                                                                                          |
+| Agent delegation guidance | [OpenAI model guidance](https://developers.openai.com/api/docs/guides/latest-model)                                                                                      |

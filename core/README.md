@@ -94,6 +94,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                      |
 | Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls  |
 | Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content           |
+| List items        | Pressable rows with both slots filled, a row holding its own control, truncation                  |
 | Carousel          | Slides with pagination you can switch off live, and the position it announces                     |
 | Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web |
 | Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                   |
@@ -599,6 +600,33 @@ A horizontal bar showing how far along a task is. `Spinner` stays the right answ
 - **Both states honour Reduce Motion, differently.** The determinate fill goes through `duration()`, so it lands on each new value instantly instead of gliding. The indeterminate sweep can't simply stop — the movement _is_ the signal that something is happening — so it becomes a cross-fade in place, which is the substitution Apple's own guidance names. Covered by tests that render with `isReduceMotionEnabled` mocked on and assert the bar fades full-width rather than sweeping a segment.
 - **The track is `backgroundElementSelected`, not `backgroundElement`** — the latter is what most raised surfaces already use, so an unfilled bar sitting on a `Card` would be invisible. Same trap `Button`'s `secondary` and `Card`'s `outlined` document.
 - **No `type="expo"` here.** Expo UI has a progress view for SwiftUI and one for Jetpack Compose, but nothing universal and nothing on web — three platform-specific implementations for a bar drawn from two `View`s isn't a trade worth making. `Switch`, `Checkbox`, `RadioButton`, `Slider` and `SegmentedControl` offer the switch because Expo UI ships one component that covers every platform.
+
+### `ListItem` — `src/components/list-item`
+
+```tsx
+import ListItem from "@/components/list-item";
+
+<ListItem title="Ada Lovelace" subtitle="ada@example.com" left={<Avatar />} />
+
+<ListItem
+  title="Account"
+  right={<Icon name="chevron-right" />}
+  onPress={openAccount}
+/>
+
+// the button is the control; the row just labels it, so it stays inert
+<ListItem
+  title="Ada Lovelace"
+  right={<IconButton label="Remove Ada Lovelace" onPress={remove}>…</IconButton>}
+/>
+```
+
+One row in a list: something on the left, text in the middle, something on the right. Both slots take one element or several.
+
+- **The middle is _not_ centred**, unlike `Header`'s. A list is read down its leading edge, and text that shifts with the width of whatever sits beside it is much harder to scan. It takes the space the slots don't need and truncates before either of them shrinks — a squashed avatar or control is unusable, while a clipped line is merely shorter. That needs `minWidth: 0` on both the middle _and_ the lines inside it: a flex item's default minimum size is its own content, so one level isn't enough (the same trap `Header` documents).
+- **`onPress` makes the whole row one control**, named from its own text (`label` overrides), with `selected` and `disabled` announced. Right for a row that navigates; wrong for a row that _holds_ a control — `accessible` groups the children into one announcement, so an `IconButton` in the right slot of a pressable row becomes unreachable. Give the button the interaction and leave the row inert. Both halves are covered by tests, and verified in the browser: the rows announce as buttons with `aria-selected` tracking the pick, and the remove button inside an inert row is still reachable and still fires.
+- **`Switch`, `Checkbox` and `RadioButton` don't go in a slot at all.** Each is already a full labelled row (they share `BinaryControlRow`), so nesting one puts its label beside this row's title and says everything twice — caught the first time the Showcase rendered a "Notifications" row with the word in it twice. They replace a `ListItem` rather than sitting inside one.
+- **Title, subtitle and custom middle content are a union**, so a `subtitle` with no `title` to sub, or a custom element competing with a title, won't compile — the same construction `Header` uses.
 
 ### `Card` — `src/components/card`
 

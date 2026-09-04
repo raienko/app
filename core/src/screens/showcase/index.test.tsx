@@ -25,6 +25,7 @@ const SECTION_TITLES = [
   "Inputs",
   "Images",
   "Cards",
+  "List items",
   "Carousel",
   "Image picker",
   "Modals",

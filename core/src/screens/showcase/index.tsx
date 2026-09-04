@@ -20,6 +20,7 @@ import IconsSection from "./sections/icons";
 import ImagePickerSection from "./sections/image-picker";
 import ImagesSection from "./sections/images";
 import InputsSection from "./sections/inputs";
+import ListItemSection from "./sections/list-item";
 import LocalizationSection from "./sections/localization";
 import LoggerSection from "./sections/logger";
 import ModalsSection from "./sections/modals";
@@ -74,6 +75,7 @@ const SECTIONS: {
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.images", Component: ImagesSection },
   { title: "showcase.cards", Component: CardSection },
+  { title: "showcase.listItems", Component: ListItemSection },
   { title: "showcase.carousel", Component: CarouselSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },
