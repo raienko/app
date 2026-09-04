@@ -56,4 +56,61 @@ module.exports = defineConfig([
       ],
     },
   },
+  // Design-system boundaries are enforceable rules, not review-time
+  // conventions. Only their implementation files may reach the raw text and
+  // image primitives; UI consumers use the wrappers that supply typography,
+  // theme, fallback and accessibility behavior. The same boundary keeps raw
+  // color literals and ad-hoc type scales out of component styles.
+  {
+    files: [
+      "src/app/**/*.{ts,tsx}",
+      "src/components/**/*.{ts,tsx}",
+      "src/root/**/*.{ts,tsx}",
+      "src/screens/**/*.{ts,tsx}",
+    ],
+    ignores: [
+      "**/*.test.{ts,tsx}",
+      "src/components/image/index.tsx",
+      "src/components/text/index.tsx",
+      "src/components/expo-ui-host/index.tsx",
+    ],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "ImportDeclaration[source.value='react-native'] ImportSpecifier[imported.name='Text']",
+          message:
+            "Use '@/components/text' so app typography, color and direction are applied.",
+        },
+        {
+          selector: "ImportDeclaration[source.value='expo-image']",
+          message:
+            "Use '@/components/image' so fallback and accessibility behavior are applied.",
+        },
+        {
+          selector:
+            "ImportDeclaration[source.value=/^@expo\\/ui(?:\\/(?:jetpack-compose|swift-ui))?$/] ImportSpecifier[imported.name='Host']",
+          message:
+            "Use '@/components/expo-ui-host' so Expo controls receive the app color scheme, seed color and layout direction.",
+        },
+        {
+          selector: "Literal[value=/^(#[0-9A-Fa-f]{3,8}|rgba?\\(|hsla?\\()/]",
+          message:
+            "Use a semantic color from useTheme() instead of a raw UI color.",
+        },
+        {
+          selector: "Literal[value=/^(black|white|red|blue|green|gray|grey)$/]",
+          message:
+            "Use a semantic color from useTheme() instead of a named UI color.",
+        },
+        {
+          selector:
+            "Property[key.name=/^(fontFamily|fontSize|fontWeight|lineHeight|letterSpacing)$/]",
+          message:
+            "Use a typography token from Text or createStyles() instead of defining an ad-hoc type style.",
+        },
+      ],
+    },
+  },
 ]);

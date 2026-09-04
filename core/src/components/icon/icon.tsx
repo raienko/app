@@ -41,8 +41,8 @@ type Props = (VectorIconProps | CustomTypeProps | DefaultTypeProps) &
  * child, so an icon on a filled button is legible without the call site
  * restating the button's own colour — see `withIconDefaults`.
  *
- * @example <Icon type="Feather" name="home" color="red" size={units(24)} />
- * @example <Icon type="custom" name="logo" size={units(24)} />
+ * @example <Icon type="Feather" name="home" color={theme.colors.error} size={spacing.x24} />
+ * @example <Icon type="custom" name="logo" size={spacing.x24} />
  * @example <Icon name="home" /> // type omitted -> DEFAULT_ICON_TYPE (Feather)
  */
 export default function Icon({

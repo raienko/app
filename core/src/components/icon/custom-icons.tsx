@@ -7,7 +7,7 @@ import type { CustomIconProps } from "./types";
  * by adding a component here and one line to CUSTOM_ICONS below — nothing
  * else needs to change.
  */
-function Logo({ size = 12, color = "black" }: CustomIconProps) {
+function Logo({ size = 12, color }: CustomIconProps) {
   return (
     <Svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <Path

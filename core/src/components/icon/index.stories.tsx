@@ -1,3 +1,6 @@
+import { useSizes } from "@/features/responsive";
+import { useTheme } from "@/features/theme";
+
 import Component from "./index";
 
 const meta = {
@@ -13,14 +16,21 @@ export const Default = {
   },
 };
 
-export const Feather = {
-  args: {
-    type: "Feather",
-    name: "home",
-    color: "red",
-    size: 32,
-  },
-};
+function FeatherStory() {
+  const theme = useTheme();
+  const { spacing } = useSizes();
+
+  return (
+    <Component
+      type="Feather"
+      name="home"
+      color={theme.colors.error}
+      size={spacing.x32}
+    />
+  );
+}
+
+export const Feather = { render: FeatherStory };
 
 export const MaterialIcons = {
   args: {

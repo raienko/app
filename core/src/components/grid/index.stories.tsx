@@ -1,6 +1,8 @@
 import { View } from "react-native";
 
 import Text from "@/components/text";
+import { createStyles } from "@/features/responsive";
+import { useTheme } from "@/features/theme";
 
 import { Cell, Column, Row } from "./index";
 
@@ -13,19 +15,28 @@ export default meta;
 
 /** Something visible to put in a cell — not part of the grid system. */
 function Tile({ label }: { label: string }) {
+  const theme = useTheme();
+  const styles = useStyles();
+
   return (
     <View
-      style={{
-        backgroundColor: "#3f3f46",
-        borderRadius: 8,
-        paddingVertical: 16,
-        alignItems: "center",
-      }}
+      style={[
+        styles.tile,
+        { backgroundColor: theme.colors.backgroundElementSelected },
+      ]}
     >
       <Text value={label} type="caption1" />
     </View>
   );
 }
+
+const useStyles = createStyles(({ radius, spacing }) => ({
+  tile: {
+    borderRadius: radius.x8,
+    paddingVertical: spacing.x16,
+    alignItems: "center",
+  },
+}));
 
 export const TwelveColumn = {
   render: () => (

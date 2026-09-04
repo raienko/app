@@ -3,7 +3,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { tabListA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
-import { useTheme } from "@/features/theme";
+import { useElevationStyle, useTheme } from "@/features/theme";
 
 import { useTabBarMetrics } from "./space";
 import Tab from "./tab";
@@ -40,6 +40,7 @@ export default function TabBar({
   testID,
 }: TabBarProps) {
   const theme = useTheme();
+  const elevationStyle = useElevationStyle("floating");
   const styles = useStyles();
   const insets = useSafeAreaInsets();
   const { height, floatingInset } = useTabBarMetrics();
@@ -60,6 +61,7 @@ export default function TabBar({
         floating
           ? [
               styles.floating,
+              elevationStyle,
               {
                 borderColor: theme.colors.border,
                 // The gap under a floating bar is its own inset plus the
@@ -108,11 +110,5 @@ const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
     // Clips a pressed tab's highlight to the pill instead of letting it
     // square off over the corners.
     overflow: "hidden",
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: spacing.x2 },
-    shadowOpacity: 0.12,
-    shadowRadius: spacing.x8,
-    // iOS and web read the shadow* props; Android only reads this one.
-    elevation: 6,
   },
 }));

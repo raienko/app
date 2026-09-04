@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Image } from "expo-image";
 
+import Image from "@/components/image";
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
 
@@ -27,7 +27,9 @@ export const Default = () => {
       >
         <Text value="Choose an image" type="headline" />
       </Component>
-      {uri ? <Image source={uri} style={styles.image} /> : null}
+      {uri ? (
+        <Image source={uri} alt="Selected image preview" style={styles.image} />
+      ) : null}
     </>
   );
 };

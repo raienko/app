@@ -9,7 +9,7 @@ import {
 
 import { controlA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
-import { useTheme } from "@/features/theme";
+import { useElevationStyle, useTheme } from "@/features/theme";
 
 export type CardType = "elevated" | "outlined" | "filled";
 
@@ -125,6 +125,7 @@ export default function Card({
   ...props
 }: Props) {
   const theme = useTheme();
+  const elevationStyle = useElevationStyle("raised");
   const styles = useStyles();
   const config = TYPE_CONFIG[type];
 
@@ -141,7 +142,7 @@ export default function Card({
     // A shadow is nearly invisible against a dark background, which is why
     // `elevated` also carries the raised *fill* rather than leaning on the
     // shadow alone to separate it from the page.
-    config.shadow ? styles.shadow : null,
+    config.shadow ? elevationStyle : null,
     disabled ? styles.disabled : null,
     style,
   ];
@@ -192,14 +193,6 @@ const useStyles = createStyles(({ spacing, radius }) => ({
   padded: {
     padding: spacing.x16,
     gap: spacing.x8,
-  },
-  shadow: {
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: spacing.x2 },
-    shadowOpacity: 0.12,
-    shadowRadius: spacing.x8,
-    // iOS and web read the shadow* props; Android only reads this one.
-    elevation: 3,
   },
   disabled: {
     opacity: 0.5,

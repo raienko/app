@@ -4,6 +4,7 @@ import { runOnJS, withTiming, type SharedValue } from "react-native-reanimated";
 
 import { useAnimationDuration } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
+import { useTheme } from "@/features/theme";
 
 import { ANIMATION_DURATION } from "./constants";
 
@@ -27,6 +28,7 @@ type Props = {
  */
 export default function ModalHandle({ dragY, onDismiss }: Props) {
   const styles = useStyles();
+  const theme = useTheme();
   const duration = useAnimationDuration();
   const snapBackDuration = duration(ANIMATION_DURATION);
 
@@ -54,24 +56,22 @@ export default function ModalHandle({ dragY, onDismiss }: Props) {
   return (
     <GestureDetector gesture={dragGesture}>
       <View testID="modal-drag-handle" style={styles.grabberHandle}>
-        <View style={styles.grabber} />
+        <View
+          style={[styles.grabber, { backgroundColor: theme.colors.grabber }]}
+        />
       </View>
     </GestureDetector>
   );
 }
 
-const useStyles = createStyles(({ units, spacing, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes }) => ({
   grabberHandle: {
     alignItems: "center",
     paddingVertical: spacing.x8,
   },
-  // The grabber's mid-gray (iOS's own system gray for this exact element)
-  // is the other deliberate exception to theme.colors — it already reads
-  // clearly on both a light and a dark sheet without needing to switch.
   grabber: {
     width: sizes.grabberWidth,
     height: sizes.grabberHeight,
     borderRadius: sizes.grabberHeight / 2,
-    backgroundColor: "#8e8e93",
   },
 }));

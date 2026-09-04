@@ -21,6 +21,10 @@ export type ThemeColors = {
   info: string;
   /** Scrim color behind overlays; the overlay controls its own opacity. */
   overlay: string;
+  /** Base colour used by platform shadow APIs. */
+  shadow: string;
+  /** Bottom-sheet drag indicator. */
+  grabber: string;
   /** Keyboard/screen-reader focus indicator. */
   focus: string;
   /** Accent used for high-emphasis actions — see Button's `primary` type. */
@@ -44,6 +48,8 @@ const REQUIRED_KEYS: (keyof ThemeColors)[] = [
   "warning",
   "info",
   "overlay",
+  "shadow",
+  "grabber",
   "focus",
   "primary",
   "onPrimary",

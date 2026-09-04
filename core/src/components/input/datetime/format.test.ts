@@ -19,9 +19,9 @@ describe("formatValue", () => {
     expect(formatValue(VALUE, "ja", "datetime")).toBe("2026年8月27日 14:30");
   });
 
-  // Chinese is the one that needs naming a region: moment ships no plain
+  // Chinese is the one that needs naming a region: Day.js ships no plain
   // `zh`, so an unmapped code would silently fall back to English.
-  it("maps Chinese onto a locale moment actually has", () => {
+  it("maps Chinese onto a locale Day.js actually has", () => {
     expect(formatValue(VALUE, "zh", "date")).toBe("2026年8月27日");
   });
 
@@ -29,7 +29,7 @@ describe("formatValue", () => {
    * The picker can only be trusted with 24-hour wheels (see
    * TWELVE_HOUR_UNSUPPORTED in ./index), so the field is pinned to the same
    * clock even where the locale itself prefers AM/PM — via a literal
-   * `HH:mm` rather than moment's localized `LT`.
+   * `HH:mm` rather than a localized clock token.
    */
   it.each([
     ["en", "14:30"],
@@ -55,9 +55,9 @@ describe("formatValue", () => {
 
 describe("numeralsFor", () => {
   /**
-   * moment writes Arabic in Arabic-Indic digits while the picker defaults to
-   * Latin, so the two would sit in one sheet disagreeing about what a number
-   * looks like. This is what keeps them in step.
+   * Our Day.js formatter writes Arabic in Arabic-Indic digits while the
+   * picker defaults to Latin, so the two would sit in one sheet disagreeing
+   * about what a number looks like. This is what keeps them in step.
    */
   it("tells the picker which digits the field is using", () => {
     expect(formatValue(VALUE, "ar", "date")).toBe("٢٧ أغسطس ٢٠٢٦");

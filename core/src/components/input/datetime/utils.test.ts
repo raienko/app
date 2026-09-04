@@ -50,6 +50,10 @@ describe("toDate", () => {
     expect(toDate(date.toISOString())).toEqual(date);
     // A dayjs-like object is recognised by its toDate().
     expect(toDate({ toDate: () => date } as never)).toEqual(date);
+    expect(toDate("2026-08-27 14:30")).toEqual(new Date(2026, 7, 27, 14, 30));
+    expect(toDate("2026-08-27T14:30:00+03:00")?.toISOString()).toBe(
+      "2026-08-27T11:30:00.000Z",
+    );
   });
 
   it("reports an absent or unusable value as null", () => {
@@ -58,6 +62,9 @@ describe("toDate", () => {
     // Reported now rather than becoming an Invalid Date that only surfaces
     // once something tries to format it.
     expect(toDate("not a date")).toBeNull();
+    expect(toDate("2026-02-31")).toBeNull();
+    expect(toDate("2026-02-01T10:30+24:00")).toBeNull();
+    expect(toDate("2026-02-01T10:30+02:60")).toBeNull();
   });
 });
 
@@ -83,6 +90,14 @@ describe("picker boundary", () => {
 
   it("round-trips exactly, whatever the machine's offset", () => {
     expect(fromPickerDate(toPickerDate(LOCAL))).toEqual(LOCAL);
+  });
+
+  it("round-trips years below 100 without JavaScript's 1900 offset", () => {
+    const early = new Date(0);
+    early.setFullYear(42, 7, 27);
+    early.setHours(14, 30, 0, 0);
+
+    expect(fromPickerDate(toPickerDate(early))).toEqual(early);
   });
 
   // Midnight and the end of a day are where an off-by-one-offset conversion

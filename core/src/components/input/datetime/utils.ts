@@ -1,6 +1,5 @@
 import dayjs, { type Dayjs } from "dayjs";
 import utc from "dayjs/plugin/utc";
-import moment from "moment";
 import type { DateType } from "react-native-ui-datepicker";
 
 dayjs.extend(utc);
@@ -36,17 +35,71 @@ export function toDate(value: DateType): Date | null {
 
   const parsed =
     typeof value === "string"
-      ? // Parsed strictly as ISO 8601. moment falls back to the `Date`
-        // constructor for anything else and warns that it's doing so, which
-        // is both looser than we want and noisy.
-        moment(value, moment.ISO_8601)
+      ? parseISO8601(value)
       : value instanceof Date || typeof value === "number"
-        ? moment(value)
-        : // A dayjs object, which moment doesn't recognise — unwrap it to a
-          // Date first.
-          moment(value.toDate());
+        ? dayjs(value)
+        : dayjs(value.toDate());
 
-  return parsed.isValid() ? parsed.toDate() : null;
+  return parsed?.isValid() ? parsed.toDate() : null;
+}
+
+/**
+ * Day.js deliberately accepts and normalizes loose date strings. DateType's
+ * string case is narrower: accept ISO 8601 only, and reject impossible
+ * calendar dates before Day.js can turn them into a different valid day.
+ */
+function parseISO8601(value: string): Dayjs | null {
+  const match = value.match(
+    /^(\d{4})-(\d{2})-(\d{2})(?:[T ](\d{2}):(\d{2})(?::(\d{2})(?:\.(\d{1,9}))?)?(?:Z|[+-](\d{2}):?(\d{2}))?)?$/,
+  );
+  if (!match) return null;
+
+  const [
+    ,
+    yearText,
+    monthText,
+    dayText,
+    hourText,
+    minuteText,
+    secondText,
+    fractionText,
+    offsetHourText,
+    offsetMinuteText,
+  ] = match;
+  const year = Number(yearText);
+  const month = Number(monthText);
+  const day = Number(dayText);
+  const hour = Number(hourText ?? 0);
+  const minute = Number(minuteText ?? 0);
+  const second = Number(secondText ?? 0);
+  const millisecond = Number(`${fractionText ?? ""}000`.slice(0, 3));
+  const calendarDate = dayjs
+    .utc(0)
+    .year(year)
+    .month(month - 1)
+    .date(day);
+
+  if (
+    calendarDate.year() !== year ||
+    calendarDate.month() !== month - 1 ||
+    calendarDate.date() !== day
+  ) {
+    return null;
+  }
+
+  if (
+    hour > 24 ||
+    (hour === 24 && (minute > 0 || second > 0 || millisecond > 0)) ||
+    minute > 59 ||
+    second > 59 ||
+    (offsetHourText !== undefined && Number(offsetHourText) > 23) ||
+    (offsetMinuteText !== undefined && Number(offsetMinuteText) > 59)
+  ) {
+    return null;
+  }
+
+  const parsed = dayjs(value);
+  return parsed.isValid() ? parsed : null;
 }
 
 /**
@@ -66,15 +119,20 @@ export function toDate(value: DateType): Date | null {
  * timezone-aware value matters on the first render: the library clones its
  * input with `dayjs(value)` before its timezone sync effect runs. A plain
  * Date loses the UTC interpretation in that clone and shifts the initial
- * wheel by the device offset. The trip goes through a formatted string
- * rather than an offset, which keeps it exact and independent of whatever
- * `Intl` can or cannot do.
+ * wheel by the device offset. Copying the wall-clock fields directly keeps
+ * the trip exact and independent of whatever `Intl` can or cannot do.
  */
-const WALL_CLOCK = "YYYY-MM-DDTHH:mm:ss.SSS";
-
 /** Local wall clock in, the same wall clock as UTC out. */
 export function toPickerDate(value: Date): Dayjs {
-  return dayjs.utc(moment(value).format(WALL_CLOCK));
+  return dayjs
+    .utc(0)
+    .year(value.getFullYear())
+    .month(value.getMonth())
+    .date(value.getDate())
+    .hour(value.getHours())
+    .minute(value.getMinutes())
+    .second(value.getSeconds())
+    .millisecond(value.getMilliseconds());
 }
 
 /** The picker's UTC wall clock in, the same wall clock as local out. */
@@ -82,5 +140,13 @@ export function fromPickerDate(value: DateType): Date | null {
   const date = toDate(value);
   if (date === null) return null;
 
-  return moment(moment.utc(date).format(WALL_CLOCK), WALL_CLOCK).toDate();
+  return dayjs(0)
+    .year(date.getUTCFullYear())
+    .month(date.getUTCMonth())
+    .date(date.getUTCDate())
+    .hour(date.getUTCHours())
+    .minute(date.getUTCMinutes())
+    .second(date.getUTCSeconds())
+    .millisecond(date.getUTCMilliseconds())
+    .toDate();
 }

@@ -1,4 +1,4 @@
-import { Text as RNText } from "react-native";
+import Text from "@/components/text";
 
 import Component from "./index";
 
@@ -11,6 +11,6 @@ export default meta;
 
 export const Default = {
   args: {
-    children: <RNText>Screen content</RNText>,
+    children: <Text value="Screen content" />,
   },
 };

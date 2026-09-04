@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react";
 import { Tabs } from "expo-router";
 
+import { useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 import TabBar from "./tab-bar";
@@ -50,6 +51,7 @@ export default function NavigationTabBar({
   ...layout
 }: Props) {
   const theme = useTheme();
+  const { spacing } = useSizes();
 
   const routes = state.routes.filter((route) => {
     // Expo Router hides a tab with `href: null`. It isn't in React
@@ -72,7 +74,7 @@ export default function NavigationTabBar({
         // used anyway, so an icon that ignores the argument and an icon
         // that honours it both come out right.
         color: focused ? theme.colors.primary : theme.colors.textSecondary,
-        size: 24,
+        size: spacing.x24,
       }),
       testID: options.tabBarButtonTestID,
     };

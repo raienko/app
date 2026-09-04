@@ -43,16 +43,25 @@ describe(`${Component.name} smoke test`, () => {
   });
 
   it("renders the Expo UI variation through the same public API", async () => {
+    const user = userEvent.setup();
+    const onChange = jest.fn();
     await render(
       <Component
         type="expo"
         label="Expo option"
         value
-        onChange={() => {}}
+        onChange={onChange}
         testID="expo-checkbox"
       />,
     );
 
-    expect(screen.getByTestId("expo-checkbox")).toBeOnTheScreen();
+    const checkbox = screen.getByRole("checkbox", {
+      name: "Expo option",
+      checked: true,
+    });
+    expect(checkbox).toBe(screen.getByTestId("expo-checkbox"));
+
+    await user.press(checkbox);
+    expect(onChange).toHaveBeenCalledWith(false);
   });
 });

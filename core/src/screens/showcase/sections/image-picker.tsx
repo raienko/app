@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Image } from "expo-image";
 import type { ImagePickerAsset } from "expo-image-picker";
 import { View } from "react-native";
 
 import Button from "@/components/button";
 import Icon from "@/components/icon";
+import Image from "@/components/image";
 import ImagePicker from "@/components/image-picker";
 import Text from "@/components/text";
 import { createStyles, useSizes } from "@/features/responsive";
@@ -49,7 +49,7 @@ export default function ImagePickerSection() {
           <Image
             source={image.uri}
             contentFit="cover"
-            accessibilityLabel="Selected image preview"
+            alt="Selected image preview"
             style={styles.image}
           />
         ) : (

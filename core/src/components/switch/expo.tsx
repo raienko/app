@@ -1,7 +1,7 @@
-import { Host, Switch as ExpoSwitch } from "@expo/ui";
+import { Switch as ExpoSwitch } from "@expo/ui";
 import { StyleSheet, View } from "react-native";
 
-import { useTheme } from "@/features/theme";
+import ExpoUIHost from "@/components/expo-ui-host";
 import { isAndroid, isIOS } from "@/utils";
 
 import SwitchRow from "./row";
@@ -17,8 +17,6 @@ const switchSize = isAndroid
       { width: 36, height: 22 };
 
 function ExpoIndicator({ value, disabled }: SwitchIndicatorProps) {
-  const theme = useTheme();
-
   return (
     <View
       accessible={false}
@@ -26,18 +24,13 @@ function ExpoIndicator({ value, disabled }: SwitchIndicatorProps) {
       pointerEvents="none"
       style={styles.slot}
     >
-      <Host
-        colorScheme={theme.scheme}
-        seedColor={theme.colors.primary}
-        ignoreSafeArea="all"
-        style={styles.host}
-      >
+      <ExpoUIHost ignoreSafeArea="all" style={styles.host}>
         <ExpoSwitch
           value={value}
           disabled={disabled}
           onValueChange={() => {}}
         />
-      </Host>
+      </ExpoUIHost>
     </View>
   );
 }

@@ -1,9 +1,9 @@
-import { Host, Slider as ExpoSlider } from "@expo/ui";
+import { Slider as ExpoSlider } from "@expo/ui";
 import { View } from "react-native";
 
+import ExpoUIHost from "@/components/expo-ui-host";
 import { sliderA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
-import { useTheme } from "@/features/theme";
 import { isWeb } from "@/utils";
 
 import {
@@ -19,7 +19,6 @@ import { normalizeSliderValue } from "./utils";
 
 /** Expo UI's universal single-thumb slider behind our labelled API. */
 export default function ExpoUISlider(props: SliderImplementationProps) {
-  const theme = useTheme();
   const styles = useStyles();
   const { min, max } = getSliderBounds(props);
   const rawValue = Array.isArray(props.value) ? props.value[0] : props.value;
@@ -62,12 +61,10 @@ export default function ExpoUISlider(props: SliderImplementationProps) {
       }}
       style={[styles.control, props.disabled ? styles.disabled : null]}
     >
-      <Host
+      <ExpoUIHost
         accessible={false}
         accessibilityElementsHidden
         importantForAccessibility="no-hide-descendants"
-        colorScheme={theme.scheme}
-        seedColor={theme.colors.primary}
         ignoreSafeArea="all"
         style={styles.host}
       >
@@ -79,7 +76,7 @@ export default function ExpoUISlider(props: SliderImplementationProps) {
           disabled={props.disabled}
           onValueChange={(next) => changeSliderThumb(props, 0, next)}
         />
-      </Host>
+      </ExpoUIHost>
     </View>
   );
 }

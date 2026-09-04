@@ -1,8 +1,8 @@
-import { Host, RadioButton as ExpoRadioButton } from "@expo/ui/jetpack-compose";
+import { RadioButton as ExpoRadioButton } from "@expo/ui/jetpack-compose";
 import { View } from "react-native";
 
+import ExpoUIHost from "@/components/expo-ui-host";
 import { createStyles } from "@/features/responsive";
-import { useTheme } from "@/features/theme";
 
 import RadioButtonRow from "./row";
 import type {
@@ -11,7 +11,6 @@ import type {
 } from "./types";
 
 function ExpoIndicator({ selected }: RadioIndicatorProps) {
-  const theme = useTheme();
   const styles = useStyles();
 
   return (
@@ -21,13 +20,9 @@ function ExpoIndicator({ selected }: RadioIndicatorProps) {
       pointerEvents="none"
       style={styles.slot}
     >
-      <Host
-        colorScheme={theme.scheme}
-        seedColor={theme.colors.primary}
-        style={styles.host}
-      >
+      <ExpoUIHost ignoreSafeArea="all" style={styles.host}>
         <ExpoRadioButton selected={selected} />
-      </Host>
+      </ExpoUIHost>
     </View>
   );
 }
