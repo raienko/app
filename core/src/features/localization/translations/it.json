@@ -2,6 +2,7 @@
   "common": {
     "close": "Chiudi",
     "cancel": "Annulla",
+    "back": "Indietro",
     "confirm": "Conferma",
     "ok": "OK",
     "loading": "Caricamento",

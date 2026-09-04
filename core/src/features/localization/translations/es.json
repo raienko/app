@@ -2,6 +2,7 @@
   "common": {
     "close": "Cerrar",
     "cancel": "Cancelar",
+    "back": "Atrás",
     "confirm": "Confirmar",
     "ok": "Aceptar",
     "loading": "Cargando",

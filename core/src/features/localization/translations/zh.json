@@ -2,6 +2,7 @@
   "common": {
     "close": "关闭",
     "cancel": "取消",
+    "back": "返回",
     "confirm": "确认",
     "ok": "好",
     "loading": "加载中",

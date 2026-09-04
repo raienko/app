@@ -6,3 +6,4 @@
 export { default } from "./button";
 export { default as IconButton } from "./icon-button";
 export type { ButtonSize, ButtonType } from "./palette";
+export type { IconButtonSize } from "./icon-button";

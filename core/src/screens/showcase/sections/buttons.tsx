@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View } from "react-native";
 
+import BackButton from "@/components/back-button";
 import Button, {
   IconButton,
   type ButtonSize,
@@ -134,6 +135,30 @@ export default function ButtonsSection() {
         <IconButton label="Disabled icon button" type="primary" disabled>
           <Icon name="slash" />
         </IconButton>
+      </View>
+
+      <Text
+        value="BackButton — an IconButton that pops the stack"
+        type="headline"
+      />
+      <Text
+        value="With no onPress it calls router.back(), or replaces with its fallback when there is no history — which is the case here, since the showcase is the only route. Its chevron mirrors in a right-to-left locale."
+        type="caption1"
+        style={{ color: theme.colors.textSecondary }}
+      />
+      <View style={styles.row}>
+        {/* onPress here so the demo doesn't navigate away from the showcase. */}
+        <BackButton onPress={() => setPressCount((n) => n + 1)} />
+        <BackButton
+          type="secondary"
+          onPress={() => setPressCount((n) => n + 1)}
+        />
+        <BackButton
+          type="primary"
+          size="large"
+          onPress={() => setPressCount((n) => n + 1)}
+        />
+        <BackButton type="secondary" disabled />
       </View>
 
       <Readout label="presses" value={String(pressCount)} />
