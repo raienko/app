@@ -12,6 +12,8 @@ import { useLocale } from "@/features/localization";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
+import { isIOS } from "@/utils";
+
 import { STATE_VIEW_CONFIG } from "./config";
 import stateViews from "./store";
 import type { StateViewOverlayOptions, StateViewProps } from "./types";
@@ -50,7 +52,7 @@ function StateViewComponent({
   useEffect(() => {
     // Android and web consume the live-region props below. VoiceOver needs
     // an explicit announcement when a state view appears dynamically.
-    if (process.env.EXPO_OS === "ios") {
+    if (isIOS) {
       AccessibilityInfo.announceForAccessibility(announcement);
     }
   }, [announcement]);

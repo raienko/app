@@ -1,12 +1,9 @@
 import { forwardRef } from "react";
-import {
-  Platform,
-  View,
-  type TextInput as RNTextInputInstance,
-} from "react-native";
+import { View, type TextInput as RNTextInputInstance } from "react-native";
 
 import Checkbox from "@/components/checkbox";
 import { createStyles } from "@/features/responsive";
+import { isWeb } from "@/utils";
 
 import FormField from "../form-field";
 import type { ChecklistInputTypeProps, CommonInputProps } from "../types";
@@ -48,9 +45,7 @@ const ChecklistInput = forwardRef<RNTextInputInstance, Props>(
     }
 
     const webGroupProps =
-      Platform.OS === "web" && label
-        ? ({ role: "group", "aria-label": label } as const)
-        : null;
+      isWeb && label ? ({ role: "group", "aria-label": label } as const) : null;
 
     return (
       <FormField

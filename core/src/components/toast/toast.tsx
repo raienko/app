@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import {
   AccessibilityInfo,
-  Platform,
   Pressable,
   View,
   type StyleProp,
@@ -17,7 +16,7 @@ import { deepLinks } from "@/features/deep-links";
 import { useLocale } from "@/features/localization";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { wait } from "@/utils";
+import { isIOS, wait } from "@/utils";
 
 import { TOAST_TYPE_CONFIG } from "./config";
 import { ANIMATION_DURATION } from "./constants";
@@ -97,7 +96,7 @@ function ToastComponent({
     // Live regions are Android's and the web's; iOS has no equivalent, so
     // VoiceOver only hears a toast if it's told. Announcing on every
     // platform would make Android and the web say it twice.
-    if (Platform.OS === "ios") {
+    if (isIOS) {
       AccessibilityInfo.announceForAccessibility(announcement);
     }
     // Deliberately mount-only: the announcement is "this appeared", not a

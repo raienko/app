@@ -4,6 +4,7 @@ import { View, type GestureResponderEvent } from "react-native";
 import { sliderA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { isWeb } from "@/utils";
 
 import {
   changeSliderThumb,
@@ -65,14 +66,13 @@ export default function SliderThumb({
     [index, isRTL, max, min, slider, usableWidth],
   );
 
-  const webKeyboardProps =
-    process.env.EXPO_OS === "web"
-      ? {
-          tabIndex: slider.disabled ? (-1 as const) : (0 as const),
-          onKeyDown: (event: SliderKeyEvent) =>
-            handleSliderKey(event, slider, index),
-        }
-      : null;
+  const webKeyboardProps = isWeb
+    ? {
+        tabIndex: slider.disabled ? (-1 as const) : (0 as const),
+        onKeyDown: (event: SliderKeyEvent) =>
+          handleSliderKey(event, slider, index),
+      }
+    : null;
 
   return (
     <View

@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { sliderA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { isWeb } from "@/utils";
 
 import {
   changeSliderThumb,
@@ -25,14 +26,12 @@ export default function ExpoUISlider(props: SliderImplementationProps) {
   const value = normalizeSliderValue(rawValue, min, max, props.step);
   const valueText = props.formatValue?.(value, 0) ?? String(value);
   const accessibilityStep = getAccessibilityStep(min, max, props.step);
-  const webKeyboardProps =
-    process.env.EXPO_OS === "web"
-      ? {
-          tabIndex: props.disabled ? (-1 as const) : (0 as const),
-          onKeyDown: (event: SliderKeyEvent) =>
-            handleSliderKey(event, props, 0),
-        }
-      : null;
+  const webKeyboardProps = isWeb
+    ? {
+        tabIndex: props.disabled ? (-1 as const) : (0 as const),
+        onKeyDown: (event: SliderKeyEvent) => handleSliderKey(event, props, 0),
+      }
+    : null;
 
   return (
     <View

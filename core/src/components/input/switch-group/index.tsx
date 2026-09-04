@@ -1,13 +1,10 @@
 import { forwardRef } from "react";
-import {
-  Platform,
-  View,
-  type TextInput as RNTextInputInstance,
-} from "react-native";
+import { View, type TextInput as RNTextInputInstance } from "react-native";
 
 import If from "@/components/if";
 import Switch from "@/components/switch";
 import { createStyles } from "@/features/responsive";
+import { isWeb } from "@/utils";
 
 import FormField from "../form-field";
 import type { CommonInputProps, SwitchGroupInputTypeProps } from "../types";
@@ -66,9 +63,7 @@ const SwitchGroupInput = forwardRef<RNTextInputInstance, Props>(
     }
 
     const webGroupProps =
-      Platform.OS === "web" && label
-        ? ({ role: "group", "aria-label": label } as const)
-        : null;
+      isWeb && label ? ({ role: "group", "aria-label": label } as const) : null;
 
     return (
       <FormField

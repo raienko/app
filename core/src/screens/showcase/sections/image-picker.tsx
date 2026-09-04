@@ -9,12 +9,13 @@ import ImagePicker from "@/components/image-picker";
 import Text from "@/components/text";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { isWeb } from "@/utils";
 
 import Readout from "./readout";
 
 const PICKER_ID = "showcase-image-picker";
 
-/** Pressable and static entry points sharing one camera/gallery picker. */
+/** Pressable and static entry points sharing one picker. */
 export default function ImagePickerSection() {
   const [image, setImage] = useState<ImagePickerAsset>();
   const theme = useTheme();
@@ -27,7 +28,11 @@ export default function ImagePickerSection() {
   return (
     <View style={styles.container}>
       <Text
-        value="Tap the preview or use the static API. Both open the same camera/gallery bottom sheet."
+        value={
+          isWeb
+            ? "Tap the preview or use the static API. On web both go straight to the file dialog — there is no camera to offer, so a chooser would be picking between one option and a copy of it."
+            : "Tap the preview or use the static API. Both open the same camera/gallery bottom sheet."
+        }
         type="footnote"
         style={{ color: theme.colors.textSecondary }}
       />
@@ -54,7 +59,12 @@ export default function ImagePickerSection() {
               size={spacing.x32}
               color={theme.colors.textSecondary}
             />
-            <Text value="Choose from camera or gallery" type="callout" />
+            <Text
+              value={
+                isWeb ? "Choose an image" : "Choose from camera or gallery"
+              }
+              type="callout"
+            />
           </View>
         )}
       </ImagePicker>

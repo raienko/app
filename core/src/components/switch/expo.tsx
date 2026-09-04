@@ -2,23 +2,19 @@ import { Host, Switch as ExpoSwitch } from "@expo/ui";
 import { StyleSheet, View } from "react-native";
 
 import { useTheme } from "@/features/theme";
+import { isAndroid, isIOS } from "@/utils";
 
 import SwitchRow from "./row";
 import type { SwitchImplementationProps, SwitchIndicatorProps } from "./types";
 
-const switchSize = (() => {
-  switch (process.env.EXPO_OS) {
-    case "android":
-      // Material 3 switch plus its native minimum interactive canvas.
-      return { width: 52, height: 48 };
-    case "ios":
-      // UISwitch is 51×31pt; retain a little vertical native breathing room.
-      return { width: 51, height: 44 };
-    default:
-      // Expo UI's web track has a 36×22 CSS-pixel intrinsic size.
-      return { width: 36, height: 22 };
-  }
-})();
+const switchSize = isAndroid
+  ? // Material 3 switch plus its native minimum interactive canvas.
+    { width: 52, height: 48 }
+  : isIOS
+    ? // UISwitch is 51×31pt; retain a little vertical native breathing room.
+      { width: 51, height: 44 }
+    : // Expo UI's web track has a 36×22 CSS-pixel intrinsic size.
+      { width: 36, height: 22 };
 
 function ExpoIndicator({ value, disabled }: SwitchIndicatorProps) {
   const theme = useTheme();

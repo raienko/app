@@ -3,6 +3,7 @@ import { View, type TextInput as RNTextInputInstance } from "react-native";
 
 import RadioButton from "@/components/radio-button";
 import { createStyles } from "@/features/responsive";
+import { isWeb } from "@/utils";
 
 import FormField from "../form-field";
 import type { CommonInputProps, RadioGroupInputTypeProps } from "../types";
@@ -26,10 +27,9 @@ const RadioGroupInput = forwardRef<RNTextInputInstance, Props>(
     _ref,
   ) {
     const styles = useStyles();
-    const webGroupProps =
-      process.env.EXPO_OS === "web"
-        ? ({ role: "radiogroup", "aria-label": label } as const)
-        : null;
+    const webGroupProps = isWeb
+      ? ({ role: "radiogroup", "aria-label": label } as const)
+      : null;
 
     return (
       <FormField

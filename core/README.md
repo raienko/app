@@ -76,32 +76,32 @@ internal API into application code.
 
 The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are ordered foundations-first — the styleguides and app-wide settings everything else is built on, then the components that consume them.
 
-| Section           | What it demonstrates                                                                             |
-| ----------------- | ------------------------------------------------------------------------------------------------ |
-| Typography        | All 11 type-scale entries at their own size, with the title sizes as real headings               |
-| Theme & colors    | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                    |
-| Localization      | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                       |
-| Accessibility     | A live readout of every OS flag, `fontScale`, and `duration()`                                   |
-| Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes              |
-| Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                     |
-| Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale           |
-| Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides          |
-| Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row  |
-| Progress          | A live determinate bar, custom value wording, and the indeterminate state                        |
-| Segmented control | Both implementations side by side, a disabled option, and a disabled control                     |
-| Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding          |
-| Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                    |
-| Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                     |
-| Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls |
-| Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content          |
-| Carousel          | Slides with pagination you can switch off live, and the position it announces                    |
-| Image picker      | Camera/gallery selection through a pressable trigger or the static API                           |
-| Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                  |
-| Permissions       | Persisted camera, gallery and notification permission state and actions                          |
-| Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                  |
-| Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`      |
-| Logger            | Every logger method and structured metadata                                                      |
-| Utilities         | `If` toggling content, and a scoped event bus emitting and counting pings                        |
+| Section           | What it demonstrates                                                                              |
+| ----------------- | ------------------------------------------------------------------------------------------------- |
+| Typography        | All 11 type-scale entries at their own size, with the title sizes as real headings                |
+| Theme & colors    | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                     |
+| Localization      | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                        |
+| Accessibility     | A live readout of every OS flag, `fontScale`, and `duration()`                                    |
+| Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes               |
+| Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                      |
+| Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale            |
+| Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides           |
+| Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row   |
+| Progress          | A live determinate bar, custom value wording, and the indeterminate state                         |
+| Segmented control | Both implementations side by side, a disabled option, and a disabled control                      |
+| Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding           |
+| Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                     |
+| Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                      |
+| Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls  |
+| Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content           |
+| Carousel          | Slides with pagination you can switch off live, and the position it announces                     |
+| Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web |
+| Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                   |
+| Permissions       | Persisted camera, gallery and notification permission state and actions                           |
+| Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                   |
+| Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`       |
+| Logger            | Every logger method and structured metadata                                                       |
+| Utilities         | `If` toggling content, and a scoped event bus emitting and counting pings                         |
 
 Each section is its own file under `src/screens/showcase/sections/`. They're screen-local — the showcase is their only consumer — but split for the same reason `Modal`'s internals are: one file per concern beats one large screen file. The section list itself is a table in `screens/showcase/index.tsx`, so adding one is an entry there plus a file.
 
@@ -496,6 +496,21 @@ src/components/input/
 - `index.tsx`'s dispatch is a `switch` on `props.type`, but the actual `{...props}` spread appears exactly once, in a generic `renderVariant<P>(Component, props, ref)` helper each `case` calls — TS infers `P` from `Component` and checks the (already-narrowed-by-`switch`) `props` against it, so a mismatched case (e.g. the wrong variation under the wrong `case`) is still a `tsc` error, unlike an earlier version of this dispatcher that stored the picked component in an `any`-typed variable.
 - Each input layer has its own Storybook story and Jest test, scoped to what that layer owns. `BaseInput` covers shared behavior once; variation tests cover only their value coercion and type-specific behavior; `Input` confirms routing.
 - Live examples on the Showcase screen exercise every variation together, including numeric clamp-and-resync behavior, the actual `type="email"` DOM attribute, and ref-based imperative focus.
+
+### Platform constants — `src/utils`
+
+```ts
+import { isWeb, isIOS, isAndroid } from "@/utils";
+
+if (isIOS) AccessibilityInfo.announceForAccessibility(message);
+const keyboardProps = isWeb ? { tabIndex: 0, onKeyDown } : null;
+```
+
+Three constants instead of a platform comparison written out at every call site — every one of the app's platform branches goes through them (`StateView`'s iOS announcement, `Toast`'s, `Switch`'s per-platform track size, the web keyboard handling in `Slider`, `Input`'s checklist/radio-group/switch-group, `ImagePicker`'s web path).
+
+- **Constants, not functions.** The platform can't change while the app runs, so there's nothing to re-evaluate, and `if (isWeb)` reads as a fact rather than a question.
+- **They read `Platform.OS`, not `process.env.EXPO_OS`** — and the difference matters more than it looks. The env read is inlined by `babel-preset-expo` at transform time, so it collapses to a literal and its branches are dead-code-eliminated per platform: cheaper, but under Jest it is permanently `"ios"`, which makes every non-iOS branch unreachable by any test. That's how `ImagePicker`'s web behaviour was first written — shipped, with no test able to see it. `Platform.OS` costs one comparison at module load and leaves the other branches in the bundle; being able to prove platform-specific behaviour is worth more. `src/utils/index.test.ts` asserts the env read is still pinned to `"ios"` under Jest, so a change back fails there rather than silently freezing every branch.
+- **A test that needs a different platform mocks `@/utils`**, not react-native's `Platform` — replacing that module breaks `expo-modules-core`, which reads `select` from it during setup. Because the values are settled at module load, that mock belongs at the top of its own test file; `image-picker`'s web behaviour is covered in `web.test.tsx` beside the native cases in `index.test.tsx` for exactly that reason.
 
 ### Event bus — `src/features/event-bus`
 
