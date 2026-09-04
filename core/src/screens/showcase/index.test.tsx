@@ -13,6 +13,7 @@ const SECTION_TITLES = [
   "Spacer",
   "Icons",
   "Buttons",
+  "Header",
   "Checkboxes",
   "Radio buttons",
   "Switches",

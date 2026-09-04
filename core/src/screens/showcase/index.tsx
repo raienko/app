@@ -15,6 +15,7 @@ import CarouselSection from "./sections/carousel";
 import CheckboxesSection from "./sections/checkboxes";
 import DeepLinksSection from "./sections/deep-links";
 import GridSection from "./sections/grid";
+import HeaderSection from "./sections/header";
 import IconsSection from "./sections/icons";
 import ImagePickerSection from "./sections/image-picker";
 import ImagesSection from "./sections/images";
@@ -60,6 +61,7 @@ const SECTIONS: {
   { title: "showcase.spacer", Component: SpacerSection },
   { title: "showcase.icons", Component: IconsSection },
   { title: "showcase.buttons", Component: ButtonsSection },
+  { title: "showcase.header", Component: HeaderSection },
   { title: "showcase.checkboxes", Component: CheckboxesSection },
   { title: "showcase.radioButtons", Component: RadioButtonsSection },
   { title: "showcase.switches", Component: SwitchesSection },

@@ -177,6 +177,7 @@
     "spacer": "Spacer",
     "icons": "Icons",
     "buttons": "Buttons",
+    "header": "Header",
     "checkboxes": "Checkboxes",
     "radioButtons": "Radio buttons",
     "switches": "Switches",
