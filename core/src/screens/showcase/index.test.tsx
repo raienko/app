@@ -14,6 +14,7 @@ const SECTION_TITLES = [
   "Icons",
   "Buttons",
   "Header",
+  "Tab bar",
   "Checkboxes",
   "Radio buttons",
   "Switches",

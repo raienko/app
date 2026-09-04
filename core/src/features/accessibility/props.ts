@@ -294,6 +294,46 @@ export function sliderA11yProps({
   };
 }
 
+type TabOptions = {
+  /** The tab's visible text, which is also its accessible name. */
+  label: string;
+  selected: boolean;
+  disabled?: boolean;
+};
+
+/**
+ * The accessibility props for one tab in a tab bar.
+ *
+ * `accessibilityRole="tab"` rather than `"button"`: both are pressable, but
+ * a tab tells a screen reader that picking it swaps the view rather than
+ * performing an action, and that it belongs to the set its parent
+ * `tabListA11yProps()` declares — which is what makes "2 of 4" position
+ * announcements work.
+ */
+export function tabA11yProps({
+  label,
+  selected,
+  disabled = false,
+}: TabOptions): AccessibilityProps {
+  return {
+    accessibilityRole: "tab",
+    role: "tab",
+    accessibilityLabel: label,
+    accessibilityState: { selected, disabled },
+    // react-native-web 0.21 renders only the aria-* form of state.
+    "aria-selected": selected,
+    "aria-disabled": disabled,
+  };
+}
+
+/** The container around a set of tabs — pair it with `tabA11yProps()`. */
+export function tabListA11yProps(): AccessibilityProps {
+  return {
+    accessibilityRole: "tablist",
+    role: "tablist",
+  };
+}
+
 type ProgressOptions = {
   /** What is progressing — "Uploading photos", "Downloading update". */
   label: string;

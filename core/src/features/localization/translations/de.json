@@ -178,6 +178,7 @@
     "icons": "Symbole",
     "buttons": "Schaltflächen",
     "header": "Kopfzeile",
+    "tabBar": "Tab-Leiste",
     "checkboxes": "Kontrollkästchen",
     "radioButtons": "Optionsfelder",
     "switches": "Schalter",

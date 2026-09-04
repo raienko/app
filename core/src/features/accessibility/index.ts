@@ -18,6 +18,8 @@ export {
   sliderA11yProps,
   statusA11yProps,
   switchA11yProps,
+  tabA11yProps,
+  tabListA11yProps,
   type HeadingLevel,
 } from "./props";
 export { ACCESSIBILITY_FLAGS } from "./settings";

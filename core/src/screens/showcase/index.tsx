@@ -34,6 +34,7 @@ import SegmentedControlSection from "./sections/segmented-control";
 import SlidersSection from "./sections/sliders";
 import SpacerSection from "./sections/spacer";
 import SwitchesSection from "./sections/switches";
+import TabBarSection from "./sections/tab-bar";
 import ThemeSection from "./sections/theme";
 import ToastsSection from "./sections/toasts";
 import TypographySection from "./sections/typography";
@@ -62,6 +63,7 @@ const SECTIONS: {
   { title: "showcase.icons", Component: IconsSection },
   { title: "showcase.buttons", Component: ButtonsSection },
   { title: "showcase.header", Component: HeaderSection },
+  { title: "showcase.tabBar", Component: TabBarSection },
   { title: "showcase.checkboxes", Component: CheckboxesSection },
   { title: "showcase.radioButtons", Component: RadioButtonsSection },
   { title: "showcase.switches", Component: SwitchesSection },
