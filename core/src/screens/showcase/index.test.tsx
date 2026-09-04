@@ -5,6 +5,7 @@ import Component from "./index";
 
 const SECTION_TITLES = [
   "Typography",
+  "Markdown",
   "Theme & colors",
   "Localization",
   "Accessibility",

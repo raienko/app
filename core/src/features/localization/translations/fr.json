@@ -140,6 +140,19 @@
     "progress": "Position de lecture",
     "time": "{{current}} sur {{total}}"
   },
+  "markdown": {
+    "bulletPoint": "Puce",
+    "nestedBulletPoint": "Puce imbriquée",
+    "orderedItem": "Élément {n}",
+    "nestedOrderedItem": "Élément imbriqué {n}",
+    "quote": "Citation",
+    "nestedQuote": "Citation imbriquée",
+    "row": "Ligne {n} : {content}",
+    "equation": "Formule : {latex}",
+    "headings": "Titres",
+    "links": "Liens",
+    "images": "Images"
+  },
   "carousel": {
     "slide": "Diapositive {{current}} sur {{total}}"
   },
@@ -177,6 +190,7 @@
   "showcase": {
     "summary": "nom : {{name}} / âge : {{age}} / e-mail : {{email}}",
     "typography": "Typographie",
+    "markdown": "Markdown",
     "theme": "Thème et couleurs",
     "localization": "Localisation",
     "accessibility": "Accessibilité",

@@ -140,6 +140,19 @@
     "progress": "Позиція відтворення",
     "time": "{{current}} з {{total}}"
   },
+  "markdown": {
+    "bulletPoint": "Маркер",
+    "nestedBulletPoint": "Вкладений маркер",
+    "orderedItem": "Пункт списку {n}",
+    "nestedOrderedItem": "Вкладений пункт списку {n}",
+    "quote": "Цитата",
+    "nestedQuote": "Вкладена цитата",
+    "row": "Рядок {n}: {content}",
+    "equation": "Формула: {latex}",
+    "headings": "Заголовки",
+    "links": "Посилання",
+    "images": "Зображення"
+  },
   "carousel": {
     "slide": "Слайд {{current}} з {{total}}"
   },
@@ -177,6 +190,7 @@
   "showcase": {
     "summary": "ім'я: {{name}} / вік: {{age}} / email: {{email}}",
     "typography": "Типографіка",
+    "markdown": "Markdown",
     "theme": "Тема та кольори",
     "localization": "Локалізація",
     "accessibility": "Доступність",

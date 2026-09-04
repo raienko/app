@@ -140,6 +140,19 @@
     "progress": "播放位置",
     "time": "{{current}} / {{total}}"
   },
+  "markdown": {
+    "bulletPoint": "项目符号",
+    "nestedBulletPoint": "嵌套项目符号",
+    "orderedItem": "列表项 {n}",
+    "nestedOrderedItem": "嵌套列表项 {n}",
+    "quote": "引用",
+    "nestedQuote": "嵌套引用",
+    "row": "第 {n} 行：{content}",
+    "equation": "公式：{latex}",
+    "headings": "标题",
+    "links": "链接",
+    "images": "图片"
+  },
   "carousel": {
     "slide": "第 {{current}} 张，共 {{total}} 张"
   },
@@ -177,6 +190,7 @@
   "showcase": {
     "summary": "姓名：{{name}} / 年龄：{{age}} / 邮箱：{{email}}",
     "typography": "排版",
+    "markdown": "Markdown",
     "theme": "主题与颜色",
     "localization": "本地化",
     "accessibility": "无障碍",

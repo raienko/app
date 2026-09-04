@@ -140,6 +140,19 @@
     "progress": "Posición de reproducción",
     "time": "{{current}} de {{total}}"
   },
+  "markdown": {
+    "bulletPoint": "Viñeta",
+    "nestedBulletPoint": "Viñeta anidada",
+    "orderedItem": "Elemento {n}",
+    "nestedOrderedItem": "Elemento anidado {n}",
+    "quote": "Cita",
+    "nestedQuote": "Cita anidada",
+    "row": "Fila {n}: {content}",
+    "equation": "Fórmula: {latex}",
+    "headings": "Encabezados",
+    "links": "Enlaces",
+    "images": "Imágenes"
+  },
   "carousel": {
     "slide": "Diapositiva {{current}} de {{total}}"
   },
@@ -177,6 +190,7 @@
   "showcase": {
     "summary": "nombre: {{name}} / edad: {{age}} / email: {{email}}",
     "typography": "Tipografía",
+    "markdown": "Markdown",
     "theme": "Tema y colores",
     "localization": "Localización",
     "accessibility": "Accesibilidad",

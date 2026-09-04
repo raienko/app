@@ -140,6 +140,19 @@
     "progress": "موضع التشغيل",
     "time": "{{current}} من {{total}}"
   },
+  "markdown": {
+    "bulletPoint": "نقطة",
+    "nestedBulletPoint": "نقطة متداخلة",
+    "orderedItem": "عنصر القائمة {n}",
+    "nestedOrderedItem": "عنصر قائمة متداخل {n}",
+    "quote": "اقتباس",
+    "nestedQuote": "اقتباس متداخل",
+    "row": "الصف {n}: {content}",
+    "equation": "معادلة: {latex}",
+    "headings": "العناوين",
+    "links": "الروابط",
+    "images": "الصور"
+  },
   "carousel": {
     "slide": "الشريحة {{current}} من {{total}}"
   },
@@ -177,6 +190,7 @@
   "showcase": {
     "summary": "الاسم: {{name}} / العمر: {{age}} / البريد الإلكتروني: {{email}}",
     "typography": "الطباعة",
+    "markdown": "Markdown",
     "theme": "السمة والألوان",
     "localization": "الترجمة",
     "accessibility": "إمكانية الوصول",

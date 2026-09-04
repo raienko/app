@@ -26,6 +26,7 @@ import ListItemSection from "./sections/list-item";
 import ListSection from "./sections/list";
 import LocalizationSection from "./sections/localization";
 import LoggerSection from "./sections/logger";
+import MarkdownSection from "./sections/markdown";
 import MediaPlayerSection from "./sections/media-player";
 import ModalsSection from "./sections/modals";
 import PermissionsSection from "./sections/permissions";
@@ -59,6 +60,7 @@ const SECTIONS: {
   Component: () => React.JSX.Element;
 }[] = [
   { title: "showcase.typography", Component: TypographySection },
+  { title: "showcase.markdown", Component: MarkdownSection },
   { title: "showcase.theme", Component: ThemeSection },
   { title: "showcase.localization", Component: LocalizationSection },
   { title: "showcase.accessibility", Component: AccessibilitySection },

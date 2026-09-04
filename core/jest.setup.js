@@ -51,3 +51,9 @@ jest.mock("expo-video", () => ({
   },
   VideoView: () => null,
 }));
+
+// react-native-enriched-markdown renders through a native view, so it can't
+// render under Jest. The package ships its own mock for exactly this.
+jest.mock("react-native-enriched-markdown", () =>
+  require("react-native-enriched-markdown/jest"),
+);

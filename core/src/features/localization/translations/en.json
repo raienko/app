@@ -140,6 +140,19 @@
     "progress": "Playback position",
     "time": "{{current}} of {{total}}"
   },
+  "markdown": {
+    "bulletPoint": "Bullet point",
+    "nestedBulletPoint": "Nested bullet point",
+    "orderedItem": "List item {n}",
+    "nestedOrderedItem": "Nested list item {n}",
+    "quote": "Blockquote",
+    "nestedQuote": "Nested blockquote",
+    "row": "Row {n}: {content}",
+    "equation": "Math: {latex}",
+    "headings": "Headings",
+    "links": "Links",
+    "images": "Images"
+  },
   "carousel": {
     "slide": "Slide {{current}} of {{total}}"
   },
@@ -177,6 +190,7 @@
   "showcase": {
     "summary": "name: {{name}} / age: {{age}} / email: {{email}}",
     "typography": "Typography",
+    "markdown": "Markdown",
     "theme": "Theme & colors",
     "localization": "Localization",
     "accessibility": "Accessibility",

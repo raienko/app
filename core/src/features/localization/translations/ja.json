@@ -140,6 +140,19 @@
     "progress": "再生位置",
     "time": "{{total}} 中 {{current}}"
   },
+  "markdown": {
+    "bulletPoint": "箇条書き",
+    "nestedBulletPoint": "入れ子の箇条書き",
+    "orderedItem": "リスト項目 {n}",
+    "nestedOrderedItem": "入れ子のリスト項目 {n}",
+    "quote": "引用",
+    "nestedQuote": "入れ子の引用",
+    "row": "{n} 行目: {content}",
+    "equation": "数式: {latex}",
+    "headings": "見出し",
+    "links": "リンク",
+    "images": "画像"
+  },
   "carousel": {
     "slide": "{{total}} 枚中 {{current}} 枚目"
   },
@@ -177,6 +190,7 @@
   "showcase": {
     "summary": "名前: {{name}} / 年齢: {{age}} / メール: {{email}}",
     "typography": "タイポグラフィ",
+    "markdown": "Markdown",
     "theme": "テーマと色",
     "localization": "ローカライズ",
     "accessibility": "アクセシビリティ",

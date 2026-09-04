@@ -140,6 +140,19 @@
     "progress": "Wiedergabeposition",
     "time": "{{current}} von {{total}}"
   },
+  "markdown": {
+    "bulletPoint": "Aufzählungszeichen",
+    "nestedBulletPoint": "Verschachteltes Aufzählungszeichen",
+    "orderedItem": "Listeneintrag {n}",
+    "nestedOrderedItem": "Verschachtelter Listeneintrag {n}",
+    "quote": "Zitat",
+    "nestedQuote": "Verschachteltes Zitat",
+    "row": "Zeile {n}: {content}",
+    "equation": "Formel: {latex}",
+    "headings": "Überschriften",
+    "links": "Links",
+    "images": "Bilder"
+  },
   "carousel": {
     "slide": "Folie {{current}} von {{total}}"
   },
@@ -177,6 +190,7 @@
   "showcase": {
     "summary": "Name: {{name}} / Alter: {{age}} / E-Mail: {{email}}",
     "typography": "Typografie",
+    "markdown": "Markdown",
     "theme": "Design und Farben",
     "localization": "Lokalisierung",
     "accessibility": "Barrierefreiheit",
