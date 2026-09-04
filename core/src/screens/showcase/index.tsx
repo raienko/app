@@ -10,6 +10,7 @@ import { createStyles, useSizes } from "@/features/responsive";
 
 import AccessibilitySection from "./sections/accessibility";
 import ButtonsSection from "./sections/buttons";
+import CardSection from "./sections/card";
 import CarouselSection from "./sections/carousel";
 import CheckboxesSection from "./sections/checkboxes";
 import DeepLinksSection from "./sections/deep-links";
@@ -66,6 +67,7 @@ const SECTIONS: {
   { title: "showcase.stateViews", Component: StateViewsSection },
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.images", Component: ImagesSection },
+  { title: "showcase.cards", Component: CardSection },
   { title: "showcase.carousel", Component: CarouselSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },

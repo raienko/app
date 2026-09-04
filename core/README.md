@@ -90,6 +90,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Segmented control | Both implementations side by side, a disabled option, and a disabled control                     |
 | Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                     |
 | Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls |
+| Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content          |
 | Carousel          | Slides with pagination you can switch off live, and the position it announces                    |
 | Image picker      | Camera/gallery selection through a pressable trigger or the static API                           |
 | Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                  |
@@ -486,6 +487,38 @@ Wraps RN's own `Modal` — already a native, full-window overlay, so no `Root` w
 - **`bottomSheet`/`actions` support drag-to-dismiss from a grabber handle** (`react-native-gesture-handler`'s `Gesture.Pan()` + `GestureDetector`, Reanimated-driven). Deliberately scoped to just the handle, not the whole sheet — wrapping the entire content (including the `ScrollView` above) in the pan gesture would fight the `ScrollView`'s own vertical scrolling for the same gesture. Dragging past 100px or with velocity over 800px/s dismisses (via the same `dismiss()`/`onDismiss` path as a backdrop tap); otherwise it snaps back. Verified live in-browser with simulated pointer drags: a 200px drag dismissed the sheet, a 20px drag snapped back without dismissing.
 - **`GestureHandlerRootView` now wraps the whole app**, added to `Providers` (`src/root/providers.tsx`) rather than only around Modal's gesture — gesture-handler needs exactly one, at the true root, to reliably capture touches on Android; wrapping it locally around just the drag handle would work inconsistently. `jest.setup.js` also needed `require("react-native-gesture-handler/jestSetup")` (gesture-handler's own recommended Jest setup) once any gesture was actually used.
 - **Composed from smaller pieces**, same folder-per-piece pattern as `Input`: `backdrop.tsx` (`ModalBackdrop`), `content.tsx` (`ModalContent` — position/animation styling + the fade/slide-up interpolation), `handle.tsx` (`ModalHandle` — the grabber and its pan gesture), and `scroll-area.tsx` (`ModalScrollArea` — the bounded, scrollable content region) each own one concern; `index.tsx` is the orchestrator that owns state (`nativeVisible`, `progress`/`dragY` shared values, the show/hide/dismiss callbacks) and composes the pieces, using `If` (above) for the parts that are conditional per `type` (backdrop, drag handle) instead of ternaries.
+
+### `Card` — `src/components/card`
+
+```tsx
+import Card from "@/components/card";
+
+<Card>
+  <Text value="Total" type="footnote" />
+  <Text value="£42.00" type="title2" />
+</Card>
+
+<Card type="outlined" onPress={() => router.navigate("/orders/12")}>
+  <Text value="Order #12" />
+</Card>
+
+<Card padded={false}><Image source={url} alt="Preview" /></Card>
+```
+
+A raised surface that groups related content. It owns the box and nothing else — no title, no footer, no slots; content is `children`, composed from `Text`, `Image`, `Spacer` and the rest, which is what keeps one component from growing a prop per layout anyone ever wants. `Accordion` (below) is the version that also owns a header, and stays separate for that reason.
+
+| `type`     | fill                | border | shadow |
+| ---------- | ------------------- | ------ | ------ |
+| `elevated` | `backgroundElement` | no     | yes    |
+| `outlined` | **none**            | yes    | no     |
+| `filled`   | `backgroundElement` | no     | no     |
+
+(Defaults to `elevated`. The table lives in code as `TYPE_CONFIG` — add a type by adding one entry there plus the literal in `CardType`.)
+
+- **`outlined` has no fill at all, and that's the interesting one.** The other two fill with `backgroundElement`, the same token every other raised surface uses, so a card sitting on an `Accordion` or a `Modal` is literally the same colour as what's behind it — the trap `Button`'s `secondary` already documents. Filling `outlined` with `background` instead looks like the obvious fix and is the wrong one: on a dark scheme `background` is _darker_ than the raised surface, so the card reads as a well punched into the page rather than a thing resting on it. It came out as a black hole in a grey panel the first time it rendered on screen. Taking whatever is behind it and drawing only the `border` edge reads correctly on any surface in either scheme — checked in both.
+- **The shadow is emitted in both spellings** (`shadow*` for iOS and web, `elevation` for Android) and is nearly invisible against a dark background whatever you do, which is why `elevated` also carries the raised _fill_ rather than leaning on the shadow alone to separate it from the page.
+- **`padded={false}`** hands spacing to the content, for a card whose image or rows go edge to edge. The card clips to its corner radius (`overflow: hidden`) so that content doesn't square off over them.
+- **`onPress` makes the whole card a single button**, named from the text inside it the way a labelled `Button` is (`label` overrides). That's the right shape for a card that navigates and the wrong one for a card with its own controls: `accessible` groups the children into one announcement, so a button nested inside a pressable card becomes unreachable. Put `onPress` on the inner control instead when the card holds more than one thing to do. Expressed as a union, so `label`/`disabled` can't be passed to a card that isn't pressable in the first place.
 
 ### `Accordion` — `src/components/accordion`
 
