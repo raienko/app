@@ -183,6 +183,7 @@
     "responsive": "Responsive units",
     "grid": "Grid",
     "spacer": "Spacer",
+    "divider": "Divider",
     "icons": "Icons",
     "buttons": "Buttons",
     "header": "Header",

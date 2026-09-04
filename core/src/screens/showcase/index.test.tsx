@@ -11,6 +11,7 @@ const SECTION_TITLES = [
   "Responsive units",
   "Grid",
   "Spacer",
+  "Divider",
   "Icons",
   "Buttons",
   "Header",

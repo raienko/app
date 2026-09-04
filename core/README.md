@@ -85,6 +85,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes               |
 | Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                      |
 | Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale            |
+| Divider           | Both orientations, a labelled rule, and the inset switchable against a list                       |
 | Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides           |
 | Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row   |
 | Progress          | A live determinate bar, custom value wording, and the indeterminate state                         |
@@ -874,6 +875,25 @@ Three pieces: **`Row`** places cells across and divides into `columns` (default 
 **The layout arithmetic is not in the components.** `createGridMetrics(columns, gap)` and its hook `useGridMetrics()` live in `features/responsive` and return the whole calculation — the resolved column count, the gap, each cell's half-gap `cellPadding`, the container's cancelling `edgeOffset`, and `widthFor(n)` for a cell's percentage width (clamped, so an over-wide or zero request can't produce a broken value). `Row` calls the hook and shares the result with its cells through context; `Cell` does no arithmetic of its own. Anything else that wants to sit on the same grid without being inside a `<Row>` — a standalone card that should be a third of the screen, a modal sized to eight columns — can call it directly. The pure function is covered by its own tests, including that a full line of cells sums to exactly 100%.
 
 **`ResponsiveValue<T>` / `resolveResponsive()`** (`features/responsive`) are the primitive underneath, and are useful well beyond the grid: a value that's either fixed or a per-breakpoint map, resolved **mobile-first**. A breakpoint with no entry inherits the nearest narrower one that has one, so `{ phone: 12, tablet: 6 }` means 12 on phone _and_ foldable, then 6 on tablet _and_ desktop — a map only names the widths where something actually changes. It never cascades downward: `{ desktop: 4 }` on a phone falls back rather than reaching up. `BREAKPOINT_ORDER` drives the cascade and is derived by sorting `BREAKPOINTS` on its own thresholds, so a new breakpoint slots in at the right place without the order being restated.
+
+### `Divider` — `src/components/divider`
+
+```tsx
+import Divider from "@/components/divider";
+
+<Divider />
+<Divider label="or" />
+<Divider inset="x16" />              // clears the leading edge
+<Divider orientation="vertical" />
+```
+
+A rule between things: between list rows, between sections of a form, between two columns.
+
+- **An unlabelled divider is invisible to assistive technology.** It's a drawn boundary and nothing more — the grouping it suggests is already carried by the content either side — so it goes through `disabledA11yProps()` and is hidden on every platform rather than left as an empty stop a screen-reader user swipes past. Same treatment `Spacer` gets, for the same reason, and asserted from both sides in the tests.
+- **A labelled one is not.** "or", "Today", "3 more" is content, so the label is announced and it's the two rules either side that become the decoration. They each take an equal half of what the label leaves, so it sits centred however long it is — measured in the browser at 160px + label + 160px in a 349px row.
+- **`inset`** leaves both ends clear, as a step of the spacing scale (`SpacingToken`) or a raw px value, and follows the orientation: horizontal margins on a horizontal rule, vertical on a vertical one, so it always clears the ends rather than the sides. That's what lines a list rule up with the text instead of running under the avatars — verified live at 347px with no inset, 313px at `x16`, 263px at `x40`.
+- **`label` and `orientation="vertical"` are mutually exclusive in the types**: a vertical rule has no room for text, and turning text sideways is a different component's problem.
+- `List`'s `ItemSeparatorComponent` in the Showcase and stories now uses it, replacing the inline separator `View`s written before it existed.
 
 ### `Spacer` — `src/components/spacer`
 

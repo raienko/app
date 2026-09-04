@@ -2,11 +2,11 @@ import { useState } from "react";
 import { View } from "react-native";
 
 import Card from "@/components/card";
+import Divider from "@/components/divider";
 import Icon from "@/components/icon";
 import Image from "@/components/image";
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
-import { useTheme } from "@/features/theme";
 
 import Component, { type ListItemData } from "./index";
 
@@ -76,7 +76,6 @@ export const Pressable = () => {
 };
 
 export const WithHeaderAndSeparators = () => {
-  const theme = useTheme();
   const styles = useStyles();
 
   return (
@@ -84,11 +83,7 @@ export const WithHeaderAndSeparators = () => {
       <Component
         data={rows()}
         ListHeaderComponent={<Text value="People" type="title3" />}
-        ItemSeparatorComponent={() => (
-          <View
-            style={[styles.separator, { backgroundColor: theme.colors.border }]}
-          />
-        )}
+        ItemSeparatorComponent={() => <Divider inset="x16" />}
       />
     </View>
   );
@@ -141,10 +136,6 @@ const useStyles = createStyles(({ radius, sizes, spacing }) => ({
     alignSelf: "stretch",
     height: sizes.elementHeightLg * 5,
     gap: spacing.x8,
-  },
-  separator: {
-    height: spacing.x1,
-    marginHorizontal: spacing.x16,
   },
   photo: {
     width: "100%",

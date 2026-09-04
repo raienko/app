@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View } from "react-native";
 
 import Card from "@/components/card";
+import Divider from "@/components/divider";
 import Icon from "@/components/icon";
 import List, { type ListItemData } from "@/components/list";
 import SegmentedControl from "@/components/segmented-control";
@@ -65,14 +66,7 @@ export default function ListSection() {
                 <Text value={`${PEOPLE.length} people`} type="footnote" />
               </View>
             }
-            ItemSeparatorComponent={() => (
-              <View
-                style={[
-                  styles.separator,
-                  { backgroundColor: theme.colors.border },
-                ]}
-              />
-            )}
+            ItemSeparatorComponent={() => <Divider inset="x16" />}
           />
         ) : (
           <List
@@ -113,10 +107,6 @@ const useStyles = createStyles(({ sizes, spacing }) => ({
   },
   header: {
     padding: spacing.x12,
-  },
-  separator: {
-    height: spacing.x1,
-    marginHorizontal: spacing.x16,
   },
   custom: {
     padding: spacing.x12,
