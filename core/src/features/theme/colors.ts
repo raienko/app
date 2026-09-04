@@ -21,6 +21,13 @@ export type ThemeColors = {
   info: string;
   /** Scrim color behind overlays; the overlay controls its own opacity. */
   overlay: string;
+  /**
+   * The letterbox behind media that doesn't fill its frame. Black in both
+   * schemes on purpose, unlike every other surface here: a video's own
+   * black bars are what the eye expects around a picture, and a light one
+   * would read as a rendering fault rather than a theme.
+   */
+  mediaSurface: string;
   /** Base colour used by platform shadow APIs. */
   shadow: string;
   /** Bottom-sheet drag indicator. */
@@ -48,6 +55,7 @@ const REQUIRED_KEYS: (keyof ThemeColors)[] = [
   "warning",
   "info",
   "overlay",
+  "mediaSurface",
   "shadow",
   "grabber",
   "focus",

@@ -5,6 +5,14 @@ import type { ComponentTypeProps } from "@/components/types";
 type CommonSliderProps = ComponentTypeProps & {
   /** Visible text and the accessible base name for the slider. */
   label: string;
+  /**
+   * Keeps `label` as the accessible name but stops drawing it, for a
+   * slider whose surroundings already say what it is — a scrubber between
+   * a play button and a clock, a volume control in a toolbar. The name
+   * still has to exist: a slider has no text of its own for a screen
+   * reader to derive one from.
+   */
+  hideLabel?: boolean;
   min?: number;
   max?: number;
   /** Omit for continuous pointer movement; accessibility uses 1% increments. */

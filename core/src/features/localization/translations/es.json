@@ -132,6 +132,14 @@
       "content": "Modal a pantalla completa"
     }
   },
+  "mediaPlayer": {
+    "play": "Reproducir",
+    "pause": "Pausar",
+    "mute": "Silenciar",
+    "unmute": "Activar sonido",
+    "progress": "Posición de reproducción",
+    "time": "{{current}} de {{total}}"
+  },
   "carousel": {
     "slide": "Diapositiva {{current}} de {{total}}"
   },
@@ -192,6 +200,7 @@
     "listItems": "Elementos de lista",
     "list": "Lista",
     "carousel": "Carrusel",
+    "mediaPlayer": "Reproductor multimedia",
     "imagePicker": "Selector de imágenes",
     "modals": "Ventanas modales",
     "popups": "Diálogos emergentes",

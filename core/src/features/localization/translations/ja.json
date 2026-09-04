@@ -132,6 +132,14 @@
       "content": "フルスクリーンモーダル"
     }
   },
+  "mediaPlayer": {
+    "play": "再生",
+    "pause": "一時停止",
+    "mute": "ミュート",
+    "unmute": "ミュート解除",
+    "progress": "再生位置",
+    "time": "{{total}} 中 {{current}}"
+  },
   "carousel": {
     "slide": "{{total}} 枚中 {{current}} 枚目"
   },
@@ -192,6 +200,7 @@
     "listItems": "リスト項目",
     "list": "リスト",
     "carousel": "カルーセル",
+    "mediaPlayer": "メディアプレーヤー",
     "imagePicker": "画像ピッカー",
     "modals": "モーダル",
     "popups": "ポップアップ",

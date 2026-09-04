@@ -132,6 +132,14 @@
       "content": "Janela modal em ecrã inteiro"
     }
   },
+  "mediaPlayer": {
+    "play": "Reproduzir",
+    "pause": "Pausa",
+    "mute": "Silenciar",
+    "unmute": "Ativar som",
+    "progress": "Posição de reprodução",
+    "time": "{{current}} de {{total}}"
+  },
   "carousel": {
     "slide": "Slide {{current}} de {{total}}"
   },
@@ -192,6 +200,7 @@
     "listItems": "Itens de lista",
     "list": "Lista",
     "carousel": "Carrossel",
+    "mediaPlayer": "Leitor multimédia",
     "imagePicker": "Seletor de imagens",
     "modals": "Janelas modais",
     "popups": "Popups",

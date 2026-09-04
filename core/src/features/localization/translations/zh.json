@@ -132,6 +132,14 @@
       "content": "全屏模态框"
     }
   },
+  "mediaPlayer": {
+    "play": "播放",
+    "pause": "暂停",
+    "mute": "静音",
+    "unmute": "取消静音",
+    "progress": "播放位置",
+    "time": "{{current}} / {{total}}"
+  },
   "carousel": {
     "slide": "第 {{current}} 张，共 {{total}} 张"
   },
@@ -192,6 +200,7 @@
     "listItems": "列表项",
     "list": "列表",
     "carousel": "轮播",
+    "mediaPlayer": "媒体播放器",
     "imagePicker": "图片选择器",
     "modals": "模态框",
     "popups": "弹出对话框",

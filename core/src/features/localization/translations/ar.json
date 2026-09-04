@@ -132,6 +132,14 @@
       "content": "نافذة ملء الشاشة"
     }
   },
+  "mediaPlayer": {
+    "play": "تشغيل",
+    "pause": "إيقاف مؤقت",
+    "mute": "كتم الصوت",
+    "unmute": "إلغاء كتم الصوت",
+    "progress": "موضع التشغيل",
+    "time": "{{current}} من {{total}}"
+  },
   "carousel": {
     "slide": "الشريحة {{current}} من {{total}}"
   },
@@ -192,6 +200,7 @@
     "listItems": "عناصر القائمة",
     "list": "القائمة",
     "carousel": "دوّار",
+    "mediaPlayer": "مشغل الوسائط",
     "imagePicker": "منتقي الصور",
     "modals": "النوافذ المنبثقة",
     "popups": "مربعات الحوار",

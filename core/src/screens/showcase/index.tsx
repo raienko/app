@@ -24,6 +24,7 @@ import ListItemSection from "./sections/list-item";
 import ListSection from "./sections/list";
 import LocalizationSection from "./sections/localization";
 import LoggerSection from "./sections/logger";
+import MediaPlayerSection from "./sections/media-player";
 import ModalsSection from "./sections/modals";
 import PermissionsSection from "./sections/permissions";
 import PopupsSection from "./sections/popups";
@@ -79,6 +80,7 @@ const SECTIONS: {
   { title: "showcase.listItems", Component: ListItemSection },
   { title: "showcase.list", Component: ListSection },
   { title: "showcase.carousel", Component: CarouselSection },
+  { title: "showcase.mediaPlayer", Component: MediaPlayerSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.modals", Component: ModalsSection },
   { title: "showcase.popups", Component: PopupsSection },

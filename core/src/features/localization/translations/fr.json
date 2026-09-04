@@ -132,6 +132,14 @@
       "content": "Fenêtre modale plein écran"
     }
   },
+  "mediaPlayer": {
+    "play": "Lire",
+    "pause": "Pause",
+    "mute": "Couper le son",
+    "unmute": "Rétablir le son",
+    "progress": "Position de lecture",
+    "time": "{{current}} sur {{total}}"
+  },
   "carousel": {
     "slide": "Diapositive {{current}} sur {{total}}"
   },
@@ -192,6 +200,7 @@
     "listItems": "Éléments de liste",
     "list": "Liste",
     "carousel": "Carrousel",
+    "mediaPlayer": "Lecteur multimédia",
     "imagePicker": "Sélecteur d’images",
     "modals": "Fenêtres modales",
     "popups": "Popups",

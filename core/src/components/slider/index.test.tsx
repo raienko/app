@@ -172,4 +172,22 @@ describe(`${Component.name} smoke test`, () => {
     });
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  // Keeps the accessible name while dropping the visible text, for a
+  // slider whose surroundings already say what it is — MediaPlayer's
+  // scrubber sits between a play button and a clock.
+  it("hides the visible label without losing the accessible name", async () => {
+    await render(
+      <Component label="Volume" value={5} onChange={jest.fn()} hideLabel />,
+    );
+
+    expect(screen.queryByText("Volume")).toBeNull();
+    expect(screen.getByRole("slider", { name: "Volume" })).toBeTruthy();
+  });
+
+  it("draws the label by default", async () => {
+    await render(<Component label="Volume" value={5} onChange={jest.fn()} />);
+
+    expect(screen.getByText("Volume")).toBeTruthy();
+  });
 });

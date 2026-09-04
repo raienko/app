@@ -132,6 +132,14 @@
       "content": "Vollbild-Modal"
     }
   },
+  "mediaPlayer": {
+    "play": "Abspielen",
+    "pause": "Pause",
+    "mute": "Stummschalten",
+    "unmute": "Stummschaltung aufheben",
+    "progress": "Wiedergabeposition",
+    "time": "{{current}} von {{total}}"
+  },
   "carousel": {
     "slide": "Folie {{current}} von {{total}}"
   },
@@ -192,6 +200,7 @@
     "listItems": "Listenelemente",
     "list": "Liste",
     "carousel": "Karussell",
+    "mediaPlayer": "Medienplayer",
     "imagePicker": "Bildauswahl",
     "modals": "Modale",
     "popups": "Pop-ups",

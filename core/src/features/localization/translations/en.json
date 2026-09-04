@@ -132,6 +132,14 @@
       "content": "Fullscreen modal"
     }
   },
+  "mediaPlayer": {
+    "play": "Play",
+    "pause": "Pause",
+    "mute": "Mute",
+    "unmute": "Unmute",
+    "progress": "Playback position",
+    "time": "{{current}} of {{total}}"
+  },
   "carousel": {
     "slide": "Slide {{current}} of {{total}}"
   },
@@ -192,6 +200,7 @@
     "listItems": "List items",
     "list": "List",
     "carousel": "Carousel",
+    "mediaPlayer": "Media player",
     "imagePicker": "Image picker",
     "modals": "Modals",
     "popups": "Popups",

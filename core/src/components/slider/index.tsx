@@ -11,6 +11,7 @@ import type { SliderProps } from "./types";
 /** Controlled single- or multi-thumb slider with custom and Expo UI variants. */
 export default function Slider({
   type = DEFAULT_COMPONENT_TYPE,
+  hideLabel = false,
   style,
   ...props
 }: SliderProps) {
@@ -19,7 +20,7 @@ export default function Slider({
 
   return (
     <View style={[styles.container, style]}>
-      <Text value={props.label} type="footnote" />
+      {hideLabel ? null : <Text value={props.label} type="footnote" />}
       {useExpo ? <ExpoUISlider {...props} /> : <CustomSlider {...props} />}
     </View>
   );
