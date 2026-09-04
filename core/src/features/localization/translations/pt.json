@@ -201,6 +201,7 @@
     "icons": "Ícones",
     "buttons": "Botões",
     "tags": "Etiquetas",
+    "badges": "Selos",
     "header": "Cabeçalho",
     "tabBar": "Barra de separadores",
     "checkboxes": "Caixas de verificação",
@@ -252,6 +253,9 @@
     "multipleSecond": "Segundo valor",
     "multipleThird": "Terceiro valor",
     "disabled": "Controlo deslizante desativado"
+  },
+  "badge": {
+    "overflow": "{{count}}+"
   },
   "tag": {
     "remove": "Remover {{value}}"

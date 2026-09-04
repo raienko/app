@@ -201,6 +201,7 @@
     "icons": "Icônes",
     "buttons": "Boutons",
     "tags": "Étiquettes",
+    "badges": "Badges",
     "header": "En-tête",
     "tabBar": "Barre d’onglets",
     "checkboxes": "Cases à cocher",
@@ -252,6 +253,9 @@
     "multipleSecond": "Deuxième valeur",
     "multipleThird": "Troisième valeur",
     "disabled": "Curseur désactivé"
+  },
+  "badge": {
+    "overflow": "{{count}}+"
   },
   "tag": {
     "remove": "Supprimer {{value}}"

@@ -201,6 +201,7 @@
     "icons": "Icons",
     "buttons": "Buttons",
     "tags": "Tags",
+    "badges": "Badges",
     "header": "Header",
     "tabBar": "Tab bar",
     "checkboxes": "Checkboxes",
@@ -252,6 +253,9 @@
     "multipleSecond": "Second value",
     "multipleThird": "Third value",
     "disabled": "Disabled slider"
+  },
+  "badge": {
+    "overflow": "{{count}}+"
   },
   "tag": {
     "remove": "Remove {{value}}"

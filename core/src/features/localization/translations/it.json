@@ -201,6 +201,7 @@
     "icons": "Icone",
     "buttons": "Pulsanti",
     "tags": "Tag",
+    "badges": "Badge",
     "header": "Intestazione",
     "tabBar": "Barra delle schede",
     "checkboxes": "Caselle di controllo",
@@ -252,6 +253,9 @@
     "multipleSecond": "Secondo valore",
     "multipleThird": "Terzo valore",
     "disabled": "Cursore disattivato"
+  },
+  "badge": {
+    "overflow": "{{count}}+"
   },
   "tag": {
     "remove": "Rimuovi {{value}}"

@@ -201,6 +201,7 @@
     "icons": "图标",
     "buttons": "按钮",
     "tags": "标签",
+    "badges": "徽章",
     "header": "页眉",
     "tabBar": "标签栏",
     "checkboxes": "复选框",
@@ -252,6 +253,9 @@
     "multipleSecond": "第二个值",
     "multipleThird": "第三个值",
     "disabled": "已禁用的滑块"
+  },
+  "badge": {
+    "overflow": "{{count}}+"
   },
   "tag": {
     "remove": "移除{{value}}"

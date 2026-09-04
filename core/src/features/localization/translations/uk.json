@@ -201,6 +201,7 @@
     "icons": "Іконки",
     "buttons": "Кнопки",
     "tags": "Теги",
+    "badges": "Значки",
     "header": "Шапка",
     "tabBar": "Панель вкладок",
     "checkboxes": "Прапорці",
@@ -252,6 +253,9 @@
     "multipleSecond": "Друге значення",
     "multipleThird": "Третє значення",
     "disabled": "Вимкнений повзунок"
+  },
+  "badge": {
+    "overflow": "{{count}}+"
   },
   "tag": {
     "remove": "Видалити «{{value}}»"

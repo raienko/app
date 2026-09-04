@@ -201,6 +201,7 @@
     "icons": "الأيقونات",
     "buttons": "الأزرار",
     "tags": "الوسوم",
+    "badges": "الشارات",
     "header": "الترويسة",
     "tabBar": "شريط التبويبات",
     "checkboxes": "مربعات الاختيار",
@@ -252,6 +253,9 @@
     "multipleSecond": "القيمة الثانية",
     "multipleThird": "القيمة الثالثة",
     "disabled": "شريط تمرير معطل"
+  },
+  "badge": {
+    "overflow": "{{count}}+"
   },
   "tag": {
     "remove": "إزالة {{value}}"
