@@ -95,6 +95,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls  |
 | Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content           |
 | List items        | Pressable rows with both slots filled, a row holding its own control, truncation                  |
+| List              | 200 rows with a handful mounted, and the default renderer swapped for a custom one                |
 | Carousel          | Slides with pagination you can switch off live, and the position it announces                     |
 | Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web |
 | Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                   |
@@ -600,6 +601,37 @@ A horizontal bar showing how far along a task is. `Spinner` stays the right answ
 - **Both states honour Reduce Motion, differently.** The determinate fill goes through `duration()`, so it lands on each new value instantly instead of gliding. The indeterminate sweep can't simply stop — the movement _is_ the signal that something is happening — so it becomes a cross-fade in place, which is the substitution Apple's own guidance names. Covered by tests that render with `isReduceMotionEnabled` mocked on and assert the bar fades full-width rather than sweeping a segment.
 - **The track is `backgroundElementSelected`, not `backgroundElement`** — the latter is what most raised surfaces already use, so an unfilled bar sitting on a `Card` would be invisible. Same trap `Button`'s `secondary` and `Card`'s `outlined` document.
 - **No `type="expo"` here.** Expo UI has a progress view for SwiftUI and one for Jetpack Compose, but nothing universal and nothing on web — three platform-specific implementations for a bar drawn from two `View`s isn't a trade worth making. `Switch`, `Checkbox`, `RadioButton`, `Slider` and `SegmentedControl` offer the switch because Expo UI ships one component that covers every platform.
+
+### `List` — `src/components/list`
+
+```tsx
+import List from "@/components/list";
+
+// default: each entry renders as a ListItem
+<List
+  data={people.map((person) => ({
+    key: person.id,
+    title: person.name,
+    subtitle: person.email,
+    onPress: () => open(person.id),
+  }))}
+/>
+
+// or bring your own renderer
+<List
+  data={photos}
+  keyExtractor={(photo) => photo.id}
+  renderItem={({ item }) => <Image source={item.url} alt={item.caption} />}
+/>
+```
+
+A virtualized list wrapping [Legend List](https://legendapp.com/open-source/list/) — a drop-in `FlatList` replacement that recycles item containers rather than mounting one view per row. Everything is Legend List's own API passed straight through (`ListHeaderComponent`, `ItemSeparatorComponent`, `ListEmptyComponent`, `onEndReached`, `numColumns`, `horizontal`, the viewability callbacks). The wrapper adds two things.
+
+- **A default renderer.** Give it `data` of `ListItemData` — `ListItem`'s own props plus a `key` — and each entry renders as a `ListItem`, which is what most lists here are. Pass `renderItem` and it steps out of the way entirely: the item type is then inferred from `data` and stops asking for `ListItem`'s shape. Expressed as a union, so omitting `renderItem` with data that isn't `ListItemData` is a `tsc` error rather than a blank list.
+- **Defaults it can actually know.** `keyExtractor` reads each row's `key`, and `estimatedItemSize` is `ListItem`'s own row height — a genuine first-render hint rather than a guess, which Legend List replaces with measured averages as soon as anything renders. Both are supplied _only_ for default rows: an item with its own renderer has a shape this knows nothing about, so guessing would be worse than Legend List's own fallbacks. Both are overridable.
+- **The `key` never reaches the row.** React treats a spread `key` as the element's own key and warns about it — which the Showcase surfaced the first time this rendered. It's destructured out and used through `keyExtractor`, the only place it means anything. A required `key` rather than an index is the point of a recycling list: reorder or remove a row and an index key reuses the wrong content in the wrong container.
+- **Composing rows needs the array annotated.** `ListItemData` is a union (text-or-children, pressable-or-not), so spreading over rows afterwards widens the array into a union of shapes that no longer matches the default branch, and the list starts asking for a `renderItem`. Build each row in one place, or annotate the array `ListItemData[]`.
+- **Jest can't drive it.** Legend List renders no rows without a measured container, which under Jest is every time. The tests replace it with a stub and assert what the wrapper _hands over_ — the default renderer, the default key and size hint, and everything else untouched — with the virtualization left to Legend List's own suite. Verified in the browser instead: 200 rows, 11 mounted, still 11 after scrolling, and pressing a row reports it.
 
 ### `ListItem` — `src/components/list-item`
 

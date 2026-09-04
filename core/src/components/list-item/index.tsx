@@ -54,7 +54,7 @@ type PressProps =
       selected?: boolean;
     };
 
-type Props = Omit<
+export type ListItemProps = Omit<
   PressableProps,
   "children" | "style" | "onPress" | "disabled" | "accessible"
 > &
@@ -109,7 +109,7 @@ export default function ListItem({
   selected = false,
   style,
   ...props
-}: Props) {
+}: ListItemProps) {
   const theme = useTheme();
   const styles = useStyles();
 

@@ -1727,6 +1727,13 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@legendapp/list@3.3.10":
+  version "3.3.10"
+  resolved "https://registry.yarnpkg.com/@legendapp/list/-/list-3.3.10.tgz#c173e58bcb033d75ef7e49c45412a2e5b7829057"
+  integrity sha512-S8cwV11oJJD2m47JoRnCmlgbUrnY/f48TPL1zl1C3wwyrvru53Zf1NtYFlMtAU6lUKh/cU9RIffLI7unbf3kmg==
+  dependencies:
+    use-sync-external-store "^1.5.0"
+
 "@napi-rs/wasm-runtime@^1.1.4", "@napi-rs/wasm-runtime@^1.1.5":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@napi-rs/wasm-runtime/-/wasm-runtime-1.2.3.tgz#97e3d45d7424dc5da1d4e32f3bf3b292f6c1b44c"
