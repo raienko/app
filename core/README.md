@@ -118,6 +118,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | List items        | Pressable rows with both slots filled, a row holding its own control, truncation                      |
 | List              | 200 rows with a handful mounted, and the default renderer swapped for a custom one                    |
 | Carousel          | Slides with pagination you can switch off live, and the position it announces                         |
+| Pagination        | A paged list, the window and its gaps, the compact form, the dots, and the one-page case              |
 | Media player      | Video and audio behind one transport, switchable live, with native controls as an escape hatch        |
 | Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web     |
 | File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker             |
@@ -1103,6 +1104,32 @@ A wrapper over [`expo-image`](https://docs.expo.dev/versions/v57.0.0/sdk/image/)
 - **`Image.preload(urls, options?)`** warms the cache for images about to be needed — the next page of a feed, the photos behind a screen one tap away. Only remote URLs benefit; a `require()`d asset is in the bundle already. It resolves `false` if _any_ URL fails, and nothing treats that as fatal: a warm cache is an optimization, and a failed preload just means the image is fetched at render as it would have been anyway.
 - **`Image.cacheClear(target?)`** empties `expo-image`'s caches — after a sign-out when images are user-scoped, or from a "clear cached data" setting. Both caches by default; `"memory"` or `"disk"` narrows it. It resolves `false` on web (which has no cache of `expo-image`'s own) and on Android when the activity is gone, so `false` means "nothing was cleared", not "something broke" — which is exactly what the Showcase shows when you press it in a browser.
 
+### `Pagination` — `src/components/pagination`
+
+```tsx
+import Pagination from "@/components/pagination";
+
+<Pagination label="Search results" value={page} total={40} onChange={setPage} />
+<Pagination label="Results" value={page} total={40} onChange={setPage} compact />
+<Pagination variant="dots" label="Slides" value={slide} total={5} onChange={setSlide} />
+```
+
+Which of these am I on, and take me to another one.
+
+- **Two variants, because that question has two shapes.** `"numbers"` is the paged-data control — arrows, page numbers, gaps. `"dots"` is the position indicator for a small, known set, where the count matters more than the index. Dots have no arrows and no gaps: every position is a dot.
+- **`Carousel` uses the `"dots"` variant.** It passes its own labels, so a dot announces "A pug wrapped in a blanket, Slide 2 of 4" rather than a number, and its private pagination wrapper is gone.
+- **The dots are plain pressables, and that is the second version.** The first interpolated each dot off the carousel's animated `progress` so it would grow while the finger was still moving. It produced two iOS bugs in a row and was removed: the animation was worth less than a control that is reliably pressable.
+- **The touch target is a real box, not `hitSlop`.** An 8pt dot needs a target several times its size, and `hitSlop` is the obvious way to get one — and the wrong one here, because dots sit a few points apart, so 16pt of slop overlapped every neighbour. Overlapping targets do not average out: the topmost wins, so on iOS every press landed on the last dot rendered and the earlier ones could not be pressed at all. Sizing the `Pressable` itself (32pt, 4pt apart) makes the targets tile instead of stack.
+- **Neither web check could have caught that**, which is worth recording. `react-native-web`'s `Pressable` does not implement `hitSlop` at all — only its legacy `Touchable` references it — so on web the targets never overlapped and the bug did not exist. The first check compounded it by driving the dots with `element.click()`, which dispatches straight to the element and bypasses hit-testing entirely. Verified since with real pointer events at coordinates, recording which element each one reaches: clicks on dots 1, 4, 2, 1, 3 landed on exactly those dots, backwards moves included.
+- **Fewer than two pages renders nothing at all.** A pagination bar for a single page is a control that cannot do anything, and it is the state a real screen spends most of its time in — an empty result set, a filter that narrowed to one page. Hiding it is the behaviour, not an oversight.
+- **The width does not change as you page.** `paginationRange` returns a constant number of slots once there are enough pages to need gaps, so the button under your cursor stays where it is; a bar that reflows moves the target you were about to press. Verified at 121px and five number slots at every position from page 1 to 10 of 40, as the digits go from one to two.
+- **A gap must hide at least two pages.** An ellipsis standing in for a single number takes the same room and tells the reader less. The bound is off-by-one-prone and was — the first version rendered `1 … 3 4 5 … 12` at page 4, where the gap hid only page 2, and a test caught it.
+- **The arrows mirror in RTL.** Previous is a direction, not a glyph: in a right-to-left locale the earlier page is to the _right_, so a left-pointing chevron there means next. Read from `useIsRtl()` rather than automatic mirroring, which only lands after a native reload — the same reason `BackButton` does it.
+- **The numbers wrap; the arrows do not.** Letting the whole row wrap put "next" alone on a second line at phone widths, where it reads as a different control rather than the other end of this one. `compact` — two arrows and "Page 3 of 20" — is the better answer when there is genuinely no room.
+- **`value`/`onChange`, not `page`/`onPageChange`.** The same pair `Checkbox`, `Switch`, `Slider`, `SegmentedControl`, `Stepper` and `Input` take, so a controlled component reads the same wherever you meet one. `value` is 1-based — the number the reader sees, not an array index — and carries none of the zero-based implication `index` would. The active item is wider or recoloured depending on the variant, so state survives greyscale (WCAG 1.4.1).
+- **Every item announces its position**: "Page 3 of 20", not "3", because a screen-reader user has no visible row to read it among — and `getItemLabel` lets a carousel say "A pug wrapped in a blanket, Slide 2 of 4" instead. The current item is marked selected. The bar itself is not `accessible`: that would collapse its buttons into one announcement and make them unreachable, the trap `Card` and `ListItem` both document.
+- **Out-of-range input is clamped, not trusted.** A `page` past the end selects the last page and disables "next" rather than rendering a bar with nothing selected.
+
 ### `Carousel` — `src/components/carousel`
 
 ```tsx
@@ -1122,7 +1149,7 @@ import Carousel from "@/components/carousel";
 
 A wrapper over [`react-native-reanimated-carousel`](https://rn-carousel.dev/) (v5, whose peer deps — Reanimated 4, Worklets, Gesture Handler — this project already had). `loop`, `autoplay`, `itemSize`, `layout`, `animation`, `snapMode`, `orientation` and the render callbacks are the library's own API, passed straight through; the wrapper adds pagination and accessibility.
 
-- **`hasPagination`** (default `true`) shows one dot per slide. On by default because a carousel's remaining content is off-screen by definition — without dots nothing says it exists or how much of it there is. The dots are the library's own `Pagination`, so each one tracks the same `progress` shared value the slides animate with and grows _as you drag_ rather than snapping when the slide settles; `pagination.tsx` only supplies this app's colours, spacing and language. The active dot is **wider as well as recoloured**, so the current slide isn't signalled by colour alone (WCAG 1.4.1).
+- **`hasPagination`** (default `true`) shows one dot per slide. On by default because a carousel's remaining content is off-screen by definition — without dots nothing says it exists or how much of it there is. The dots are this app's own `Pagination` in its `"dots"` variant — the private `pagination.tsx` that used to live here is gone, and with it the `progress` shared value it interpolated each dot from. They follow the settled slide instead, which is what made them reliably pressable on iOS; see `Pagination` above for what that cost. The active dot is **recoloured**, and the carousel passes `slideLabel` through so a dot announces what it goes to rather than a number.
 - **`style` has to give the carousel a height.** Its slides are absolutely positioned — that's how the library animates them — so they can't stretch their container the way ordinary children would, and an unsized carousel renders as an empty box. The dots share that same box.
 - **A carousel is driven by a pan gesture, which no screen reader can perform.** Left alone it's a region whose content silently changes and that a VoiceOver or TalkBack user can never move through. Two things fix that, both on by default:
   - The region is `accessibilityRole="adjustable"` with increment/decrement actions wired to the carousel's own `next()`/`prev()`, so the native swipe-up/swipe-down gesture changes slides. Its `accessibilityValue` carries the position, which both platforms re-announce as it changes. A one-slide carousel gets neither — offering gestures that can't do anything is worse than offering none.

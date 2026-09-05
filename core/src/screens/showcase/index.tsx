@@ -33,6 +33,7 @@ import LoggerSection from "./sections/logger";
 import MarkdownSection from "./sections/markdown";
 import MediaPlayerSection from "./sections/media-player";
 import ModalsSection from "./sections/modals";
+import PaginationSection from "./sections/pagination";
 import PermissionsSection from "./sections/permissions";
 import PopupsSection from "./sections/popups";
 import ProgressBarSection from "./sections/progress-bar";
@@ -106,6 +107,7 @@ const SECTIONS: {
   { title: "showcase.listItems", Component: ListItemSection },
   { title: "showcase.list", Component: ListSection },
   { title: "showcase.carousel", Component: CarouselSection },
+  { title: "showcase.pagination", Component: PaginationSection },
   { title: "showcase.mediaPlayer", Component: MediaPlayerSection },
   { title: "showcase.imagePicker", Component: ImagePickerSection },
   { title: "showcase.filePicker", Component: FilePickerSection },

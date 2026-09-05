@@ -40,6 +40,7 @@ const SECTION_TITLES = [
   "List items",
   "List",
   "Carousel",
+  "Pagination",
   "Media player",
   "Image picker",
   "File picker",

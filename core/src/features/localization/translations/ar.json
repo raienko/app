@@ -226,6 +226,7 @@
     "listItems": "عناصر القائمة",
     "list": "القائمة",
     "carousel": "دوّار",
+    "pagination": "ترقيم الصفحات",
     "mediaPlayer": "مشغل الوسائط",
     "imagePicker": "منتقي الصور",
     "filePicker": "منتقي الملفات",
@@ -265,6 +266,12 @@
   },
   "badge": {
     "overflow": "{{count}}+"
+  },
+  "pagination": {
+    "previous": "الصفحة السابقة",
+    "next": "الصفحة التالية",
+    "page": "الصفحة {{page}} من {{total}}",
+    "label": "ترقيم الصفحات"
   },
   "share": {
     "action": "مشاركة",

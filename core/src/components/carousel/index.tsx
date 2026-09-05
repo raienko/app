@@ -1,6 +1,5 @@
 import { useCallback, useImperativeHandle, useRef, useState } from "react";
 import { View, type StyleProp, type ViewStyle } from "react-native";
-import { useSharedValue } from "react-native-reanimated";
 import { Carousel as ReanimatedCarousel } from "react-native-reanimated-carousel";
 import type {
   CarouselProps as ReanimatedCarouselProps,
@@ -10,7 +9,7 @@ import type {
 import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 
-import CarouselPagination from "./pagination";
+import Pagination from "@/components/pagination";
 
 export type { CarouselRef } from "react-native-reanimated-carousel";
 
@@ -127,7 +126,6 @@ export default function Carousel<Item>({
   const { t } = useLocale();
   const styles = useStyles();
   const carousel = useRef<CarouselRef>(null);
-  const progress = useSharedValue(0);
   const [index, setIndex] = useState(props.defaultIndex ?? 0);
 
   const count = data.length;
@@ -203,28 +201,34 @@ export default function Carousel<Item>({
         ref={carousel}
         data={data}
         orientation={orientation}
-        progress={progress}
         onSnapToItem={handleSnap}
         style={styles.carousel}
       />
 
       {hasPagination && count > 0 ? (
-        <CarouselPagination
-          count={count}
-          progress={progress}
+        <Pagination
+          variant="dots"
+          label={label}
+          value={index + 1}
+          total={count}
           orientation={orientation}
           // Pressing a dot is the screen-reader-reachable way to change
           // slides, so the handler is always wired rather than being
           // something a call site has to remember to pass.
-          onPress={(target) => carousel.current?.scrollTo({ index: target })}
-          getLabel={describe}
+          onChange={(value) => carousel.current?.scrollTo({ index: value - 1 })}
+          getItemLabel={(value) => describe(value - 1)}
+          style={
+            orientation === "vertical"
+              ? styles.paginationVertical
+              : styles.pagination
+          }
         />
       ) : null}
     </View>
   );
 }
 
-const useStyles = createStyles(() => ({
+const useStyles = createStyles(({ spacing }) => ({
   container: {
     width: "100%",
   },
@@ -234,5 +238,14 @@ const useStyles = createStyles(() => ({
   carousel: {
     flex: 1,
     width: "100%",
+  },
+  // The gap between the strip and its dots. It lived in the private
+  // pagination wrapper; now that the dots are the shared component, the
+  // spacing is the carousel's own business.
+  pagination: {
+    paddingTop: spacing.x12,
+  },
+  paginationVertical: {
+    paddingStart: spacing.x12,
   },
 }));

@@ -226,6 +226,7 @@
     "listItems": "列表项",
     "list": "列表",
     "carousel": "轮播",
+    "pagination": "分页",
     "mediaPlayer": "媒体播放器",
     "imagePicker": "图片选择器",
     "filePicker": "文件选择器",
@@ -265,6 +266,12 @@
   },
   "badge": {
     "overflow": "{{count}}+"
+  },
+  "pagination": {
+    "previous": "上一页",
+    "next": "下一页",
+    "page": "第 {{page}} 页，共 {{total}} 页",
+    "label": "分页"
   },
   "share": {
     "action": "分享",

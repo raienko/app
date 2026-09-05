@@ -226,6 +226,7 @@
     "listItems": "Éléments de liste",
     "list": "Liste",
     "carousel": "Carrousel",
+    "pagination": "Pagination",
     "mediaPlayer": "Lecteur multimédia",
     "imagePicker": "Sélecteur d’images",
     "filePicker": "Sélecteur de fichiers",
@@ -265,6 +266,12 @@
   },
   "badge": {
     "overflow": "{{count}}+"
+  },
+  "pagination": {
+    "previous": "Page précédente",
+    "next": "Page suivante",
+    "page": "Page {{page}} sur {{total}}",
+    "label": "Pagination"
   },
   "share": {
     "action": "Partager",

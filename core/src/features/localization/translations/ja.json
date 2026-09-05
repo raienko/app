@@ -226,6 +226,7 @@
     "listItems": "リスト項目",
     "list": "リスト",
     "carousel": "カルーセル",
+    "pagination": "ページ送り",
     "mediaPlayer": "メディアプレーヤー",
     "imagePicker": "画像ピッカー",
     "filePicker": "ファイル選択",
@@ -265,6 +266,12 @@
   },
   "badge": {
     "overflow": "{{count}}+"
+  },
+  "pagination": {
+    "previous": "前のページ",
+    "next": "次のページ",
+    "page": "{{total}} ページ中 {{page}} ページ目",
+    "label": "ページ送り"
   },
   "share": {
     "action": "共有",
