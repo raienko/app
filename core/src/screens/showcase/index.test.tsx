@@ -33,6 +33,7 @@ const SECTION_TITLES = [
   "Inputs",
   "Images",
   "Cards",
+  "Section",
   "List items",
   "List",
   "Carousel",

@@ -39,6 +39,7 @@ import ResponsiveSection from "./sections/responsive";
 import StepperSection from "./sections/stepper";
 import StorageSection from "./sections/storage";
 import StateViewsSection from "./sections/state-views";
+import SectionSection from "./sections/section";
 import SegmentedControlSection from "./sections/segmented-control";
 import SkeletonSection from "./sections/skeleton";
 import SlidersSection from "./sections/sliders";
@@ -94,6 +95,7 @@ const SECTIONS: {
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.images", Component: ImagesSection },
   { title: "showcase.cards", Component: CardSection },
+  { title: "showcase.section", Component: SectionSection },
   { title: "showcase.listItems", Component: ListItemSection },
   { title: "showcase.list", Component: ListSection },
   { title: "showcase.carousel", Component: CarouselSection },
