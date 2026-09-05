@@ -213,6 +213,7 @@
     "stepper": "Incrémenteur",
     "skeleton": "Squelette",
     "chart": "Graphique",
+    "barcode": "Code-barres",
     "progress": "Progression",
     "segmentedControl": "Contrôle segmenté",
     "stateViews": "Vues d’état",

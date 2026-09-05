@@ -213,6 +213,7 @@
     "stepper": "Contador",
     "skeleton": "Esqueleto",
     "chart": "Gráfico",
+    "barcode": "Código de barras",
     "progress": "Progreso",
     "segmentedControl": "Control segmentado",
     "stateViews": "Estados",

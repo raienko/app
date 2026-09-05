@@ -213,6 +213,7 @@
     "stepper": "Stepper",
     "skeleton": "Skeleton",
     "chart": "Chart",
+    "barcode": "Barcode",
     "progress": "Progress",
     "segmentedControl": "Segmented control",
     "stateViews": "State views",

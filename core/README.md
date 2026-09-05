@@ -105,6 +105,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Stepper           | The limits disabling their own button, a fractional step, the sizes, and the typing alternative       |
 | Skeleton          | A card and a list of rows from one file, the children form beside them, and the sweep switchable live |
 | Chart             | The three forms switchable live, the theme series palette, and the sentence it reads out              |
+| Barcode           | A live-editable QR, the linear formats switchable, and an invalid value falling back                  |
 | Progress          | A live determinate bar, custom value wording, and the indeterminate state                             |
 | Segmented control | Both implementations side by side, a disabled option, and a disabled control                          |
 | Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding               |
@@ -625,6 +626,28 @@ Wraps RN's own `Modal` — already a native, full-window overlay, so no `Root` w
 - **`bottomSheet`/`actions` support drag-to-dismiss from a grabber handle** (`react-native-gesture-handler`'s `Gesture.Pan()` + `GestureDetector`, Reanimated-driven). Deliberately scoped to just the handle, not the whole sheet — wrapping the entire content (including the `ScrollView` above) in the pan gesture would fight the `ScrollView`'s own vertical scrolling for the same gesture. Dragging past 100px or with velocity over 800px/s dismisses (via the same `dismiss()`/`onDismiss` path as a backdrop tap); otherwise it snaps back. Verified live in-browser with simulated pointer drags: a 200px drag dismissed the sheet, a 20px drag snapped back without dismissing.
 - **`GestureHandlerRootView` now wraps the whole app**, added to `Providers` (`src/root/providers.tsx`) rather than only around Modal's gesture — gesture-handler needs exactly one, at the true root, to reliably capture touches on Android; wrapping it locally around just the drag handle would work inconsistently. `jest.setup.js` also needed `require("react-native-gesture-handler/jestSetup")` (gesture-handler's own recommended Jest setup) once any gesture was actually used.
 - **Composed from smaller pieces**, same folder-per-piece pattern as `Input`: `backdrop.tsx` (`ModalBackdrop`), `content.tsx` (`ModalContent` — position/animation styling + the fade/slide-up interpolation), `handle.tsx` (`ModalHandle` — the grabber and its pan gesture), and `scroll-area.tsx` (`ModalScrollArea` — the bounded, scrollable content region) each own one concern; `index.tsx` is the orchestrator that owns state (`nativeVisible`, `progress`/`dragY` shared values, the show/hide/dismiss callbacks) and composes the pieces, using `If` (above) for the parts that are conditional per `type` (backdrop, drag handle) instead of ternaries.
+
+### `Barcode` — `src/components/barcode`
+
+```tsx
+import Barcode from "@/components/barcode";
+
+<Barcode format="qr" value={order.url} label="Order QR code" />
+<Barcode format="CODE128" value="PKG-4821" label="Package barcode" />
+<Barcode format="EAN13" value="590123412345" label="Product barcode" />
+```
+
+A QR code or a linear barcode, drawn as vectors. `format` covers `qr` plus `CODE128`, `CODE39`, `EAN13`, `EAN8`, `UPC`, `ITF14` and `codabar`.
+
+- **No native module and no canvas.** Both symbologies are encoded in plain JavaScript — `qrcode-generator`, and `jsbarcode`'s own encoders used _without_ their DOM renderers — then drawn with `react-native-svg`, which the app already has. So iOS, Android and the web run the same code with nothing to prebuild, unlike the two components before it. The encoders are pure and separately tested; the component is the thin part.
+- **It stays black on white in both schemes.** A code is not a graphic the user reads, it is a target a camera reads, and the scanner is the audience. Inverting it for dark mode is a real risk rather than a theoretical one: most QR decoders cope with a light-on-dark symbol, many linear decoders do not, and the failure is silent — the code simply never scans, on someone else's phone, where nobody testing the app will see it. `scanSurface`/`onScanSurface` are the palette's entries that deliberately do not follow the scheme, the same exception `mediaSurface` makes.
+- **The quiet zone is part of the drawing.** A scanner finds a symbol by the blank border around it, so a code flush to the edge of its container frequently will not read at all — the most common way a hand-rolled code renderer fails. Four modules for QR (what the spec requires), ten for a linear symbol, both baked in rather than left to a caller's padding.
+- **Invalid input renders the `fallback`, never a wrong code.** Each symbology has rules — `EAN13` is twelve digits plus a computed check, `CODE39` has no lower case — and drawing something anyway produces a code that scans as the wrong thing with nothing on screen to say so. The encoders are asked first and `null` means nothing is drawn.
+- **`flat: true` is not optional when calling those encoders**, and finding out why is what the tests are for. Without it the EAN/UPC family returns a _segmented_ encoding — guard bars and halves as separate pieces for a renderer that positions them — and the top-level `data` is the three modules of the first guard. That drew three bars where a barcode should be, and was caught only because a test asserted EAN13's check digit and found the text missing too.
+- **One path for a QR, runs for a barcode.** A dense QR is 57×57 — around three thousand modules, half of them dark — so every module is a subpath of a single `<Path>` rather than its own `<Rect>`. A linear symbol collapses adjacent dark modules into one bar, turning a hundred-odd modules into a couple of dozen rects.
+- **A screen reader gets the value, not the picture.** `label` names the code and the encoded value is its `accessibilityHint`, because someone who cannot see it also cannot point a camera at it — the string is the only way they get what it holds. The drawing declares no accessibility props of its own: the container is one element, and `react-native-svg` forwards unknown props straight to the DOM `<svg>` on the web, where React rejects react-native's spellings of them (caught in the console, the same leak `WebView` hit with `maskType`).
+- **`format` is required rather than defaulted.** A component called `Barcode` that silently produced a QR would be a surprise, and one that silently produced `CODE128` would be a worse one.
+- Verified by decoding what it drew: the browser's own `BarcodeDetector` reads the rendered QR back as `https://example.com/order/12` and the rendered CODE128 back as `PKG-4821`.
 
 ### `Chart` — `src/components/chart`
 

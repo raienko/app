@@ -23,7 +23,9 @@
     "chart3": "#1baf7a",
     "chart4": "#eda100",
     "chart5": "#e87ba4",
-    "chart6": "#008300"
+    "chart6": "#008300",
+    "scanSurface": "#ffffff",
+    "onScanSurface": "#000000"
   },
   "dark": {
     "background": "#000000",
@@ -49,6 +51,8 @@
     "chart3": "#199e70",
     "chart4": "#c98500",
     "chart5": "#d55181",
-    "chart6": "#008300"
+    "chart6": "#008300",
+    "scanSurface": "#ffffff",
+    "onScanSurface": "#000000"
   }
 }

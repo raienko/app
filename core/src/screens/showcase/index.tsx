@@ -12,6 +12,7 @@ import AccessibilitySection from "./sections/accessibility";
 import AvatarsSection from "./sections/avatars";
 import BadgesSection from "./sections/badges";
 import ButtonsSection from "./sections/buttons";
+import BarcodeSection from "./sections/barcode";
 import CardSection from "./sections/card";
 import CarouselSection from "./sections/carousel";
 import ChartSection from "./sections/chart";
@@ -91,6 +92,7 @@ const SECTIONS: {
   { title: "showcase.stepper", Component: StepperSection },
   { title: "showcase.skeleton", Component: SkeletonSection },
   { title: "showcase.chart", Component: ChartSection },
+  { title: "showcase.barcode", Component: BarcodeSection },
   { title: "showcase.progress", Component: ProgressBarSection },
   { title: "showcase.segmentedControl", Component: SegmentedControlSection },
   { title: "showcase.stateViews", Component: StateViewsSection },

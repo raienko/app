@@ -30,6 +30,20 @@ export type ThemeColors = {
   mediaSurface: string;
   /** Base colour used by platform shadow APIs. */
   shadow: string;
+  /**
+   * The quiet zone behind a QR code or a barcode, and the modules drawn on
+   * it. White and black in *both* schemes, on purpose — the same exception
+   * `mediaSurface` makes, and for a stronger reason.
+   *
+   * A code is not a graphic the user reads, it is a target a camera reads,
+   * and the scanner is the audience. Inverting it for the dark scheme is a
+   * real risk rather than a theoretical one: most QR decoders cope with a
+   * light-on-dark symbol, many linear decoders do not, and the failure is
+   * silent — the code simply never scans, on someone else's phone, where
+   * nobody testing the app will see it.
+   */
+  scanSurface: string;
+  onScanSurface: string;
   /** Bottom-sheet drag indicator. */
   grabber: string;
   /** Keyboard/screen-reader focus indicator. */
@@ -104,6 +118,8 @@ const REQUIRED_KEYS: (keyof ThemeColors)[] = [
   "overlay",
   "mediaSurface",
   "shadow",
+  "scanSurface",
+  "onScanSurface",
   "grabber",
   "focus",
   "primary",

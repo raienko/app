@@ -213,6 +213,7 @@
     "stepper": "Stepper",
     "skeleton": "Skeleton",
     "chart": "Diagramm",
+    "barcode": "Barcode",
     "progress": "Fortschritt",
     "segmentedControl": "Segmentierte Steuerung",
     "stateViews": "Zustandsansichten",
