@@ -76,42 +76,43 @@ internal API into application code.
 
 The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are ordered foundations-first — the styleguides and app-wide settings everything else is built on, then the components that consume them.
 
-| Section           | What it demonstrates                                                                              |
-| ----------------- | ------------------------------------------------------------------------------------------------- |
-| Typography        | All 11 type-scale entries at their own size, with the title sizes as real headings                |
-| Markdown          | A rendered document taking the app's type scale and palette, with an editable source              |
-| Theme & colors    | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                     |
-| Localization      | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                        |
-| Accessibility     | A live readout of every OS flag, `fontScale`, and `duration()`                                    |
-| Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes               |
-| Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                      |
-| Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale            |
-| Divider           | Both orientations, a labelled rule, and the inset switchable against a list                       |
-| Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides           |
-| Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row   |
-| Tags              | All three shapes, both sizes, the two-control pill, disabled, and truncation                      |
-| Badges            | Every type, the count formatting and its zero case, the dot, and where a badge sits               |
-| Avatars           | The fallback stack, the sizes switchable live, the status dot, and awkward names                  |
-| Stepper           | The limits disabling their own button, a fractional step, the sizes, and the typing alternative   |
-| Progress          | A live determinate bar, custom value wording, and the indeterminate state                         |
-| Segmented control | Both implementations side by side, a disabled option, and a disabled control                      |
-| Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding           |
-| Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                     |
-| Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                      |
-| Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls  |
-| Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content           |
-| List items        | Pressable rows with both slots filled, a row holding its own control, truncation                  |
-| List              | 200 rows with a handful mounted, and the default renderer swapped for a custom one                |
-| Carousel          | Slides with pagination you can switch off live, and the position it announces                     |
-| Media player      | Video and audio behind one transport, switchable live, with native controls as an escape hatch    |
-| Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web |
-| File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker         |
-| Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                   |
-| Permissions       | Persisted camera, gallery and notification permission state and actions                           |
-| Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                   |
-| Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`       |
-| Logger            | Every logger method and structured metadata                                                       |
-| Utilities         | `If` toggling content, and a scoped event bus emitting and counting pings                         |
+| Section           | What it demonstrates                                                                                  |
+| ----------------- | ----------------------------------------------------------------------------------------------------- |
+| Typography        | All 11 type-scale entries at their own size, with the title sizes as real headings                    |
+| Markdown          | A rendered document taking the app's type scale and palette, with an editable source                  |
+| Theme & colors    | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                         |
+| Localization      | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                            |
+| Accessibility     | A live readout of every OS flag, `fontScale`, and `duration()`                                        |
+| Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes                   |
+| Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                          |
+| Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale                |
+| Divider           | Both orientations, a labelled rule, and the inset switchable against a list                           |
+| Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides               |
+| Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row       |
+| Tags              | All three shapes, both sizes, the two-control pill, disabled, and truncation                          |
+| Badges            | Every type, the count formatting and its zero case, the dot, and where a badge sits                   |
+| Avatars           | The fallback stack, the sizes switchable live, the status dot, and awkward names                      |
+| Stepper           | The limits disabling their own button, a fractional step, the sizes, and the typing alternative       |
+| Skeleton          | A card and a list of rows from one file, the children form beside them, and the sweep switchable live |
+| Progress          | A live determinate bar, custom value wording, and the indeterminate state                             |
+| Segmented control | Both implementations side by side, a disabled option, and a disabled control                          |
+| Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding               |
+| Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                         |
+| Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                          |
+| Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls      |
+| Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content               |
+| List items        | Pressable rows with both slots filled, a row holding its own control, truncation                      |
+| List              | 200 rows with a handful mounted, and the default renderer swapped for a custom one                    |
+| Carousel          | Slides with pagination you can switch off live, and the position it announces                         |
+| Media player      | Video and audio behind one transport, switchable live, with native controls as an escape hatch        |
+| Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web     |
+| File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker             |
+| Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                       |
+| Permissions       | Persisted camera, gallery and notification permission state and actions                               |
+| Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                       |
+| Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`           |
+| Logger            | Every logger method and structured metadata                                                           |
+| Utilities         | `If` toggling content, and a scoped event bus emitting and counting pings                             |
 
 Each section is its own file under `src/screens/showcase/sections/`. They're screen-local — the showcase is their only consumer — but split for the same reason `Modal`'s internals are: one file per concern beats one large screen file. The section list itself is a table in `screens/showcase/index.tsx`, so adding one is an entry there plus a file.
 
@@ -693,6 +694,37 @@ One row in a list: something on the left, text in the middle, something on the r
 - **`onPress` makes the whole row one control**, named from its own text (`label` overrides), with `selected` and `disabled` announced. Right for a row that navigates; wrong for a row that _holds_ a control — `accessible` groups the children into one announcement, so an `IconButton` in the right slot of a pressable row becomes unreachable. Give the button the interaction and leave the row inert. Both halves are covered by tests, and verified in the browser: the rows announce as buttons with `aria-selected` tracking the pick, and the remove button inside an inert row is still reachable and still fires.
 - **`Switch`, `Checkbox` and `RadioButton` don't go in a slot at all.** Each is already a full labelled row (they share `BinaryControlRow`), so nesting one puts its label beside this row's title and says everything twice — caught the first time the Showcase rendered a "Notifications" row with the word in it twice. They replace a `ListItem` rather than sitting inside one.
 - **Title, subtitle and custom middle content are a union**, so a `subtitle` with no `title` to sub, or a custom element competing with a title, won't compile — the same construction `Header` uses.
+
+### `Skeleton` — `src/components/skeleton`
+
+```tsx
+import Skeleton from "@/components/skeleton";
+
+<Skeleton source={require("@/assets/images/skeleton-card.svg")} style={styles.card} />
+
+<Skeleton>
+  <Image source={placeholder} alt="" style={{ width: 200, height: 200 }} />
+</Skeleton>
+
+<Skeleton>
+  <SvgFromFigma width={200} height={50} />
+</Skeleton>
+```
+
+A loading placeholder: your own artwork, with a highlight travelling through it.
+
+- **It draws no shapes of its own.** There are no `<SkeletonLine>` / `<SkeletonCircle>` primitives to reassemble the design in code. A placeholder's whole job is to be the shape of the content that is coming, the design tool is where that shape already exists, and rebuilding it in JSX means maintaining the same layout twice and watching the two drift. Export it from Figma as one file, or hand over the elements you have already drawn.
+- **The highlight is masked to the artwork's shapes whenever the artwork is a file.** Given a `source` — or a lone `<Image>` child, which is the same thing said another way — the file's own alpha clips the highlight, so it travels through the shapes and never across the gaps between them. `<Skeleton source={x} />` and `<Skeleton><Image source={x} /></Skeleton>` are therefore the same placeholder, drawn the same way; only a direct, only child is inspected, and only when it is this app's own `Image`, the same limit `withIconDefaults` puts on which children it will touch. The child's own `contentFit` is carried into the mask's `preserveAspectRatio`, or the two would line up only by accident.
+- **Anything else gets the highlight across its bounding box**, because a React element tree has no alpha channel to ask about. An SVG component out of Figma, or several elements, still shimmers — the band is just held to a third of the masked strength (`0.16` against `0.45`), since it is painting the empty space as well and at full strength that reads as a translucent panel sliding over the placeholder rather than as light. The showcase puts the masked and unmasked forms next to each other, where the difference is obvious.
+- **The band leans, and the lean is a skew on the shape rather than an angled gradient.** Angling the gradient inside an upright rect looks like it should do the same thing and doesn't: a diagonal gradient only reaches its end stops at two corners, so the band's own left and right edges stay partly opaque down most of their height and the rect shows up as a hard vertical line travelling across the artwork — tried it, and it was worse than the upright version it replaced. `skewX` leans the shape while the gradient keeps running along the band's own axis, transparent along the whole of both edges, so the soft edges lean with it. The travel is padded at both ends by `height × tan(skew)`, or the leaning part would still be on screen once the upright part had left.
+- **The mask sits on a wrapping `<G>`, not on the band itself.** An element's own transform applies to its mask as well, so skewing the rect directly skews the artwork it is masked against and pulls the two out of register. The mask is also pinned with `maskUnits="userSpaceOnUse"`: the default is relative to the bounding box of what is being masked, which here is a band that moves and leans, and that would re-crop the artwork every frame.
+- **The mask is `react-native-svg`, not a new dependency.** The usual recipe for this is `@react-native-masked-view/masked-view` plus `expo-linear-gradient`; neither is installed, and adding a native module to get a loading placeholder is a poor trade. Instead the highlight is an SVG `<Rect>` filled with a `<LinearGradient>` and masked by an `<Image>` of the same artwork, swept by animating the rect's `x` through Reanimated's `useAnimatedProps`. Verified running on web, where the band walks from `-190` to `+322` across a 349px box with `mask-type: alpha` applied.
+- **`maskType` is set through `style`, not the prop of the same name.** The prop reaches native fine and leaks straight to the DOM on web, where React rejects it as an unknown attribute and the mask is silently dropped — caught in the browser console. `react-native-svg` reads `props.maskType || style?.maskType`, so the style spelling is the one that works on both. It must be `alpha`: the artwork's colours are already gone by then, and SVG's default luminance mask would make a dark export mask nothing at all.
+- **A `source` is recoloured, not used as drawn.** It goes through `Image`'s `tintColor`, so only its alpha matters — a Figma export in any grey comes out in the app's own palette, correct in both schemes and after a rebrand, with nothing to re-export. Opacity in the file still counts, so a shape drawn at 50% comes out half-strength. `children` are drawn as given; `SKELETON_COLORS` is exported so they can use the same two tones.
+- **The base is `backgroundElementSelected`, not `backgroundElement`**, for the reason `ProgressBar`'s track is: `backgroundElement` is what most raised surfaces already use, so a placeholder on a `Card` or in an open `Accordion` is the colour of what is behind it. The first version did exactly that and rendered invisible in the showcase. The highlight is `grabber`, the one neutral with the same value in both schemes — that makes it reliably _visible_ rather than reliably brighter (it reads as a lighter sweep in dark and a darker one in light). No token is brighter than the base in both, so visibility is the property worth pinning; a conventional always-brighter shine would need a palette entry of its own.
+- **Reduce Motion stops it dead, with nothing substituted.** `ProgressBar` swaps its sweep for a cross-fade because there the movement carries information — "this is still going" — and something has to take that over. A skeleton's does not: the shapes already say the content hasn't arrived, so a placeholder that simply sits still is the whole answer rather than a lesser one, and the shimmer layer isn't rendered at all. `animated={false}` does the same thing by hand, for a screen where a dozen independent shimmers is worse than none.
+- **It is hidden from assistive technology unless you name it.** A skeleton is a picture of content that hasn't arrived: nothing to read, nothing to act on, and usually the screen already says it is loading. Pass `label` when this _is_ the announcement, and it becomes a polite live region instead.
+- **A `source` sizes itself from `style`, like `Image` does** — a file has no layout of its own to contribute, so give it the width and height (or a width and an `aspectRatio`) of the space it stands in for. `children` size the skeleton themselves.
 
 ### `Stepper` — `src/components/stepper`
 

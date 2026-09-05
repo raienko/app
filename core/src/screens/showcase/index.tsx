@@ -40,6 +40,7 @@ import StepperSection from "./sections/stepper";
 import StorageSection from "./sections/storage";
 import StateViewsSection from "./sections/state-views";
 import SegmentedControlSection from "./sections/segmented-control";
+import SkeletonSection from "./sections/skeleton";
 import SlidersSection from "./sections/sliders";
 import SpacerSection from "./sections/spacer";
 import SwitchesSection from "./sections/switches";
@@ -84,6 +85,7 @@ const SECTIONS: {
   { title: "showcase.switches", Component: SwitchesSection },
   { title: "showcase.sliders", Component: SlidersSection },
   { title: "showcase.stepper", Component: StepperSection },
+  { title: "showcase.skeleton", Component: SkeletonSection },
   { title: "showcase.progress", Component: ProgressBarSection },
   { title: "showcase.segmentedControl", Component: SegmentedControlSection },
   { title: "showcase.stateViews", Component: StateViewsSection },
