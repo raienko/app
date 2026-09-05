@@ -214,6 +214,8 @@
     "skeleton": "Squelette",
     "chart": "Graphique",
     "barcode": "Code-barres",
+    "timer": "Minuteur",
+    "share": "Partage",
     "progress": "Progression",
     "segmentedControl": "Contrôle segmenté",
     "stateViews": "Vues d’état",
@@ -263,6 +265,12 @@
   },
   "badge": {
     "overflow": "{{count}}+"
+  },
+  "share": {
+    "action": "Partager",
+    "copy": "Copier",
+    "copied": "Copié dans le presse-papiers",
+    "failed": "Impossible de partager"
   },
   "tag": {
     "remove": "Supprimer {{value}}"

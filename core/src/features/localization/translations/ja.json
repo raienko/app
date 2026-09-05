@@ -214,6 +214,8 @@
     "skeleton": "スケルトン",
     "chart": "チャート",
     "barcode": "バーコード",
+    "timer": "タイマー",
+    "share": "共有",
     "progress": "進捗",
     "segmentedControl": "セグメンテッドコントロール",
     "stateViews": "状態ビュー",
@@ -263,6 +265,12 @@
   },
   "badge": {
     "overflow": "{{count}}+"
+  },
+  "share": {
+    "action": "共有",
+    "copy": "コピー",
+    "copied": "クリップボードにコピーしました",
+    "failed": "共有できませんでした"
   },
   "tag": {
     "remove": "{{value}} を削除"

@@ -214,6 +214,8 @@
     "skeleton": "هيكل التحميل",
     "chart": "الرسم البياني",
     "barcode": "الرمز الشريطي",
+    "timer": "المؤقت",
+    "share": "المشاركة",
     "progress": "التقدم",
     "segmentedControl": "عنصر تحكم مقسَّم",
     "stateViews": "حالات العرض",
@@ -263,6 +265,12 @@
   },
   "badge": {
     "overflow": "{{count}}+"
+  },
+  "share": {
+    "action": "مشاركة",
+    "copy": "نسخ",
+    "copied": "تم النسخ إلى الحافظة",
+    "failed": "تعذّرت المشاركة"
   },
   "tag": {
     "remove": "إزالة {{value}}"

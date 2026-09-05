@@ -214,6 +214,8 @@
     "skeleton": "骨架屏",
     "chart": "图表",
     "barcode": "条码",
+    "timer": "计时器",
+    "share": "分享",
     "progress": "进度",
     "segmentedControl": "分段控件",
     "stateViews": "状态视图",
@@ -263,6 +265,12 @@
   },
   "badge": {
     "overflow": "{{count}}+"
+  },
+  "share": {
+    "action": "分享",
+    "copy": "复制",
+    "copied": "已复制到剪贴板",
+    "failed": "无法分享"
   },
   "tag": {
     "remove": "移除{{value}}"

@@ -43,6 +43,7 @@ import StorageSection from "./sections/storage";
 import StateViewsSection from "./sections/state-views";
 import SectionSection from "./sections/section";
 import SegmentedControlSection from "./sections/segmented-control";
+import ShareSection from "./sections/share";
 import SkeletonSection from "./sections/skeleton";
 import SlidersSection from "./sections/sliders";
 import SpacerSection from "./sections/spacer";
@@ -50,6 +51,7 @@ import SwitchesSection from "./sections/switches";
 import TabBarSection from "./sections/tab-bar";
 import TagsSection from "./sections/tags";
 import ThemeSection from "./sections/theme";
+import TimerSection from "./sections/timer";
 import ToastsSection from "./sections/toasts";
 import TypographySection from "./sections/typography";
 import UtilitiesSection from "./sections/utilities";
@@ -93,6 +95,7 @@ const SECTIONS: {
   { title: "showcase.skeleton", Component: SkeletonSection },
   { title: "showcase.chart", Component: ChartSection },
   { title: "showcase.barcode", Component: BarcodeSection },
+  { title: "showcase.timer", Component: TimerSection },
   { title: "showcase.progress", Component: ProgressBarSection },
   { title: "showcase.segmentedControl", Component: SegmentedControlSection },
   { title: "showcase.stateViews", Component: StateViewsSection },
@@ -108,6 +111,7 @@ const SECTIONS: {
   { title: "showcase.filePicker", Component: FilePickerSection },
   { title: "showcase.modals", Component: ModalsSection },
   { title: "showcase.popups", Component: PopupsSection },
+  { title: "showcase.share", Component: ShareSection },
   { title: "showcase.toasts", Component: ToastsSection },
   { title: "showcase.permissions", Component: PermissionsSection },
   { title: "showcase.deepLinks", Component: DeepLinksSection },

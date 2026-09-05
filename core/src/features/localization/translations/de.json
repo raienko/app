@@ -214,6 +214,8 @@
     "skeleton": "Skeleton",
     "chart": "Diagramm",
     "barcode": "Barcode",
+    "timer": "Timer",
+    "share": "Teilen",
     "progress": "Fortschritt",
     "segmentedControl": "Segmentierte Steuerung",
     "stateViews": "Zustandsansichten",
@@ -263,6 +265,12 @@
   },
   "badge": {
     "overflow": "{{count}}+"
+  },
+  "share": {
+    "action": "Teilen",
+    "copy": "Kopieren",
+    "copied": "In die Zwischenablage kopiert",
+    "failed": "Teilen nicht möglich"
   },
   "tag": {
     "remove": "{{value}} entfernen"

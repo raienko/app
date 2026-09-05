@@ -106,6 +106,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Skeleton          | A card and a list of rows from one file, the children form beside them, and the sweep switchable live |
 | Chart             | The three forms switchable live, the theme series palette, and the sentence it reads out              |
 | Barcode           | A live-editable QR, the linear formats switchable, and an invalid value falling back                  |
+| Timer             | A countdown with its ring, a stopwatch, the formats, and pause                                        |
 | Progress          | A live determinate bar, custom value wording, and the indeterminate state                             |
 | Segmented control | Both implementations side by side, a disabled option, and a disabled control                          |
 | Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding               |
@@ -121,6 +122,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web     |
 | File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker             |
 | Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                       |
+| Share             | The two icons, the text form, the copy fallback, and all four outcomes reported                       |
 | Permissions       | Persisted camera, gallery and notification permission state and actions                               |
 | Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                       |
 | Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`           |
@@ -677,6 +679,52 @@ A wrapper over [Victory Native XL](https://commerce.nearform.com/open-source/vic
 - **Axis labels appear on native and not on the web, and that is CanvasKit.** Skia draws text with a font _object_, so an axis with no font renders ticks and no labels. `matchFont` asks the platform's font manager rather than making us bundle a `.ttf` — but CanvasKit's `FontMgr` exposes only `FromData`, with no system font manager in the WebAssembly build at all (checked in the browser). The failure is contained: Victory reads `null` as "no labels", so the web keeps its grid, its marks and its readout, which carries every number the labels would have shown. Giving the web labels too means shipping a font file, which is a bundle-size decision rather than a bug fix.
 - **Everything inside the canvas is a Skia node.** A react-native `View` dropped in there is handed to Skia's reconciler as if it were one: it renders nothing and throws out of a `ResizeObserver` on the web. Found exactly that way — an empty plot and a console full of `unobserve: parameter 1 is not of type Element` — and fixed by grouping marks with a `Fragment`.
 - **The grid is `backgroundElementSelected`, not `border`.** `border` is the token for an edge that has to be _seen_; a grid is a reference the eye should be able to ignore while reading the marks.
+
+### `Share` — `src/components/share`
+
+```tsx
+import Share from "@/components/share";
+
+<Share content={{ url: order.url, title: "Order #12" }} />      // share icon
+<Share content={{ url: order.url }} mode="copy" />              // copy icon
+<Share content={{ url: order.url }} value="Share this order" /> // text button
+
+// or drive it yourself, from anywhere
+const outcome = await Share.share({ url });
+await Share.copy(url);
+```
+
+A button that opens the OS share sheet, and copies to the clipboard where there isn't one.
+
+- **It is an icon by default, and the glyph says which mode it is in** — a share glyph for the sheet, a copy glyph for the clipboard. They are different actions rather than two spellings of one, so they no more share a glyph than they share a label. It is also what this is nearly always wanted as: one control beside the thing being shared, not a word competing with it. Passing `value` turns it into a text button for the cases that need the action spelled out, and the accessible name is the localized "Share"/"Copy" either way — so the icon form is never an unnamed control.
+- **The clipboard is not a consolation prize.** iOS and Android always have a share sheet. A browser has one only where the Web Share API exists — mobile Safari and Chrome, over HTTPS — and `react-native-web` maps `Share.share` straight onto `navigator.share`, rejecting with "Share is not supported in this browser" everywhere else. That is most desktop browsers, so on the web the clipboard is the _normal_ path rather than an edge case, which is why `copied` is one of four first-class outcomes rather than an error. Confirmed in the preview browser, which reports `navigator.share` as `undefined` and takes the fallback.
+- **A dismissal never falls back to copying.** Someone who opened the sheet and closed it has decided not to share; quietly copying instead — and then announcing that it was copied — does the opposite of what they just asked for. The web reports that cancel by _rejecting_ with an `AbortError`, which is indistinguishable from a real failure unless the name is checked, so it is checked.
+- **Four outcomes, not a boolean**, because the three that aren't `shared` mean different things: `dismissed` is the user's choice and nothing to apologise for, `copied` means they still got what they came for, and only `failed` is a failure. On Android the OS cannot tell a share from a dismissal and reports `shared` for both — a platform limit rather than something this papers over.
+- **A copy is invisible unless something says so.** Nothing on screen changes when text reaches the clipboard; the only way to know it worked is to paste somewhere and look. So the confirmation `Toast` is on by default rather than opt-in, and `notify={false}` is for a caller showing its own feedback.
+- **What gets copied is the URL, not the sentence around it.** The clipboard is nearly always on its way into an address bar, a chat box, or a QR generator, where "Check this out https://…" is wrong in a way the bare link never is. `title` is deliberately not in that chain either: it names the _sheet_ rather than the thing being shared, and react-native's own `Share` rejects content that is only a title — so treating it as a payload would make the runtime disagree with `ShareContent`, which already refuses to describe that case.
+- **Nothing to share is a disabled button**, not a sheet that opens empty — reached by a URL that hasn't loaded yet far more often than by a caller getting it wrong.
+- **`Share.share()` and `Share.copy()` are attached to the component**, the same shape `Toast` and `Image` use, so a screen with its own `IconButton` or menu item doesn't have to render this button to get the behaviour.
+- `ShareContent` is written as two whole shapes rather than `{ title? } & (A | B)`. The intersection describes the same values but stops narrowing, so a check on `message` no longer tells the compiler which branch it is in — which is exactly what handing it to react-native's own union needs.
+
+### `Timer` — `src/components/timer`
+
+```tsx
+import Timer from "@/components/timer";
+
+<Timer label="Time remaining" until={expiresAt} ring onComplete={expire} />
+<Timer label="Session length" since={startedAt} type="body" />
+```
+
+A countdown or a stopwatch. `until` counts down and stops at zero, `since` counts up — a union, so a timer with both (no sensible answer) or neither (nothing to count) won't compile.
+
+- **The two halves run at different rates, and that is the whole design.** The digits change once a second, so they are React state and cost one cheap re-render a second. The ring changes every frame, so it is a single `withTiming` on a shared value read straight into the circle's `strokeDashoffset` — it runs on the UI thread, never re-renders React, and stays smooth while JavaScript is busy. Driving both from one clock would mean either a ring that jumps in sixty steps or sixty React renders a second for something React does not need to know about. Measured in the browser: the ring's offset moved 86.80 → 88.68 over 480ms in sub-pixel steps while the digits produced three distinct values over 3.2 seconds.
+- **It cannot drift.** Every value is `Date.now()` measured against the target rather than a count of elapsed ticks, so it is still correct after the app was backgrounded, after the device slept, and after a slow frame — a timer that counted its own ticks would be visibly behind after any of those and would never recover. `AppState` re-reads on foreground, because that is the one moment the value on screen is guaranteed stale.
+- **The redraw is scheduled to the next second boundary**, not a flat 1000ms. An interval started at `x.900` redraws at `.900` forever — always 100ms after the second it is showing actually turned over, and further out as the drift accumulates. Waiting for the remainder means each redraw lands when the digits change, once each, instead of sometimes firing twice inside one second.
+- **The digits are tabular.** In a proportional font `11:11` is narrower than `00:00`, so a timer laid out normally jiggles every second and shoves whatever is beside it. `fontVariant: ["tabular-nums"]` fixes every digit's width — the difference between a timer and a timer that looks broken.
+- **A screen reader hears words, not a clock face.** `4:07` is announced as "four oh seven", which is a time of day rather than a length of one, so the spoken form is built separately (`describeDuration` → "4 minutes 7 seconds") and stops at the two largest units that carry information. It is the element's _value_ rather than a live region: a timer announcing itself every second would talk over the whole screen, so it is read on demand like any other value.
+- **The ring sweeps linearly and starts at twelve o'clock.** Eased, it would disagree with the digits about how much time is left, which is the one thing a timer must not do. Under Reduce Motion it is drawn at its true position without the sweep — the number beside it already says how long is left, so the movement alone was carrying nothing.
+- **`onComplete` fires once**, not once per redraw after the deadline, and `ring` is countdown-only in the types: counting up has no total to be a fraction of, so there is nothing for a ring to show.
+- One bug worth recording: the value arithmetic was written twice, and the copy the scheduler used had its sign inverted — so every countdown reported itself complete on the first tick and never redrew. It is one function now.
 
 ### `ProgressBar` — `src/components/progress-bar`
 
