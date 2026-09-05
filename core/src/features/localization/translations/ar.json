@@ -191,6 +191,7 @@
     "summary": "الاسم: {{name}} / العمر: {{age}} / البريد الإلكتروني: {{email}}",
     "typography": "الطباعة",
     "markdown": "Markdown",
+    "webView": "عرض الويب",
     "theme": "السمة والألوان",
     "localization": "الترجمة",
     "accessibility": "إمكانية الوصول",

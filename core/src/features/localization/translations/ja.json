@@ -191,6 +191,7 @@
     "summary": "名前: {{name}} / 年齢: {{age}} / メール: {{email}}",
     "typography": "タイポグラフィ",
     "markdown": "Markdown",
+    "webView": "Web ビュー",
     "theme": "テーマと色",
     "localization": "ローカライズ",
     "accessibility": "アクセシビリティ",

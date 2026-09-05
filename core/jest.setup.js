@@ -57,3 +57,38 @@ jest.mock("expo-video", () => ({
 jest.mock("react-native-enriched-markdown", () =>
   require("react-native-enriched-markdown/jest"),
 );
+
+// react-native-webview renders a native view, so it can't render under Jest
+// and the package ships no mock of its own. Stubbed to a plain View that
+// keeps the ref API the bridge drives (`injectJavaScript`, `reload`) and
+// exposes the handlers, so a test can post a message *as the page* without
+// a browser. Anything that renders the Showcase reaches this too.
+jest.mock("react-native-webview", () => {
+  const { forwardRef, useImperativeHandle } = require("react");
+  const { View } = require("react-native");
+
+  // Every script the app injects, in order. This is the app's only way of
+  // talking into the page on native, so a test asserting that a message was
+  // sent has to read it from here — see web-view/index.test.tsx.
+  const injected = [];
+  const reloads = [];
+
+  const WebView = forwardRef((props, ref) => {
+    useImperativeHandle(ref, () => ({
+      injectJavaScript: (script) => injected.push(script),
+      reload: () => reloads.push(true),
+      postMessage: jest.fn(),
+      stopLoading: jest.fn(),
+    }));
+    return <View {...props} testID="native-web-view" />;
+  });
+  WebView.displayName = "WebView";
+
+  return {
+    __esModule: true,
+    default: WebView,
+    WebView,
+    __injected: injected,
+    __reloads: reloads,
+  };
+});

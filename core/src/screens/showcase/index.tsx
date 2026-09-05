@@ -50,6 +50,7 @@ import ThemeSection from "./sections/theme";
 import ToastsSection from "./sections/toasts";
 import TypographySection from "./sections/typography";
 import UtilitiesSection from "./sections/utilities";
+import WebViewSection from "./sections/web-view";
 
 /**
  * One entry per feature or component that can be demonstrated on screen.
@@ -66,6 +67,7 @@ const SECTIONS: {
 }[] = [
   { title: "showcase.typography", Component: TypographySection },
   { title: "showcase.markdown", Component: MarkdownSection },
+  { title: "showcase.webView", Component: WebViewSection },
   { title: "showcase.theme", Component: ThemeSection },
   { title: "showcase.localization", Component: LocalizationSection },
   { title: "showcase.accessibility", Component: AccessibilitySection },

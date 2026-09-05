@@ -191,6 +191,7 @@
     "summary": "姓名：{{name}} / 年龄：{{age}} / 邮箱：{{email}}",
     "typography": "排版",
     "markdown": "Markdown",
+    "webView": "网页视图",
     "theme": "主题与颜色",
     "localization": "本地化",
     "accessibility": "无障碍",

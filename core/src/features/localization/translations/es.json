@@ -191,6 +191,7 @@
     "summary": "nombre: {{name}} / edad: {{age}} / email: {{email}}",
     "typography": "Tipografía",
     "markdown": "Markdown",
+    "webView": "Vista web",
     "theme": "Tema y colores",
     "localization": "Localización",
     "accessibility": "Accesibilidad",

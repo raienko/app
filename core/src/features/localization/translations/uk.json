@@ -191,6 +191,7 @@
     "summary": "ім'я: {{name}} / вік: {{age}} / email: {{email}}",
     "typography": "Типографіка",
     "markdown": "Markdown",
+    "webView": "Вебперегляд",
     "theme": "Тема та кольори",
     "localization": "Локалізація",
     "accessibility": "Доступність",
