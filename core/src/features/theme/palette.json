@@ -17,7 +17,13 @@
     "grabber": "#8e8e93",
     "focus": "#1d4ed8",
     "primary": "#1d4ed8",
-    "onPrimary": "#ffffff"
+    "onPrimary": "#ffffff",
+    "chart1": "#2a78d6",
+    "chart2": "#eb6834",
+    "chart3": "#1baf7a",
+    "chart4": "#eda100",
+    "chart5": "#e87ba4",
+    "chart6": "#008300"
   },
   "dark": {
     "background": "#000000",
@@ -37,6 +43,12 @@
     "grabber": "#8e8e93",
     "focus": "#60a5fa",
     "primary": "#60a5fa",
-    "onPrimary": "#0b1220"
+    "onPrimary": "#0b1220",
+    "chart1": "#3987e5",
+    "chart2": "#d95926",
+    "chart3": "#199e70",
+    "chart4": "#c98500",
+    "chart5": "#d55181",
+    "chart6": "#008300"
   }
 }

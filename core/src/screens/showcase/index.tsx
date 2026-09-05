@@ -14,6 +14,7 @@ import BadgesSection from "./sections/badges";
 import ButtonsSection from "./sections/buttons";
 import CardSection from "./sections/card";
 import CarouselSection from "./sections/carousel";
+import ChartSection from "./sections/chart";
 import CheckboxesSection from "./sections/checkboxes";
 import DeepLinksSection from "./sections/deep-links";
 import DividerSection from "./sections/divider";
@@ -89,6 +90,7 @@ const SECTIONS: {
   { title: "showcase.sliders", Component: SlidersSection },
   { title: "showcase.stepper", Component: StepperSection },
   { title: "showcase.skeleton", Component: SkeletonSection },
+  { title: "showcase.chart", Component: ChartSection },
   { title: "showcase.progress", Component: ProgressBarSection },
   { title: "showcase.segmentedControl", Component: SegmentedControlSection },
   { title: "showcase.stateViews", Component: StateViewsSection },

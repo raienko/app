@@ -212,6 +212,7 @@
     "sliders": "Sliders",
     "stepper": "Stepper",
     "skeleton": "Skeleton",
+    "chart": "Chart",
     "progress": "Progress",
     "segmentedControl": "Segmented control",
     "stateViews": "State views",

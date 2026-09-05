@@ -92,3 +92,59 @@ jest.mock("react-native-webview", () => {
     __reloads: reloads,
   };
 });
+
+// @shopify/react-native-skia ships untranspiled ESM and a native canvas, so
+// importing it under Jest fails to parse before it even fails to render.
+// Only the pieces Chart touches are stubbed: `matchFont` returns null, which
+// is what the component already treats as "this platform gave me no font, so
+// draw the axes without labels".
+jest.mock("@shopify/react-native-skia", () => ({
+  __esModule: true,
+  matchFont: () => null,
+}));
+
+// Victory Native draws through @shopify/react-native-skia, whose canvas is a
+// native surface with no JS renderer under Jest — importing it throws, which
+// reaches anything that renders a Chart, the Showcase included. Stubbed to
+// plain Views that record what they were asked to draw, so a test can assert
+// the series and colours a chart passed down without a canvas to read.
+jest.mock("victory-native", () => {
+  const { View } = require("react-native");
+
+  const CartesianChart = ({ children, data, xKey, yKeys }) => (
+    <View testID="cartesian-chart">
+      {children({
+        // One point per row per series is enough for the wrapper's own
+        // logic; the geometry is Victory's business, not ours.
+        points: Object.fromEntries(
+          (yKeys ?? []).map((key) => [
+            key,
+            (data ?? []).map((row) => ({ x: row[xKey], y: row[key] })),
+          ]),
+        ),
+        chartBounds: { left: 0, right: 100, top: 0, bottom: 100 },
+      })}
+    </View>
+  );
+
+  const mark = (name) => {
+    const Mark = ({ color, points }) => (
+      <View testID={`chart-${name}`} accessibilityValue={{ text: color }}>
+        <View
+          testID={`chart-${name}-points`}
+          accessibilityValue={{ now: (points ?? []).length }}
+        />
+      </View>
+    );
+    Mark.displayName = name;
+    return Mark;
+  };
+
+  return {
+    __esModule: true,
+    CartesianChart,
+    Line: mark("line"),
+    Area: mark("area"),
+    Bar: mark("bar"),
+  };
+});

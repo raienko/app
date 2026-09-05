@@ -1,7 +1,7 @@
 export { default as ThemeProvider } from "./theme-provider";
 export { default as useTheme } from "./use-theme";
 export { default as useElevationStyle } from "./use-elevation-style";
-export { composePalette } from "./colors";
+export { composePalette, CHART_SERIES_KEYS } from "./colors";
 export { THEME_PREFERENCES } from "./types";
 export type { Theme, ThemePreference } from "./types";
 export type { ColorScheme, ThemeColors, ThemeOverrides } from "./colors";

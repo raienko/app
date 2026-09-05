@@ -27,6 +27,7 @@ const SECTION_TITLES = [
   "Sliders",
   "Stepper",
   "Skeleton",
+  "Chart",
   "Progress",
   "Segmented control",
   "State views",
