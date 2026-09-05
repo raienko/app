@@ -209,6 +209,7 @@
     "radioButtons": "Radio buttons",
     "switches": "Switches",
     "sliders": "Sliders",
+    "stepper": "Stepper",
     "progress": "Progress",
     "segmentedControl": "Segmented control",
     "stateViews": "State views",
@@ -260,5 +261,9 @@
   },
   "tag": {
     "remove": "Remove {{value}}"
+  },
+  "stepper": {
+    "decrease": "Decrease {{label}}",
+    "increase": "Increase {{label}}"
   }
 }

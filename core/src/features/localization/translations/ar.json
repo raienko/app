@@ -209,6 +209,7 @@
     "radioButtons": "أزرار الاختيار",
     "switches": "مفاتيح التبديل",
     "sliders": "أشرطة التمرير",
+    "stepper": "المُدرِّج",
     "progress": "التقدم",
     "segmentedControl": "عنصر تحكم مقسَّم",
     "stateViews": "حالات العرض",
@@ -260,5 +261,9 @@
   },
   "tag": {
     "remove": "إزالة {{value}}"
+  },
+  "stepper": {
+    "decrease": "إنقاص {{label}}",
+    "increase": "زيادة {{label}}"
   }
 }

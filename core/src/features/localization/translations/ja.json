@@ -209,6 +209,7 @@
     "radioButtons": "ラジオボタン",
     "switches": "スイッチ",
     "sliders": "スライダー",
+    "stepper": "ステッパー",
     "progress": "進捗",
     "segmentedControl": "セグメンテッドコントロール",
     "stateViews": "状態ビュー",
@@ -260,5 +261,9 @@
   },
   "tag": {
     "remove": "{{value}} を削除"
+  },
+  "stepper": {
+    "decrease": "{{label}} を減らす",
+    "increase": "{{label}} を増やす"
   }
 }

@@ -209,6 +209,7 @@
     "radioButtons": "Boutons radio",
     "switches": "Interrupteurs",
     "sliders": "Curseurs",
+    "stepper": "Incrémenteur",
     "progress": "Progression",
     "segmentedControl": "Contrôle segmenté",
     "stateViews": "Vues d’état",
@@ -260,5 +261,9 @@
   },
   "tag": {
     "remove": "Supprimer {{value}}"
+  },
+  "stepper": {
+    "decrease": "Diminuer {{label}}",
+    "increase": "Augmenter {{label}}"
   }
 }

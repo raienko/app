@@ -209,6 +209,7 @@
     "radioButtons": "Optionsfelder",
     "switches": "Schalter",
     "sliders": "Schieberegler",
+    "stepper": "Stepper",
     "progress": "Fortschritt",
     "segmentedControl": "Segmentierte Steuerung",
     "stateViews": "Zustandsansichten",
@@ -260,5 +261,9 @@
   },
   "tag": {
     "remove": "{{value}} entfernen"
+  },
+  "stepper": {
+    "decrease": "{{label}} verringern",
+    "increase": "{{label}} erhöhen"
   }
 }

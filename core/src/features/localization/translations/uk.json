@@ -209,6 +209,7 @@
     "radioButtons": "Перемикачі вибору",
     "switches": "Перемикачі",
     "sliders": "Повзунки",
+    "stepper": "Лічильник",
     "progress": "Прогрес",
     "segmentedControl": "Сегментований контрол",
     "stateViews": "Стани",
@@ -260,5 +261,9 @@
   },
   "tag": {
     "remove": "Видалити «{{value}}»"
+  },
+  "stepper": {
+    "decrease": "Зменшити: {{label}}",
+    "increase": "Збільшити: {{label}}"
   }
 }

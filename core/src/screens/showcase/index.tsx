@@ -36,6 +36,7 @@ import PopupsSection from "./sections/popups";
 import ProgressBarSection from "./sections/progress-bar";
 import RadioButtonsSection from "./sections/radio-buttons";
 import ResponsiveSection from "./sections/responsive";
+import StepperSection from "./sections/stepper";
 import StorageSection from "./sections/storage";
 import StateViewsSection from "./sections/state-views";
 import SegmentedControlSection from "./sections/segmented-control";
@@ -82,6 +83,7 @@ const SECTIONS: {
   { title: "showcase.radioButtons", Component: RadioButtonsSection },
   { title: "showcase.switches", Component: SwitchesSection },
   { title: "showcase.sliders", Component: SlidersSection },
+  { title: "showcase.stepper", Component: StepperSection },
   { title: "showcase.progress", Component: ProgressBarSection },
   { title: "showcase.segmentedControl", Component: SegmentedControlSection },
   { title: "showcase.stateViews", Component: StateViewsSection },

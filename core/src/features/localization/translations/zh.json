@@ -209,6 +209,7 @@
     "radioButtons": "单选按钮",
     "switches": "开关",
     "sliders": "滑块",
+    "stepper": "步进器",
     "progress": "进度",
     "segmentedControl": "分段控件",
     "stateViews": "状态视图",
@@ -260,5 +261,9 @@
   },
   "tag": {
     "remove": "移除{{value}}"
+  },
+  "stepper": {
+    "decrease": "减少{{label}}",
+    "increase": "增加{{label}}"
   }
 }
