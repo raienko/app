@@ -24,6 +24,36 @@ function optional(value) {
   return normalized || undefined;
 }
 
+/**
+ * A required var that has to be a hex colour, because the two places these
+ * are used — the Android adaptive icon's plate and the splash background —
+ * are read at prebuild and written straight into the native projects. A
+ * malformed value there doesn't fail here, it fails later in Gradle or
+ * Xcode with a message about something else entirely.
+ *
+ * Three- and six-digit hex only. Eight-digit is deliberately refused: it
+ * means `#RRGGBBAA` on the web and `#AARRGGBB` on Android, so the same
+ * string would produce two different colours depending on who read it.
+ */
+function color(key, value) {
+  const normalized = value?.trim();
+  if (!normalized) {
+    // Its own message rather than `required`'s, because for a colour the
+    // overwhelmingly likely cause is a value written without quotes: `#`
+    // starts a comment in a .env file, so `KEY=#208AEF` reads as empty and
+    // the line is sitting right there looking correct.
+    throw new Error(
+      `Missing required environment variable: ${key}. Hex colours must be quoted in .env ("#208AEF"), or the # is read as a comment.`,
+    );
+  }
+  if (!/^#([0-9a-f]{3}|[0-9a-f]{6})$/i.test(normalized)) {
+    throw new Error(
+      `Environment variable ${key} must be a 3- or 6-digit hex colour (e.g. "#208AEF"), got: ${normalized}`,
+    );
+  }
+  return normalized;
+}
+
 /** A comma-separated var as a list, with blanks and stray spaces dropped. */
 function list(value) {
   return (value ?? "")
@@ -50,6 +80,21 @@ const env = {
   // links here at all, and @/features/deep-links checks incoming URLs
   // against them so a link for someone else's site opens in the browser.
   appLinkDomains: list(process.env.EXPO_PUBLIC_APP_LINK_DOMAINS),
+  // The two surfaces the OS paints for us, before any of this app's own
+  // code runs: the plate an Android adaptive icon's foreground sits on, and
+  // the splash background behind the launch image. They live here rather
+  // than in theme/palette.json because nothing in the app ever draws them —
+  // they are baked into the native projects at prebuild, and the app is not
+  // running yet when they are on screen. Both pair with a file in
+  // assets/brand, so a rebrand is those files plus these two values.
+  brandIconBackground: color(
+    "EXPO_PUBLIC_BRAND_ICON_BACKGROUND",
+    process.env.EXPO_PUBLIC_BRAND_ICON_BACKGROUND,
+  ),
+  brandSplashBackground: color(
+    "EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND",
+    process.env.EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND,
+  ),
 };
 
 module.exports = env;

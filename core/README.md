@@ -18,6 +18,8 @@ An [Expo](https://expo.dev) (SDK 57) app using [Expo Router](https://docs.expo.d
 
    `.env` is read by Expo CLI (via `@expo/env`) and used both by `app.config.ts` (app name/slug/scheme/bundle id) and by the app itself through [`src/constants/env`](src/constants/env/index.js). Only `EXPO_PUBLIC_*`-prefixed vars are available at runtime — Metro inlines them into the bundle at build time, so they must be referenced as a static `process.env.EXPO_PUBLIC_X`, never a dynamic key. See the comment in `src/constants/env/index.js` before adding new ones.
 
+   **`EXPO_PUBLIC_BRAND_ICON_BACKGROUND` and `EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND` must be quoted.** They are hex colours, and an unquoted `#` starts a comment in a `.env` file — so `KEY=#208AEF` reads as empty while the line sits there looking correct. The validator says so by name when it finds one missing, because the error is otherwise indistinguishable from having forgotten the variable entirely.
+
 3. Start the app
 
    ```bash
@@ -33,7 +35,7 @@ An [Expo](https://expo.dev) (SDK 57) app using [Expo Router](https://docs.expo.d
 ## Project structure
 
 ```
-app.config.ts          Expo config — reads name/slug/scheme/bundleId from src/constants/env
+app.config.ts          Expo config — reads name/slug/scheme/bundleId/brand colours from src/constants/env
 metro.config.js         Wraps Metro with Storybook's entry-swap (see Storybook below)
 src/
   app/                   Routing only (Expo Router) — each route file re-exports a screen
@@ -44,7 +46,14 @@ src/
   features/storage/       LocalValue<T> — a small MMKV-backed reactive value primitive
   features/deep-links/    One pipeline for every incoming link — see below
   constants/env/          Validated EXPO_PUBLIC_* env vars, used by both app code and app.config.ts
+assets/
+  brand/                  App icon, adaptive icon, splash, favicon — everything that carries the app's identity
+  images/                 What a screen draws, reached through `@/assets/images/...`
 ```
+
+**The two colours the OS paints for us live in `.env`, not in the theme.** `brandIconBackground` (the plate an Android adaptive icon's foreground sits on) and `brandSplashBackground` (behind the launch image) are baked into the native projects at prebuild — the app is not running when they are on screen, so `theme/palette.json` is the wrong home for them and nothing in the app ever draws them. Each pairs with a file in `assets/brand`, so a rebrand is those files plus these two values. They are validated as 3- or 6-digit hex on load: eight-digit is refused outright, because `#RRGGBBAA` on the web and `#AARRGGBB` on Android would make the same string two different colours. A malformed one otherwise fails much later, in Gradle or Xcode, complaining about something else.
+
+**`assets/brand` and `assets/images` are split by who reads them, not by file type.** Everything under `brand/` is read by Expo at config time and baked into the native projects; nothing there is imported by the app at runtime. Everything under `images/` goes through Metro and is `require()`d by a component. The practical payoff is that a rebrand is "replace the contents of `assets/brand`" rather than picking the branding files out of the ones that only look like branding. `app.config.ts` reaches them through a `brandAsset()` helper, so the directory name appears once — and a typo in a path Expo only reads at prebuild time otherwise surfaces as a missing icon on a build machine.
 
 Every screen/component/feature-value lives in its own folder with a single `index` entry point; all imports go through that folder path (e.g. `@/components/text`), not into its internals. Components ship with a co-located Storybook story and a Jest smoke test that follows the same pattern:
 

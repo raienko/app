@@ -9,6 +9,30 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 const env = require("./src/constants/env");
 const storybookEnabled = process.env.STORYBOOK_ENABLED === "true";
 
+/**
+ * Everything that carries the app's identity — the icons, the splash, the
+ * favicon — lives in one directory, so a rebrand is a matter of replacing
+ * the contents of `assets/brand` rather than hunting the files that happen
+ * to be branding among the ones that happen not to be.
+ *
+ * `assets/images` keeps what a *screen* draws; nothing under here is
+ * imported by the app at runtime. The two are separate for that reason
+ * rather than by file type: these paths are read by Expo at config time and
+ * baked into the native projects, while the others go through Metro.
+ */
+const BRAND_DIR = "./assets/brand";
+
+/**
+ * A path under `assets/brand`, relative to the project root, which is what
+ * every Expo config field here expects.
+ *
+ * A helper rather than the literal seven times over: the directory name
+ * appears once, so moving it is one edit, and a typo in a path that Expo
+ * only reads at prebuild time is otherwise the kind of mistake that surfaces
+ * as a missing icon on a build machine.
+ */
+const brandAsset = (file: string): string => `${BRAND_DIR}/${file}`;
+
 // Universal links (iOS) and app links (Android) only ever reach the app if
 // the OS knows the app claims those domains, so both native declarations are
 // generated from the one list in EXPO_PUBLIC_APP_LINK_DOMAINS. Left out
@@ -48,29 +72,31 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   scheme: env.appScheme,
   version: "0.0.1",
   orientation: "portrait",
-  icon: "./assets/images/icon.png",
+  icon: brandAsset("icon.png"),
   userInterfaceStyle: "automatic",
   ios: {
     ...config.ios,
     bundleIdentifier: env.appBundleId,
-    icon: "./assets/expo.icon",
+    // Apple's Icon Composer bundle, which iOS uses in preference to the
+    // flat `icon` above where it is supported.
+    icon: brandAsset("app.icon"),
     ...iosAppLinks,
   },
   android: {
     ...config.android,
     package: env.appBundleId,
     adaptiveIcon: {
-      backgroundColor: "#E6F4FE",
-      foregroundImage: "./assets/images/android-icon-foreground.png",
-      backgroundImage: "./assets/images/android-icon-background.png",
-      monochromeImage: "./assets/images/android-icon-monochrome.png",
+      backgroundColor: env.brandIconBackground,
+      foregroundImage: brandAsset("android-icon-foreground.png"),
+      backgroundImage: brandAsset("android-icon-background.png"),
+      monochromeImage: brandAsset("android-icon-monochrome.png"),
     },
     predictiveBackGestureEnabled: false,
     ...androidAppLinks,
   },
   web: {
     output: "single",
-    favicon: "./assets/images/favicon.png",
+    favicon: brandAsset("favicon.png"),
   },
   extra: {
     ...config.extra,
@@ -100,8 +126,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-splash-screen",
       {
-        backgroundColor: "#208AEF",
-        image: "./assets/images/splash-icon.png",
+        backgroundColor: env.brandSplashBackground,
+        image: brandAsset("splash-icon.png"),
         imageWidth: 76,
       },
     ],
