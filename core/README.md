@@ -85,50 +85,50 @@ internal API into application code.
 
 The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are ordered foundations-first — the styleguides and app-wide settings everything else is built on, then the components that consume them.
 
-| Section           | What it demonstrates                                                                                  |
-| ----------------- | ----------------------------------------------------------------------------------------------------- |
-| Typography        | All 11 type-scale entries at their own size, with the title sizes as real headings                    |
-| Markdown          | A rendered document taking the app's type scale and palette, with an editable source                  |
-| Web view          | The bridge both ways, the app's typography inside a page, and the theme switchable live               |
-| Theme & colors    | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                         |
-| Localization      | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                            |
-| Accessibility     | A live readout of every OS flag, `fontScale`, and `duration()`                                        |
-| Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes                   |
-| Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                          |
-| Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale                |
-| Divider           | Both orientations, a labelled rule, and the inset switchable against a list                           |
-| Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides               |
-| Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row       |
-| Tags              | All three shapes, both sizes, the two-control pill, disabled, and truncation                          |
-| Badges            | Every type, the count formatting and its zero case, the dot, and where a badge sits                   |
-| Avatars           | The fallback stack, the sizes switchable live, the status dot, and awkward names                      |
-| Stepper           | The limits disabling their own button, a fractional step, the sizes, and the typing alternative       |
-| Skeleton          | A card and a list of rows from one file, the children form beside them, and the sweep switchable live |
-| Chart             | The three forms switchable live, the theme series palette, and the sentence it reads out              |
-| Barcode           | A live-editable QR, the linear formats switchable, and an invalid value falling back                  |
-| Timer             | A countdown with its ring, a stopwatch, the formats, and pause                                        |
-| Progress          | A live determinate bar, custom value wording, and the indeterminate state                             |
-| Segmented control | Both implementations side by side, a disabled option, and a disabled control                          |
-| Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding               |
-| Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                         |
-| Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                          |
-| Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls      |
-| Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content               |
-| Section           | A settings group, an action beside a title, a form footer, and levels that count themselves           |
-| List items        | Pressable rows with both slots filled, a row holding its own control, truncation                      |
-| List              | 200 rows with a handful mounted, and the default renderer swapped for a custom one                    |
-| Carousel          | Slides with pagination you can switch off live, and the position it announces                         |
-| Pagination        | A paged list, the window and its gaps, the compact form, the dots, and the one-page case              |
-| Media player      | Video and audio behind one transport, switchable live, with native controls as an escape hatch        |
-| Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web     |
-| File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker             |
-| Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                       |
-| Share             | The two icons, the text form, the copy fallback, and all four outcomes reported                       |
-| Permissions       | Persisted camera, gallery and notification permission state and actions                               |
-| Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                       |
-| Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`           |
-| Logger            | Every logger method and structured metadata                                                           |
-| Utilities         | `If` toggling content, and a scoped event bus emitting and counting pings                             |
+| Section           | What it demonstrates                                                                                   |
+| ----------------- | ------------------------------------------------------------------------------------------------------ |
+| Typography        | All 11 type-scale entries at their own size, with the title sizes as real headings                     |
+| Markdown          | A rendered document taking the app's type scale and palette, with an editable source                   |
+| Web view          | The bridge both ways, the app's typography inside a page, and the theme switchable live                |
+| Theme & colors    | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                          |
+| Localization      | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                             |
+| Accessibility     | A live readout of every OS flag, `fontScale`, and `duration()`                                         |
+| Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes                    |
+| Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                           |
+| Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale                 |
+| Divider           | Both orientations, a labelled rule, and the inset switchable against a list                            |
+| Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides                |
+| Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row        |
+| Tags              | All three shapes, both sizes, the two-control pill, disabled, and truncation                           |
+| Badges            | Every type, the count formatting and its zero case, the dot, and where a badge sits                    |
+| Avatars           | The fallback stack, the sizes switchable live, the status dot, and awkward names                       |
+| Stepper           | The limits disabling their own button, a fractional step, the sizes, and the typing alternative        |
+| Skeleton          | A card and a list of rows from one file, the children form beside them, and the sweep switchable live  |
+| Chart             | The three forms switchable live, the theme series palette, and the sentence it reads out               |
+| Barcode           | A live-editable QR, the linear formats switchable, and an invalid value falling back                   |
+| Timer             | A countdown with its ring, a stopwatch, the formats, and pause                                         |
+| Progress          | A live determinate bar, custom value wording, and the indeterminate state                              |
+| Segmented control | Both implementations side by side, a disabled option, and a disabled control                           |
+| Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding                |
+| Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                          |
+| Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                           |
+| Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls       |
+| Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content                |
+| Section           | A settings group, an action beside a title, a form footer, and levels that count themselves            |
+| List items        | Pressable rows with both slots filled, a row holding its own control, truncation                       |
+| List              | 200 rows with a handful mounted, and the default renderer swapped for a custom one                     |
+| Carousel          | Slides with pagination you can switch off live, and the position it announces                          |
+| Pagination        | A paged list, the window and its gaps, the compact form, the dots, and the one-page case               |
+| Media player      | Video and audio behind one transport, switchable live, with native controls as an escape hatch         |
+| Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web      |
+| File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker              |
+| Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                        |
+| Share             | The two icons, the text form, the copy fallback, and all four outcomes reported                        |
+| Permissions       | Persisted camera, gallery and notification permission state and actions                                |
+| Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                        |
+| Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`            |
+| Logger            | Every logger method and structured metadata                                                            |
+| Utilities         | `If` toggling content, `Match` cycling four states, and a scoped event bus emitting and counting pings |
 
 Each section is its own file under `src/screens/showcase/sections/`. They're screen-local — the showcase is their only consumer — but split for the same reason `Modal`'s internals are: one file per concern beats one large screen file. The section list itself is a table in `screens/showcase/index.tsx`, so adding one is an entry there plus a file.
 
@@ -591,6 +591,38 @@ import If from "@/components/if";
 ```
 
 A plain conditional wrapper — renders `children` when `condition` is true, otherwise `null`. It adds no host element of its own (unlike, say, wrapping in a `<View>` and toggling its visibility), so it's a drop-in replacement for `{condition && <X />}`/ternary JSX wherever that reads better as a tag than an inline expression. `Modal` (below) uses it for its optional backdrop and drag handle instead of ternaries.
+
+- **`If` is not a ternary, in the one way that matters: its children are built whether or not the condition holds.** They're an argument, evaluated before `If` is ever called, so `<If condition={user !== undefined}><Text value={user.name} /></If>` reads `user.name` on `undefined` and throws — where `{user ? <Text value={user.name} /> : null}` would not. It doesn't narrow types either, so TypeScript catches most of these; `country-picker.tsx` keeps a ternary and a comment saying why. **Where the body reaches into the thing being guarded, use a ternary.** Everywhere else — a boolean flag, an index comparison, a count — `If` reads better and is what this repo uses.
+
+### `Match` — `src/components/match`
+
+```tsx
+import Match from "@/components/match";
+
+<Match<Status> value={status}>
+  <Match.Case when="loading">
+    <Spinner />
+  </Match.Case>
+  <Match.Case when={["idle", "ready"]}>
+    <Results />
+  </Match.Case>
+  <Match.Default>
+    <Empty />
+  </Match.Default>
+</Match>;
+```
+
+`If` for more than two outcomes — the `switch`/`case` statement as JSX.
+
+- **`Match`, not `Switch`, because `Switch` is already the toggle.** Two components of the same name is a rename at every call site that wants both, and the one that would have to give way is the control people actually see. `Match` is what the pattern is called wherever it isn't a C-family statement.
+- **Only the first match renders, and there's no fall-through.** The statement's `break` is what everyone means and forgets to write. A branch listing several values — `when={["idle", "ready"]}` — covers the one use of fall-through anybody wanted.
+- **It adds no host element**, the same as `If`. The matched branch's children are returned directly, which is what makes it usable inside `Chart`'s Skia canvas, where a stray `View` is handed to Skia's reconciler and silently renders nothing.
+- **`Case` and `Default` hang off `Match` rather than being exported beside it**, so the three read as one construct and neither can be imported without the `Match` that gives it meaning — on its own, a `Match.Case` renders nothing. Same shape as `Share.copy` and `Popup.show`.
+- **`<Match<T>>` types `value`, and cannot type the branches.** It reads as though it should, so this is worth knowing before relying on it: a parent's type argument can't reach its JSX children. Every JSX expression arrives typed as `React.JSX.Element` — which is `ReactElement<any>` — so a `children` typed as `ReactElement<CaseProps<T>>` accepts any element at all and the props are never compared. `NoInfer` and a `when?: never` discriminant on `Default` were both tried; neither helps, because nothing is being compared in the first place. What `<Match<Status>>` does buy you is a checked `value`: passing a number, or a string outside the union, is an error.
+- **Where a typo in `when` matters, write the type on the branch.** `<Match.Case<Status> when="loding">` gives "Did you mean 'loading'?" at compile time. It's opt-in per branch — `when` defaults to `unknown` and takes anything — which is the trade for writing the type once on the `Match` instead of on every case. Worth it on a switch over a string union; noise on a boolean.
+- **Branches have to be direct children.** They're read as props rather than rendered, so a `Match.Case` inside a fragment or lifted into its own component is invisible to the `Match` and that branch silently never matches. There's a test pinning it.
+- **`Match` does not narrow, and its branches are all constructed** — the same rule as `If` above. A dispatch that needs narrowing stays a `switch` statement: `Input` picks between thirteen variations off a discriminated union, and its `switch` is what proves each variation gets props of the right shape. Converting that would cost the type check and build all thirteen elements to use one.
+- **Two-branch dispatch stays a ternary.** `Checkbox`, `RadioButton`, `SegmentedControl`, `Switch` and `MediaPlayer` each pick one of two implementations off `type`; `a ? <X /> : <Y />` is shorter and no less clear. `Match` earns its place from three branches up — which in this repo is `Chart`, picking between bar, area and line.
 
 ### `Modal` — `src/components/modal`
 

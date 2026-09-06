@@ -83,6 +83,10 @@ export default function CountryPicker({ value, onChange, disabled }: Props) {
             color={theme.colors.textSecondary}
           />
         )}
+        {/* Not an `If`: its children are built whether or not the
+            condition holds, and it does not narrow — `selected.callingCode`
+            would be read on the undefined value. A ternary is the right
+            spelling wherever the body reaches into what is being guarded. */}
         {selected ? (
           <Text value={`+${selected.callingCode}`} type="callout" />
         ) : null}

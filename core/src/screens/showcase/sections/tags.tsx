@@ -3,6 +3,7 @@ import { View } from "react-native";
 
 import Button from "@/components/button";
 import Icon from "@/components/icon";
+import If from "@/components/if";
 import Tag from "@/components/tag";
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
@@ -86,13 +87,13 @@ export default function TagsSection() {
             }
           />
         ))}
-        {people.length === 0 ? (
+        <If condition={people.length === 0}>
           <Button
             value="Reset"
             size="small"
             onPress={() => setPeople(PEOPLE)}
           />
-        ) : null}
+        </If>
       </View>
       <Readout label="remaining" value={String(people.length)} />
 

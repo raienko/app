@@ -1,6 +1,7 @@
 import { Pressable } from "react-native";
 
 import Icon from "@/components/icon";
+import If from "@/components/if";
 import Text from "@/components/text";
 import { controlA11yProps } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
@@ -44,9 +45,9 @@ export default function SelectOptionRow({ option, selected, onPress }: Props) {
       {...controlA11yProps({ label: option.label, selected })}
     >
       <Text value={option.label} style={styles.label} />
-      {selected ? (
+      <If condition={selected}>
         <Icon name="check" size={spacing.x20} color={theme.colors.primary} />
-      ) : null}
+      </If>
     </Pressable>
   );
 }

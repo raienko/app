@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View } from "react-native";
 
 import Card from "@/components/card";
+import If from "@/components/if";
 import Input from "@/components/input";
 import Markdown from "@/components/markdown";
 import Switch from "@/components/switch";
@@ -56,7 +57,7 @@ export default function MarkdownSection() {
 
       <Switch label="edit the source" value={editing} onChange={setEditing} />
 
-      {editing ? (
+      <If condition={editing}>
         <Input
           type="text"
           label="Markdown"
@@ -64,7 +65,7 @@ export default function MarkdownSection() {
           value={source}
           onChange={setSource}
         />
-      ) : null}
+      </If>
 
       <Card>
         <Markdown

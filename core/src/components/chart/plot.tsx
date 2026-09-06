@@ -9,6 +9,7 @@ import {
   type CartesianChartRenderArg,
 } from "victory-native";
 
+import Match from "@/components/match";
 import { disabledA11yProps } from "@/features/accessibility";
 import { createStyles, useResponsive } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
@@ -115,43 +116,57 @@ export default function ChartPlot({
             const seriesPoints = (points as Record<string, never>)[entry.key];
             if (!seriesPoints) return null;
 
-            if (type === "bar") {
-              return (
-                <Bar
-                  key={entry.key}
-                  points={seriesPoints}
-                  chartBounds={chartBounds}
-                  color={entry.color}
-                  // Anchored to the baseline: rounding all four corners
-                  // detaches a bar from the axis it is measured against.
-                  roundedCorners={{ topLeft: BAR_RADIUS, topRight: BAR_RADIUS }}
-                />
-              );
-            }
-
+            // All three chart types in one place, which an `if` returning
+            // early and a ternary further down did not read as. `Match`
+            // resolves to the matched branch's children and adds no element
+            // of its own, so what reaches the canvas is still nothing but
+            // Skia nodes — see the Fragment note below for why that
+            // matters here.
             return (
-              // A Fragment, not a View: everything inside the canvas is a
-              // Skia node, and a react-native View dropped in there is
-              // handed to Skia's reconciler as if it were one. It renders
-              // nothing and throws out of a ResizeObserver on the web —
-              // which is exactly how this was found, as an empty plot with
-              // a console full of "unobserve: parameter 1 is not of type
-              // Element".
-              <Fragment key={entry.key}>
-                {type === "area" ? (
-                  <Area
+              <Match<ChartType> key={entry.key} value={type}>
+                <Match.Case when="bar">
+                  <Bar
                     points={seriesPoints}
-                    y0={chartBounds.bottom}
+                    chartBounds={chartBounds}
                     color={entry.color}
-                    opacity={AREA_OPACITY}
+                    // Anchored to the baseline: rounding all four corners
+                    // detaches a bar from the axis it is measured against.
+                    roundedCorners={{
+                      topLeft: BAR_RADIUS,
+                      topRight: BAR_RADIUS,
+                    }}
                   />
-                ) : null}
-                <Line
-                  points={seriesPoints}
-                  color={entry.color}
-                  strokeWidth={LINE_WIDTH}
-                />
-              </Fragment>
+                </Match.Case>
+                <Match.Case when="area">
+                  {/* A Fragment, not a View: everything inside the canvas is
+                      a Skia node, and a react-native View dropped in there is
+                      handed to Skia's reconciler as if it were one. It
+                      renders nothing and throws out of a ResizeObserver on
+                      the web — which is exactly how this was found, as an
+                      empty plot with a console full of "unobserve: parameter
+                      1 is not of type Element". */}
+                  <Fragment>
+                    <Area
+                      points={seriesPoints}
+                      y0={chartBounds.bottom}
+                      color={entry.color}
+                      opacity={AREA_OPACITY}
+                    />
+                    <Line
+                      points={seriesPoints}
+                      color={entry.color}
+                      strokeWidth={LINE_WIDTH}
+                    />
+                  </Fragment>
+                </Match.Case>
+                <Match.Default>
+                  <Line
+                    points={seriesPoints}
+                    color={entry.color}
+                    strokeWidth={LINE_WIDTH}
+                  />
+                </Match.Default>
+              </Match>
             );
           })
         }

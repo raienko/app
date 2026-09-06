@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { View, type StyleProp, type ViewStyle } from "react-native";
 
+import If from "@/components/if";
 import Text from "@/components/text";
 import { imageA11yProps } from "@/features/accessibility";
 import { createStyles, type TypographyToken } from "@/features/responsive";
@@ -161,7 +162,7 @@ export default function Timer({
         style,
       ]}
     >
-      {showRing ? (
+      <If condition={showRing}>
         <TimerRing
           size={size}
           thickness={size * RING_THICKNESS}
@@ -171,7 +172,7 @@ export default function Timer({
           paused={paused}
           color={theme.colors.primary}
         />
-      ) : null}
+      </If>
       <Text
         value={digits}
         type={type}

@@ -1,6 +1,7 @@
 import { View, type StyleProp, type ViewStyle } from "react-native";
 import Svg, { Path, Rect } from "react-native-svg";
 
+import If from "@/components/if";
 import Text from "@/components/text";
 import { imageA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
@@ -181,13 +182,13 @@ export default function Barcode({
           />
         ))}
       </Svg>
-      {showValue ? (
+      <If condition={showValue}>
         <Text
           value={encoded.text}
           type="caption2"
           style={[styles.value, { color: ink }]}
         />
-      ) : null}
+      </If>
     </View>
   );
 }

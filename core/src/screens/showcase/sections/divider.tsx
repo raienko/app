@@ -3,6 +3,7 @@ import { View } from "react-native";
 
 import Card from "@/components/card";
 import Divider from "@/components/divider";
+import If from "@/components/if";
 import ListItem from "@/components/list-item";
 import SegmentedControl from "@/components/segmented-control";
 import Text from "@/components/text";
@@ -71,9 +72,9 @@ export default function DividerSection() {
           {PEOPLE.map((person, index) => (
             <View key={person.email}>
               <ListItem title={person.name} subtitle={person.email} />
-              {index < PEOPLE.length - 1 ? (
+              <If condition={index < PEOPLE.length - 1}>
                 <Divider inset={inset === "none" ? undefined : inset} />
-              ) : null}
+              </If>
             </View>
           ))}
         </View>

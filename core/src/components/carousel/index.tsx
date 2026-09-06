@@ -9,6 +9,7 @@ import type {
 import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 
+import If from "@/components/if";
 import Pagination from "@/components/pagination";
 
 export type { CarouselRef } from "react-native-reanimated-carousel";
@@ -205,7 +206,7 @@ export default function Carousel<Item>({
         style={styles.carousel}
       />
 
-      {hasPagination && count > 0 ? (
+      <If condition={hasPagination && count > 0}>
         <Pagination
           variant="dots"
           label={label}
@@ -223,7 +224,7 @@ export default function Carousel<Item>({
               : styles.pagination
           }
         />
-      ) : null}
+      </If>
     </View>
   );
 }

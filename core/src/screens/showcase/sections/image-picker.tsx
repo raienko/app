@@ -4,6 +4,7 @@ import { View } from "react-native";
 
 import Button from "@/components/button";
 import Icon from "@/components/icon";
+import If from "@/components/if";
 import Image from "@/components/image";
 import ImagePicker from "@/components/image-picker";
 import Text from "@/components/text";
@@ -74,13 +75,13 @@ export default function ImagePickerSection() {
           value="Open with ImagePicker.show"
           onPress={() => void ImagePicker.show(PICKER_ID)}
         />
-        {image ? (
+        <If condition={image !== undefined}>
           <Button
             value="Clear"
             type="tertiary"
             onPress={() => setImage(undefined)}
           />
-        ) : null}
+        </If>
       </View>
 
       <Readout label="file" value={fileName} />
