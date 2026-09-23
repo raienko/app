@@ -100,7 +100,7 @@ describe("Button type", () => {
   it("defaults to secondary, so existing buttons keep their look", async () => {
     await render(<Component value="plain" onPress={() => {}} />);
 
-    expect(boxOf("plain").backgroundColor).toBe(palette.backgroundElement);
+    expect(boxOf("plain").backgroundColor).toBe("transparent");
     expect(boxOf("plain").borderColor).toBe(palette.border);
     expect(labelOf("plain").color).toBe(palette.text);
   });
@@ -118,7 +118,7 @@ describe("Button type", () => {
     );
 
     expect(boxOf("ghost").backgroundColor).toBe("transparent");
-    expect(labelOf("ghost").color).toBe(palette.primary);
+    expect(labelOf("ghost").color).toBe(palette.accent);
   });
 
   /**
@@ -162,6 +162,54 @@ describe("Button type", () => {
         expect(on).not.toBe(off);
       }
     }
+  });
+});
+
+/**
+ * `testOnly_pressed` is React Native's own switch for rendering a Pressable
+ * in its held state, so the pressed look can be asserted without timing a
+ * real press-in.
+ */
+describe("Button pressed state", () => {
+  it("darkens a primary button to its pressed fill", async () => {
+    await render(
+      <Component
+        value="go"
+        type="primary"
+        testOnly_pressed
+        onPress={() => {}}
+      />,
+    );
+
+    expect(boxOf("go").backgroundColor).toBe(palette.primaryPressed);
+    expect(screen.queryByTestId("button-pressed")).not.toBeOnTheScreen();
+  });
+
+  it.each(["secondary", "tertiary"] as const)(
+    "lays the pressed overlay over an unfilled %s button",
+    async (type) => {
+      await render(
+        <Component
+          value="tap"
+          type={type}
+          testOnly_pressed
+          onPress={() => {}}
+        />,
+      );
+
+      const overlay = screen.getByTestId("button-pressed");
+      expect(StyleSheet.flatten(overlay.props.style).backgroundColor).toBe(
+        palette.pressed,
+      );
+      // The resting fill is kept underneath rather than replaced.
+      expect(boxOf("tap").backgroundColor).toBe("transparent");
+    },
+  );
+
+  it("shows no press feedback at rest", async () => {
+    await render(<Component value="idle" onPress={() => {}} />);
+
+    expect(screen.queryByTestId("button-pressed")).not.toBeOnTheScreen();
   });
 });
 

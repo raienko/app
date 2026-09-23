@@ -14,7 +14,7 @@ import type {
 function ExpoStyleIndicator({ selected }: RadioIndicatorProps) {
   const theme = useTheme();
   const styles = useStyles();
-  const color = selected ? theme.colors.primary : theme.colors.textSecondary;
+  const color = selected ? theme.colors.accent : theme.colors.textSecondary;
 
   return (
     <View
@@ -49,7 +49,7 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
   circle: {
     width: spacing.x20,
     height: spacing.x20,
-    borderRadius: radius.x16,
+    borderRadius: radius.full,
     borderWidth: spacing.x2,
     alignItems: "center",
     justifyContent: "center",
@@ -57,6 +57,6 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
   dot: {
     width: spacing.x20 / 2,
     height: spacing.x20 / 2,
-    borderRadius: radius.x16,
+    borderRadius: radius.full,
   },
 }));

@@ -80,7 +80,7 @@ export default function CarouselSection() {
   );
 }
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   container: {
     gap: spacing.x8,
   },
@@ -97,8 +97,8 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
     height: sizes.elementWidthLg * 0.6 + spacing.x20,
   },
   photo: {
+    borderRadius: radius.surface,
     width: "100%",
     height: "100%",
-    borderRadius: radius.x12,
   },
 }));

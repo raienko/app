@@ -73,13 +73,13 @@ export const Decorative = () => {
   );
 };
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   column: {
     gap: spacing.x8,
   },
   image: {
+    borderRadius: radius.surface,
     width: sizes.elementWidthLg,
     height: sizes.elementWidthLg,
-    borderRadius: radius.x12,
   },
 }));

@@ -97,7 +97,7 @@ export const StandingIn = () => {
   );
 };
 
-const useStyles = createStyles(({ spacing, radius, units }) => ({
+const useStyles = createStyles(({ spacing, units, radius }) => ({
   stack: {
     alignSelf: "stretch",
     gap: spacing.x16,
@@ -126,21 +126,21 @@ const useStyles = createStyles(({ spacing, radius, units }) => ({
     padding: spacing.x4,
   },
   circle: {
+    borderRadius: radius.surface,
     width: units(48),
     height: units(48),
-    borderRadius: units(24),
   },
   lines: {
     gap: spacing.x8,
   },
   line: {
+    borderRadius: radius.indicator,
     width: units(200),
     height: units(16),
-    borderRadius: radius.x4,
   },
   lineShort: {
+    borderRadius: radius.indicator,
     width: units(120),
     height: units(16),
-    borderRadius: radius.x4,
   },
 }));

@@ -107,14 +107,14 @@ export default function TabBarSection() {
   );
 }
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   container: {
     gap: spacing.x8,
   },
   stage: {
+    borderRadius: radius.surface,
     height: sizes.elementHeightLg * 4,
     borderWidth: spacing.x1,
-    borderRadius: radius.x12,
     overflow: "hidden",
   },
   rows: {
@@ -122,8 +122,8 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
     gap: spacing.x4,
   },
   row: {
+    borderRadius: radius.surface,
     padding: spacing.x8,
-    borderRadius: radius.x4,
   },
   // The bar overlays the content rather than sitting beside it, exactly as
   // a navigator's own does.

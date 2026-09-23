@@ -64,7 +64,7 @@ export default function ModalHandle({ dragY, onDismiss }: Props) {
   );
 }
 
-const useStyles = createStyles(({ spacing, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   grabberHandle: {
     alignItems: "center",
     paddingVertical: spacing.x8,
@@ -72,6 +72,6 @@ const useStyles = createStyles(({ spacing, sizes }) => ({
   grabber: {
     width: sizes.grabberWidth,
     height: sizes.grabberHeight,
-    borderRadius: sizes.grabberHeight / 2,
+    borderRadius: radius.full,
   },
 }));

@@ -88,7 +88,7 @@ export default function CardSection() {
         />
         <View style={styles.caption}>
           <Text
-            value="padded={false} — the content owns its spacing, and is clipped to the corner radius."
+            value="padded={false} — the content owns its spacing, and is clipped to the card's edge."
             type="footnote"
           />
         </View>

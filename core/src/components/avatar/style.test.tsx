@@ -1,3 +1,4 @@
+import { useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 import { render, renderHook } from "@/root/testing";
 
@@ -18,7 +19,7 @@ function flatten(style: unknown): Record<string, unknown>[] {
   return [];
 }
 
-/** The avatar's element children: the circle, then the status dot. */
+/** The avatar's element children: the square, then the status dot. */
 function partsOf(view: View) {
   return view
     .getByTestId("avatar", { includeHiddenElements: true })
@@ -32,7 +33,7 @@ function styleOf(part: ReturnType<typeof partsOf>[number]) {
   >;
 }
 
-/** The circle itself, which is the avatar's first child. */
+/** The square itself, which is the avatar's first child. */
 function surfaceStyle(view: View) {
   return styleOf(partsOf(view)[0]);
 }
@@ -40,16 +41,17 @@ function surfaceStyle(view: View) {
 const SIZES: AvatarSize[] = ["small", "medium", "large"];
 
 describe("Avatar sizing and theming", () => {
-  it.each(SIZES)("draws %s as a circle", async (size) => {
+  it.each(SIZES)("draws %s as a square", async (size) => {
+    const { result } = await renderHook(() => useSizes());
     const view = await render(
       <Component testID="avatar" name="Ada" size={size} />,
     );
     const style = surfaceStyle(view);
 
     expect(style.width).toBe(style.height);
-    // A radius of exactly half the box is what makes it round rather than
-    // merely rounded.
-    expect(style.borderRadius).toBe((style.width as number) / 2);
+    // Its corners are the shared surface radius, so the kit's shape is
+    // decided in one place rather than per component.
+    expect(style.borderRadius).toBe(result.current.radius.surface);
   });
 
   it("grows with the size", async () => {
@@ -67,7 +69,7 @@ describe("Avatar sizing and theming", () => {
 
   // Same reason `Button`'s `secondary` and `ImageFallback` carry one: a
   // `backgroundElement` fill is invisible against another raised surface.
-  it("paints the circle from the raised-surface tokens, with an edge", async () => {
+  it("paints the square from the raised-surface tokens, with an edge", async () => {
     const { result } = await renderHook(() => useTheme());
     const view = await render(<Component testID="avatar" name="Ada" />);
     const style = surfaceStyle(view);
@@ -77,9 +79,9 @@ describe("Avatar sizing and theming", () => {
     expect(style.borderWidth).toBeGreaterThan(0);
   });
 
-  // Everything inside is clipped to the circle, which is exactly why the
+  // Everything inside is clipped to the square, which is exactly why the
   // status dot is a sibling of the surface rather than a child of it.
-  it("clips the picture to the circle", async () => {
+  it("clips the picture to the square", async () => {
     const view = await render(<Component testID="avatar" name="Ada" />);
 
     expect(surfaceStyle(view).overflow).toBe("hidden");

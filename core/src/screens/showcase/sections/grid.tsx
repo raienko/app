@@ -86,7 +86,7 @@ export default function GridSection() {
 
 const useStyles = createStyles(({ spacing, radius }) => ({
   tile: {
-    borderRadius: radius.x8,
+    borderRadius: radius.surface,
     paddingVertical: spacing.x12,
     alignItems: "center",
   },

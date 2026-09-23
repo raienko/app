@@ -7,7 +7,7 @@ import type { StyleProp, ViewStyle } from "react-native";
  * - `sticky` — docked to the bottom edge, full width, with a top border.
  *   Content scrolls up to meet it, and it never covers the edge of the
  *   screen it's anchored to.
- * - `floating` — inset from all three edges as a rounded, raised pill.
+ * - `floating` — inset from all three edges as an outlined, raised bar.
  *   Content scrolls *under* it, which is what makes it worth the extra
  *   space it costs.
  */

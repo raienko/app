@@ -68,7 +68,7 @@ export default function useMarkdownStyle(): MarkdownStyle {
     h6: { ...block(BLOCK_TYPOGRAPHY.h6), marginTop: spacing.x8 },
 
     link: {
-      color: theme.colors.primary,
+      color: theme.colors.accent,
       underline: true,
     },
     strong: { color: theme.colors.text },
@@ -89,8 +89,8 @@ export default function useMarkdownStyle(): MarkdownStyle {
       color: theme.colors.textSecondary,
       borderColor: theme.colors.border,
       borderWidth: spacing.x2,
+      borderRadius: radius.surface,
       backgroundColor: theme.colors.backgroundElement,
-      borderRadius: radius.x8,
       padding: spacing.x12,
       gapWidth: spacing.x8,
     },
@@ -106,7 +106,7 @@ export default function useMarkdownStyle(): MarkdownStyle {
       backgroundColor: theme.colors.backgroundElement,
       borderColor: theme.colors.border,
       borderWidth: spacing.x1,
-      borderRadius: radius.x8,
+      borderRadius: radius.surface,
       padding: spacing.x12,
     },
 

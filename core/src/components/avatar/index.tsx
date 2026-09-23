@@ -20,8 +20,8 @@ export type AvatarSize = "small" | "medium" | "large";
 
 /**
  * Which step of the type scale the monogram is set in, roughly 40% of the
- * circle at each size — the ratio at which initials read as a monogram
- * rather than as text that happens to be in a circle.
+ * square at each size — the ratio at which initials read as a monogram
+ * rather than as text that happens to be in a box.
  *
  * The title steps carry heading semantics in `Text`, which is why the
  * monogram is also spread with `disabledA11yProps()` below: the container
@@ -37,7 +37,7 @@ const SIZE_TEXT: Record<AvatarSize, TypographyToken> = {
 /**
  * A status dot is colour, and colour is not information on its own (WCAG
  * 1.4.1). Requiring the label with the dot is what keeps "online" from
- * being a green circle and nothing else — the same reason every `Toast`
+ * being a green dot and nothing else — the same reason every `Toast`
  * type carries an `announcement`.
  */
 type StatusProps =
@@ -74,7 +74,7 @@ type Props = StatusProps & {
 };
 
 /**
- * The picture of a person or a thing, in a circle: a list row's leading
+ * The picture of a person or a thing, in a square: a list row's leading
  * slot, a comment's author, the account button in a header.
  *
  * **The fallbacks are a stack, not a branch.** The monogram (or `icon`) is
@@ -97,7 +97,7 @@ type Props = StatusProps & {
  * an element with an empty name, the same treatment an unlabelled `Badge`
  * dot gets.
  *
- * **The monogram doesn't scale with the OS text size.** The circle is a
+ * **The monogram doesn't scale with the OS text size.** The square is a
  * fixed graphic that has to line up down a list, so letters that grew would
  * clip rather than help — and the name is available in full to anyone
  * reading by screen reader. Everything else here scales with the device
@@ -130,7 +130,7 @@ export default function Avatar({
   // avatar with a status should announce the status, not ", Online".
   const label = [name.trim(), statusLabel].filter(Boolean).join(", ");
   // Deliberately last: a name with no letters in it at all is the one case
-  // with nothing to draw, and a person glyph beats an empty circle.
+  // with nothing to draw, and a person glyph beats an empty square.
   const placeholder =
     icon ?? (initials === "" ? <Icon name="user" /> : undefined);
 
@@ -179,22 +179,24 @@ export default function Avatar({
       </View>
 
       {status === undefined ? null : (
-        // Sat in the corner of the square the circle is inscribed in, which
-        // the circle itself doesn't reach — so it reads against the page
-        // rather than against the picture, and needs no ring to separate
-        // it. Outside the clipping surface above, or it would be cut in
-        // half.
+        // Sat over the square's corner, so it overlaps the picture: a ring
+        // in the page colour cuts it out of whatever is underneath. Outside
+        // the clipping surface above, or it would be cut in half.
         <Badge
           dot
           type={status}
-          style={[styles.status, styles[`dot-${size}`]]}
+          style={[
+            styles.status,
+            styles[`dot-${size}`],
+            { borderColor: theme.colors.background },
+          ]}
         />
       )}
     </View>
   );
 }
 
-/** Roughly half the circle, so a glyph fills it the way a monogram does. */
+/** Roughly half the square, so a glyph fills it the way a monogram does. */
 const ICON_SIZE: Record<AvatarSize, "x16" | "x24" | "x32"> = {
   small: "x16",
   medium: "x24",
@@ -202,14 +204,14 @@ const ICON_SIZE: Record<AvatarSize, "x16" | "x24" | "x32"> = {
 };
 
 /**
- * The circle diameters are this component's own business rather than
+ * The square sides are this component's own business rather than
  * entries in the sizes styleguide: nothing else in the app is measured in
  * avatars, and the styleguide's own note says a bespoke measurement stays
  * local. They still go through `units()`, like every other size here.
  */
-const useStyles = createStyles(({ units, isRTL }) => ({
+const useStyles = createStyles(({ units, isRTL, radius }) => ({
   avatar: {
-    // Sized by the circle inside it, and never stretched to its container:
+    // Sized by the square inside it, and never stretched to its container:
     // an avatar is a fixed graphic, not a surface.
     alignSelf: "flex-start",
   },
@@ -220,13 +222,12 @@ const useStyles = createStyles(({ units, isRTL }) => ({
     // fill is `backgroundElement`, which is invisible against any other
     // raised surface the avatar might sit on.
     borderWidth: units(1),
-    // Clips the picture to the circle. It also clips anything else in here,
+    // Clips the picture to the square. It also clips anything else in here,
     // which is why the status dot is a sibling rather than a child.
     overflow: "hidden",
   },
-  // Fills the surface rather than restating its size, and takes its round
-  // corners from the surface's `overflow: "hidden"` rather than repeating
-  // the radius — one place decides how big the circle is.
+  // Fills the surface rather than restating its size — one place decides
+  // how big the square is.
   picture: {
     position: "absolute",
     top: 0,
@@ -243,35 +244,38 @@ const useStyles = createStyles(({ units, isRTL }) => ({
     ...(isRTL ? { left: 0 } : { right: 0 }),
   },
   small: {
+    borderRadius: radius.surface,
     width: units(32),
     height: units(32),
-    borderRadius: units(16),
   },
   medium: {
+    borderRadius: radius.surface,
     width: units(48),
     height: units(48),
-    borderRadius: units(24),
   },
   large: {
+    borderRadius: radius.surface,
     width: units(64),
     height: units(64),
-    borderRadius: units(32),
   },
-  // A presence dot is about a quarter of the circle at every size — fixed
+  // A presence dot is about a quarter of the square at every size — fixed
   // at `Badge`'s own 8pt it would vanish on a large avatar.
   "dot-small": {
+    borderRadius: radius.indicator,
     width: units(10),
     height: units(10),
-    borderRadius: units(5),
+    borderWidth: units(2),
   },
   "dot-medium": {
+    borderRadius: radius.indicator,
     width: units(14),
     height: units(14),
-    borderRadius: units(7),
+    borderWidth: units(2),
   },
   "dot-large": {
+    borderRadius: radius.indicator,
     width: units(18),
     height: units(18),
-    borderRadius: units(9),
+    borderWidth: units(2),
   },
 }));

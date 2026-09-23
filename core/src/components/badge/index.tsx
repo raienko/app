@@ -199,31 +199,29 @@ export default function Badge({
 
 const useStyles = createStyles(({ spacing, radius }) => ({
   badge: {
+    borderRadius: radius.indicator,
     alignItems: "center",
     justifyContent: "center",
     // Sized by its own content, never by its container — a badge is
     // attached to something, so stretching would be meaningless.
     alignSelf: "flex-start",
-    // Minimums rather than a fixed height: a single digit comes out round,
+    // Minimums rather than a fixed height: a single digit comes out square,
     // and text that outgrows the box under large dynamic type makes the
-    // badge grow instead of clipping. `radius.x8` is exactly half of
-    // `spacing.x16` — both go through the same `units()` — so the resting
-    // badge is a true pill and a scaled-up one rounds off as a rect.
+    // badge grow instead of clipping.
     minWidth: spacing.x16,
     minHeight: spacing.x16,
     paddingHorizontal: spacing.x4,
-    borderRadius: radius.x8,
   },
   // Only `neutral` takes this — see TYPE_COLORS.
   outlined: {
     borderWidth: spacing.x1,
   },
   dot: {
+    borderRadius: radius.indicator,
     // A dot carries no text, so it scales with the device (`units()`) but
     // deliberately not with the OS text size — there's nothing to read.
     width: spacing.x8,
     height: spacing.x8,
-    borderRadius: radius.x4,
     alignSelf: "flex-start",
   },
 }));

@@ -89,10 +89,10 @@ export default function AudioMediaPlayer({
   );
 }
 
-const useStyles = createStyles(({ radius, spacing }) => ({
+const useStyles = createStyles(({ spacing, radius }) => ({
   player: {
+    borderRadius: radius.surface,
     alignSelf: "stretch",
-    borderRadius: radius.x12,
     borderWidth: spacing.x1,
     overflow: "hidden",
   },

@@ -138,14 +138,14 @@ export default function ListItemSection() {
   );
 }
 
-const useStyles = createStyles(({ radius, sizes, spacing }) => ({
+const useStyles = createStyles(({ sizes, spacing, radius }) => ({
   container: {
     gap: spacing.x8,
   },
   avatar: {
+    borderRadius: radius.surface,
     width: sizes.elementHeightMd,
     height: sizes.elementHeightMd,
-    borderRadius: radius.x16,
     alignItems: "center",
     justifyContent: "center",
   },

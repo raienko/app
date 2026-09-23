@@ -146,21 +146,21 @@ const useStyles = createStyles(({ spacing, units, radius }) => ({
     padding: spacing.x4,
   },
   drawnCircle: {
+    borderRadius: radius.surface,
     width: units(48),
     height: units(48),
-    borderRadius: units(24),
   },
   drawnLines: {
     gap: spacing.x8,
   },
   drawnLine: {
+    borderRadius: radius.indicator,
     width: units(200),
     height: units(16),
-    borderRadius: radius.x4,
   },
   drawnLineShort: {
+    borderRadius: radius.indicator,
     width: units(120),
     height: units(16),
-    borderRadius: radius.x4,
   },
 }));

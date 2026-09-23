@@ -56,7 +56,7 @@ export default function ExpoUISegmentedControl({
         // native side; undefined is how "nothing selected" is spelled.
         selectedIndex={selectedIndex === -1 ? undefined : selectedIndex}
         enabled={!disabled}
-        tintColor={theme.colors.primary}
+        tintColor={theme.colors.selected}
         appearance={theme.scheme}
         onChange={({ nativeEvent }) => {
           const next = options[nativeEvent.selectedSegmentIndex];

@@ -73,7 +73,7 @@ export default function NavigationTabBar({
         // The route's own icon renderer gets the colour this bar would have
         // used anyway, so an icon that ignores the argument and an icon
         // that honours it both come out right.
-        color: focused ? theme.colors.primary : theme.colors.textSecondary,
+        color: focused ? theme.colors.text : theme.colors.textSecondary,
         size: spacing.x24,
       }),
       testID: options.tabBarButtonTestID,

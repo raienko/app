@@ -66,7 +66,7 @@ export default function Divider({
 
   const rule = [
     orientation === "vertical" ? styles.vertical : styles.horizontal,
-    { backgroundColor: theme.colors.border },
+    { backgroundColor: theme.colors.divider },
   ];
   const gap =
     inset === undefined

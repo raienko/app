@@ -149,18 +149,18 @@ describe(`${Component.name} smoke test`, () => {
     expect(boxStyle("Close").backgroundColor).toBe("transparent");
   });
 
-  it("fills a secondary button, for the case that wants a background", async () => {
-    const element = themeColor((colors) => colors.backgroundElement);
+  it("outlines a secondary button, for the case that wants an edge", async () => {
+    const border = themeColor((colors) => colors.border);
     await render(
       <>
-        <element.Reader />
+        <border.Reader />
         <Component label="Close" type="secondary">
           <Icon name="x" />
         </Component>
       </>,
     );
 
-    expect(boxStyle("Close").backgroundColor).toBe(element.read());
+    expect(boxStyle("Close").borderColor).toBe(border.read());
   });
 
   // Square, so it sits level with a Button of the same name in a row.

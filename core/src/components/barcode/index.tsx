@@ -195,13 +195,13 @@ export default function Barcode({
 
 const useStyles = createStyles(({ spacing, radius }) => ({
   code: {
+    borderRadius: radius.surface,
     // Sized by its own props, never stretched: a code drawn to whatever
     // width a container happens to be is a code at an unpredictable module
     // size, which is the other half of why scanners fail.
     alignSelf: "flex-start",
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: radius.x4,
     overflow: "hidden",
   },
   value: {

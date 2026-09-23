@@ -160,9 +160,9 @@ const useStyles = createStyles(({ spacing, radius }) => ({
     width: spacing.x40 * 3,
   },
   chip: {
+    borderRadius: radius.indicator,
     width: spacing.x32,
     height: spacing.x32,
-    borderRadius: radius.x8,
     borderWidth: spacing.x1,
   },
   chipLabel: {
@@ -173,9 +173,9 @@ const useStyles = createStyles(({ spacing, radius }) => ({
     gap: spacing.x8,
   },
   preview: {
+    borderRadius: radius.surface,
     gap: spacing.x12,
     padding: spacing.x16,
-    borderRadius: radius.x12,
     borderWidth: spacing.x1,
   },
   previewColors: {
@@ -184,8 +184,8 @@ const useStyles = createStyles(({ spacing, radius }) => ({
     gap: spacing.x8,
   },
   previewColor: {
+    borderRadius: radius.indicator,
     width: spacing.x32,
     height: spacing.x32,
-    borderRadius: radius.x8,
   },
 }));

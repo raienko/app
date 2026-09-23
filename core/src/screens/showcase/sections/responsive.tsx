@@ -39,7 +39,7 @@ export default function ResponsiveSection() {
               style={{
                 width: spacing[token],
                 height: spacing.x8,
-                borderRadius: radius.x4,
+                borderRadius: radius.indicator,
                 backgroundColor: theme.colors.backgroundElementSelected,
               }}
             />
@@ -56,7 +56,7 @@ export default function ResponsiveSection() {
         label="sizes.contentMaxWidth"
         value={String(sizes.contentMaxWidth)}
       />
-      <Readout label="radius.x12" value={String(radius.x12)} />
+      <Readout label="radius.surface" value={String(radius.surface)} />
     </View>
   );
 }

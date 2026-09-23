@@ -73,7 +73,7 @@ type Props = PressProps &
   };
 
 /**
- * A short piece of text in a pill: a keyword on an article, an applied
+ * A short piece of text in a small outlined box: a keyword on an article, an applied
  * filter, one of the recipients in a "To:" field.
  *
  * Three shapes out of two props. With neither `onPress` nor `onClose` it's
@@ -84,9 +84,9 @@ type Props = PressProps &
  * **The remove button is its own target, never part of the body's.** A
  * pressable body groups its children into one announcement, so a remove
  * button *inside* it would be unreachable to a screen reader and the whole
- * pill would carry two meanings on one tap — "apply this filter" and
+ * tag would carry two meanings on one tap — "apply this filter" and
  * "delete it" — with no way to choose. The two sit side by side instead:
- * one pill, two controls, each with its own name. It's the same rule
+ * one tag, two controls, each with its own name. It's the same rule
  * `ListItem` states for a row that holds a control.
  *
  * **The remove button names what it removes.** "Remove Ada Lovelace", not
@@ -116,10 +116,11 @@ export default function Tag({
   const styles = useStyles();
   const { t } = useLocale();
 
-  // `onPrimary` exists precisely to stay legible on `primary`; the resting
-  // pill is `backgroundElement`, the same surface every other raised
-  // element in the app uses, so `text` reads on it in both schemes.
-  const foreground = selected ? theme.colors.onPrimary : theme.colors.text;
+  // A selected tag is tinted and labelled in `accent` rather than inverted
+  // into a solid block; the palette tests hold `accent` to 4.5:1 on the
+  // `selected` tint. The resting tag is `backgroundElement`, the same
+  // surface every other raised element uses, so `text` reads on it.
+  const foreground = selected ? theme.colors.accent : theme.colors.text;
   const glyphSize = spacing.x16;
 
   const content = (
@@ -149,9 +150,9 @@ export default function Tag({
         styles.tag,
         {
           backgroundColor: selected
-            ? theme.colors.primary
+            ? theme.colors.selected
             : theme.colors.backgroundElement,
-          borderColor: selected ? theme.colors.primary : theme.colors.border,
+          borderColor: selected ? theme.colors.accent : theme.colors.border,
           opacity: disabled ? 0.5 : 1,
         },
         style,
@@ -198,25 +199,21 @@ export default function Tag({
   );
 }
 
-const useStyles = createStyles(({ isRTL, spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ isRTL, spacing, sizes, radius }) => ({
   tag: {
+    borderRadius: radius.control,
     flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "center",
     // Sized by its own text, unlike `Card` or `ListItem` which stretch: a
     // tag is a word, and a row of them is meant to read as a row.
     alignSelf: "flex-start",
-    // Exactly half `elementHeightSm` — both go through the same `units()`,
-    // so a small tag is a true pill and a medium one is near enough one.
-    // Text that outgrows the min height (large dynamic type) rounds off as
-    // a rect instead, which is the graceful end of that trade.
-    borderRadius: radius.x16,
     borderWidth: spacing.x1,
-    // Keeps each half's pressed state inside the pill's own corners.
+    // Keeps each half's pressed state inside the tag's own edge.
     overflow: "hidden",
     // A tag longer than its container truncates rather than overflowing it.
     maxWidth: "100%",
   },
-  // Both halves take the pill's full height, so neither target is a
+  // Both halves take the tag's full height, so neither target is a
   // fraction of what it looks like.
   small: {
     minHeight: sizes.elementHeightSm,
@@ -229,7 +226,7 @@ const useStyles = createStyles(({ isRTL, spacing, radius, sizes }) => ({
     alignItems: "center",
     gap: spacing.x4,
     paddingHorizontal: spacing.x12,
-    // The half that gives way when the pill hits `maxWidth` — the remove
+    // The half that gives way when the tag hits `maxWidth` — the remove
     // button is a touch target and never shrinks.
     flexShrink: 1,
     minWidth: 0,

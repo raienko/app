@@ -176,18 +176,18 @@ export default function Card({
 
 const useStyles = createStyles(({ spacing, radius }) => ({
   card: {
+    borderRadius: radius.surface,
     // Fills whatever contains it rather than picking a width of its own.
     // `alignSelf` (not `width: "100%"`) for the reason `Accordion`
     // documents: the usual parent centers its children without stretching
     // them, and only alignSelf opts back out of that.
     alignSelf: "stretch",
-    borderRadius: radius.x12,
     // Always present, transparent unless the type asks for one — so a
     // bordered and an unbordered card are the same size and don't shift
     // layout when swapped.
     borderWidth: spacing.x1,
     // Keeps edge-to-edge content (a `padded={false}` image) inside the
-    // corner radius instead of squaring off over it.
+    // card's edge instead of painting over its border.
     overflow: "hidden",
   },
   padded: {

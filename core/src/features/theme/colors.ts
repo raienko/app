@@ -11,8 +11,30 @@ export type ThemeColors = {
   textSecondary: string;
   backgroundElement: string;
   backgroundElementSelected: string;
+  /**
+   * The tinted fill behind whatever is currently chosen — a selected
+   * segment, option row, tab or tag. Tinted with the accent hue rather than
+   * a darker grey, so "picked" never needs a solid inverted block to read:
+   * the tint plus an `accent` edge or label carries it.
+   */
+  selected: string;
   /** Default visible boundary for controls and content surfaces. */
   border: string;
+  /**
+   * A hairline between rows and sections. Quieter than `border` on
+   * purpose: it separates content that is already legible on its own, so it
+   * is not a control boundary and does not need 3:1 — `border` does that job.
+   */
+  divider: string;
+  /**
+   * The press feedback on a control with no fill of its own — a secondary
+   * or tertiary button, an icon button. Translucent on purpose, and the one
+   * non-hex value in the palette: it is laid *over* whatever the control
+   * already shows (the page, a raised surface, the `selected` tint), so one
+   * value darkens or lightens every one of them by the same step instead of
+   * needing a pressed shade per surface.
+   */
+  pressed: string;
   /** Muted fill for controls that are unavailable for interaction. */
   disabled: string;
   error: string;
@@ -48,10 +70,25 @@ export type ThemeColors = {
   grabber: string;
   /** Keyboard/screen-reader focus indicator. */
   focus: string;
-  /** Accent used for high-emphasis actions — see Button's `primary` type. */
+  /** Fill for high-emphasis actions — see Button's `primary` type. */
   primary: string;
   /** Text/icon colour that sits legibly on `primary`. */
   onPrimary: string;
+  /**
+   * `primary` while it is being pressed. A solid shade rather than the
+   * `pressed` overlay: laid over the fill, a translucent light step would
+   * pull `onPrimary` under 4.5:1 in the dark scheme, so this one is chosen
+   * to keep the label legible while it moves.
+   */
+  primaryPressed: string;
+  /**
+   * The primary hue as a *foreground* on app surfaces — links, a selected
+   * tab's label, check marks, tertiary buttons. Separate from `primary`
+   * because one value can't be both in a dark scheme: a fill dark enough
+   * to carry white text reads under 4.5:1 as text on a dark background,
+   * and a label light enough to read becomes a glaring block as a fill.
+   */
+  accent: string;
   /**
    * The categorical series order for charts — slot 1 first, always in this
    * order, never cycled. See CHART_SERIES_KEYS below for why these are
@@ -109,7 +146,10 @@ const REQUIRED_KEYS: (keyof ThemeColors)[] = [
   "textSecondary",
   "backgroundElement",
   "backgroundElementSelected",
+  "selected",
   "border",
+  "divider",
+  "pressed",
   "disabled",
   "error",
   "success",
@@ -124,6 +164,8 @@ const REQUIRED_KEYS: (keyof ThemeColors)[] = [
   "focus",
   "primary",
   "onPrimary",
+  "primaryPressed",
+  "accent",
   ...CHART_SERIES_KEYS,
 ];
 

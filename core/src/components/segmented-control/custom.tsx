@@ -8,16 +8,17 @@ import Segment from "./segment";
 import type { SegmentedControlImplementationProps } from "./types";
 
 /**
- * The app-owned segmented control: a bordered track with equal-width
- * segments and a filled pill on the current one.
+ * The app-owned segmented control: a square, outlined track split into
+ * equal-width segments by hairlines, with the current one tinted.
  *
- * The pill is `primary` with an `onPrimary` label rather than the lighter
- * "raised card on a grey track" iOS uses. That shade of the idea would put
- * `background` on `backgroundElement` — the same 1.19:1 pairing `Button`'s
- * palette already rejected for its `secondary` border — which is far under
- * the 3:1 WCAG 1.4.11 asks of the only thing marking which option is
- * chosen. Selection is also a *fill* appearing rather than a hue changing,
- * so it survives greyscale and a colour-blindness filter.
+ * The current segment is marked three ways at once — the `selected` tint,
+ * an `accent` bar along its bottom edge, and a `text` label where the rest
+ * are `textSecondary` — rather than
+ * by inverting it into a solid block. A solid `primary` or `text` fill was
+ * the loudest thing on any screen it sat on, most of all in the dark
+ * scheme; the bar alone clears the 3:1 WCAG 1.4.11 asks of the only thing
+ * marking the choice, and as a shape it survives greyscale and a
+ * colour-blindness filter where a hue change alone would not.
  */
 export default function CustomSegmentedControl({
   value,
@@ -37,18 +38,16 @@ export default function CustomSegmentedControl({
       testID={testID}
       style={[
         styles.track,
-        {
-          backgroundColor: theme.colors.backgroundElement,
-          borderColor: theme.colors.border,
-        },
+        { borderColor: theme.colors.border },
         disabled ? styles.disabled : null,
         style,
       ]}
     >
-      {options.map((option) => (
+      {options.map((option, index) => (
         <Segment
           key={option.value}
           option={option}
+          separated={index > 0}
           selected={option.value === value}
           disabled={disabled || (option.disabled ?? false)}
           onPress={() => onChange(option.value)}
@@ -58,21 +57,19 @@ export default function CustomSegmentedControl({
   );
 }
 
-const useStyles = createStyles(({ isRTL, spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ isRTL, spacing, sizes, radius }) => ({
   track: {
+    borderRadius: radius.control,
     flexDirection: isRTL ? "row-reverse" : "row",
-    alignItems: "center",
+    alignItems: "stretch",
     alignSelf: "stretch",
     minHeight: sizes.elementHeightMd,
-    // Inset so the selected pill sits *inside* the track rather than
-    // covering its border.
-    padding: spacing.x4,
-    gap: spacing.x2,
-    borderRadius: radius.x8,
-    // Same reason Button's `secondary` carries one: the fill is
-    // `backgroundElement`, which is invisible against any other raised
-    // surface the control might sit on.
+    // Same reason Button's `secondary` carries one: the track has no fill,
+    // so the outline is what marks the control's extent on any surface.
     borderWidth: spacing.x1,
+    // Clips the selected segment's tint to the track's corners, so
+    // `radius.control` rounds the whole control from one place.
+    overflow: "hidden",
   },
   disabled: {
     opacity: 0.5,

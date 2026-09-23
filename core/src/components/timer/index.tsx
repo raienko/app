@@ -170,7 +170,7 @@ export default function Timer({
           progress={Math.min(1, Math.max(0, 1 - value / total))}
           remaining={value}
           paused={paused}
-          color={theme.colors.primary}
+          color={theme.colors.accent}
         />
       </If>
       <Text

@@ -92,7 +92,7 @@ export default function ImagesSection() {
   );
 }
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   container: {
     gap: spacing.x8,
   },
@@ -106,13 +106,13 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
     alignItems: "center",
   },
   image: {
+    borderRadius: radius.surface,
     width: sizes.elementHeightLg * 2,
     height: sizes.elementHeightLg * 2,
-    borderRadius: radius.x8,
   },
   wide: {
+    borderRadius: radius.surface,
     width: "100%",
     height: sizes.elementHeightLg * 2,
-    borderRadius: radius.x8,
   },
 }));

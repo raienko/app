@@ -34,19 +34,19 @@ export const Default = () => {
   );
 };
 
-const useStyles = createStyles(({ radius, spacing, sizes, units }) => ({
+const useStyles = createStyles(({ spacing, sizes, units, radius }) => ({
   trigger: {
+    borderRadius: radius.surface,
     minHeight: sizes.elementHeightMd,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: spacing.x1,
-    borderRadius: radius.x8,
     paddingHorizontal: spacing.x16,
     paddingVertical: spacing.x8,
   },
   image: {
+    borderRadius: radius.surface,
     width: units(240),
     aspectRatio: 1,
-    borderRadius: radius.x8,
   },
 }));

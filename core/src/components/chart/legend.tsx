@@ -57,8 +57,8 @@ const useStyles = createStyles(({ isRTL, units, spacing, radius }) => ({
     gap: spacing.x4,
   },
   swatch: {
+    borderRadius: radius.indicator,
     width: units(10),
     height: units(10),
-    borderRadius: radius.x4,
   },
 }));

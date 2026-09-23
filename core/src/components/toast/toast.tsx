@@ -150,7 +150,6 @@ function ToastComponent({
         {
           backgroundColor: theme.colors.backgroundElement,
           borderColor: theme.colors.border,
-          borderStartColor: accent,
         },
         style,
       ]}
@@ -236,8 +235,9 @@ for (const type of TOAST_TYPES) {
 
 export default Toast;
 
-const useStyles = createStyles(({ isRTL, spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ isRTL, spacing, sizes, radius }) => ({
   toast: {
+    borderRadius: radius.surface,
     flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "center",
     width: "100%",
@@ -245,11 +245,9 @@ const useStyles = createStyles(({ isRTL, spacing, radius, sizes }) => ({
     gap: spacing.x8,
     paddingVertical: spacing.x8,
     paddingHorizontal: spacing.x12,
-    borderRadius: radius.x12,
+    // The type's colour lives on the icon alone — a coloured side stripe
+    // on top of it repeated the same signal as decoration.
     borderWidth: spacing.x1,
-    // The accent stripe. `borderStart` rather than `borderLeft` so it stays
-    // on the side the text starts from in an RTL locale.
-    borderStartWidth: spacing.x4,
   },
   body: {
     flexDirection: isRTL ? "row-reverse" : "row",

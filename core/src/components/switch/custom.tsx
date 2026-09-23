@@ -18,9 +18,7 @@ function CustomIndicator({ value }: SwitchIndicatorProps) {
         styles.track,
         value ? styles.trackOn : styles.trackOff,
         {
-          backgroundColor: value
-            ? theme.colors.primary
-            : theme.colors.backgroundElementSelected,
+          backgroundColor: value ? theme.colors.primary : "transparent",
           borderColor: value ? theme.colors.primary : theme.colors.border,
         },
       ]}
@@ -32,7 +30,7 @@ function CustomIndicator({ value }: SwitchIndicatorProps) {
           {
             backgroundColor: value
               ? theme.colors.onPrimary
-              : theme.colors.textSecondary,
+              : theme.colors.border,
           },
         ]}
       />
@@ -47,10 +45,10 @@ export default function CustomSwitch(props: SwitchImplementationProps) {
 
 const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
   track: {
+    borderRadius: radius.control,
     width: spacing.x40,
     height: spacing.x24,
     padding: spacing.x2,
-    borderRadius: radius.x16,
     borderWidth: spacing.x1,
     flexDirection: "row",
     alignItems: "center",
@@ -62,9 +60,9 @@ const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
     justifyContent: isRTL ? "flex-end" : "flex-start",
   },
   thumb: {
+    borderRadius: radius.control,
     width: spacing.x16,
     height: spacing.x16,
-    borderRadius: radius.x16,
   },
   thumbOn: {
     transform: [{ scale: 1.1 }],

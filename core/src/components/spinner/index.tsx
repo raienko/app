@@ -45,7 +45,7 @@ export default function Spinner({
   return (
     <ActivityIndicator
       {...props}
-      color={color ?? theme.colors.primary}
+      color={color ?? theme.colors.accent}
       size={resolvedSize}
       accessible={resolvedLabel !== null}
       accessibilityRole={resolvedLabel === null ? undefined : "progressbar"}

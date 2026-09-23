@@ -33,12 +33,30 @@ const RAW_SPACING = {
   x40: 40,
 } as const;
 
-/** Same idea as `RAW_SPACING`, for `borderRadius`. */
+/**
+ * Every corner in the app, by the role of the thing it rounds — the one
+ * place that decides the kit's shape. Unlike `RAW_SPACING` these are named
+ * by purpose rather than keyed by value, because the value is exactly what
+ * a redesign changes: the Graphite kit is square, so three of the four are
+ * `0`, and rounding it later is an edit to this table rather than a hunt
+ * through every component for a `borderRadius`.
+ *
+ * Reach for one of these for *any* corner, including a zero one — a
+ * component that simply omits `borderRadius` can't be rounded from here.
+ */
 const RAW_RADIUS = {
-  x4: RAW_SPACING.x4,
-  x8: RAW_SPACING.x8,
-  x12: RAW_SPACING.x12,
-  x16: RAW_SPACING.x16,
+  /** Things you press or type into: buttons, fields, segmented controls, tags, checkboxes, switches. */
+  control: 0,
+  /** Things that hold content: cards, modals, toasts, media, code blocks, avatars. */
+  surface: 0,
+  /** Small marks that carry a state rather than content: badges, dots, progress tracks, swatches. */
+  indicator: 0,
+  /**
+   * A true circle or capsule at any size — radio buttons, the sheet grabber.
+   * Large enough to exceed half of anything it rounds, which is all RN needs
+   * to draw a full curve.
+   */
+  full: 9999,
 } as const;
 
 /**

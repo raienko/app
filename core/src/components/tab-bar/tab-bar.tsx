@@ -11,7 +11,7 @@ import type { TabBarProps } from "./types";
 
 /**
  * A bottom tab bar, in two shapes: docked to the edge (`sticky`) or lifted
- * off it as a rounded pill (`floating`).
+ * off it as an outlined bar (`floating`).
  *
  * This is the controlled form — `items`, `value`, `onChange` — which is what
  * the Showcase and the stories drive. To use it as a navigator's own bar,
@@ -73,7 +73,9 @@ export default function TabBar({
           : [
               styles.sticky,
               {
-                borderTopColor: theme.colors.border,
+                // A hairline, not a control boundary: the bar is set apart
+                // by position, the line only stops content running into it.
+                borderTopColor: theme.colors.divider,
                 // Padded rather than made taller by the chin, so the row of
                 // tabs keeps its full height and only the dead space below
                 // grows.
@@ -105,10 +107,9 @@ const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
     borderTopWidth: spacing.x1,
   },
   floating: {
-    borderRadius: radius.x16,
+    borderRadius: radius.surface,
     borderWidth: spacing.x1,
-    // Clips a pressed tab's highlight to the pill instead of letting it
-    // square off over the corners.
+    // Keeps a pressed tab's highlight inside the bar's corners.
     overflow: "hidden",
   },
 }));

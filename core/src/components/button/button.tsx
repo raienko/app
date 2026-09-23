@@ -115,12 +115,16 @@ export default function Button({
         selected,
         busy: loading ? true : undefined,
       })}
-      style={[
+      style={({ pressed }) => [
         styles.button,
         styles[size],
         {
           backgroundColor:
-            background === null ? "transparent" : theme.colors[background],
+            pressed && palette.backgroundPressed !== null
+              ? theme.colors[palette.backgroundPressed]
+              : background === null
+                ? "transparent"
+                : theme.colors[background],
           borderColor:
             palette.border === null
               ? "transparent"
@@ -132,30 +136,58 @@ export default function Button({
       disabled={isDisabled}
       {...props}
     >
-      <View style={styles.content}>
-        {/* Keep content laid out while loading so changing state never
-            changes the button's width or height. It also keeps the original
-            text available as the accessible name. */}
-        <View style={loading ? styles.loadingContent : null}>{content}</View>
-        <If condition={loading}>
-          <Spinner
-            testID="button-loading"
-            label={null}
-            color={theme.colors[foreground]}
-            style={styles.loadingIndicator}
-          />
-        </If>
-      </View>
+      {({ pressed }) => (
+        <>
+          {/* A sibling under the content rather than a background, so it
+              shades the resting fill — including the `selected` tint —
+              instead of replacing it. */}
+          <If condition={pressed && palette.backgroundPressed === null}>
+            <View
+              testID="button-pressed"
+              pointerEvents="none"
+              style={[
+                styles.pressedOverlay,
+                { backgroundColor: theme.colors.pressed },
+              ]}
+            />
+          </If>
+          <View style={styles.content}>
+            {/* Keep content laid out while loading so changing state never
+                changes the button's width or height. It also keeps the
+                original text available as the accessible name. */}
+            <View style={loading ? styles.loadingContent : null}>
+              {content}
+            </View>
+            <If condition={loading}>
+              <Spinner
+                testID="button-loading"
+                label={null}
+                color={theme.colors[foreground]}
+                style={styles.loadingIndicator}
+              />
+            </If>
+          </View>
+        </>
+      )}
     </Pressable>
   );
 }
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   button: {
-    borderRadius: radius.x8,
+    borderRadius: radius.control,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: spacing.x1,
+    // Keeps the pressed overlay inside `radius.control` corners.
+    overflow: "hidden",
+  },
+  pressedOverlay: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
   },
   content: {
     alignItems: "center",

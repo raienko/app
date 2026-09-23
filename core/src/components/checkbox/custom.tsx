@@ -45,9 +45,9 @@ export default function CustomCheckbox(props: CheckboxImplementationProps) {
 
 const useStyles = createStyles(({ spacing, radius }) => ({
   box: {
+    borderRadius: radius.control,
     width: spacing.x24,
     height: spacing.x24,
-    borderRadius: radius.x4,
     borderWidth: spacing.x2,
     alignItems: "center",
     justifyContent: "center",

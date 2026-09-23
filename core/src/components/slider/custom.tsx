@@ -125,7 +125,7 @@ export default function CustomSlider(props: SliderImplementationProps) {
   );
 }
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   control: {
     alignSelf: "stretch",
     height: sizes.elementHeightMd,
@@ -140,8 +140,8 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
     justifyContent: "center",
   },
   track: {
+    borderRadius: radius.indicator,
     height: spacing.x4,
-    borderRadius: radius.x4,
     overflow: "hidden",
   },
   fill: {

@@ -33,13 +33,10 @@ export default function CodeCell({ index, character, active, invalid }: Props) {
       style={[
         styles.cell,
         {
-          backgroundColor: active
-            ? theme.colors.backgroundElementSelected
-            : theme.colors.backgroundElement,
-          // A resting box needs a visible border for the reason Button's
-          // `secondary` does: its fill is `backgroundElement` and it sits on
-          // surfaces using that same token, so a fill-only box vanishes.
-          // The semantic border token clears 3:1 against every app surface.
+          backgroundColor: active ? theme.colors.selected : "transparent",
+          // Outlined like every other field: with no resting fill, the
+          // border is what marks the box, and the semantic token clears 3:1
+          // against every app surface.
           borderColor: invalid
             ? theme.colors.error
             : active
@@ -57,13 +54,13 @@ export default function CodeCell({ index, character, active, invalid }: Props) {
   );
 }
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   cell: {
+    borderRadius: radius.control,
     flex: 1,
     height: sizes.elementHeightLg,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: radius.x8,
     // Always present so a box doesn't resize when it becomes active.
     borderWidth: spacing.x1,
   },

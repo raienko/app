@@ -139,7 +139,7 @@ export default function ListItem({
   const surface = [
     styles.row,
     disabled ? styles.disabled : null,
-    selected ? { backgroundColor: theme.colors.backgroundElement } : null,
+    selected ? { backgroundColor: theme.colors.selected } : null,
     style,
   ];
 

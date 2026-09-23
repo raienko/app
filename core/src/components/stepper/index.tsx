@@ -230,11 +230,11 @@ const useStyles = createStyles(({ isRTL, units, spacing, radius }) => ({
     gap: spacing.x4,
   },
   control: {
+    borderRadius: radius.control,
     flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "center",
     alignSelf: "flex-start",
     borderWidth: spacing.x1,
-    borderRadius: radius.x8,
   },
   value: {
     textAlign: "center",

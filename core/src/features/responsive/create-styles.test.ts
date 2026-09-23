@@ -10,7 +10,7 @@ describe(`${createStyles.name} smoke test`, () => {
         breakpoint,
         isRTL,
         gap: spacing.x8,
-        radius: radius.x8,
+        radius: radius.control,
         elementHeightMd: sizes.elementHeightMd,
       }),
     );
@@ -24,7 +24,7 @@ describe(`${createStyles.name} smoke test`, () => {
         breakpoint: expect.any(String),
         isRTL: expect.any(Boolean),
         spacing: expect.objectContaining({ x8: expect.any(Number) }),
-        radius: expect.objectContaining({ x8: expect.any(Number) }),
+        radius: expect.objectContaining({ control: expect.any(Number) }),
         sizes: expect.objectContaining({ elementHeightMd: expect.any(Number) }),
       }),
     );

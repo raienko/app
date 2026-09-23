@@ -23,11 +23,10 @@ export default function CountryOption({ option, selected, onPress }: Props) {
 
   return (
     <Pressable
-      style={[
+      style={({ pressed }) => [
         styles.row,
-        selected
-          ? { backgroundColor: theme.colors.backgroundElementSelected }
-          : null,
+        selected ? { backgroundColor: theme.colors.selected } : null,
+        pressed && !selected ? { backgroundColor: theme.colors.pressed } : null,
       ]}
       onPress={() => onPress(option)}
       {...controlA11yProps({ label: accessibleLabel, selected })}
@@ -40,20 +39,20 @@ export default function CountryOption({ option, selected, onPress }: Props) {
         style={{ color: theme.colors.textSecondary }}
       />
       <If condition={selected}>
-        <Icon name="check" size={spacing.x20} color={theme.colors.primary} />
+        <Icon name="check" size={spacing.x20} color={theme.colors.accent} />
       </If>
     </Pressable>
   );
 }
 
-const useStyles = createStyles(({ isRTL, spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ isRTL, spacing, sizes, radius }) => ({
   row: {
+    borderRadius: radius.control,
     flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "center",
     gap: spacing.x8,
     minHeight: sizes.elementHeightMd,
     paddingHorizontal: spacing.x12,
-    borderRadius: radius.x8,
   },
   name: {
     flex: 1,

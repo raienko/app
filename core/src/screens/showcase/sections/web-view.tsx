@@ -113,9 +113,9 @@ const useStyles = createStyles(({ units, spacing, radius }) => ({
     gap: spacing.x12,
   },
   stage: {
+    borderRadius: radius.surface,
     height: units(280),
     alignSelf: "stretch",
-    borderRadius: radius.x8,
     overflow: "hidden",
   },
 }));

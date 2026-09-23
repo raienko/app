@@ -34,19 +34,19 @@ export default function usePickerStyles(): PickerStyles {
   return useMemo<PickerStyles>(
     () => ({
       // Days grid.
-      day: { borderRadius: radius.x8 },
+      day: { borderRadius: radius.control },
       day_label: { ...typography.callout, color: theme.colors.text },
       today: {
-        borderRadius: radius.x8,
+        borderRadius: radius.control,
         borderWidth: spacing.x1,
         // A ring rather than a fill, so it stays readable underneath the
         // selected background on the day that is both.
-        borderColor: theme.colors.primary,
+        borderColor: theme.colors.accent,
       },
       today_label: { color: theme.colors.text },
       selected: {
+        borderRadius: radius.control,
         backgroundColor: theme.colors.primary,
-        borderRadius: radius.x8,
       },
       selected_label: { color: theme.colors.onPrimary },
       outside_label: { color: theme.colors.textSecondary },
@@ -60,9 +60,9 @@ export default function usePickerStyles(): PickerStyles {
 
       // Month and year grids, reached from the header's selectors.
       month: {
-        borderRadius: radius.x8,
+        borderRadius: radius.control,
         borderWidth: spacing.x1,
-        borderColor: theme.colors.backgroundElementSelected,
+        borderColor: theme.colors.divider,
       },
       month_label: { ...typography.callout, color: theme.colors.text },
       selected_month: {
@@ -71,9 +71,9 @@ export default function usePickerStyles(): PickerStyles {
       },
       selected_month_label: { color: theme.colors.onPrimary },
       year: {
-        borderRadius: radius.x8,
+        borderRadius: radius.control,
         borderWidth: spacing.x1,
-        borderColor: theme.colors.backgroundElementSelected,
+        borderColor: theme.colors.divider,
       },
       year_label: { ...typography.callout, color: theme.colors.text },
       selected_year: {
@@ -81,7 +81,7 @@ export default function usePickerStyles(): PickerStyles {
         borderColor: theme.colors.primary,
       },
       selected_year_label: { color: theme.colors.onPrimary },
-      active_year: { borderColor: theme.colors.primary },
+      active_year: { borderColor: theme.colors.accent },
       active_year_label: { color: theme.colors.text },
 
       // Header: the month / year / time selectors and the step arrows.
@@ -93,12 +93,12 @@ export default function usePickerStyles(): PickerStyles {
       year_selector_label: { ...typography.headline, color: theme.colors.text },
       time_selector_label: { ...typography.headline, color: theme.colors.text },
       button_prev: {
+        borderRadius: radius.control,
         backgroundColor: theme.colors.backgroundElement,
-        borderRadius: radius.x8,
       },
       button_next: {
+        borderRadius: radius.control,
         backgroundColor: theme.colors.backgroundElement,
-        borderRadius: radius.x8,
       },
       // The step arrows are Images, so they take the foreground colour through
       // `tintColor` rather than `color`.
@@ -108,8 +108,8 @@ export default function usePickerStyles(): PickerStyles {
       // Time wheels.
       time_label: { ...typography.title3, color: theme.colors.text },
       time_selected_indicator: {
-        backgroundColor: theme.colors.backgroundElementSelected,
-        borderRadius: radius.x8,
+        borderRadius: radius.control,
+        backgroundColor: theme.colors.selected,
       },
     }),
     [theme, typography, radius, spacing],

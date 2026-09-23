@@ -64,7 +64,12 @@ export default function CountryPicker({ value, onChange, disabled }: Props) {
   return (
     <>
       <Pressable
-        style={styles.trigger}
+        style={({ pressed }) => [
+          styles.trigger,
+          pressed && !disabled
+            ? { backgroundColor: theme.colors.pressed }
+            : null,
+        ]}
         onPress={show}
         disabled={disabled}
         {...controlA11yProps({

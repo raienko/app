@@ -97,16 +97,20 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     const styles = useStyles();
     const [focused, setFocused] = useState(false);
 
+    // Outlined, not filled: the `border` edge marks the field on any
+    // surface, and focus or an error thickens it and changes its colour
+    // together, so neither state is signalled by hue alone.
     const fieldStyle = [
       styles.field,
+      focused || error ? styles.fieldEmphasised : null,
       {
-        backgroundColor: focused
-          ? theme.colors.backgroundElementSelected
-          : theme.colors.backgroundElement,
         opacity: disabled ? 0.5 : 1,
-        borderColor: focused ? theme.colors.focus : "transparent",
+        borderColor: error
+          ? theme.colors.error
+          : focused
+            ? theme.colors.focus
+            : theme.colors.border,
       },
-      error ? { borderColor: theme.colors.error } : null,
     ];
 
     // A press-mode field renders its value as plain text rather than a
@@ -166,7 +170,12 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
       >
         {onPress ? (
           <Pressable
-            style={fieldStyle}
+            style={({ pressed }) => [
+              ...fieldStyle,
+              pressed && !disabled
+                ? { backgroundColor: theme.colors.pressed }
+                : null,
+            ]}
             onPress={onPress}
             disabled={disabled}
             // The whole row is one control, so the announcement is built
@@ -208,16 +217,21 @@ export default BaseInput;
 // than this file overriding only `fontSize` on top of `body`. That partial
 // override was a real bug: an 11px label kept body's 19px line height.
 const useStyles = createStyles(
-  ({ isRTL, spacing, radius, sizes, typography }) => ({
+  ({ isRTL, spacing, sizes, typography, radius }) => ({
     field: {
+      borderRadius: radius.control,
       flexDirection: isRTL ? "row-reverse" : "row",
       alignItems: "center",
       gap: spacing.x8,
       minHeight: sizes.elementHeightMd,
-      borderRadius: radius.x8,
       paddingHorizontal: spacing.x12,
       borderWidth: spacing.x1,
-      borderColor: "transparent",
+    },
+    // The extra border pixel comes out of the padding, so the text doesn't
+    // shift when the field gains focus.
+    fieldEmphasised: {
+      borderWidth: spacing.x2,
+      paddingHorizontal: spacing.x12 - spacing.x1,
     },
     // The RN TextInput host is not our Text component, so it takes the type
     // scale as a style rather than a `type` prop.
@@ -230,7 +244,7 @@ const useStyles = createStyles(
       minWidth: 0,
       padding: 0,
       // Browsers draw their own focus outline inside our styled field. The
-      // field's focused background is the design-system focus treatment.
+      // field's focused border is the design-system focus treatment.
       outlineColor: "transparent",
       outlineStyle: "solid",
       outlineWidth: 0,

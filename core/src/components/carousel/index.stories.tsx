@@ -116,7 +116,7 @@ export const Cards = () => {
   );
 };
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   stage: {
     width: "100%",
     maxWidth: sizes.elementWidthLg,
@@ -126,14 +126,14 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
     height: sizes.elementWidthLg * 0.66 + spacing.x20,
   },
   photo: {
+    borderRadius: radius.surface,
     width: "100%",
     height: "100%",
-    borderRadius: radius.x12,
   },
   card: {
+    borderRadius: radius.surface,
     flex: 1,
     margin: spacing.x8,
-    borderRadius: radius.x12,
     alignItems: "center",
     justifyContent: "center",
   },

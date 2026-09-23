@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   Pressable,
+  StyleSheet,
   type PressableProps,
   type StyleProp,
   type ViewStyle,
@@ -159,7 +160,10 @@ function ImagePickerComponent({
         {...pressableProps}
         accessibilityLabel={accessibilityLabel}
         disabled={disabled}
-        style={style}
+        style={({ pressed }) => [
+          style,
+          pressed && !disabled ? styles.pressed : null,
+        ]}
         // Called directly rather than through the static, so the browser
         // still sees the file dialog as opened by this press.
         onPress={() =>
@@ -214,3 +218,11 @@ ImagePicker.hide = async (id: string) => {
 };
 
 export default ImagePicker;
+
+// Not `createStyles`: nothing here depends on the window, so there is
+// nothing for it to recompute.
+const styles = StyleSheet.create({
+  pressed: {
+    opacity: 0.7,
+  },
+});

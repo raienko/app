@@ -206,12 +206,12 @@ export default function ProgressBar({
 
 const useStyles = createStyles(({ spacing, radius }) => ({
   track: {
+    borderRadius: radius.indicator,
     // Fills whatever contains it rather than picking a width of its own —
     // same reason `Accordion` and `Card` use alignSelf rather than a width.
     alignSelf: "stretch",
-    borderRadius: radius.x4,
-    // Keeps the sweeping segment inside the rounded ends instead of
-    // sliding out past them.
+    // Keeps the sweeping segment inside the track instead of
+    // sliding out past its ends.
     overflow: "hidden",
     // The track is `backgroundElementSelected` rather than
     // `backgroundElement`: the latter is what most raised surfaces already
@@ -225,7 +225,7 @@ const useStyles = createStyles(({ spacing, radius }) => ({
     height: spacing.x8,
   },
   fill: {
+    borderRadius: radius.indicator,
     height: "100%",
-    borderRadius: radius.x4,
   },
 }));

@@ -89,8 +89,8 @@ const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
     alignItems: "center",
   },
   block: {
+    borderRadius: radius.surface,
     paddingHorizontal: spacing.x8,
     paddingVertical: spacing.x4,
-    borderRadius: radius.x4,
   },
 }));

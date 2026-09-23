@@ -133,7 +133,7 @@ export default function Header({
         styles.header,
         {
           backgroundColor: theme.colors.background,
-          borderBottomColor: theme.colors.border,
+          borderBottomColor: theme.colors.divider,
         },
         avoidNotch ? { paddingTop: insets.top } : null,
         style,

@@ -32,7 +32,7 @@ function styleOf(view: View, testID: string) {
 
 describe("Tag sizing and theming", () => {
   describe("size", () => {
-    // Both halves take the pill's full height, so neither target is a
+    // Both halves take the tag's full height, so neither target is a
     // fraction of what it looks like.
     it("gives the remove button the touch-target height by default", async () => {
       const { result } = await renderHook(() => useSizes());
@@ -63,7 +63,7 @@ describe("Tag sizing and theming", () => {
   });
 
   describe("theme", () => {
-    it("paints the resting pill from the raised-surface tokens", async () => {
+    it("paints the resting tag from the raised-surface tokens", async () => {
       const { result } = await renderHook(() => useTheme());
       const view = await render(<Component testID="tag" value="Design" />);
 
@@ -75,19 +75,22 @@ describe("Tag sizing and theming", () => {
       );
     });
 
-    it("paints a selected tag in the accent, with a legible label on it", async () => {
+    it("tints a selected tag and labels it in the accent", async () => {
       const { result } = await renderHook(() => useTheme());
       const view = await render(
         <Component testID="tag" value="Unread" onPress={jest.fn()} selected />,
       );
 
       expect(styleOf(view, "tag").backgroundColor).toBe(
-        result.current.colors.primary,
+        result.current.colors.selected,
+      );
+      expect(styleOf(view, "tag").borderColor).toBe(
+        result.current.colors.accent,
       );
       expect(
         Object.assign({}, ...flatten(view.getByText("Unread").props.style))
           .color,
-      ).toBe(result.current.colors.onPrimary);
+      ).toBe(result.current.colors.accent);
     });
 
     it("dims a disabled tag", async () => {
@@ -101,9 +104,9 @@ describe("Tag sizing and theming", () => {
     // Same contract Button's content has: the surface knows its foreground,
     // so an icon child never restates it.
     it("hands its foreground down to a leading icon", async () => {
-      let onPrimary = "";
+      let accent = "";
       function Reader() {
-        onPrimary = useTheme().colors.onPrimary;
+        accent = useTheme().colors.accent;
         return null;
       }
 
@@ -119,7 +122,7 @@ describe("Tag sizing and theming", () => {
         </>,
       );
 
-      expect(JSON.stringify(toJSON())).toContain(onPrimary);
+      expect(JSON.stringify(toJSON())).toContain(accent);
     });
   });
 });

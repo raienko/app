@@ -111,19 +111,19 @@ export const Headless = () => {
   );
 };
 
-const useStyles = createStyles(({ isRTL, radius, spacing, units }) => ({
+const useStyles = createStyles(({ isRTL, spacing, units, radius }) => ({
   stack: {
     alignSelf: "stretch",
     gap: spacing.x8,
   },
   zone: {
+    borderRadius: radius.surface,
     minHeight: units(120),
     alignItems: "center",
     justifyContent: "center",
     gap: spacing.x8,
     borderWidth: spacing.x1,
     borderStyle: "dashed",
-    borderRadius: radius.x12,
   },
   row: {
     flexDirection: isRTL ? "row-reverse" : "row",

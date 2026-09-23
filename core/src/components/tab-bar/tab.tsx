@@ -18,20 +18,28 @@ type Props = {
  * One destination: its icon, its label, and the whole column as the touch
  * target — a tab bar's most common miss is a hit area the size of the glyph,
  * which is a quarter of the space the row already reserves for it.
+ *
+ * The current tab is marked by an `accent` bar along its top edge as well
+ * as a `text` label, not by recolouring alone — a shift between two greys
+ * is the cue greyscale and colour-blind viewers are most likely to lose.
  */
 export default function Tab({ item, selected, onPress }: Props) {
   const theme = useTheme();
   const { spacing } = useSizes();
   const styles = useStyles();
 
-  const color = selected ? theme.colors.primary : theme.colors.textSecondary;
+  const color = selected ? theme.colors.text : theme.colors.textSecondary;
 
   return (
     <Pressable
       {...tabA11yProps({ label: item.label, selected })}
       testID={item.testID}
       onPress={onPress}
-      style={({ pressed }) => [styles.tab, pressed ? styles.pressed : null]}
+      style={({ pressed }) => [
+        styles.tab,
+        { borderTopColor: selected ? theme.colors.accent : "transparent" },
+        pressed ? styles.pressed : null,
+      ]}
     >
       {/* Colour and size filled in from the tab's state, so a call site
           passes `<Icon name="home" />` and nothing else. */}
@@ -58,6 +66,8 @@ const useStyles = createStyles(({ spacing }) => ({
     paddingHorizontal: spacing.x4,
     // The whole column, not just the glyph.
     alignSelf: "stretch",
+    // Reserved on every tab, so the bar appearing doesn't shift the glyph.
+    borderTopWidth: spacing.x2,
   },
   label: {
     textAlign: "center",

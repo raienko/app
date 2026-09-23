@@ -30,9 +30,9 @@ function Tile({ label }: { label: string }) {
   );
 }
 
-const useStyles = createStyles(({ radius, spacing }) => ({
+const useStyles = createStyles(({ spacing, radius }) => ({
   tile: {
-    borderRadius: radius.x8,
+    borderRadius: radius.surface,
     paddingVertical: spacing.x16,
     alignItems: "center",
   },

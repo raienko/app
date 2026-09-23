@@ -83,18 +83,18 @@ export default function ModalContent({
   );
 }
 
-const useStyles = createStyles(({ radius, spacing, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   popupContent: {
+    borderRadius: radius.surface,
     width: "100%",
     maxWidth: sizes.elementWidthLg,
     maxHeight: "85%",
-    borderRadius: radius.x16,
     padding: spacing.x20,
   },
   sheetContent: {
+    borderTopLeftRadius: radius.surface,
+    borderTopRightRadius: radius.surface,
     maxHeight: "85%",
-    borderTopLeftRadius: radius.x16,
-    borderTopRightRadius: radius.x16,
     paddingHorizontal: spacing.x20,
   },
   fullscreenContent: {

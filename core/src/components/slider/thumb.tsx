@@ -126,7 +126,7 @@ export default function SliderThumb({
   );
 }
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   touchTarget: {
     position: "absolute",
     top: 0,
@@ -137,9 +137,9 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
     zIndex: 2,
   },
   thumb: {
+    borderRadius: radius.control,
     width: spacing.x24,
     height: spacing.x24,
-    borderRadius: radius.x16,
     borderWidth: spacing.x2,
   },
   focused: {

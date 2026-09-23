@@ -87,11 +87,12 @@ export default function FilePickerSection() {
   );
 }
 
-const useStyles = createStyles(({ radius, spacing, units }) => ({
+const useStyles = createStyles(({ spacing, units, radius }) => ({
   container: {
     gap: spacing.x8,
   },
   zone: {
+    borderRadius: radius.surface,
     alignSelf: "stretch",
     minHeight: units(120),
     alignItems: "center",
@@ -99,6 +100,5 @@ const useStyles = createStyles(({ radius, spacing, units }) => ({
     gap: spacing.x8,
     borderWidth: spacing.x1,
     borderStyle: "dashed",
-    borderRadius: radius.x12,
   },
 }));

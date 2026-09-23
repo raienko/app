@@ -119,7 +119,7 @@ const useStyles = createStyles(({ spacing, radius }) => ({
   // A header stretches edge to edge, so each demo gets a bounded box to
   // sit in rather than bleeding into the section's own padding.
   stage: {
-    borderRadius: radius.x8,
+    borderRadius: radius.surface,
     overflow: "hidden",
   },
 }));

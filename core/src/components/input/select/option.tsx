@@ -32,11 +32,10 @@ export default function SelectOptionRow({ option, selected, onPress }: Props) {
 
   return (
     <Pressable
-      style={[
+      style={({ pressed }) => [
         styles.row,
-        selected
-          ? { backgroundColor: theme.colors.backgroundElementSelected }
-          : null,
+        selected ? { backgroundColor: theme.colors.selected } : null,
+        pressed && !selected ? { backgroundColor: theme.colors.pressed } : null,
       ]}
       onPress={() => onPress(option.value)}
       // The label is explicit even though the row has a Text child, because
@@ -46,20 +45,20 @@ export default function SelectOptionRow({ option, selected, onPress }: Props) {
     >
       <Text value={option.label} style={styles.label} />
       <If condition={selected}>
-        <Icon name="check" size={spacing.x20} color={theme.colors.primary} />
+        <Icon name="check" size={spacing.x20} color={theme.colors.accent} />
       </If>
     </Pressable>
   );
 }
 
-const useStyles = createStyles(({ isRTL, spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ isRTL, spacing, sizes, radius }) => ({
   row: {
+    borderRadius: radius.control,
     flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "center",
     gap: spacing.x8,
     minHeight: sizes.elementHeightMd,
     paddingHorizontal: spacing.x16,
-    borderRadius: radius.x8,
   },
   label: {
     flex: 1,

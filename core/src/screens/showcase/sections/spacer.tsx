@@ -114,8 +114,8 @@ const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
     gap: spacing.x8,
   },
   stage: {
+    borderRadius: radius.surface,
     borderWidth: spacing.x1,
-    borderRadius: radius.x8,
     padding: spacing.x12,
   },
   stageRow: {
@@ -126,8 +126,8 @@ const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
     alignItems: isRTL ? "flex-end" : "flex-start",
   },
   block: {
+    borderRadius: radius.surface,
     paddingHorizontal: spacing.x8,
     paddingVertical: spacing.x4,
-    borderRadius: radius.x4,
   },
 }));

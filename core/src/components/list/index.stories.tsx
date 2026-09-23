@@ -131,15 +131,15 @@ export const CustomRenderItem = () => {
   );
 };
 
-const useStyles = createStyles(({ radius, sizes, spacing }) => ({
+const useStyles = createStyles(({ sizes, spacing, radius }) => ({
   stage: {
     alignSelf: "stretch",
     height: sizes.elementHeightLg * 5,
     gap: spacing.x8,
   },
   photo: {
+    borderRadius: radius.surface,
     width: "100%",
     height: sizes.elementHeightLg * 2,
-    borderRadius: radius.x8,
   },
 }));

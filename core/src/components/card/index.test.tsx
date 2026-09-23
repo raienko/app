@@ -112,8 +112,8 @@ describe(`${Component.name} smoke test`, () => {
       expect(cardStyle().padding).toBeUndefined();
     });
 
-    // Otherwise a `padded={false}` image squares off over the corners.
-    it("clips content to the corner radius", async () => {
+    // Otherwise a `padded={false}` image paints over the card's border.
+    it("clips content to the card's edge", async () => {
       await render(
         <Component testID="card" padded={false}>
           <RNText>content</RNText>

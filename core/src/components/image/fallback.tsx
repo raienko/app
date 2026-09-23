@@ -54,13 +54,13 @@ export default function ImageFallback({ style, a11yProps }: Props) {
 
 const useStyles = createStyles(({ spacing, radius }) => ({
   fallback: {
+    borderRadius: radius.surface,
     alignItems: "center",
     justifyContent: "center",
     // Same reason Button's `secondary` carries one: the fill is
     // `backgroundElement`, which is invisible against any other raised
     // surface it might sit on.
     borderWidth: spacing.x1,
-    borderRadius: radius.x8,
     overflow: "hidden",
   },
 }));

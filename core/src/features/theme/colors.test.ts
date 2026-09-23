@@ -49,11 +49,15 @@ const TEXT_SURFACES: (keyof ThemeColors)[] = [
   "backgroundElement",
 ];
 
+/** Where a chosen item's label sits — `text` and `accent` must read on it. */
+const SELECTED_SURFACES: (keyof ThemeColors)[] = [...TEXT_SURFACES, "selected"];
+
 /** Fills a control's outline may have to separate itself from. */
 const BOUNDARY_SURFACES: (keyof ThemeColors)[] = [
   "background",
   "backgroundElement",
   "backgroundElementSelected",
+  "selected",
 ];
 
 const STATUS_COLORS: (keyof ThemeColors)[] = [
@@ -67,22 +71,37 @@ describe("palette contrast", () => {
   describe.each(SCHEMES)("%s", (scheme) => {
     const palette = colors[scheme];
 
-    it.each(TEXT_SURFACES)("reads `text` on %s", (surface) => {
+    it.each(SELECTED_SURFACES)("reads `text` on %s", (surface) => {
       expect(contrast(palette.text, palette[surface])).toBeGreaterThanOrEqual(
         TEXT_MINIMUM,
       );
     });
 
     // Button's `tertiary` type and every accent label in the app.
-    it.each(TEXT_SURFACES)("reads `primary` as a label on %s", (surface) => {
+    it.each(SELECTED_SURFACES)("reads `accent` as a label on %s", (surface) => {
+      expect(contrast(palette.accent, palette[surface])).toBeGreaterThanOrEqual(
+        TEXT_MINIMUM,
+      );
+    });
+
+    // A `primary` fill is a control's only boundary when it's a switch or a
+    // checked box, so it must stand off the surfaces it sits on.
+    it.each(TEXT_SURFACES)("shows a `primary` fill on %s", (surface) => {
       expect(
         contrast(palette.primary, palette[surface]),
-      ).toBeGreaterThanOrEqual(TEXT_MINIMUM);
+      ).toBeGreaterThanOrEqual(BOUNDARY_MINIMUM);
     });
 
     it("reads `onPrimary` on a `primary` fill", () => {
       expect(
         contrast(palette.onPrimary, palette.primary),
+      ).toBeGreaterThanOrEqual(TEXT_MINIMUM);
+    });
+
+    // The label must stay legible for the whole press, not just at rest.
+    it("reads `onPrimary` on a pressed `primary` fill", () => {
+      expect(
+        contrast(palette.onPrimary, palette.primaryPressed),
       ).toBeGreaterThanOrEqual(TEXT_MINIMUM);
     });
 

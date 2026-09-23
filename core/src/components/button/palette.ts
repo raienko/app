@@ -18,28 +18,26 @@ export type ButtonType = "primary" | "secondary" | "tertiary";
  * resting and `selected` — so a segmented control reads as picked in every
  * type, not just the one that happens to have a darker token.
  *
- * `null` means "no fill": `tertiary` is a text-only button, so its resting
- * state paints nothing and only picks up a background once selected.
+ * `null` means "no fill": `secondary` is an outlined button and `tertiary`
+ * a text-only one, so neither paints anything at rest; both pick up the
+ * `selected` tint once chosen, never a solid inverted block.
  *
- * **`secondary` carries a border, and that's not decoration.** Its fill is
- * `backgroundElement` — the same token `Accordion`, `Modal` and every other
- * raised surface uses. Sitting on one of those, a fill-only secondary button
- * is literally the same colour as what's behind it and disappears; the
- * showcase made that obvious the moment a `primary` button sat next to one.
- * The border gives it an edge on any surface without changing the fill every
- * existing button in the app already has.
- *
- * That border is the semantic `border` token rather than the more obvious
- * `backgroundElementSelected`: on a `backgroundElement` surface — the exact
- * case the border exists for — the two neighbouring greys contrast at 1.19:1,
- * far under the 3:1 WCAG 1.4.11 asks of a boundary that is the only thing
- * marking the control. `border` clears it in both schemes.
+ * **`secondary`'s border is the control, not decoration.** With no fill, the
+ * outline is the only thing marking where the button is, so it is the
+ * semantic `border` token — which clears WCAG 1.4.11's 3:1 against every
+ * surface a button can sit on, including `backgroundElement` and the
+ * `selected` tint it takes on when picked. *
+ * **Every type answers a press.** `backgroundPressed` is the solid fill a
+ * type switches to while held; `null` means the type has no fill worth
+ * shading, so the translucent `pressed` overlay is laid over whatever it
+ * shows instead — the page, a raised surface, or its `selected` tint.
  */
 export const TYPE_COLORS: Record<
   ButtonType,
   {
     background: keyof ThemeColors | null;
     backgroundSelected: keyof ThemeColors;
+    backgroundPressed: keyof ThemeColors | null;
     border: keyof ThemeColors | null;
     label: keyof ThemeColors;
     labelSelected?: keyof ThemeColors;
@@ -48,19 +46,22 @@ export const TYPE_COLORS: Record<
   primary: {
     background: "primary",
     backgroundSelected: "primary",
+    backgroundPressed: "primaryPressed",
     border: null,
     label: "onPrimary",
   },
   secondary: {
-    background: "backgroundElement",
-    backgroundSelected: "backgroundElementSelected",
+    background: null,
+    backgroundSelected: "selected",
+    backgroundPressed: null,
     border: "border",
     label: "text",
   },
   tertiary: {
     background: null,
-    backgroundSelected: "backgroundElement",
+    backgroundSelected: "selected",
+    backgroundPressed: null,
     border: null,
-    label: "primary",
+    label: "accent",
   },
 };

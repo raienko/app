@@ -167,7 +167,7 @@ describe(`${Component.name} smoke test`, () => {
     });
   });
 
-  // The circle is a fixed graphic that has to line up down a list, so
+  // The square is a fixed graphic that has to line up down a list, so
   // letters that grew with the OS text size would clip rather than help.
   it("keeps the monogram out of OS text scaling", async () => {
     const view = await render(<Component name="Ada Lovelace" />);

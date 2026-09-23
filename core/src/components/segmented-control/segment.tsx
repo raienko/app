@@ -9,14 +9,16 @@ import type { SegmentedControlOption } from "./types";
 
 type Props = {
   option: SegmentedControlOption;
+  /** Draws the hairline that separates this segment from the one before it. */
+  separated: boolean;
   selected: boolean;
   disabled: boolean;
   onPress: () => void;
 };
 
 /**
- * One segment: the touch target, its label, and the pill that marks it as
- * the current choice.
+ * One segment: the touch target, its label, and the tint and bar that mark
+ * it as the current choice.
  *
  * Announced as a radio rather than a button, because that's what it is —
  * one of a set of mutually exclusive options, inside the `radiogroup` its
@@ -26,6 +28,7 @@ type Props = {
  */
 export default function Segment({
   option,
+  separated,
   selected,
   disabled,
   onPress,
@@ -47,7 +50,15 @@ export default function Segment({
       }}
       style={({ pressed }) => [
         styles.segment,
-        selected ? { backgroundColor: theme.colors.primary } : null,
+        separated
+          ? [styles.separated, { borderStartColor: theme.colors.border }]
+          : null,
+        selected
+          ? {
+              backgroundColor: theme.colors.selected,
+              borderBottomColor: theme.colors.accent,
+            }
+          : null,
         // Dimmed per segment, not only when the whole control is disabled:
         // one unavailable choice among available ones is otherwise
         // indistinguishable until you tap it and nothing happens.
@@ -62,7 +73,7 @@ export default function Segment({
         style={[
           styles.label,
           {
-            color: selected ? theme.colors.onPrimary : theme.colors.text,
+            color: selected ? theme.colors.text : theme.colors.textSecondary,
           },
         ]}
       />
@@ -70,7 +81,7 @@ export default function Segment({
   );
 }
 
-const useStyles = createStyles(({ spacing, radius, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes }) => ({
   segment: {
     // Equal widths regardless of label length, so the control doesn't
     // reflow as the selection moves. `minWidth: 0` lets a long label
@@ -81,7 +92,13 @@ const useStyles = createStyles(({ spacing, radius, sizes }) => ({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: spacing.x8,
-    borderRadius: radius.x4,
+    // Reserved on every segment, so selecting one doesn't nudge its label
+    // up by the bar's height.
+    borderBottomWidth: spacing.x2,
+    borderBottomColor: "transparent",
+  },
+  separated: {
+    borderStartWidth: spacing.x1,
   },
   label: {
     textAlign: "center",

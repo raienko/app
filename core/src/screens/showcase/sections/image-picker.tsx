@@ -90,17 +90,17 @@ export default function ImagePickerSection() {
   );
 }
 
-const useStyles = createStyles(({ radius, spacing, units }) => ({
+const useStyles = createStyles(({ spacing, units, radius }) => ({
   container: {
     gap: spacing.x12,
   },
   trigger: {
+    borderRadius: radius.surface,
     alignSelf: "stretch",
     minHeight: units(180),
     overflow: "hidden",
     borderWidth: spacing.x1,
     borderStyle: "dashed",
-    borderRadius: radius.x12,
   },
   placeholder: {
     flex: 1,

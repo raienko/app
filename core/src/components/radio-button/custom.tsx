@@ -41,7 +41,7 @@ const useStyles = createStyles(({ spacing, radius }) => ({
   circle: {
     width: spacing.x24,
     height: spacing.x24,
-    borderRadius: radius.x16,
+    borderRadius: radius.full,
     borderWidth: spacing.x2,
     alignItems: "center",
     justifyContent: "center",
@@ -49,6 +49,6 @@ const useStyles = createStyles(({ spacing, radius }) => ({
   dot: {
     width: spacing.x12,
     height: spacing.x12,
-    borderRadius: radius.x16,
+    borderRadius: radius.full,
   },
 }));

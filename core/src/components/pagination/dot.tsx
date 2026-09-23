@@ -45,7 +45,10 @@ export default function PaginationDot({
       // are on.
       {...controlA11yProps({ label, selected: active })}
       onPress={onPress}
-      style={styles.target}
+      style={({ pressed }) => [
+        styles.target,
+        pressed ? { backgroundColor: theme.colors.pressed } : null,
+      ]}
     >
       <View
         style={[
@@ -56,9 +59,7 @@ export default function PaginationDot({
             // Longer as well as recoloured: colour is never the sole
             // carrier of state (WCAG 1.4.1), and a shape change survives
             // greyscale.
-            backgroundColor: active
-              ? theme.colors.primary
-              : theme.colors.border,
+            backgroundColor: active ? theme.colors.accent : theme.colors.border,
           },
         ]}
       />
@@ -76,6 +77,6 @@ const useStyles = createStyles(({ spacing, radius }) => ({
     justifyContent: "center",
   },
   dot: {
-    borderRadius: radius.x4,
+    borderRadius: radius.indicator,
   },
 }));

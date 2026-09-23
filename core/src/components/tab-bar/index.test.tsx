@@ -171,7 +171,7 @@ describe(`${Component.name} smoke test`, () => {
     });
 
     // A floating bar is already off the edge, so the inset moves it further
-    // up rather than padding the inside of the pill.
+    // up rather than padding the inside of the bar.
     it("lifts a floating bar clear of the inset", async () => {
       await render(
         withChin(

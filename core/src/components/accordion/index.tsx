@@ -30,6 +30,9 @@ type Props = {
  * two icon assets, so there's only ever one glyph to keep in sync with
  * state.
  *
+ * It draws no box — only a hairline under each section — so a stack of
+ * them reads as one ruled list rather than a pile of cards.
+ *
  * Content itself shows/hides instantly (via `If`), not height-animated —
  * animating to/from an unmeasured "auto" height is the fiddly part of an
  * accordion; not worth it until a real need for that polish shows up.
@@ -62,13 +65,13 @@ export default function Accordion({
 
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor: theme.colors.backgroundElement },
-      ]}
+      style={[styles.container, { borderBottomColor: theme.colors.divider }]}
     >
       <Pressable
-        style={styles.header}
+        style={({ pressed }) => [
+          styles.header,
+          pressed ? { backgroundColor: theme.colors.pressed } : null,
+        ]}
         onPress={toggle}
         {...controlA11yProps({ expanded: open })}
       >
@@ -88,7 +91,7 @@ export default function Accordion({
   );
 }
 
-const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
+const useStyles = createStyles(({ isRTL, spacing, sizes }) => ({
   container: {
     // Fills whatever contains it, rather than picking a width of its own.
     // `alignSelf` (not `width: "100%"`) because the usual parent — Screen —
@@ -98,22 +101,21 @@ const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
     // Constraining the width is the parent's call: see the Home screen,
     // which caps its content column at `sizes.contentMaxWidth`.
     alignSelf: "stretch",
-    borderRadius: radius.x12,
-    overflow: "hidden",
+    borderBottomWidth: spacing.x1,
   },
   header: {
     flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "center",
     justifyContent: "space-between",
+    gap: spacing.x12,
+    minHeight: sizes.elementHeightLg,
     paddingVertical: spacing.x12,
-    paddingHorizontal: spacing.x16,
   },
   title: {
     flex: 1,
   },
   content: {
     gap: spacing.x12,
-    paddingHorizontal: spacing.x16,
-    paddingBottom: spacing.x16,
+    paddingBottom: spacing.x24,
   },
 }));
