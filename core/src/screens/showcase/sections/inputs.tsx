@@ -36,6 +36,7 @@ export default function InputsSection() {
   const { t } = useLocale();
   const styles = useStyles();
   const [name, setName] = useState("");
+  const [notes, setNotes] = useState("");
   const [age, setAge] = useState<number | null>(null);
   const [email, setEmail] = useState("");
   const [secret, setSecret] = useState("");
@@ -103,6 +104,16 @@ export default function InputsSection() {
         onChange={setName}
         leftSlot={<Icon name="user" />}
         helperText={t("input.name.helper")}
+      />
+      <Input
+        type="textarea"
+        label={t("input.notes.label")}
+        placeholder={t("input.notes.placeholder")}
+        value={notes}
+        onChange={setNotes}
+        maxLength={200}
+        necessity="optional"
+        helperText={t("input.notes.helper")}
       />
       <Input
         type="numeric"

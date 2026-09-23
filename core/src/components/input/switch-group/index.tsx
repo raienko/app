@@ -6,7 +6,7 @@ import Switch from "@/components/switch";
 import { createStyles } from "@/features/responsive";
 import { isWeb } from "@/utils";
 
-import FormField from "../form-field";
+import FormField from "@/components/form-field";
 import type { CommonInputProps, SwitchGroupInputTypeProps } from "../types";
 
 type Props = Omit<SwitchGroupInputTypeProps, "type"> & CommonInputProps;
@@ -29,6 +29,7 @@ const SwitchGroupInput = forwardRef<RNTextInputInstance, Props>(
       disabled = false,
       error,
       helperText,
+      necessity,
       style,
     },
     _ref,
@@ -70,6 +71,7 @@ const SwitchGroupInput = forwardRef<RNTextInputInstance, Props>(
         label={groupSwitch ? undefined : label}
         error={error}
         helperText={helperText}
+        necessity={necessity}
         style={style}
       >
         <View {...webGroupProps} style={styles.options}>

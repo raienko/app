@@ -9,7 +9,7 @@ import {
 import { fieldA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 
-import FormField from "../form-field";
+import FormField from "@/components/form-field";
 import type {
   CodeCharset,
   CodeInputTypeProps,
@@ -65,6 +65,7 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
     label,
     error,
     helperText,
+    necessity,
     disabled,
     style,
     onFocus,
@@ -107,6 +108,7 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
       label={label}
       error={error}
       helperText={helperText}
+      necessity={necessity}
       style={style}
     >
       {/* The invisible input would mostly catch the tap itself, but that

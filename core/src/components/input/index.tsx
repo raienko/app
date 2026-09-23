@@ -19,6 +19,7 @@ import RangeInput from "./range";
 import SelectInput from "./select";
 import SwitchGroupInput from "./switch-group";
 import TextInput from "./text";
+import TextAreaInput from "./textarea";
 import type { InputProps } from "./types";
 
 /**
@@ -53,6 +54,7 @@ function renderVariant<P>(
  * stays `null`. Same for `file`, `datetime`, groups, and `range`.
  *
  * @example <Input value={text} onChange={setText} label="Name" />
+ * @example <Input type="textarea" value={notes} onChange={setNotes} maxLength={500} />
  * @example <Input type="numeric" value={age} onChange={setAge} min={0} max={120} />
  * @example <Input type="email" value={email} onChange={setEmail} />
  * @example <Input type="select" value={country} onChange={setCountry} options={COUNTRIES} />
@@ -70,6 +72,8 @@ function renderVariant<P>(
 const Input = forwardRef<RNTextInputInstance, InputProps>(
   function Input(props, ref) {
     switch (props.type) {
+      case "textarea":
+        return renderVariant(TextAreaInput, props, ref);
       case "numeric":
         return renderVariant(NumericInput, props, ref);
       case "email":
@@ -116,5 +120,6 @@ export type {
   RadioGroupInputTypeProps,
   RangeInputTypeProps,
   SelectOption,
+  TextAreaInputTypeProps,
   SwitchGroupOption,
 } from "./types";

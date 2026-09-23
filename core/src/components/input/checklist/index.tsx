@@ -5,7 +5,7 @@ import Checkbox from "@/components/checkbox";
 import { createStyles } from "@/features/responsive";
 import { isWeb } from "@/utils";
 
-import FormField from "../form-field";
+import FormField from "@/components/form-field";
 import type { ChecklistInputTypeProps, CommonInputProps } from "../types";
 
 type Props = Omit<ChecklistInputTypeProps, "type"> & CommonInputProps;
@@ -27,6 +27,7 @@ const ChecklistInput = forwardRef<RNTextInputInstance, Props>(
       disabled = false,
       error,
       helperText,
+      necessity,
       style,
     },
     _ref,
@@ -52,6 +53,7 @@ const ChecklistInput = forwardRef<RNTextInputInstance, Props>(
         label={label}
         error={error}
         helperText={helperText}
+        necessity={necessity}
         style={style}
       >
         <View {...webGroupProps} style={styles.options}>

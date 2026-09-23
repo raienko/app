@@ -111,6 +111,12 @@
       "helper": "Elige el mínimo y el máximo",
       "minimum": "Presupuesto mínimo",
       "maximum": "Presupuesto máximo"
+    },
+    "characterCount": "{{count}} de {{max}} caracteres",
+    "notes": {
+      "label": "Notas",
+      "placeholder": "¿Algo que debamos saber?",
+      "helper": "Crece con el texto hasta seis líneas y luego se desplaza"
     }
   },
   "modal": {
@@ -220,6 +226,7 @@
     "segmentedControl": "Control segmentado",
     "stateViews": "Estados",
     "inputs": "Campos de entrada",
+    "formField": "Campo de formulario",
     "images": "Imágenes",
     "cards": "Tarjetas",
     "section": "Sección",
@@ -233,6 +240,7 @@
     "modals": "Ventanas modales",
     "popups": "Diálogos emergentes",
     "toasts": "Avisos",
+    "inlineAlerts": "Alertas en línea",
     "permissions": "Permisos",
     "deepLinks": "Enlaces profundos",
     "storage": "Almacenamiento",
@@ -285,5 +293,15 @@
   "stepper": {
     "decrease": "Reducir {{label}}",
     "increase": "Aumentar {{label}}"
+  },
+  "formField": {
+    "required": "Obligatorio",
+    "optional": "Opcional"
+  },
+  "inlineAlert": {
+    "success": "Éxito",
+    "error": "Error",
+    "warning": "Advertencia",
+    "info": "Información"
   }
 }

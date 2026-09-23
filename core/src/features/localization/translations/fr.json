@@ -111,6 +111,12 @@
       "helper": "Choisissez le minimum et le maximum",
       "minimum": "Budget minimum",
       "maximum": "Budget maximum"
+    },
+    "characterCount": "{{count}} sur {{max}} caractères",
+    "notes": {
+      "label": "Notes",
+      "placeholder": "Quelque chose à nous dire ?",
+      "helper": "S'agrandit avec le texte jusqu'à six lignes, puis défile"
     }
   },
   "modal": {
@@ -220,6 +226,7 @@
     "segmentedControl": "Contrôle segmenté",
     "stateViews": "Vues d’état",
     "inputs": "Champs de saisie",
+    "formField": "Champ de formulaire",
     "images": "Images",
     "cards": "Cartes",
     "section": "Section",
@@ -233,6 +240,7 @@
     "modals": "Fenêtres modales",
     "popups": "Popups",
     "toasts": "Toasts",
+    "inlineAlerts": "Alertes intégrées",
     "permissions": "Autorisations",
     "deepLinks": "Liens profonds",
     "storage": "Stockage",
@@ -285,5 +293,15 @@
   "stepper": {
     "decrease": "Diminuer {{label}}",
     "increase": "Augmenter {{label}}"
+  },
+  "formField": {
+    "required": "Obligatoire",
+    "optional": "Facultatif"
+  },
+  "inlineAlert": {
+    "success": "Succès",
+    "error": "Erreur",
+    "warning": "Avertissement",
+    "info": "Information"
   }
 }

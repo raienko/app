@@ -85,50 +85,52 @@ internal API into application code.
 
 The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are ordered foundations-first — the styleguides and app-wide settings everything else is built on, then the components that consume them.
 
-| Section           | What it demonstrates                                                                                   |
-| ----------------- | ------------------------------------------------------------------------------------------------------ |
-| Typography        | All 11 type-scale entries at their own size, with the title sizes as real headings                     |
-| Markdown          | A rendered document taking the app's type scale and palette, with an editable source                   |
-| Web view          | The bridge both ways, the app's typography inside a page, and the theme switchable live                |
-| Theme & colors    | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                          |
-| Localization      | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                             |
-| Accessibility     | A live readout of every OS flag, `fontScale`, and `duration()`                                         |
-| Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes                    |
-| Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                           |
-| Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale                 |
-| Divider           | Both orientations, a labelled rule, and the inset switchable against a list                            |
-| Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides                |
-| Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row        |
-| Tags              | All three shapes, both sizes, the two-control tag, disabled, and truncation                            |
-| Badges            | Every type, the count formatting and its zero case, the dot, and where a badge sits                    |
-| Avatars           | The fallback stack, the sizes switchable live, the status dot, and awkward names                       |
-| Stepper           | The limits disabling their own button, a fractional step, the sizes, and the typing alternative        |
-| Skeleton          | A card and a list of rows from one file, the children form beside them, and the sweep switchable live  |
-| Chart             | The three forms switchable live, the theme series palette, and the sentence it reads out               |
-| Barcode           | A live-editable QR, the linear formats switchable, and an invalid value falling back                   |
-| Timer             | A countdown with its ring, a stopwatch, the formats, and pause                                         |
-| Progress          | A live determinate bar, custom value wording, and the indeterminate state                              |
-| Segmented control | Both implementations side by side, a disabled option, and a disabled control                           |
-| Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding                |
-| Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                          |
-| Inputs            | Text, numeric, email, password, code, phone, select and date/time variations                           |
-| Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls       |
-| Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content                |
-| Section           | A settings group, an action beside a title, a form footer, and levels that count themselves            |
-| List items        | Pressable rows with both slots filled, a row holding its own control, truncation                       |
-| List              | 200 rows with a handful mounted, and the default renderer swapped for a custom one                     |
-| Carousel          | Slides with pagination you can switch off live, and the position it announces                          |
-| Pagination        | A paged list, the window and its gaps, the compact form, the dots, and the one-page case               |
-| Media player      | Video and audio behind one transport, switchable live, with native controls as an escape hatch         |
-| Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web      |
-| File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker              |
-| Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                        |
-| Share             | The two icons, the text form, the copy fallback, and all four outcomes reported                        |
-| Permissions       | Persisted camera, gallery and notification permission state and actions                                |
-| Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                        |
-| Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`            |
-| Logger            | Every logger method and structured metadata                                                            |
-| Utilities         | `If` toggling content, `Match` cycling four states, and a scoped event bus emitting and counting pings |
+| Section           | What it demonstrates                                                                                    |
+| ----------------- | ------------------------------------------------------------------------------------------------------- |
+| Typography        | All 11 type-scale entries at their own size, with the title sizes as real headings                      |
+| Markdown          | A rendered document taking the app's type scale and palette, with an editable source                    |
+| Web view          | The bridge both ways, the app's typography inside a page, and the theme switchable live                 |
+| Theme & colors    | `ThemeSwitcher`, the resolved scheme/preference, and a swatch per palette key                           |
+| Localization      | `LocaleSwitcher`, a translated sentence, and the resolved locale/RTL state                              |
+| Accessibility     | A live readout of every OS flag, `fontScale`, and `duration()`                                          |
+| Responsive units  | Window size, breakpoint, `units(16)`, the spacing scale drawn to width, named sizes                     |
+| Grid              | 12-column spans, per-breakpoint spans that reflow on resize, and a tile grid                            |
+| Spacer            | A gap between two blocks, switchable across all three directions and the spacing scale                  |
+| Divider           | Both orientations, a labelled rule, and the inset switchable against a list                             |
+| Icons             | One glyph from each of the five families, the custom SVG set, colour and size overrides                 |
+| Buttons           | The full type × size matrix, a real segmented control (so `selected` moves), and a disabled row         |
+| Tags              | All three shapes, both sizes, the two-control tag, disabled, and truncation                             |
+| Badges            | Every type, the count formatting and its zero case, the dot, and where a badge sits                     |
+| Avatars           | The fallback stack, the sizes switchable live, the status dot, and awkward names                        |
+| Stepper           | The limits disabling their own button, a fractional step, the sizes, and the typing alternative         |
+| Skeleton          | A card and a list of rows from one file, the children form beside them, and the sweep switchable live   |
+| Chart             | The three forms switchable live, the theme series palette, and the sentence it reads out                |
+| Barcode           | A live-editable QR, the linear formats switchable, and an invalid value falling back                    |
+| Timer             | A countdown with its ring, a stopwatch, the formats, and pause                                          |
+| Progress          | A live determinate bar, custom value wording, and the indeterminate state                               |
+| Segmented control | Both implementations side by side, a disabled option, and a disabled control                            |
+| Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding                 |
+| Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                           |
+| Inputs            | Text, textarea, numeric, email, password, code, phone, select and date/time variations                  |
+| Form field        | A Slider and a Stepper framed like inputs, a required/optional hint, and an error that announces itself |
+| Images            | A source that loads, one that's empty, one that fails, a custom fallback, and the cache controls        |
+| Cards             | The three types, the case that tells them apart, a pressable card, edge-to-edge content                 |
+| Section           | A settings group, an action beside a title, a form footer, and levels that count themselves             |
+| List items        | Pressable rows with both slots filled, a row holding its own control, truncation                        |
+| List              | 200 rows with a handful mounted, and the default renderer swapped for a custom one                      |
+| Carousel          | Slides with pagination you can switch off live, and the position it announces                           |
+| Pagination        | A paged list, the window and its gaps, the compact form, the dots, and the one-page case                |
+| Media player      | Video and audio behind one transport, switchable live, with native controls as an escape hatch          |
+| Image picker      | A pressable trigger and the static API — a camera/gallery sheet on native, the file dialog on web       |
+| File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker               |
+| Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                         |
+| Share             | The two icons, the text form, the copy fallback, and all four outcomes reported                         |
+| Inline alerts     | Every type, a title with an action that updates its message, and one that can be dismissed              |
+| Permissions       | Persisted camera, gallery and notification permission state and actions                                 |
+| Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                         |
+| Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`             |
+| Logger            | Every logger method and structured metadata                                                             |
+| Utilities         | `If` toggling content, `Match` cycling four states, and a scoped event bus emitting and counting pings  |
 
 Each section is its own file under `src/screens/showcase/sections/`. They're screen-local — the showcase is their only consumer — but split for the same reason `Modal`'s internals are: one file per concern beats one large screen file. The section list itself is a table in `screens/showcase/index.tsx`, so adding one is an entry there plus a file.
 
@@ -529,6 +531,7 @@ src/components/input/
   types.ts       CommonInputProps + each type's own props (the public API)
   base/           BaseInput — the shared shell: label, slots, focus/disabled styling
   text/           TextInput — type="text" (default)
+  textarea/       TextAreaInput — type="textarea", multiline with an optional character limit
   numeric/        NumericInput — type="numeric", + its own use-numeric-text.ts
   email/          EmailInput — type="email", forces the email-address keyboard
   password/       PasswordInput — type="password", visibility + autofill semantics
@@ -544,7 +547,10 @@ src/components/input/
 - **`autoCapitalize`/`autoCorrect` default off for every variation**, enforced in one place: `BaseInput` defaults them (`"none"`/`false`) when not passed, so every current and future variation gets that default for free instead of each one having to remember it. Still overridable per field, e.g. `<Input autoCapitalize="words" />` for a name field.
 - **`type="numeric"` buffers the raw typed text separately from the numeric `value`**, in `numeric/use-numeric-text.ts` — a `TextInput` controlled directly by `String(value)` can't represent in-progress input like `"1."` or a bare `"-"`. Non-digit characters are stripped as you type, and `onChange` only fires once the buffered text parses to a real number, clamped to `min`/`max`. The Showcase feeds the committed value back into the field so that clamp-and-resync path stays visible.
 - Resyncing the buffered text when `value` changes from outside (e.g. that clamp round-trip above) happens **during render**, not in a `useEffect` — React's documented pattern for adjusting state from a prop change without an extra render pass. A `useEffect` calling `setState` synchronously in its body is also an ESLint error in this project's `react-hooks/set-state-in-effect` rule, which caught the first draft of this hook.
-- Focus and disabled states are handled centrally — focus uses the semantic `focus` border plus `backgroundElementSelected`, while disabled controls use muted presentation without changing their public behavior.
+- Focus and disabled states are handled centrally — the field is outlined in `border`, and focus (or an error) thickens that outline and recolours it to `focus` (or `error`), taking the extra width out of the padding so nothing shifts; disabled controls use muted presentation without changing their public behavior.
+- **The frame around the field is the public `FormField`** (`src/components/form-field`, below): every variation draws its label, helper and error through it, so a non-`Input` control framed by hand looks identical.
+- **`necessity: "required" | "optional"`** on `CommonInputProps` shows "Required" or "Optional" beside the label, and joins the field's accessible name ("Notes, Optional") because a screen reader never reaches the label's hint from inside the field. Mark whichever is the exception in a form — marking every field the same way says nothing.
+- **`type="textarea"`** is BaseInput told to be multiline: it starts `minLines` tall (3), grows with its text to `maxLines` (6), then scrolls — sized in lines of its own type step, so a larger OS text size makes a taller field rather than fewer visible lines. Return inserts a new line and never submits. With `maxLength` it shows "120/500" at the end of the helper row (read as "120 of 500 characters"); the limit is hard, so the count never goes over. Capitalisation and correction are back on here, because it's prose.
 - **`error`/`helperText`**: `helperText` renders under the field in `theme.colors.textSecondary`; `error` (also a string) replaces it, renders in `theme.colors.error`, and switches the field's border to that color too (`error` — a new key in `palette.json`/`ThemeColors`, `#dc2626`/`#f87171` light/dark — same swap-the-palette-file extensibility as every other color). Both live on `CommonInputProps`, so every variation gets them for free. Verified live: an invalid `Email` value renders a red border and "Enter a valid email" in place of blank helper text.
 - **`type="file"` is `FilePicker` behind a field.** It shows the chosen file's own `name`, never its `uri` — a cache path on native, a blob URL on web, meaningless to whoever reads the field — and falls back to the placeholder with nothing picked, the same shape `select` has. The picker is mounted _beside_ the field rather than around it: React Native has no touch bubbling, so a pressable field nested inside a pressable wrapper simply swallows every press. The field's `onPress` calls `FilePicker.open(id)` instead, which the bus delivers synchronously, so a browser still counts the press as the user activation that opened the dialog.
 - **Ref forwarding**: typed variations forward their ref to the underlying RN `TextInput`, so a caller can use `.focus()`/`.blur()`. Press-mode variations such as select and datetime deliberately keep a null text-input ref because their value is picked rather than typed.
@@ -553,6 +559,63 @@ src/components/input/
 - `index.tsx`'s dispatch is a `switch` on `props.type`, but the actual `{...props}` spread appears exactly once, in a generic `renderVariant<P>(Component, props, ref)` helper each `case` calls — TS infers `P` from `Component` and checks the (already-narrowed-by-`switch`) `props` against it, so a mismatched case (e.g. the wrong variation under the wrong `case`) is still a `tsc` error, unlike an earlier version of this dispatcher that stored the picked component in an `any`-typed variable.
 - Each input layer has its own Storybook story and Jest test, scoped to what that layer owns. `BaseInput` covers shared behavior once; variation tests cover only their value coercion and type-specific behavior; `Input` confirms routing.
 - Live examples on the Showcase screen exercise every variation together, including numeric clamp-and-resync behavior, the actual `type="email"` DOM attribute, and ref-based imperative focus.
+
+### `FormField` — `src/components/form-field`
+
+```tsx
+import FormField from "@/components/form-field";
+
+<FormField
+  label="Volume"
+  necessity="optional"
+  helperText="Applies to every device"
+>
+  <Slider
+    label="Volume"
+    hideLabel
+    value={volume}
+    onChange={setVolume}
+    max={100}
+  />
+</FormField>;
+<FormField label="Guests" error={guestsError}>
+  {({ labelId, descriptionId }) => (
+    <MyControl aria-labelledby={labelId} aria-describedby={descriptionId} />
+  )}
+</FormField>;
+```
+
+The label, helper and error shell every `Input` variation is drawn in, public so a `Slider`, a `Stepper` or anything custom sits in a form without looking borrowed.
+
+- **It owns text and spacing only.** The control keeps its own name and state; give a control that draws its own label (`Slider`, `Stepper`) `hideLabel`, so its name stays for a screen reader without showing twice. When a control should point at the field's text instead of repeating it, pass a function as `children`: it receives `labelId` and `descriptionId`, the `nativeID`s on the label and the helper/error line, for `aria-labelledby`/`aria-describedby` on the web and `accessibilityLabelledBy` on Android.
+- **An error is announced when it appears** — the error line alone is an assertive live region. Helper text is not, because a hint that talks whenever it changes is noise.
+- **`necessity`** puts "Required" or "Optional" beside the label; see the note under `Input` on marking only the exception.
+- **`counter` / `counterLabel`** put a short reading at the end of the helper row ("3/5", "120/500") with a spoken form ("3 of 5 selected"). The helper wraps and the counter never gets pushed off the edge.
+
+### `InlineAlert` — `src/components/inline-alert`
+
+```tsx
+import InlineAlert from "@/components/inline-alert";
+
+<InlineAlert
+  type="warning"
+  message="You're offline. Changes will sync later."
+/>;
+<InlineAlert
+  type="error"
+  title="Couldn't save"
+  message="Check your connection and try again."
+  action={{ label: "Retry", onPress: save }}
+  onDismiss={() => setError(null)}
+/>;
+```
+
+A message that stays in the page until what it reports stops being true — offline, an unverified email, a failed save. It fills the gap between the two overlays: `Toast` reports something that happened and leaves on its own, `Popup` blocks until answered, and this does neither.
+
+- **Types**: `info` (default), `success`, `warning`, `error` — the same icons, urgencies and announcements as `Toast`, kept as a table in the component so a new type is one entry plus its `inlineAlert.<type>` translation.
+- **Drawn to the kit, not as a coloured card**: the raised `backgroundElement` surface with a `divider` hairline and `radius.surface` corners. The type is carried by the icon in its status colour and by the spoken announcement — never by a fill.
+- **Announced once, on mount**, through a live region with the type read first ("Error, Couldn't save, Check your connection…"); only `error` interrupts. The action (a tertiary button under the message) and the close control stay separate stops.
+- **`onDismiss` is what adds the close control.** Leave it off for a message that must stay while its cause does.
 
 ### Platform constants — `src/utils`
 

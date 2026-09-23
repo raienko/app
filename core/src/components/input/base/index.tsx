@@ -9,10 +9,11 @@ import {
 
 import Text from "@/components/text";
 import { controlA11yProps, fieldA11yProps } from "@/features/accessibility";
-import { createStyles } from "@/features/responsive";
+import { useLocale } from "@/features/localization";
+import { createStyles, useTypography } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
-import FormField from "../form-field";
+import FormField from "@/components/form-field";
 import type { CommonInputProps } from "../types";
 
 export type BaseInputProps = CommonInputProps & {
@@ -48,6 +49,17 @@ export type BaseInputProps = CommonInputProps & {
   onPress?: () => void;
   /** Only meaningful alongside `onPress`: whether what it opens is showing. */
   expanded?: boolean;
+  /**
+   * Several lines instead of one: the field starts `minLines` tall, grows
+   * with its text up to `maxLines`, then scrolls. Set by the `textarea`
+   * variation.
+   */
+  multiline?: { minLines: number; maxLines: number };
+  /** A hard character limit, enforced by the OS keyboard as well as here. */
+  maxLength?: number;
+  /** A reading at the end of the helper row — see FormField's `counter`. */
+  counter?: string;
+  counterLabel?: string;
 };
 
 /**
@@ -86,23 +98,66 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
       autoCorrect = false,
       error,
       helperText,
+      necessity,
       onFocus,
       onBlur,
       onPress,
       expanded,
+      multiline,
+      maxLength,
+      counter,
+      counterLabel,
     },
     ref,
   ) {
     const theme = useTheme();
     const styles = useStyles();
+    const typography = useTypography();
+    const { t } = useLocale();
     const [focused, setFocused] = useState(false);
+
+    // The "Required" / "Optional" beside the label is text a screen reader
+    // never reaches from inside the field, so it joins the field's own name.
+    const name = label ?? placeholder;
+    const accessibleName =
+      name !== undefined && necessity !== undefined
+        ? `${name}, ${t(`formField.${necessity}`)}`
+        : name;
+
+    // Sized in lines of the field's own type step, so a taller OS text size
+    // makes a taller field rather than fewer visible lines.
+    //
+    // The height follows the text explicitly rather than being left to the
+    // platform: native TextInput grows between min and max on its own, but
+    // react-native-web's textarea doesn't, and would scroll from the first
+    // overflowing line.
+    const [contentHeight, setContentHeight] = useState(0);
+    const multilineStyle =
+      multiline === undefined
+        ? null
+        : (() => {
+            const minHeight =
+              typography.callout.lineHeight * multiline.minLines;
+            const maxHeight =
+              typography.callout.lineHeight * multiline.maxLines;
+            return {
+              minHeight,
+              maxHeight,
+              height: Math.min(Math.max(contentHeight, minHeight), maxHeight),
+            };
+          })();
 
     // Outlined, not filled: the `border` edge marks the field on any
     // surface, and focus or an error thickens it and changes its colour
     // together, so neither state is signalled by hue alone.
     const fieldStyle = [
       styles.field,
-      focused || error ? styles.fieldEmphasised : null,
+      multiline === undefined ? null : styles.fieldMultiline,
+      focused || error
+        ? multiline === undefined
+          ? styles.fieldEmphasised
+          : styles.fieldMultilineEmphasised
+        : null,
       {
         opacity: disabled ? 0.5 : 1,
         borderColor: error
@@ -130,17 +185,27 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     ) : (
       <RNTextInput
         ref={ref}
-        style={[styles.input, { color: theme.colors.text }]}
+        style={[styles.input, multilineStyle, { color: theme.colors.text }]}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={theme.colors.textSecondary}
         editable={!disabled}
+        multiline={multiline !== undefined}
+        onContentSizeChange={
+          multiline === undefined
+            ? undefined
+            : (event) => setContentHeight(event.nativeEvent.contentSize.height)
+        }
+        // Android centres multiline text vertically by default; a block of
+        // text reads from the top.
+        textAlignVertical={multiline === undefined ? undefined : "top"}
+        maxLength={maxLength}
         // A sibling <Text> label isn't auto-associated with a field the
         // way HTML's <label for> is, and an error needs announcing as
         // *why* the field is invalid — both handled by the shared helper.
         {...fieldA11yProps({
-          label: label ?? placeholder,
+          label: accessibleName,
           disabled,
           error,
         })}
@@ -164,8 +229,11 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     return (
       <FormField
         label={label}
+        necessity={necessity}
         error={error}
         helperText={helperText}
+        counter={counter}
+        counterLabel={counterLabel}
         style={style}
       >
         {onPress ? (
@@ -182,7 +250,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
             // here rather than left to RN deriving it from the children —
             // which would read out the placeholder as if it were a value.
             {...controlA11yProps({
-              label: label ?? placeholder,
+              label: accessibleName,
               value: value || undefined,
               hint: error,
               disabled: disabled ?? false,
@@ -241,6 +309,18 @@ const useStyles = createStyles(
       borderWidth: spacing.x2,
       paddingHorizontal: spacing.x12 - (spacing.x2 - spacing.x1),
       paddingVertical: spacing.x1 - (spacing.x2 - spacing.x1),
+    },
+    // A block of text starts at the top, with room above and below the
+    // first and last lines rather than the single-line row's centring.
+    fieldMultiline: {
+      alignItems: "flex-start",
+      paddingVertical: spacing.x12,
+    },
+    // The same focus compensation as above, from the taller padding.
+    fieldMultilineEmphasised: {
+      borderWidth: spacing.x2,
+      paddingHorizontal: spacing.x12 - (spacing.x2 - spacing.x1),
+      paddingVertical: spacing.x12 - (spacing.x2 - spacing.x1),
     },
     // The RN TextInput host is not our Text component, so it takes the type
     // scale as a style rather than a `type` prop.

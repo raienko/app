@@ -20,11 +20,13 @@ import CheckboxesSection from "./sections/checkboxes";
 import DeepLinksSection from "./sections/deep-links";
 import DividerSection from "./sections/divider";
 import FilePickerSection from "./sections/file-picker";
+import FormFieldSection from "./sections/form-field";
 import GridSection from "./sections/grid";
 import HeaderSection from "./sections/header";
 import IconsSection from "./sections/icons";
 import ImagePickerSection from "./sections/image-picker";
 import ImagesSection from "./sections/images";
+import InlineAlertsSection from "./sections/inline-alerts";
 import InputsSection from "./sections/inputs";
 import ListItemSection from "./sections/list-item";
 import ListSection from "./sections/list";
@@ -101,6 +103,7 @@ const SECTIONS: {
   { title: "showcase.segmentedControl", Component: SegmentedControlSection },
   { title: "showcase.stateViews", Component: StateViewsSection },
   { title: "showcase.inputs", Component: InputsSection },
+  { title: "showcase.formField", Component: FormFieldSection },
   { title: "showcase.images", Component: ImagesSection },
   { title: "showcase.cards", Component: CardSection },
   { title: "showcase.section", Component: SectionSection },
@@ -115,6 +118,7 @@ const SECTIONS: {
   { title: "showcase.popups", Component: PopupsSection },
   { title: "showcase.share", Component: ShareSection },
   { title: "showcase.toasts", Component: ToastsSection },
+  { title: "showcase.inlineAlerts", Component: InlineAlertsSection },
   { title: "showcase.permissions", Component: PermissionsSection },
   { title: "showcase.deepLinks", Component: DeepLinksSection },
   { title: "showcase.storage", Component: StorageSection },

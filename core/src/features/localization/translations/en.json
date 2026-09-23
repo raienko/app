@@ -111,6 +111,12 @@
       "helper": "Choose the minimum and maximum",
       "minimum": "Minimum budget",
       "maximum": "Maximum budget"
+    },
+    "characterCount": "{{count}} of {{max}} characters",
+    "notes": {
+      "label": "Notes",
+      "placeholder": "Anything we should know?",
+      "helper": "Grows with its text up to six lines, then scrolls"
     }
   },
   "modal": {
@@ -220,6 +226,7 @@
     "segmentedControl": "Segmented control",
     "stateViews": "State views",
     "inputs": "Inputs",
+    "formField": "Form field",
     "images": "Images",
     "cards": "Cards",
     "section": "Section",
@@ -233,6 +240,7 @@
     "modals": "Modals",
     "popups": "Popups",
     "toasts": "Toasts",
+    "inlineAlerts": "Inline alerts",
     "permissions": "Permissions",
     "deepLinks": "Deep links",
     "storage": "Storage",
@@ -285,5 +293,15 @@
   "stepper": {
     "decrease": "Decrease {{label}}",
     "increase": "Increase {{label}}"
+  },
+  "formField": {
+    "required": "Required",
+    "optional": "Optional"
+  },
+  "inlineAlert": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information"
   }
 }

@@ -5,7 +5,7 @@ import RadioButton from "@/components/radio-button";
 import { createStyles } from "@/features/responsive";
 import { isWeb } from "@/utils";
 
-import FormField from "../form-field";
+import FormField from "@/components/form-field";
 import type { CommonInputProps, RadioGroupInputTypeProps } from "../types";
 
 type Props = Omit<RadioGroupInputTypeProps, "type"> & CommonInputProps;
@@ -22,6 +22,7 @@ const RadioGroupInput = forwardRef<RNTextInputInstance, Props>(
       disabled,
       error,
       helperText,
+      necessity,
       style,
     },
     _ref,
@@ -36,6 +37,7 @@ const RadioGroupInput = forwardRef<RNTextInputInstance, Props>(
         label={label}
         error={error}
         helperText={helperText}
+        necessity={necessity}
         style={style}
       >
         <View {...webGroupProps} style={styles.options}>

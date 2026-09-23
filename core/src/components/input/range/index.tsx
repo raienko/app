@@ -3,7 +3,7 @@ import type { TextInput as RNTextInputInstance } from "react-native";
 
 import Slider from "@/components/slider";
 
-import FormField from "../form-field";
+import FormField from "@/components/form-field";
 import type { CommonInputProps, RangeInputTypeProps } from "../types";
 
 type WithoutType<Props> = Props extends unknown ? Omit<Props, "type"> : never;
@@ -25,6 +25,7 @@ const RangeInput = forwardRef<RNTextInputInstance, Props>(
       disabled,
       error,
       helperText,
+      necessity,
       style,
       onFocus,
       onBlur,
@@ -45,7 +46,12 @@ const RangeInput = forwardRef<RNTextInputInstance, Props>(
     } as const;
 
     return (
-      <FormField error={error} helperText={helperText} style={style}>
+      <FormField
+        error={error}
+        helperText={helperText}
+        necessity={necessity}
+        style={style}
+      >
         {Array.isArray(value) ? (
           <Slider
             {...common}

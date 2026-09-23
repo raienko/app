@@ -3,6 +3,7 @@ import type { CountryCode } from "libphonenumber-js";
 import type { ReactNode } from "react";
 import type { StyleProp, TextInputProps, ViewStyle } from "react-native";
 
+import type { FormFieldNecessity } from "@/components/form-field";
 import type { ComponentType } from "@/components/types";
 
 /**
@@ -26,6 +27,12 @@ export type CommonInputProps = {
   error?: string;
   /** Shown under the field when there's no error. */
   helperText?: string;
+  /**
+   * Marks the field "Required" or "Optional" beside its label, and says so
+   * to a screen reader as part of the field's name. Mark whichever is the
+   * exception in the form — see `FormFieldNecessity`.
+   */
+  necessity?: FormFieldNecessity;
   onFocus?: () => void;
   onBlur?: () => void;
 };
@@ -34,6 +41,32 @@ export type TextInputTypeProps = {
   type?: "text";
   value: string;
   onChange: (value: string) => void;
+};
+
+export type TextAreaInputTypeProps = {
+  type: "textarea";
+  value: string;
+  onChange: (value: string) => void;
+  /**
+   * A hard limit, and the moment a count appears under the field. Without
+   * one there is nothing to count against, and a running total on its own
+   * is a number nobody asked for.
+   */
+  maxLength?: number;
+  /** How tall the field starts, in lines of text. Defaults to 3. */
+  minLines?: number;
+  /**
+   * How tall it may grow as the text does before it scrolls instead.
+   * Defaults to 6 — past that a growing field pushes the rest of the form
+   * off screen, and whatever follows it (the submit button, usually) with it.
+   */
+  maxLines?: number;
+  /**
+   * The row is for one line of text; these have nowhere to go in a block of
+   * several.
+   */
+  leftSlot?: never;
+  rightSlot?: never;
 };
 
 export type NumericInputTypeProps = {
@@ -328,6 +361,7 @@ export type FileInputTypeProps = {
 
 export type InputProps = (
   | TextInputTypeProps
+  | TextAreaInputTypeProps
   | NumericInputTypeProps
   | EmailInputTypeProps
   | SelectInputTypeProps

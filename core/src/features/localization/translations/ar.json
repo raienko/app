@@ -111,6 +111,12 @@
       "helper": "اختر الحد الأدنى والأقصى",
       "minimum": "الحد الأدنى للميزانية",
       "maximum": "الحد الأقصى للميزانية"
+    },
+    "characterCount": "{{count}} من {{max}} حرفًا",
+    "notes": {
+      "label": "ملاحظات",
+      "placeholder": "هل هناك ما يجب أن نعرفه؟",
+      "helper": "يتّسع مع النص حتى ستة أسطر، ثم يتم التمرير"
     }
   },
   "modal": {
@@ -220,6 +226,7 @@
     "segmentedControl": "عنصر تحكم مقسَّم",
     "stateViews": "حالات العرض",
     "inputs": "حقول الإدخال",
+    "formField": "حقل النموذج",
     "images": "الصور",
     "cards": "البطاقات",
     "section": "القسم",
@@ -233,6 +240,7 @@
     "modals": "النوافذ المنبثقة",
     "popups": "مربعات الحوار",
     "toasts": "التنبيهات",
+    "inlineAlerts": "تنبيهات مضمّنة",
     "permissions": "الأذونات",
     "deepLinks": "الروابط العميقة",
     "storage": "التخزين",
@@ -285,5 +293,15 @@
   "stepper": {
     "decrease": "إنقاص {{label}}",
     "increase": "زيادة {{label}}"
+  },
+  "formField": {
+    "required": "مطلوب",
+    "optional": "اختياري"
+  },
+  "inlineAlert": {
+    "success": "نجاح",
+    "error": "خطأ",
+    "warning": "تحذير",
+    "info": "معلومات"
   }
 }

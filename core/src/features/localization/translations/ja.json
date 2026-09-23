@@ -111,6 +111,12 @@
       "helper": "最小値と最大値を選択",
       "minimum": "最小予算",
       "maximum": "最大予算"
+    },
+    "characterCount": "{{max}}文字中{{count}}文字",
+    "notes": {
+      "label": "メモ",
+      "placeholder": "お知らせいただくことはありますか？",
+      "helper": "6行までは文字に合わせて広がり、それ以降はスクロールします"
     }
   },
   "modal": {
@@ -220,6 +226,7 @@
     "segmentedControl": "セグメンテッドコントロール",
     "stateViews": "状態ビュー",
     "inputs": "入力フィールド",
+    "formField": "フォームフィールド",
     "images": "画像",
     "cards": "カード",
     "section": "セクション",
@@ -233,6 +240,7 @@
     "modals": "モーダル",
     "popups": "ポップアップ",
     "toasts": "トースト",
+    "inlineAlerts": "インラインアラート",
     "permissions": "権限",
     "deepLinks": "ディープリンク",
     "storage": "ストレージ",
@@ -285,5 +293,15 @@
   "stepper": {
     "decrease": "{{label}} を減らす",
     "increase": "{{label}} を増やす"
+  },
+  "formField": {
+    "required": "必須",
+    "optional": "任意"
+  },
+  "inlineAlert": {
+    "success": "成功",
+    "error": "エラー",
+    "warning": "警告",
+    "info": "情報"
   }
 }

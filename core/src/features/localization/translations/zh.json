@@ -111,6 +111,12 @@
       "helper": "选择最小值和最大值",
       "minimum": "最低预算",
       "maximum": "最高预算"
+    },
+    "characterCount": "{{count}}/{{max}} 个字符",
+    "notes": {
+      "label": "备注",
+      "placeholder": "有什么需要我们知道的吗？",
+      "helper": "随文字增高至六行，之后滚动"
     }
   },
   "modal": {
@@ -220,6 +226,7 @@
     "segmentedControl": "分段控件",
     "stateViews": "状态视图",
     "inputs": "输入框",
+    "formField": "表单字段",
     "images": "图片",
     "cards": "卡片",
     "section": "区块",
@@ -233,6 +240,7 @@
     "modals": "模态框",
     "popups": "弹出对话框",
     "toasts": "轻提示",
+    "inlineAlerts": "内联提示",
     "permissions": "权限",
     "deepLinks": "深层链接",
     "storage": "存储",
@@ -285,5 +293,15 @@
   "stepper": {
     "decrease": "减少{{label}}",
     "increase": "增加{{label}}"
+  },
+  "formField": {
+    "required": "必填",
+    "optional": "选填"
+  },
+  "inlineAlert": {
+    "success": "成功",
+    "error": "错误",
+    "warning": "警告",
+    "info": "信息"
   }
 }
