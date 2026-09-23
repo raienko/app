@@ -137,6 +137,32 @@ const DateTimeInput = forwardRef<RNTextInputInstance, Props>(
       [max, min, mode],
     );
 
+    // The step arrows as the app's own glyphs rather than the library's
+    // bundled PNGs: those are `require()`d images that only Metro turns into
+    // something `Image` can draw (under Vite they render as empty boxes), and
+    // they'd never match the kit's icon set anyway. Picked by the locale's
+    // direction because the header row is mirrored in RTL, putting "previous"
+    // on the right, where it has to point right.
+    const pickerIcons = useMemo(
+      () => ({
+        IconPrev: (
+          <Icon
+            name={isRTL ? "chevron-right" : "chevron-left"}
+            size={spacing.x20}
+            color={theme.colors.text}
+          />
+        ),
+        IconNext: (
+          <Icon
+            name={isRTL ? "chevron-left" : "chevron-right"}
+            size={spacing.x20}
+            color={theme.colors.text}
+          />
+        ),
+      }),
+      [isRTL, spacing.x20, theme.colors.text],
+    );
+
     const directionStyle = useMemo(
       () => ({ direction: isRTL ? ("rtl" as const) : ("ltr" as const) }),
       [isRTL],
@@ -224,6 +250,7 @@ const DateTimeInput = forwardRef<RNTextInputInstance, Props>(
                 firstDayOfWeek={weekStartsOn}
                 showOutsideDays
                 styles={pickerStyles}
+                components={pickerIcons}
               />
             </View>
 

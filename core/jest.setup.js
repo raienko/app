@@ -140,11 +140,19 @@ jest.mock("victory-native", () => {
     return Mark;
   };
 
+  // Grouped bars render each series' bar as `BarGroup.Bar`, which records
+  // as a plain `bar` mark — so a test counts bars the same way either way.
+  const BarGroup = ({ children }) => (
+    <View testID="chart-bar-group">{children}</View>
+  );
+  BarGroup.Bar = mark("bar");
+
   return {
     __esModule: true,
     CartesianChart,
     Line: mark("line"),
     Area: mark("area"),
     Bar: mark("bar"),
+    BarGroup,
   };
 });

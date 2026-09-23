@@ -52,6 +52,27 @@ describe(`${Component.name} smoke test`, () => {
     expect(markColors(view, kind)).toHaveLength(1);
   });
 
+  // Drawn one series at a time, bars at the same x overlap and a taller
+  // later series hides an earlier one entirely. Grouped, they sit side by
+  // side — one group, one bar per series.
+  it("groups several bar series side by side instead of overlapping them", async () => {
+    const view = await render(
+      <Component
+        label="Revenue and costs"
+        type="bar"
+        data={MONTHS}
+        xKey="month"
+        yKeys={["revenue", "costs"]}
+      />,
+    );
+
+    const groups = view.getAllByTestId("chart-bar-group", {
+      includeHiddenElements: true,
+    });
+    expect(groups).toHaveLength(1);
+    expect(markColors(view, "bar")).toHaveLength(2);
+  });
+
   // An area is a line with a fill under it, not a fill on its own — the
   // line is what the eye reads the value off.
   it("draws the line on top of an area's fill", async () => {

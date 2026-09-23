@@ -1,9 +1,9 @@
-import { Fragment, useMemo } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { View } from "react-native";
 import { matchFont } from "@shopify/react-native-skia";
 import {
   Area,
-  Bar,
+  BarGroup,
   CartesianChart,
   Line,
   type CartesianChartRenderArg,
@@ -19,8 +19,10 @@ import type { ChartRow, ChartType } from "./types";
 
 /** Thin marks: a 2px line reads as data, a 6px one reads as decoration. */
 const LINE_WIDTH = 2;
-/** Rounds the top of a bar without rounding the baseline it stands on. */
-const BAR_RADIUS = 4;
+/** Space between one x value's group of bars and the next, as a share of the slot. */
+const BAR_GROUP_PADDING = 0.3;
+/** Space between the bars inside one group, as a share of the group. */
+const BAR_WITHIN_GROUP_PADDING = 0.1;
 /** The fill under an `area`, faint enough that the line stays the subject. */
 const AREA_OPACITY = 0.2;
 
@@ -50,7 +52,7 @@ export default function ChartPlot({
 }: Props) {
   const theme = useTheme();
   const styles = useStyles();
-  const { typography } = useResponsive();
+  const { typography, radius, spacing } = useResponsive();
 
   /**
    * Skia draws text with a font *object*, not a family name, so an axis
@@ -85,15 +87,34 @@ export default function ChartPlot({
 
   const yKeys = series.map((entry) => entry.key);
 
+  // Bars are drawn centred on their x value, so the first and last group
+  // hang half a group past it. A fixed inset clips them whenever a group is
+  // wider than that inset — which is most bar charts. Half of one x slot is
+  // always at least half a group (the group is 70% of its slot), so it's
+  // measured from the plot's own width rather than guessed.
+  const [plotWidth, setPlotWidth] = useState(0);
+  const edgeInset =
+    type === "bar" && data.length > 0
+      ? Math.max(spacing.x16, plotWidth / data.length / 2)
+      : spacing.x16;
+
   return (
     // The canvas is a picture with nothing inside it to read — the readout
     // on the container above is what a screen reader gets instead.
-    <View {...disabledA11yProps()} style={[styles.plot, { height }]}>
+    <View
+      {...disabledA11yProps()}
+      onLayout={(event) => setPlotWidth(event.nativeEvent.layout.width)}
+      style={[styles.plot, { height }]}
+    >
       <CartesianChart
         data={data as never}
         xKey={xKey as never}
         yKeys={yKeys as never}
-        domainPadding={{ left: BAR_RADIUS * 4, right: BAR_RADIUS * 4, top: 12 }}
+        domainPadding={{
+          left: edgeInset,
+          right: edgeInset,
+          top: spacing.x12,
+        }}
         axisOptions={
           axes
             ? {
@@ -111,32 +132,52 @@ export default function ChartPlot({
             : { font: null, lineWidth: 0, labelColor: "transparent" }
         }
       >
-        {({ points, chartBounds }: CartesianChartRenderArg<never, never>) =>
-          series.map((entry) => {
-            const seriesPoints = (points as Record<string, never>)[entry.key];
+        {({ points, chartBounds }: CartesianChartRenderArg<never, never>) => {
+          const pointsOf = (key: string) =>
+            (points as Record<string, never>)[key];
+
+          // Bars are grouped rather than drawn one series at a time: each
+          // series' bars sit at the same x, so drawn separately the second
+          // series covers the first wherever it's taller — a multi-series
+          // bar chart that silently hides data. `BarGroup` places them side
+          // by side within each x instead, and a single series is simply a
+          // group of one.
+          if (type === "bar") {
+            return (
+              <BarGroup
+                chartBounds={chartBounds}
+                betweenGroupPadding={BAR_GROUP_PADDING}
+                withinGroupPadding={BAR_WITHIN_GROUP_PADDING}
+                // Anchored to the baseline: rounding all four corners
+                // detaches a bar from the axis it is measured against.
+                roundedCorners={{
+                  topLeft: radius.indicator,
+                  topRight: radius.indicator,
+                }}
+              >
+                {series
+                  .filter((entry) => pointsOf(entry.key))
+                  .map((entry) => (
+                    <BarGroup.Bar
+                      key={entry.key}
+                      points={pointsOf(entry.key)}
+                      color={entry.color}
+                    />
+                  ))}
+              </BarGroup>
+            );
+          }
+
+          return series.map((entry) => {
+            const seriesPoints = pointsOf(entry.key);
             if (!seriesPoints) return null;
 
-            // All three chart types in one place, which an `if` returning
-            // early and a ternary further down did not read as. `Match`
-            // resolves to the matched branch's children and adds no element
-            // of its own, so what reaches the canvas is still nothing but
-            // Skia nodes — see the Fragment note below for why that
-            // matters here.
+            // The two line-based types in one place. `Match` resolves to
+            // the matched branch's children and adds no element of its own,
+            // so what reaches the canvas is still nothing but Skia nodes —
+            // see the Fragment note below for why that matters here.
             return (
               <Match<ChartType> key={entry.key} value={type}>
-                <Match.Case when="bar">
-                  <Bar
-                    points={seriesPoints}
-                    chartBounds={chartBounds}
-                    color={entry.color}
-                    // Anchored to the baseline: rounding all four corners
-                    // detaches a bar from the axis it is measured against.
-                    roundedCorners={{
-                      topLeft: BAR_RADIUS,
-                      topRight: BAR_RADIUS,
-                    }}
-                  />
-                </Match.Case>
                 <Match.Case when="area">
                   {/* A Fragment, not a View: everything inside the canvas is
                       a Skia node, and a react-native View dropped in there is
@@ -168,8 +209,8 @@ export default function ChartPlot({
                 </Match.Default>
               </Match>
             );
-          })
-        }
+          });
+        }}
       </CartesianChart>
     </View>
   );

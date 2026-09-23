@@ -225,13 +225,22 @@ const useStyles = createStyles(
       gap: spacing.x8,
       minHeight: sizes.elementHeightMd,
       paddingHorizontal: spacing.x12,
+      // Reserved for the emphasised border below. A field is usually as tall
+      // as `minHeight`, but one holding a full-size slot (Password's eye
+      // button) is as tall as its content — there a thicker border would
+      // grow the box and push the text down unless it has padding to eat.
+      paddingVertical: spacing.x1,
       borderWidth: spacing.x1,
     },
-    // The extra border pixel comes out of the padding, so the text doesn't
-    // shift when the field gains focus.
+    // Whatever the border gains comes out of the padding on every side, so
+    // neither the field's size nor its text moves when it gains focus.
+    // Written as the difference of the two widths rather than "one pixel":
+    // both go through `units()`, and after rounding `x2` isn't always `x1`
+    // plus one (2px and 3px on a wide window).
     fieldEmphasised: {
       borderWidth: spacing.x2,
-      paddingHorizontal: spacing.x12 - spacing.x1,
+      paddingHorizontal: spacing.x12 - (spacing.x2 - spacing.x1),
+      paddingVertical: spacing.x1 - (spacing.x2 - spacing.x1),
     },
     // The RN TextInput host is not our Text component, so it takes the type
     // scale as a style rather than a `type` prop.

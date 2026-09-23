@@ -57,6 +57,24 @@ type Props = {
  * @example <BackButton onPress={confirmDiscard} />
  * @example <BackButton fallbackHref="/orders" /> // typed against your routes
  */
+/**
+ * Whether the router can go back — or `null` when there is no router to ask.
+ *
+ * `router.canGoBack()` already answers `false` for a navigator that hasn't
+ * mounted yet, but outside an Expo Router root altogether (Storybook, a
+ * component rendered before the app's root layout) there is no navigation
+ * ref for it to check and the call throws. That case is reported rather
+ * than folded into `false`, because the fallback's `router.replace` would
+ * throw the same way.
+ */
+function canGoBack(): boolean | null {
+  try {
+    return router.canGoBack();
+  } catch {
+    return null;
+  }
+}
+
 export default function BackButton({
   onPress,
   fallbackHref = "/",
@@ -72,12 +90,16 @@ export default function BackButton({
   // Only asked when this button owns the navigation: a caller's `onPress`
   // decides for itself what pressing means, and shouldn't have the button
   // disappear underneath it because the stack happens to be empty.
-  const stranded = onPress === undefined && !router.canGoBack();
+  const stranded = onPress === undefined && canGoBack() !== true;
 
   if (stranded && fallbackHref === null) return null;
 
   function goBack() {
-    if (router.canGoBack()) {
+    const back = canGoBack();
+    // No router to navigate with: the button still renders (so a story or
+    // a pre-navigation screen shows it), but pressing it has nowhere to go.
+    if (back === null) return;
+    if (back) {
       router.back();
       return;
     }

@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@/root/testing";
 import { LocalValue } from "@/features/storage";
+import { colors } from "@/features/theme/colors";
 
 import Component from "./theme";
 
@@ -13,7 +14,7 @@ describe("ThemeSection", () => {
 
     expect(screen.getByTestId("configured-primary-swatch").props.style).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ backgroundColor: "#1d4ed8" }),
+        expect.objectContaining({ backgroundColor: colors.light.primary }),
       ]),
     );
 
@@ -29,7 +30,7 @@ describe("ThemeSection", () => {
 
     expect(screen.getByTestId("configured-primary-swatch").props.style).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ backgroundColor: "#1d4ed8" }),
+        expect.objectContaining({ backgroundColor: colors.light.primary }),
       ]),
     );
   });

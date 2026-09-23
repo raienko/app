@@ -183,7 +183,8 @@ describe(`${Component.displayName} smoke test`, () => {
     await waitFor(() => {
       expect(onBlur).toHaveBeenCalledTimes(1);
     });
-    expect(input.parent).toHaveStyle({ borderColor: "transparent" });
+    // Back to the resting outline, which is always drawn.
+    expect(input.parent).toHaveStyle({ borderColor: colors.light.border });
   });
 
   describe("press mode (onPress)", () => {

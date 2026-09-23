@@ -100,10 +100,8 @@ export default function usePickerStyles(): PickerStyles {
         borderRadius: radius.control,
         backgroundColor: theme.colors.backgroundElement,
       },
-      // The step arrows are Images, so they take the foreground colour through
-      // `tintColor` rather than `color`.
-      button_prev_image: { tintColor: theme.colors.text },
-      button_next_image: { tintColor: theme.colors.text },
+      // The step arrows themselves are the app's `Icon`s, passed in as
+      // `components` by ./index, which colour themselves.
 
       // Time wheels.
       time_label: { ...typography.title3, color: theme.colors.text },

@@ -146,7 +146,10 @@ describe(`${Component.name} smoke test`, () => {
       );
       const style = barStyle();
 
-      expect(style.borderRadius).toBeGreaterThan(0);
+      // Outlined on every side, with its corners taken from the shared
+      // surface radius rather than a value of its own.
+      expect(style.borderWidth).toBeGreaterThan(0);
+      expect(style.borderRadius).toBeDefined();
       expect(style.marginHorizontal).toBeGreaterThan(0);
       expect(style.borderTopWidth).toBeUndefined();
     });

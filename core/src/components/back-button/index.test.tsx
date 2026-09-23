@@ -45,7 +45,8 @@ function chevronGlyph() {
 describe(`${Component.name} smoke test`, () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mocked.canGoBack.mockReturnValue(true);
+    // Reset rather than cleared: one test swaps in a throwing implementation.
+    mocked.canGoBack.mockReset().mockReturnValue(true);
   });
 
   it("names itself in the current language", async () => {
@@ -85,6 +86,23 @@ describe(`${Component.name} smoke test`, () => {
       // `replace`, not `navigate` — pushing it would leave a history whose
       // own back button returns to the screen the user asked to leave.
       expect(mocked.replace).toHaveBeenCalledWith("/_sitemap");
+    });
+
+    // Outside an Expo Router root (Storybook, or before the root layout
+    // mounts) `canGoBack` throws rather than answering. The button must
+    // still render, and a press must not reach a router that isn't there.
+    it("renders without a router, and does nothing when pressed", async () => {
+      mocked.canGoBack.mockImplementation(() => {
+        throw new TypeError(
+          "Cannot read properties of undefined (reading 'isReady')",
+        );
+      });
+      await render(<Component />);
+
+      await fireEvent.press(button());
+
+      expect(mocked.back).not.toHaveBeenCalled();
+      expect(mocked.replace).not.toHaveBeenCalled();
     });
 
     it("falls back to the app root by default", async () => {
