@@ -9,19 +9,19 @@ import { useLocale, type TranslationKey } from "@/features/localization";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme, type ThemeColors } from "@/features/theme";
 
-export type InlineAlertType = "info" | "success" | "warning" | "error";
+export type AlertType = "info" | "success" | "warning" | "error";
 
 /**
  * What differs between the types, as a table for the reason Toast keeps
  * one: adding a type is an entry here plus the literal above and its
- * `inlineAlert.<type>` translation.
+ * `alert.<type>` translation.
  *
  * `urgency` follows Toast's rule — only `error` interrupts. The
  * `announcement` is read before the message so the type survives for
  * someone who can't see the colour or the glyph (WCAG 1.4.1).
  */
 const TYPE_CONFIG: Record<
-  InlineAlertType,
+  AlertType,
   {
     color: keyof ThemeColors;
     icon: IconNameByType["Feather"];
@@ -33,31 +33,31 @@ const TYPE_CONFIG: Record<
     color: "info",
     icon: "info",
     urgency: "polite",
-    announcement: "inlineAlert.info",
+    announcement: "alert.info",
   },
   success: {
     color: "success",
     icon: "check-circle",
     urgency: "polite",
-    announcement: "inlineAlert.success",
+    announcement: "alert.success",
   },
   warning: {
     color: "warning",
     icon: "alert-triangle",
     urgency: "polite",
-    announcement: "inlineAlert.warning",
+    announcement: "alert.warning",
   },
   error: {
     color: "error",
     icon: "alert-octagon",
     urgency: "assertive",
-    announcement: "inlineAlert.error",
+    announcement: "alert.error",
   },
 };
 
 type Props = {
   /** Defaults to `"info"`. */
-  type?: InlineAlertType;
+  type?: AlertType;
   title?: string;
   message: string;
   /** One follow-up the message invites — "Retry", "Verify email". */
@@ -87,9 +87,9 @@ type Props = {
  * the action and the close button after hearing the message.
  *
  * @example
- * <InlineAlert type="warning" message="You're offline. Changes will sync later." />
+ * <Alert type="warning" message="You're offline. Changes will sync later." />
  * @example
- * <InlineAlert
+ * <Alert
  *   type="error"
  *   title="Couldn't save"
  *   message="Check your connection and try again."
@@ -97,7 +97,7 @@ type Props = {
  *   onDismiss={() => setError(null)}
  * />
  */
-export default function InlineAlert({
+export default function Alert({
   type = "info",
   title,
   message,
@@ -150,7 +150,7 @@ export default function InlineAlert({
           />
           <If condition={action !== undefined}>
             <Button
-              testID="inline-alert-action"
+              testID="alert-action"
               value={action?.label ?? ""}
               type="tertiary"
               size="small"
@@ -165,7 +165,7 @@ export default function InlineAlert({
 
       <If condition={onDismiss !== undefined}>
         <IconButton
-          testID="inline-alert-dismiss"
+          testID="alert-dismiss"
           label={t("common.close")}
           size="small"
           onPress={onDismiss}

@@ -49,7 +49,7 @@ const SECTION_TITLES = [
   "Popups",
   "Share",
   "Toasts",
-  "Inline alerts",
+  "Alerts",
   "Permissions",
   "Deep links",
   "Storage",

@@ -125,7 +125,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | File picker       | A drop-zone trigger, the static API, and the `type="file"` field built on the same picker               |
 | Modals            | All four types, opened by `id` _and_ by ref, with `onShow`/`onClose` shown live                         |
 | Share             | The two icons, the text form, the copy fallback, and all four outcomes reported                         |
-| Inline alerts     | Every type, a title with an action that updates its message, and one that can be dismissed              |
+| Alerts            | Every type, a title with an action that updates its message, and one that can be dismissed              |
 | Permissions       | Persisted camera, gallery and notification permission state and actions                                 |
 | Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                         |
 | Storage           | `Counter` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()`             |
@@ -592,16 +592,13 @@ The label, helper and error shell every `Input` variation is drawn in, public so
 - **`necessity`** puts "Required" or "Optional" beside the label; see the note under `Input` on marking only the exception.
 - **`counter` / `counterLabel`** put a short reading at the end of the helper row ("3/5", "120/500") with a spoken form ("3 of 5 selected"). The helper wraps and the counter never gets pushed off the edge.
 
-### `InlineAlert` — `src/components/inline-alert`
+### `Alert` — `src/components/alert`
 
 ```tsx
-import InlineAlert from "@/components/inline-alert";
+import Alert from "@/components/alert";
 
-<InlineAlert
-  type="warning"
-  message="You're offline. Changes will sync later."
-/>;
-<InlineAlert
+<Alert type="warning" message="You're offline. Changes will sync later." />;
+<Alert
   type="error"
   title="Couldn't save"
   message="Check your connection and try again."
@@ -612,7 +609,7 @@ import InlineAlert from "@/components/inline-alert";
 
 A message that stays in the page until what it reports stops being true — offline, an unverified email, a failed save. It fills the gap between the two overlays: `Toast` reports something that happened and leaves on its own, `Popup` blocks until answered, and this does neither.
 
-- **Types**: `info` (default), `success`, `warning`, `error` — the same icons, urgencies and announcements as `Toast`, kept as a table in the component so a new type is one entry plus its `inlineAlert.<type>` translation.
+- **Types**: `info` (default), `success`, `warning`, `error` — the same icons, urgencies and announcements as `Toast`, kept as a table in the component so a new type is one entry plus its `alert.<type>` translation.
 - **Drawn to the kit, not as a coloured card**: the raised `backgroundElement` surface with a `divider` hairline and `radius.surface` corners. The type is carried by the icon in its status colour and by the spoken announcement — never by a fill.
 - **Announced once, on mount**, through a live region with the type read first ("Error, Couldn't save, Check your connection…"); only `error` interrupts. The action (a tertiary button under the message) and the close control stay separate stops.
 - **`onDismiss` is what adds the close control.** Leave it off for a message that must stay while its cause does.

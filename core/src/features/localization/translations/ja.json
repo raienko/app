@@ -240,7 +240,7 @@
     "modals": "モーダル",
     "popups": "ポップアップ",
     "toasts": "トースト",
-    "inlineAlerts": "インラインアラート",
+    "alerts": "アラート",
     "permissions": "権限",
     "deepLinks": "ディープリンク",
     "storage": "ストレージ",
@@ -298,7 +298,7 @@
     "required": "必須",
     "optional": "任意"
   },
-  "inlineAlert": {
+  "alert": {
     "success": "成功",
     "error": "エラー",
     "warning": "警告",

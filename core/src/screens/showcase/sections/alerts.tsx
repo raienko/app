@@ -2,13 +2,13 @@ import { useState } from "react";
 import { View } from "react-native";
 
 import Button from "@/components/button";
-import InlineAlert from "@/components/inline-alert";
+import Alert from "@/components/alert";
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 /** Every type, a title with an action, and one that can be dismissed. */
-export default function InlineAlertsSection() {
+export default function AlertsSection() {
   const theme = useTheme();
   const styles = useStyles();
   const [dismissed, setDismissed] = useState(false);
@@ -22,13 +22,13 @@ export default function InlineAlertsSection() {
         style={{ color: theme.colors.textSecondary }}
       />
 
-      <InlineAlert type="info" message="Your plan renews on October 1." />
-      <InlineAlert type="success" message="Email verified." />
-      <InlineAlert
+      <Alert type="info" message="Your plan renews on October 1." />
+      <Alert type="success" message="Email verified." />
+      <Alert
         type="warning"
         message="You're offline. Changes will sync when you reconnect."
       />
-      <InlineAlert
+      <Alert
         type="error"
         title="Couldn't save"
         message={
@@ -45,7 +45,7 @@ export default function InlineAlertsSection() {
           onPress={() => setDismissed(false)}
         />
       ) : (
-        <InlineAlert
+        <Alert
           type="info"
           title="New: dark mode"
           message="Switch it on under Theme & colors."

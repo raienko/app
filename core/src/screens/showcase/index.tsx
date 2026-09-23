@@ -26,7 +26,7 @@ import HeaderSection from "./sections/header";
 import IconsSection from "./sections/icons";
 import ImagePickerSection from "./sections/image-picker";
 import ImagesSection from "./sections/images";
-import InlineAlertsSection from "./sections/inline-alerts";
+import AlertsSection from "./sections/alerts";
 import InputsSection from "./sections/inputs";
 import ListItemSection from "./sections/list-item";
 import ListSection from "./sections/list";
@@ -118,7 +118,7 @@ const SECTIONS: {
   { title: "showcase.popups", Component: PopupsSection },
   { title: "showcase.share", Component: ShareSection },
   { title: "showcase.toasts", Component: ToastsSection },
-  { title: "showcase.inlineAlerts", Component: InlineAlertsSection },
+  { title: "showcase.alerts", Component: AlertsSection },
   { title: "showcase.permissions", Component: PermissionsSection },
   { title: "showcase.deepLinks", Component: DeepLinksSection },
   { title: "showcase.storage", Component: StorageSection },

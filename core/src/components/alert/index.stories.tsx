@@ -7,7 +7,7 @@ import { createStyles } from "@/features/responsive";
 import Component from "./index";
 
 const meta = {
-  title: "components/InlineAlert",
+  title: "components/Alert",
   component: Component,
 };
 

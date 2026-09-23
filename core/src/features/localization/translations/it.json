@@ -240,7 +240,7 @@
     "modals": "Finestre modali",
     "popups": "Popup",
     "toasts": "Toast",
-    "inlineAlerts": "Avvisi in linea",
+    "alerts": "Avvisi",
     "permissions": "Autorizzazioni",
     "deepLinks": "Deep link",
     "storage": "Archiviazione",
@@ -298,7 +298,7 @@
     "required": "Obbligatorio",
     "optional": "Facoltativo"
   },
-  "inlineAlert": {
+  "alert": {
     "success": "Operazione riuscita",
     "error": "Errore",
     "warning": "Avviso",

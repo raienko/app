@@ -240,7 +240,7 @@
     "modals": "النوافذ المنبثقة",
     "popups": "مربعات الحوار",
     "toasts": "التنبيهات",
-    "inlineAlerts": "تنبيهات مضمّنة",
+    "alerts": "تنبيهات",
     "permissions": "الأذونات",
     "deepLinks": "الروابط العميقة",
     "storage": "التخزين",
@@ -298,7 +298,7 @@
     "required": "مطلوب",
     "optional": "اختياري"
   },
-  "inlineAlert": {
+  "alert": {
     "success": "نجاح",
     "error": "خطأ",
     "warning": "تحذير",

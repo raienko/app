@@ -240,7 +240,7 @@
     "modals": "Janelas modais",
     "popups": "Popups",
     "toasts": "Toasts",
-    "inlineAlerts": "Alertas em linha",
+    "alerts": "Alertas",
     "permissions": "Permissões",
     "deepLinks": "Ligações profundas",
     "storage": "Armazenamento",
@@ -298,7 +298,7 @@
     "required": "Obrigatório",
     "optional": "Opcional"
   },
-  "inlineAlert": {
+  "alert": {
     "success": "Sucesso",
     "error": "Erro",
     "warning": "Aviso",

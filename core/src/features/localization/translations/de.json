@@ -240,7 +240,7 @@
     "modals": "Modale",
     "popups": "Pop-ups",
     "toasts": "Toasts",
-    "inlineAlerts": "Inline-Hinweise",
+    "alerts": "Hinweise",
     "permissions": "Berechtigungen",
     "deepLinks": "Deeplinks",
     "storage": "Speicher",
@@ -298,7 +298,7 @@
     "required": "Erforderlich",
     "optional": "Optional"
   },
-  "inlineAlert": {
+  "alert": {
     "success": "Erfolg",
     "error": "Fehler",
     "warning": "Warnung",

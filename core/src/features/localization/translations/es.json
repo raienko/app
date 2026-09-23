@@ -240,7 +240,7 @@
     "modals": "Ventanas modales",
     "popups": "Diálogos emergentes",
     "toasts": "Avisos",
-    "inlineAlerts": "Alertas en línea",
+    "alerts": "Alertas",
     "permissions": "Permisos",
     "deepLinks": "Enlaces profundos",
     "storage": "Almacenamiento",
@@ -298,7 +298,7 @@
     "required": "Obligatorio",
     "optional": "Opcional"
   },
-  "inlineAlert": {
+  "alert": {
     "success": "Éxito",
     "error": "Error",
     "warning": "Advertencia",

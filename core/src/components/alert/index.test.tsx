@@ -43,18 +43,18 @@ describe(`${Component.name} smoke test`, () => {
       <Component message="Offline" action={{ label: "Retry", onPress }} />,
     );
 
-    await fireEvent.press(screen.getByTestId("inline-alert-action"));
+    await fireEvent.press(screen.getByTestId("alert-action"));
 
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
   it("shows a close control only when it can be dismissed", async () => {
     const { rerender } = await render(<Component message="Stays" />);
-    expect(screen.queryByTestId("inline-alert-dismiss")).toBeNull();
+    expect(screen.queryByTestId("alert-dismiss")).toBeNull();
 
     const onDismiss = jest.fn();
     await rerender(<Component message="Goes" onDismiss={onDismiss} />);
-    await fireEvent.press(screen.getByTestId("inline-alert-dismiss"));
+    await fireEvent.press(screen.getByTestId("alert-dismiss"));
 
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });
