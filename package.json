@@ -1,5 +1,5 @@
 {
-  "name": "core",
+  "name": "app",
   "main": "expo-router/entry",
   "version": "0.0.1",
   "dependencies": {
@@ -113,7 +113,7 @@
     "secretlint": "secretlint \"**/*\"",
     "postinstall": "patch-package && setup-skia-web public",
     "setup-skia-web": "setup-skia-web public",
-    "prepare": "cd \"$(git rev-parse --show-toplevel)\" && node core/node_modules/husky/bin.js core/.husky",
+    "prepare": "husky",
     "storybook": "STORYBOOK_ENABLED=true expo start",
     "storybook:ios": "STORYBOOK_ENABLED=true expo start --ios",
     "storybook:android": "STORYBOOK_ENABLED=true expo start --android",

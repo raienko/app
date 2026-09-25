@@ -1,4 +1,4 @@
-# core
+# app
 
 An [Expo](https://expo.dev) (SDK 57) app using [Expo Router](https://docs.expo.dev/router/introduction) for navigation, [MMKV](https://github.com/mrousavy/react-native-mmkv) for local storage, and [Storybook](https://storybook.js.org) (on-device + web) for component development.
 
@@ -1500,7 +1500,7 @@ Two separate setups, both driven by the same `*.stories.tsx` files under `src/`:
 
 ## Git hooks
 
-Set up via [husky](https://typicode.github.io/husky) + [lint-staged](https://github.com/lint-staged/lint-staged), rooted at the repo root's `.git` even though `package.json` lives in this `core/` subdirectory (see `prepare` script and `core/.husky/`).
+Set up via [husky](https://typicode.github.io/husky) + [lint-staged](https://github.com/lint-staged/lint-staged), with the hooks in `.husky/` (installed by the `prepare` script).
 
 - **pre-commit**: formats and lints staged files, and scans staged files for secrets ([secretlint](https://github.com/secretlint/secretlint)).
 - **pre-push**: full `lint` + `typecheck` + `test`.

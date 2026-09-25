@@ -5,10 +5,10 @@
  * therefore what is worth testing.
  */
 const VALID = {
-  EXPO_PUBLIC_APP_NAME: "core",
-  EXPO_PUBLIC_APP_SLUG: "core",
-  EXPO_PUBLIC_APP_SCHEME: "core",
-  EXPO_PUBLIC_APP_BUNDLE_ID: "com.example.core",
+  EXPO_PUBLIC_APP_NAME: "app",
+  EXPO_PUBLIC_APP_SLUG: "app",
+  EXPO_PUBLIC_APP_SCHEME: "app",
+  EXPO_PUBLIC_APP_BUNDLE_ID: "com.example.app",
   EXPO_PUBLIC_BRAND_ICON_BACKGROUND: "#E6F4FE",
   EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND: "#208AEF",
 };
@@ -39,8 +39,8 @@ describe("env", () => {
   it("reads the required values", () => {
     const env = load();
 
-    expect(env.appName).toBe("core");
-    expect(env.appBundleId).toBe("com.example.core");
+    expect(env.appName).toBe("app");
+    expect(env.appBundleId).toBe("com.example.app");
   });
 
   it("splits the link domains, dropping blanks and stray spaces", () => {

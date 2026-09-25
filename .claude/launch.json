@@ -3,17 +3,14 @@
   "configurations": [
     {
       "name": "web",
-      "url": "http://localhost:8081",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["web", "--port", "8081"],
       "port": 8081
     },
     {
       "name": "expo-metro",
       "runtimeExecutable": "yarn",
-      "runtimeArgs": [
-        "--cwd",
-        "core",
-        "start"
-      ],
+      "runtimeArgs": ["start"],
       "port": 8081
     }
   ]

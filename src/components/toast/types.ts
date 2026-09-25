@@ -26,7 +26,7 @@ export type ToastContent = {
    * rather than as a callback only this call site can see.
    *
    * Any URL that pipeline takes works: a bare path (`/orders/12`), this
-   * app's scheme (`core://orders/12`), a universal link, or an external URL
+   * app's scheme (`app://orders/12`), a universal link, or an external URL
    * (handed to the OS). Pressing also dismisses the toast.
    *
    * There is deliberately no `onPress` alternative. A route's `handle` can

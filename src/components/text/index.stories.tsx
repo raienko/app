@@ -9,7 +9,7 @@ export default meta;
 
 export const Default = {
   args: {
-    value: "core",
+    value: "app",
   },
 };
 

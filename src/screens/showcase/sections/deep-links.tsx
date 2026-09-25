@@ -39,7 +39,7 @@ function record(name: string, link: DeepLink) {
  * while this section is collapsed (Accordion unmounts its content) and when
  * one arrives from outside the app entirely:
  *
- *   npx uri-scheme open "core://showcase/deep-links/user/42" --ios
+ *   npx uri-scheme open "app://showcase/deep-links/user/42" --ios
  *
  * A real app declares links in src/features/deep-links/routes.ts instead —
  * `register` is for the runtime cases, which a screen-local demo is.
