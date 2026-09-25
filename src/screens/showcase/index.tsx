@@ -1,12 +1,11 @@
 import { View } from "react-native";
 
 import Accordion from "@/components/accordion";
-import Icon from "@/components/icon";
+import Header from "@/components/header";
 import Screen from "@/components/screen";
-import Text from "@/components/text";
 import env from "@/constants/env";
 import { useLocale, type TranslationKey } from "@/features/localization";
-import { createStyles, useSizes } from "@/features/responsive";
+import { createStyles } from "@/features/responsive";
 
 import AccessibilitySection from "./sections/accessibility";
 import AvatarsSection from "./sections/avatars";
@@ -128,28 +127,30 @@ const SECTIONS: {
 
 export default function Showcase() {
   const { t } = useLocale();
-  const { spacing } = useSizes();
   const styles = useStyles();
 
   return (
-    <Screen scrollable style={styles.container}>
-      <View style={styles.title}>
-        <Icon name="grid" size={spacing.x24} />
-        {/* The screen's own title, so it takes the page-title type — which
-            is also what makes it the top-level heading. */}
-        <Text value={env.appName} type="largeTitle" />
-      </View>
-
-      {SECTIONS.map(({ title, Component }) => (
-        <Accordion key={title} title={t(title)}>
-          <Component />
-        </Accordion>
-      ))}
-    </Screen>
+    <View style={styles.page}>
+      {/* Pinned above the scroll rather than inside it, so it stays put and
+          is the one place the top safe-area inset is applied: this is the
+          first thing under the notch / Dynamic Island / status bar. Its
+          title is the screen's top-level heading. */}
+      <Header title={env.appName} avoidNotch />
+      <Screen scrollable style={styles.container}>
+        {SECTIONS.map(({ title, Component }) => (
+          <Accordion key={title} title={t(title)}>
+            <Component />
+          </Accordion>
+        ))}
+      </Screen>
+    </View>
   );
 }
 
-const useStyles = createStyles(({ isRTL, spacing, sizes }) => ({
+const useStyles = createStyles(({ spacing, sizes }) => ({
+  page: {
+    flex: 1,
+  },
   container: {
     gap: spacing.x16,
     // Sections stretch to this column rather than to the window, so the
@@ -157,10 +158,5 @@ const useStyles = createStyles(({ isRTL, spacing, sizes }) => ({
     // wide enough for the grid section to actually reflow.
     width: "100%",
     maxWidth: sizes.contentMaxWidth,
-  },
-  title: {
-    flexDirection: isRTL ? "row-reverse" : "row",
-    alignItems: "center",
-    gap: spacing.x8,
   },
 }));
