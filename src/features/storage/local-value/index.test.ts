@@ -1,5 +1,7 @@
 import { act, renderHook } from "@testing-library/react-native";
 
+import logger from "@/features/logger";
+
 import LocalValue from "./index";
 
 describe(`${LocalValue.name} smoke test`, () => {
@@ -37,5 +39,24 @@ describe(`${LocalValue.name} smoke test`, () => {
     });
 
     expect(result.current).toBe(42);
+  });
+
+  it("reads a stored value that isn't valid JSON as unset instead of throwing", async () => {
+    const warn = jest.spyOn(logger, "warn").mockImplementation(() => {});
+    const value = new LocalValue<{ count: number }>("corrupt-key");
+    value.setValue({ count: 1 });
+    // Simulate a truncated write: the raw MMKV entry, not a JSON string.
+    (
+      value as unknown as { adapter: { setItem(k: string, v: string): void } }
+    ).adapter.setItem("corrupt-key", '{"count":');
+
+    expect(value.getValue()).toBeUndefined();
+    const { result } = await renderHook(() => value.useValue());
+    expect(result.current).toBeUndefined();
+    expect(warn).toHaveBeenCalled();
+
+    value.setValue({ count: 2 });
+    expect(value.getValue()).toEqual({ count: 2 });
+    warn.mockRestore();
   });
 });

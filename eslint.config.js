@@ -3,6 +3,43 @@ const { defineConfig } = require("eslint/config");
 const expoConfig = require("eslint-config-expo/flat");
 const globals = require("globals");
 
+const { COMPONENTS } = require("./src/components/manifest.json");
+
+/** Deep imports into another module's folder, past its entry point. */
+const MODULE_BOUNDARY = [
+  {
+    group: ["@/components/*/**", "@/features/*/**"],
+    message:
+      "Import through the module's entry point ('@/components/<name>', '@/features/<name>'); files inside the folder are private to it.",
+  },
+];
+
+const UNITS_SNAPSHOT = {
+  paths: [
+    {
+      name: "@/features/responsive",
+      importNames: ["unitsSnapshot"],
+      message:
+        "unitsSnapshot() doesn't update on resize. Use useUnits() (or createStyles()) inside a component instead.",
+    },
+  ],
+  patterns: [
+    {
+      group: ["@/features/responsive/units"],
+      message:
+        "Import from '@/features/responsive' and use useUnits() instead — unitsSnapshot() doesn't update on resize.",
+    },
+  ],
+};
+
+/** Components listed as internal in src/components/manifest.json. */
+const INTERNAL_COMPONENTS = Object.entries(COMPONENTS)
+  .filter(([, role]) => role === "internal")
+  .map(([name]) => ({
+    group: [`@/components/${name}`],
+    message: `'${name}' is an internal building block for other components (src/components/manifest.json), not part of the public UI kit.`,
+  }));
+
 module.exports = defineConfig([
   expoConfig,
   {
@@ -26,33 +63,60 @@ module.exports = defineConfig([
       globals: { ...globals.node, ...globals.jest },
     },
   },
-  // unitsSnapshot() is a non-reactive, point-in-time read (Dimensions.get at
-  // call time) — fine in plain utility/feature code, but inside a component
-  // it silently produces stale values on resize instead of updating like
-  // useUnits() does. Ban it where components/screens/Root live so picking
-  // the wrong one is a lint error, not a runtime bug nobody notices.
+  // Import boundaries, one block per area so no two blocks set the same rule
+  // for the same file (flat config replaces a rule's options rather than
+  // merging them). Tests are exempt: they reach into internals on purpose.
+  //
+  // - MODULE_BOUNDARY: a component or feature is imported through its
+  //   folder's entry point, never a file inside it.
+  // - INTERNAL_COMPONENTS: building blocks for other components, not the UI
+  //   kit — only src/components may use them.
+  // - UNITS_SNAPSHOT: unitsSnapshot() is a point-in-time read
+  //   (Dimensions.get at call time) — fine in plain utility/feature code,
+  //   but inside a component it silently goes stale on resize instead of
+  //   updating like useUnits() does.
   {
-    files: ["src/components/**", "src/screens/**", "src/root/**"],
+    files: ["src/components/**/*.{ts,tsx}"],
+    ignores: ["**/*.test.{ts,tsx}"],
     rules: {
       "no-restricted-imports": [
         "error",
         {
-          paths: [
-            {
-              name: "@/features/responsive",
-              importNames: ["unitsSnapshot"],
-              message:
-                "unitsSnapshot() doesn't update on resize. Use useUnits() (or createStyles()) inside a component instead.",
-            },
-          ],
+          paths: UNITS_SNAPSHOT.paths,
+          patterns: [...MODULE_BOUNDARY, ...UNITS_SNAPSHOT.patterns],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/screens/**/*.{ts,tsx}", "src/root/**/*.{ts,tsx}"],
+    ignores: ["**/*.test.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: UNITS_SNAPSHOT.paths,
           patterns: [
-            {
-              group: ["@/features/responsive/units"],
-              message:
-                "Import from '@/features/responsive' and use useUnits() instead — unitsSnapshot() doesn't update on resize.",
-            },
+            ...MODULE_BOUNDARY,
+            ...INTERNAL_COMPONENTS,
+            ...UNITS_SNAPSHOT.patterns,
           ],
         },
+      ],
+    },
+  },
+  {
+    files: [
+      "src/app/**/*.{ts,tsx}",
+      "src/features/**/*.{ts,tsx}",
+      "src/utils/**/*.{ts,tsx}",
+      "src/constants/**/*.{ts,tsx}",
+    ],
+    ignores: ["**/*.test.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        { patterns: [...MODULE_BOUNDARY, ...INTERNAL_COMPONENTS] },
       ],
     },
   },

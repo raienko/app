@@ -36,11 +36,10 @@ type Props = {
 };
 
 /**
- * The Skia half — everything that cannot render until CanvasKit is loaded.
- *
- * Split into its own module for that reason alone: on the web it is
- * imported lazily, behind `WithSkiaWeb`, so nothing in this file may be
- * reachable from `index.web.tsx`'s own imports. Native imports it directly.
+ * The native plot: Victory Native XL on a Skia canvas. The web draws the
+ * same marks as SVG instead (./svg-plot.tsx), so this module must never be
+ * reachable from `index.web.tsx` — it would pull Skia and CanvasKit into
+ * the web bundle. `web.test.tsx` enforces that.
  */
 export default function ChartPlot({
   type,
@@ -60,17 +59,10 @@ export default function ChartPlot({
    * not the same thing. `matchFont` asks the platform's own font manager
    * rather than making us bundle a `.ttf` for the sake of six numbers.
    *
-   * **It returns nothing on the web, and that is CanvasKit, not us.**
-   * CanvasKit's `FontMgr` exposes only `FromData` — there is no system font
-   * manager in the WebAssembly build at all, verified in the browser — so
-   * a font there has to be bundled and handed over as bytes. Native has a
-   * real one and gets its labels.
-   *
-   * The failure is contained rather than fatal: Victory reads `null` as
-   * "draw the axes without labels", so the web keeps its grid, its marks
-   * and its accessible readout — which carries every number the labels
-   * would have shown. Giving the web labels too means shipping a `.ttf`
-   * and `useFont`, which is a bundle-size decision rather than a bug fix.
+   * If it ever throws, the font is `null`, and Victory reads that as "draw
+   * the axes without labels". The grid, the marks and the accessible readout
+   * stay. (CanvasKit, Skia's web build, has no system font manager at all.
+   * That is one reason the web draws SVG instead.)
    */
   const font = useMemo(() => {
     try {

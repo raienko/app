@@ -38,7 +38,7 @@ export default function ChartSection() {
   return (
     <View style={styles.container}>
       <Text
-        value="A wrapper over Victory Native XL, which draws on a Skia canvas. Series colours come from the theme and were validated for colour-blind separation against this app's own light and dark surfaces."
+        value="Victory Native XL on a Skia canvas on iOS and Android, and SVG in the browser. Series colours come from the theme and were validated for colour-blind separation against this app's own light and dark surfaces."
         type="footnote"
         style={{ color: theme.colors.textSecondary }}
       />
@@ -93,7 +93,7 @@ export default function ChartSection() {
 
       <Section title="What a screen reader gets">
         <Text
-          value="A Skia canvas is one opaque picture — no bars, no points, nothing to land on. So the chart carries its data as a sentence instead: the form, how many points, and each series' first, last, low and high."
+          value="A drawn chart is one opaque picture — no bars, no points, nothing to land on. So the chart carries its data as a sentence instead: the form, how many points, and each series' first, last, low and high."
           type="caption1"
           style={{ color: theme.colors.textSecondary }}
         />

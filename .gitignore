@@ -55,8 +55,3 @@ yarn-error.*
 
 expo-env.d.ts
 # @end expo-cli
-
-# Copied out of canvaskit-wasm by `setup-skia-web` (wired into postinstall),
-# so it is reproducible from a checkout rather than an 8MB binary in git.
-# Metro serves public/ at the web root, which is where CanvasKit looks for it.
-public/canvaskit.wasm

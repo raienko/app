@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View } from "react-native";
 
 import Button from "@/components/button";
-import Counter from "@/components/counter";
+import Stepper from "@/components/stepper";
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
 import { isStoragePersistent, LocalValue } from "@/features/storage";
@@ -11,10 +11,12 @@ import { useTheme } from "@/features/theme";
 import Readout from "./readout";
 
 const note = new LocalValue<string>("showcase-note");
+const count = new LocalValue<number>("showcase-counter");
 
 /**
- * Two views onto the same primitive. `Counter` uses `.useValue()`, the reactive
- * read — increment it, reload the app, and the value is still there. The
+ * Two views onto the same primitive. The stepper reads through
+ * `.useValue()`, the reactive read — step it, reload the app, and the value
+ * is still there. The
  * row below writes through `.setValue()`/`.reset()` and reads back with
  * `.getValue()`, the imperative pair, to show that persistence isn't tied
  * to rendering.
@@ -24,10 +26,15 @@ export default function StorageSection() {
   const styles = useStyles();
   const [stored, setStored] = useState(() => note.getValue() ?? "—");
   const persistent = isStoragePersistent();
+  const storedCount = count.useValue() ?? 0;
 
   return (
     <View style={styles.container}>
-      <Counter storageKey="showcase-counter" />
+      <Stepper
+        label='LocalValue("showcase-counter")'
+        value={storedCount}
+        onChange={(next) => count.setValue(next)}
+      />
 
       <View style={styles.row}>
         <Button

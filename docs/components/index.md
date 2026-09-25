@@ -29,6 +29,13 @@ Fields, the frame around them, and controls for picking values.
 | [**Stepper**](../../src/components/stepper/index.md)                    | A number with − and + either side: quantities, party sizes, small counts.                                                                   |
 | [**SegmentedControl**](../../src/components/segmented-control/index.md) | A row of mutually exclusive options, for switching between a few views or modes.                                                            |
 | [**FilePicker**](../../src/components/file-picker/index.md)             | Wraps any trigger in a pressable that opens the system file browser.                                                                        |
+| [**Checkbox**](../../src/components/checkbox/index.md)                  | A labelled on/off choice that stands on its own; custom or Expo UI indicator.                                                               |
+| [**Switch**](../../src/components/switch/index.md)                      | A setting that is on or off and takes effect immediately.                                                                                   |
+| [**RadioButton**](../../src/components/radio-button/index.md)           | One option of a set; usually used through `<Input type="radioGroup">`.                                                                      |
+| [**Slider**](../../src/components/slider/index.md)                      | A value or a range, picked by dragging; one or more thumbs.                                                                                 |
+| [**ImagePicker**](../../src/components/image-picker/index.md)           | Wraps any trigger to pick one image from the camera or the library.                                                                         |
+| [**ThemeSwitcher**](../../src/components/theme-switcher/index.md)       | Light, dark or system appearance, persisted.                                                                                                |
+| [**LocaleSwitcher**](../../src/components/locale-switcher/index.md)     | The app language as one select field, each language in its own name.                                                                        |
 
 ## Feedback & status
 
@@ -40,6 +47,9 @@ Telling people what's happening — persistent alerts, progress, loading placeho
 | [**ProgressBar**](../../src/components/progress-bar/index.md) | How far along a task is, determinate or indeterminate.                                               |
 | [**Skeleton**](../../src/components/skeleton/index.md)        | A loading placeholder drawn from your own artwork, with a travelling highlight.                      |
 | [**Timer**](../../src/components/timer/index.md)              | A countdown or stopwatch, with an optional progress ring.                                            |
+| [**Toast**](../../src/components/toast/index.md)              | A short, self-dismissing report on something that just happened.                                     |
+| [**StateView**](../../src/components/state-view/index.md)     | Loading, empty, error, success or offline — inline or as a global overlay.                           |
+| [**Spinner**](../../src/components/spinner/index.md)          | An indeterminate loading indicator, announced unless a parent owns the busy state.                   |
 
 ## Navigation
 
@@ -58,6 +68,7 @@ Content that sits above the screen — popups, bottom sheets, action sheets and 
 | Component                                        | What it's for                                                                          |
 | ------------------------------------------------ | -------------------------------------------------------------------------------------- |
 | [**Modal**](../../src/components/modal/index.md) | Popup, bottom sheet, action sheet or fullscreen overlay, with animated enter and exit. |
+| [**Popup**](../../src/components/popup/index.md) | A small dialog: confirm, acknowledge, or prompt for one line of text.                  |
 
 ## Layout & structure
 
@@ -94,18 +105,19 @@ Icons, images, people and labels.
 | [**Badge**](../../src/components/badge/index.md)       | A small status marker: an unread count, a label, or a dot.                      |
 | [**Tag**](../../src/components/tag/index.md)           | A short label: static, selectable as a filter, or removable.                    |
 | [**Markdown**](../../src/components/markdown/index.md) | Markdown rendered as native text in the app's type scale and palette.           |
+| [**Text**](../../src/components/text/index.md)         | All app text: type scale, theme colour, direction and heading semantics.        |
 
 ## Media & rich content
 
 Video, audio, carousels, charts, scannable codes and embedded web pages.
 
-| Component                                                     | What it's for                                                              |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| [**MediaPlayer**](../../src/components/media-player/index.md) | Video or audio with app-owned controls.                                    |
-| [**Carousel**](../../src/components/carousel/index.md)        | Swipeable slides with accessible pagination.                               |
-| [**Chart**](../../src/components/chart/index.md)              | Line, area and bar charts drawn on Skia, with an accessible text summary.  |
-| [**Barcode**](../../src/components/barcode/index.md)          | A QR code or linear barcode, drawn as vectors.                             |
-| [**WebView**](../../src/components/web-view/index.md)         | An embedded web page with a two-way event bridge and the app's typography. |
+| Component                                                     | What it's for                                                                      |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| [**MediaPlayer**](../../src/components/media-player/index.md) | Video or audio with app-owned controls.                                            |
+| [**Carousel**](../../src/components/carousel/index.md)        | Swipeable slides with accessible pagination.                                       |
+| [**Chart**](../../src/components/chart/index.md)              | Line, area and bar charts (Skia on native, SVG on web) with an accessible summary. |
+| [**Barcode**](../../src/components/barcode/index.md)          | A QR code or linear barcode, drawn as vectors.                                     |
+| [**WebView**](../../src/components/web-view/index.md)         | An embedded web page with a two-way event bridge and the app's typography.         |
 
 ## Utilities
 
@@ -117,8 +129,15 @@ Declarative conditionals and platform constants.
 | [**Match**](../../src/components/match/index.md)   | `switch`/`case` as JSX, for more than two outcomes.                  |
 | [**Platform constants**](../../src/utils/index.md) | `isWeb`, `isIOS`, `isAndroid` — one place for every platform branch. |
 
-## Not documented yet
+## Internal
 
-These have stories, tests and showcase sections but no guide yet — the JSDoc in each `index.tsx` is the reference until one is written:
+Building blocks other components share. They are marked `internal` in [`src/components/manifest.json`](../../src/components/manifest.json), and ESLint keeps them out of screens, root, app and features.
 
-[`binary-control-row`](../../src/components/binary-control-row), [`checkbox`](../../src/components/checkbox), [`counter`](../../src/components/counter), [`expo-ui-host`](../../src/components/expo-ui-host), [`image-picker`](../../src/components/image-picker), [`locale-switcher`](../../src/components/locale-switcher), [`popup`](../../src/components/popup), [`radio-button`](../../src/components/radio-button), [`slider`](../../src/components/slider), [`spinner`](../../src/components/spinner), [`state-view`](../../src/components/state-view), [`switch`](../../src/components/switch), [`text`](../../src/components/text), [`theme-switcher`](../../src/components/theme-switcher), [`toast`](../../src/components/toast)
+| Component                                                                | What it's for                                                         |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| [**BinaryControlRow**](../../src/components/binary-control-row/index.md) | The labelled press target shared by Checkbox, Switch and RadioButton. |
+| [**ExpoUIHost**](../../src/components/expo-ui-host/index.md)             | The theme boundary every `@expo/ui` control renders inside.           |
+
+## Definition of done
+
+[`src/components/manifest.test.ts`](../../src/components/manifest.test.ts) fails when a component folder is missing from the manifest, or when a component lacks its `index.md`, a test, a row in this catalogue, or (if public) a story.

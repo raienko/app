@@ -47,4 +47,39 @@ describe("createEventBus smoke test", () => {
     expect(first).toHaveBeenCalledTimes(1);
     expect(second).toHaveBeenCalledTimes(1);
   });
+
+  it("snapshots listeners at emit time, like Node's EventEmitter", () => {
+    const bus = createEventBus<{ ping: undefined }>();
+    const late = jest.fn();
+    let unsubscribeSecond = () => {};
+    const second = jest.fn();
+    bus.on("ping", () => {
+      bus.on("ping", late);
+      unsubscribeSecond();
+    });
+    unsubscribeSecond = bus.on("ping", second);
+
+    bus.emit("ping", undefined);
+
+    expect(second).toHaveBeenCalledTimes(1);
+    expect(late).not.toHaveBeenCalled();
+
+    bus.emit("ping", undefined);
+
+    expect(second).toHaveBeenCalledTimes(1);
+    expect(late).toHaveBeenCalledTimes(1);
+  });
+
+  it("delivers once per subscription and ignores a repeated unsubscribe", () => {
+    const bus = createEventBus<{ ping: undefined }>();
+    const listener = jest.fn();
+    const first = bus.on("ping", listener);
+    bus.on("ping", listener);
+
+    first();
+    first();
+    bus.emit("ping", undefined);
+
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
 });
