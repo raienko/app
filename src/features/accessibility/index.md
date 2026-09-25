@@ -4,7 +4,7 @@
 
 > OS accessibility flags, text scaling, reduced motion and the shared accessibility-prop helpers every component uses.
 
-<sub>`src/features/accessibility` · Tests: [`accessibility-provider.test.tsx`](accessibility-provider.test.tsx), [`props.test.ts`](props.test.ts), [`screen-reader.web.test.ts`](screen-reader.web.test.ts)</sub>
+<sub>`src/features/accessibility` · Tests: [`accessibility-provider.test.tsx`](accessibility-provider.test.tsx), [`props/index.test.ts`](props/index.test.ts), [`screen-reader.web.test.ts`](screen-reader.web.test.ts)</sub>
 
 ```tsx
 import {

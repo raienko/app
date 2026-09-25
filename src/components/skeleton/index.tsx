@@ -1,26 +1,10 @@
-import { useEffect, useId, useState, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import {
   View,
   type LayoutChangeEvent,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import Animated, {
-  useAnimatedProps,
-  useSharedValue,
-  withRepeat,
-  withTiming,
-} from "react-native-reanimated";
-import Svg, {
-  Defs,
-  G,
-  Image as SvgImage,
-  LinearGradient,
-  Mask,
-  Rect,
-  Stop,
-} from "react-native-svg";
-
 import Image, { type ImageSourceProp } from "@/components/image";
 import {
   disabledA11yProps,
@@ -30,67 +14,11 @@ import {
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
-import { artworkFromChildren, preserveAspectRatio, svgHref } from "./source";
+import { SKELETON_COLORS } from "./colors";
+import SkeletonShimmer from "./shimmer";
+import { artworkFromChildren, svgHref } from "./source";
 
-/** One pass of the highlight across the artwork. */
-const SWEEP_DURATION = 1400;
-/** How much of the width the highlight band occupies. */
-const BAND_WIDTH = 0.6;
-
-/**
- * How far the band leans off vertical, in degrees.
- *
- * **The lean is a skew on the rect, not an angled gradient.** Angling the
- * gradient inside an upright rect looks like it should do the same thing
- * and doesn't: a diagonal gradient only reaches its end stops at two
- * corners, so the band's own left and right edges stay partly opaque down
- * most of their height and the rect shows up as a hard vertical line
- * travelling across the artwork. Skewing the shape keeps the gradient
- * running along the band's own axis — transparent along the whole of both
- * edges — and leans the soft edges with it.
- */
-const BAND_SKEW = -18;
-
-/**
- * How strong the highlight gets at the centre of the band, which depends on
- * what it is allowed to paint.
- *
- * `masked` travels through the artwork's own shapes and touches nothing
- * else, so it can be strong enough to read as a sweep. `unmasked` — the
- * `children` case, where there is no alpha channel to clip against — paints
- * the gaps between the shapes as well, and at the same strength that reads
- * as a translucent panel sliding over the placeholder rather than a shine.
- * Held to roughly a third of it, it goes back to reading as light.
- */
-const BAND_OPACITY = { masked: 0.45, unmasked: 0.16 };
-
-/**
- * The two tones a skeleton is drawn in, exported so `children` drawn by the
- * caller can use the same ones the `source` path tints to.
- *
- * **The base is `backgroundElementSelected`, not `backgroundElement`**, for
- * the reason `ProgressBar`'s track is: `backgroundElement` is what most
- * raised surfaces in the app already use, so a placeholder sitting on a
- * `Card` or inside an open `Accordion` would be exactly the colour of what
- * is behind it. Caught in the showcase, where the first version rendered an
- * invisible skeleton on the section's own card.
- *
- * **The highlight is `grabber`**, the one neutral that is the same value in
- * both schemes. That makes it reliably *visible* against the base rather
- * than reliably brighter — it reads as a lighter sweep in the dark scheme
- * and a darker one in the light. No token is brighter than the base in both
- * (the palette has no step above `backgroundElementSelected` in light, and
- * `background` inverts), so visibility is the property worth pinning; a
- * conventional always-brighter shine would need a palette entry of its own.
- * It is drawn at `BAND_OPACITY`, which is what keeps a mid-grey from
- * reading as a bar rather than a shine.
- */
-export const SKELETON_COLORS = {
-  base: "backgroundElementSelected",
-  highlight: "grabber",
-} as const;
-
-const AnimatedRect = Animated.createAnimatedComponent(Rect);
+export { SKELETON_COLORS } from "./colors";
 
 /**
  * Two ways to say what is shimmering, as a union rather than two optional
@@ -216,13 +144,6 @@ export default function Skeleton({
   const { isReduceMotionEnabled } = useAccessibility();
   const [size, setSize] = useState({ width: 0, height: 0 });
 
-  // `Defs` ids are document-global once several skeletons are on screen
-  // together, so each instance needs its own or they all resolve to
-  // whichever mounted last.
-  const id = useId();
-  const gradientId = `skeleton-gradient-${id}`;
-  const maskId = `skeleton-mask-${id}`;
-
   // The artwork to mask against: the `source`, or a lone `<Image>` child's
   // own source, so the two ways of saying the same thing render the same
   // thing. Undefined for anything else, and for the handful of
@@ -241,30 +162,6 @@ export default function Skeleton({
   // say the content hasn't arrived, so there is nothing left for an
   // animation to convey and the honest substitution is none at all.
   const shimmering = animated && !isReduceMotionEnabled;
-
-  const sweep = useSharedValue(0);
-  const band = size.width * BAND_WIDTH;
-  // The skew slides the band's lower edge sideways by this much, so the
-  // travel has to be that much longer at both ends or the lean would still
-  // be on screen when the upright part has already left.
-  const lean = size.height * Math.abs(Math.tan((BAND_SKEW * Math.PI) / 180));
-
-  useEffect(() => {
-    if (!shimmering || size.width === 0) return;
-
-    sweep.value = 0;
-    sweep.value = withRepeat(
-      withTiming(1, { duration: SWEEP_DURATION }),
-      -1,
-      false,
-    );
-  }, [shimmering, size.width, sweep]);
-
-  // Starts fully off the leading edge and ends fully off the trailing one,
-  // so the highlight enters and leaves rather than popping.
-  const bandProps = useAnimatedProps(() => ({
-    x: -band - lean + sweep.value * (size.width + band + lean * 2),
-  }));
 
   function handleLayout(event: LayoutChangeEvent) {
     const { width, height } = event.nativeEvent.layout;
@@ -300,85 +197,13 @@ export default function Skeleton({
       )}
 
       {!shimmering || size.width === 0 ? null : (
-        <Svg
-          testID={testID === undefined ? undefined : `${testID}-shimmer`}
-          pointerEvents="none"
+        <SkeletonShimmer
           width={size.width}
           height={size.height}
-          style={styles.shimmer}
-        >
-          <Defs>
-            {/* Along the band's own axis, never across it — see BAND_SKEW
-                for what happens when you angle this instead of the shape. */}
-            <LinearGradient id={gradientId} x1="0" y1="0" x2="1" y2="0">
-              <Stop
-                offset="0"
-                stopColor={theme.colors[SKELETON_COLORS.highlight]}
-                stopOpacity="0"
-              />
-              <Stop
-                offset="0.5"
-                stopColor={theme.colors[SKELETON_COLORS.highlight]}
-                stopOpacity="1"
-              />
-              <Stop
-                offset="1"
-                stopColor={theme.colors[SKELETON_COLORS.highlight]}
-                stopOpacity="0"
-              />
-            </LinearGradient>
-
-            {href === undefined ? null : (
-              /* `alpha`, not SVG's default of `luminance`: the artwork's own
-                 colours are irrelevant (the layer above has already thrown
-                 them away), and a luminance mask would make a dark export
-                 mask nothing at all. Set through `style` rather than the
-                 `maskType` prop — the prop reaches native but leaks to the
-                 DOM on web, where React rejects it and the mask is dropped;
-                 the style is read by both. */
-              <Mask
-                id={maskId}
-                // Pinned to the canvas rather than to the bounding box of
-                // whatever is being masked: that box is the band, which
-                // moves and leans, and a mask region tracking it would
-                // crop the artwork differently every frame.
-                maskUnits="userSpaceOnUse"
-                x="0"
-                y="0"
-                width={size.width}
-                height={size.height}
-                style={{ maskType: "alpha" }}
-              >
-                <SvgImage
-                  href={href}
-                  x="0"
-                  y="0"
-                  width={size.width}
-                  height={size.height}
-                  preserveAspectRatio={preserveAspectRatio(artwork?.contentFit)}
-                />
-              </Mask>
-            )}
-          </Defs>
-
-          {/* The mask is on the group, not on the rect. An element's own
-              transform applies to its mask as well, so skewing the rect
-              directly would skew the artwork it is masked against and pull
-              the two out of register. */}
-          <G {...(href === undefined ? null : { mask: `url(#${maskId})` })}>
-            <AnimatedRect
-              animatedProps={bandProps}
-              y="0"
-              width={band}
-              height={size.height}
-              transform={`skewX(${BAND_SKEW})`}
-              opacity={
-                href === undefined ? BAND_OPACITY.unmasked : BAND_OPACITY.masked
-              }
-              fill={`url(#${gradientId})`}
-            />
-          </G>
-        </Svg>
+          href={href}
+          contentFit={artwork?.contentFit}
+          testID={testID === undefined ? undefined : `${testID}-shimmer`}
+        />
       )}
     </View>
   );
@@ -396,10 +221,5 @@ const useStyles = createStyles(() => ({
     left: 0,
     right: 0,
     bottom: 0,
-  },
-  shimmer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
   },
 }));

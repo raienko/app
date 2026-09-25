@@ -43,7 +43,7 @@ function renderVariant<P>(
  * on the shared BaseInput shell in ./base — Input just picks which one to
  * render.
  *
- * Add a new variation by adding its props to ./types.ts, a new folder for
+ * Add a new variation by adding its props to ./types (by kind), a new folder for
  * its component (+ whatever variation-only logic it needs), and a case
  * below — nothing else about the existing variations changes.
  *

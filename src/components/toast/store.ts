@@ -2,16 +2,13 @@ import { useSyncExternalStore } from "react";
 
 import logger from "@/features/logger";
 
-import { ANIMATION_DURATION, DEFAULT_DURATION, MAX_VISIBLE } from "./constants";
+import { ANIMATION_DURATION, MAX_VISIBLE } from "./constants";
+import {
+  createEntry,
+  startVisibleClocks,
+  type StoredToastEntry,
+} from "./entry";
 import type { ToastEntry, ToastOptions } from "./types";
-
-let nextId = 0;
-
-/** Store-only timing state; callers and rendered items don't need it. */
-type StoredToastEntry = ToastEntry & {
-  /** Relative lifetime waiting to start on first visibility. */
-  pendingDuration: number | null;
-};
 
 /**
  * Every toast currently up, and every timer keeping one there.
@@ -74,7 +71,7 @@ class ToastStore {
    * waits out the enter animation before resolving.
    */
   show(options: ToastOptions): string {
-    const entry = this.normalize(options);
+    const entry = createEntry(options);
 
     if (entry.expiresAt !== null && entry.expiresAt <= Date.now()) {
       // Already expired before it was ever raised — a stale push payload, a
@@ -179,26 +176,6 @@ class ToastStore {
     this.commit([]);
   }
 
-  private normalize({
-    id,
-    type = "info",
-    dismissible = true,
-    duration,
-    expiresAt,
-    ...content
-  }: ToastOptions): StoredToastEntry {
-    nextId += 1;
-
-    return {
-      ...content,
-      id: id ?? `toast-${nextId}`,
-      type,
-      dismissible,
-      ...resolveExpiry(duration, expiresAt),
-      leaving: false,
-    };
-  }
-
   private remove(id: string): void {
     const entry = this.entries.find((candidate) => candidate.id === id);
     if (!entry) return;
@@ -221,16 +198,7 @@ class ToastStore {
    * This means a queued toast gets its full requested time on screen.
    */
   private commit(entries: readonly StoredToastEntry[]): void {
-    const now = Date.now();
-    this.entries = entries.map((entry, index) =>
-      index < MAX_VISIBLE && entry.pendingDuration !== null
-        ? {
-            ...entry,
-            expiresAt: now + entry.pendingDuration,
-            pendingDuration: null,
-          }
-        : entry,
-    );
+    this.entries = startVisibleClocks(entries, MAX_VISIBLE, Date.now());
     this.visible =
       this.entries.length <= MAX_VISIBLE
         ? this.entries
@@ -273,26 +241,6 @@ class ToastStore {
   private notify(): void {
     for (const listener of this.listeners) listener();
   }
-}
-
-/**
- * Relative durations remain pending until the toast becomes visible;
- * `expiresAt` is an absolute moment and wins when both are given. `null`
- * duration means "until something hides it", which is distinct from "not
- * specified" — hence the explicit `undefined` check rather than `??`.
- */
-function resolveExpiry(
-  duration: number | null | undefined,
-  expiresAt: Date | number | undefined,
-): Pick<StoredToastEntry, "expiresAt" | "pendingDuration"> {
-  if (expiresAt !== undefined) {
-    return { expiresAt: Number(expiresAt), pendingDuration: null };
-  }
-
-  return {
-    expiresAt: null,
-    pendingDuration: duration === null ? null : (duration ?? DEFAULT_DURATION),
-  };
 }
 
 const toasts = new ToastStore();

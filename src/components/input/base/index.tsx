@@ -4,63 +4,20 @@ import {
   TextInput as RNTextInput,
   View,
   type TextInput as RNTextInputInstance,
-  type TextInputProps as RNTextInputProps,
 } from "react-native";
 
 import Text from "@/components/text";
 import { controlA11yProps, fieldA11yProps } from "@/features/accessibility";
 import { useLocale } from "@/features/localization";
-import { createStyles, useTypography } from "@/features/responsive";
+import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 import FormField from "@/components/form-field";
-import type { CommonInputProps } from "../types";
 
-export type BaseInputProps = CommonInputProps & {
-  value: string;
-  /**
-   * Omitted only by a press-mode field (see `onPress`), which is never
-   * editable and so can never fire it.
-   */
-  onChangeText?: (value: string) => void;
-  keyboardType?: RNTextInputProps["keyboardType"];
-  /**
-   * Masks the field. Set by the `password` variation, which pairs it with a
-   * toggle and an `autoComplete` hint — it is deliberately not on any
-   * variation's own props, because masking on its own is the least useful
-   * third of a password field.
-   */
-  secureTextEntry?: boolean;
-  /**
-   * What the OS and any password manager should offer to fill in. Off unless
-   * a variation asks for it — an unlabelled field is better than one
-   * labelled wrongly, which is how a password ends up autofilled into a
-   * nickname box.
-   */
-  autoComplete?: RNTextInputProps["autoComplete"];
-  /** Explicitly include fields such as phone in Android's autofill structure. */
-  importantForAutofill?: RNTextInputProps["importantForAutofill"];
-  /**
-   * Turns the field into a button: it stops being typed into and instead
-   * displays `value` (or `placeholder`, when empty) as read-only text,
-   * calling this on tap. For a variation whose value is picked from
-   * somewhere else — `select` picks it in a Modal — rather than typed.
-   */
-  onPress?: () => void;
-  /** Only meaningful alongside `onPress`: whether what it opens is showing. */
-  expanded?: boolean;
-  /**
-   * Several lines instead of one: the field starts `minLines` tall, grows
-   * with its text up to `maxLines`, then scrolls. Set by the `textarea`
-   * variation.
-   */
-  multiline?: { minLines: number; maxLines: number };
-  /** A hard character limit, enforced by the OS keyboard as well as here. */
-  maxLength?: number;
-  /** A reading at the end of the helper row — see FormField's `counter`. */
-  counter?: string;
-  counterLabel?: string;
-};
+import type { BaseInputProps } from "./types";
+import useMultilineHeight from "./use-multiline-height";
+
+export type { BaseInputProps } from "./types";
 
 /**
  * The shared shell every input variation (Text, Numeric, Select, ...)
@@ -112,7 +69,6 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
   ) {
     const theme = useTheme();
     const styles = useStyles();
-    const typography = useTypography();
     const { t } = useLocale();
     const [focused, setFocused] = useState(false);
 
@@ -131,25 +87,8 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     // platform: native TextInput grows between min and max on its own, but
     // react-native-web's textarea doesn't, and would scroll from the first
     // overflowing line.
-    const [contentHeight, setContentHeight] = useState(0);
-    const multilineStyle =
-      multiline === undefined
-        ? null
-        : (() => {
-            const minHeight =
-              typography.callout.lineHeight * multiline.minLines;
-            const maxHeight =
-              typography.callout.lineHeight * multiline.maxLines;
-            return {
-              minHeight,
-              maxHeight,
-              height: Math.min(Math.max(contentHeight, minHeight), maxHeight),
-            };
-          })();
+    const autoHeight = useMultilineHeight(multiline);
 
-    // Outlined, not filled: the `border` edge marks the field on any
-    // surface, and focus or an error thickens it and changes its colour
-    // together, so neither state is signalled by hue alone.
     const fieldStyle = [
       styles.field,
       multiline === undefined ? null : styles.fieldMultiline,
@@ -185,18 +124,14 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     ) : (
       <RNTextInput
         ref={ref}
-        style={[styles.input, multilineStyle, { color: theme.colors.text }]}
+        style={[styles.input, autoHeight.style, { color: theme.colors.text }]}
         value={value}
         onChangeText={onChangeText}
         placeholder={placeholder}
         placeholderTextColor={theme.colors.textSecondary}
         editable={!disabled}
         multiline={multiline !== undefined}
-        onContentSizeChange={
-          multiline === undefined
-            ? undefined
-            : (event) => setContentHeight(event.nativeEvent.contentSize.height)
-        }
+        onContentSizeChange={autoHeight.onContentSizeChange}
         // Android centres multiline text vertically by default; a block of
         // text reads from the top.
         textAlignVertical={multiline === undefined ? undefined : "top"}

@@ -7,7 +7,7 @@ import {
   sliderA11yProps,
   statusA11yProps,
   switchA11yProps,
-} from "./props";
+} from "./index";
 
 describe("sliderA11yProps", () => {
   it("exposes adjustable native semantics and an ARIA range", () => {

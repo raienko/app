@@ -28,4 +28,4 @@ Each item below stays unbuilt until its trigger is met. Revisiting one means rec
 ## Consequences
 
 - A bundled `.ttf` for web chart labels was listed here until 2026-09-26, and is no longer needed: see [ADR 0004](0004-web-chart-renders-svg.md).
-- File splitting by line count alone stays deferred. The large files in `features/accessibility/props.ts`, `skeleton`, `input/types.ts` and `toast/store.ts` are split only when a stable responsibility boundary shows up.
+- File splitting by line count alone stays deferred. On 2026-09-26 the five largest files were split along real boundaries, not by size: accessibility props by what they describe (`props/structure`, `controls`, `field`, `feedback`); Skeleton's sweep into `shimmer.tsx` and its tones into `colors.ts`; Input's types by kind of value (`types/text`, `choice`, `value`); BaseInput's props into `types.ts` and its auto-height into `use-multiline-height.ts`; and the toast store's pure entry and expiry logic into `entry.ts`. Public imports didn't change.
