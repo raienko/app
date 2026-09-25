@@ -1,0 +1,72 @@
+[Docs](index.md)
+
+# Architecture
+
+> How the repository is laid out, the one-folder-per-unit rule, custom vs `@expo/ui` implementations, and where each kind of documentation lives.
+
+---
+
+## Project structure
+
+```
+app.config.ts          Expo config — reads name/slug/scheme/bundleId/brand colours from src/constants/env
+metro.config.js         Wraps Metro with Storybook's entry-swap (see Storybook below)
+src/
+  app/                   Routing only (Expo Router) — each route file re-exports a screen
+  root/                   Root — wraps the router; see below
+  screens/<name>/        One folder per screen, index.tsx is the screen component
+  screens/showcase/sections/ One file per showcase section — see "The app" below
+  components/<name>/     One folder per component: index.tsx, index.stories.tsx, index.test.tsx
+  features/storage/       LocalValue<T> — a small MMKV-backed reactive value primitive
+  features/deep-links/    One pipeline for every incoming link — see below
+  constants/env/          Validated EXPO_PUBLIC_* env vars, used by both app code and app.config.ts
+assets/
+  brand/                  App icon, adaptive icon, splash, favicon — everything that carries the app's identity
+  images/                 What a screen draws, reached through `@/assets/images/...`
+```
+
+**The two colours the OS paints for us live in `.env`, not in the theme.** `brandIconBackground` (the plate an Android adaptive icon's foreground sits on) and `brandSplashBackground` (behind the launch image) are baked into the native projects at prebuild — the app is not running when they are on screen, so `theme/palette.json` is the wrong home for them and nothing in the app ever draws them. Each pairs with a file in `assets/brand`, so a rebrand is those files plus these two values. They are validated as 3- or 6-digit hex on load: eight-digit is refused outright, because `#RRGGBBAA` on the web and `#AARRGGBB` on Android would make the same string two different colours. A malformed one otherwise fails much later, in Gradle or Xcode, complaining about something else.
+
+**`assets/brand` and `assets/images` are split by who reads them, not by file type.** Everything under `brand/` is read by Expo at config time and baked into the native projects; nothing there is imported by the app at runtime. Everything under `images/` goes through Metro and is `require()`d by a component. The practical payoff is that a rebrand is "replace the contents of `assets/brand`" rather than picking the branding files out of the ones that only look like branding. `app.config.ts` reaches them through a `brandAsset()` helper, so the directory name appears once — and a typo in a path Expo only reads at prebuild time otherwise surfaces as a missing icon on a build machine.
+
+Every screen/component/feature-value lives in its own folder with a single `index` entry point; all imports go through that folder path (e.g. `@/components/text`), not into its internals. Components ship with a co-located Storybook story and a Jest smoke test that follows the same pattern:
+
+```ts
+import Component from "./index";
+
+describe(`${Component.name} smoke test`, () => {
+  /* ... */
+});
+```
+
+### Component implementation types
+
+Custom design-system components are always the default. When a component
+also offers an `@expo/ui` implementation, it uses the shared
+`ComponentTypeProps` from `src/components/types.ts`:
+
+```tsx
+<Checkbox value={accepted} onChange={setAccepted} />
+<Checkbox type="expo" value={accepted} onChange={setAccepted} />
+```
+
+`type` accepts `"custom" | "expo"` and defaults to `"custom"`. Both paths
+must expose the same public behavior — including the app-wide `value` /
+`onChange` naming — so changing the implementation does not leak Expo UI's
+internal API into application code.
+
+---
+
+## Where documentation lives
+
+| What                                                          | Where                                                       |
+| ------------------------------------------------------------- | ----------------------------------------------------------- |
+| The project at a glance                                       | [`README.md`](../README.md) at the repository root          |
+| Anything that spans folders — setup, architecture, catalogues | `docs/`                                                     |
+| One component, feature, screen or the app root                | `index.md` in that folder, beside its code, story and tests |
+
+Every folder guide starts with a breadcrumb back to its catalogue, so either end of a link leads to the other.
+
+---
+
+[Docs index](index.md) · [Components](components/index.md) · [Features](features/index.md) · [`Root` & `Providers`](../src/root/index.md)

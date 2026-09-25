@@ -138,7 +138,7 @@ Two days of component work, no infrastructure work. The imbalance is the headlin
 
 ### Ordered backlog
 
-Status as of 2026-09-06. **Done** means the component exists with tests, a story, a showcase section, and README documentation.
+Status as of 2026-09-06. **Done** means the component exists with tests, a story, a showcase section, and a guide (`index.md`) in its own folder.
 
 | ID      | Priority / master step | Component                                                   | Contract and reason                                                                                                                                                                                                                                                                                                              | Dependencies / trigger                                                                                                 |
 | ------- | ---------------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
