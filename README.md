@@ -68,6 +68,7 @@ Every other guide is an `index.md` in the folder it documents — [all docs](doc
 
 ## Learn more
 
-- [Expo documentation](https://docs.expo.dev/) · [Expo Router](https://docs.expo.dev/router/introduction/)
+- [Expo documentation](https://docs.expo.dev/)
+- [Expo Router](https://docs.expo.dev/router/introduction/)
 - [react-native-mmkv](https://github.com/mrousavy/react-native-mmkv)
 - [Storybook for React Native](https://github.com/storybookjs/react-native)
