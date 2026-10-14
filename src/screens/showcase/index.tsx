@@ -13,6 +13,7 @@ import BarcodeSection from "./sections/barcode";
 import CardSection from "./sections/card";
 import CarouselSection from "./sections/carousel";
 import ChartSection from "./sections/chart";
+import MapSection from "./sections/map";
 import CheckboxesSection from "./sections/checkboxes";
 import DeepLinksSection from "./sections/deep-links";
 import DividerSection from "./sections/divider";
@@ -94,6 +95,7 @@ const SECTIONS: {
   { title: "showcase.stepper", Component: StepperSection },
   { title: "showcase.skeleton", Component: SkeletonSection },
   { title: "showcase.chart", Component: ChartSection },
+  { title: "showcase.map", Component: MapSection },
   { title: "showcase.barcode", Component: BarcodeSection },
   { title: "showcase.timer", Component: TimerSection },
   { title: "showcase.progress", Component: ProgressBarSection },

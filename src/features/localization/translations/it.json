@@ -219,6 +219,7 @@
     "stepper": "Stepper",
     "skeleton": "Skeleton",
     "chart": "Grafico",
+    "map": "Mappa",
     "barcode": "Codice a barre",
     "timer": "Timer",
     "share": "Condivisione",
@@ -302,5 +303,9 @@
     "error": "Errore",
     "warning": "Avviso",
     "info": "Informazione"
+  },
+  "map": {
+    "directions": "Indicazioni",
+    "yourLocation": "La tua posizione"
   }
 }

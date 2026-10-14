@@ -109,13 +109,14 @@ Icons, images, people and labels.
 
 ## Media & rich content
 
-Video, audio, carousels, charts, scannable codes and embedded web pages.
+Video, audio, carousels, charts, maps, scannable codes and embedded web pages.
 
 | Component                                                     | What it's for                                                                      |
 | ------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
 | [**MediaPlayer**](../../src/components/media-player/index.md) | Video or audio with app-owned controls.                                            |
 | [**Carousel**](../../src/components/carousel/index.md)        | Swipeable slides with accessible pagination.                                       |
 | [**Chart**](../../src/components/chart/index.md)              | Line, area and bar charts (Skia on native, SVG on web) with an accessible summary. |
+| [**Map**](../../src/components/map/index.md)                  | Places on a map in the app theme, with Directions handed to the platform map app.  |
 | [**Barcode**](../../src/components/barcode/index.md)          | A QR code or linear barcode, drawn as vectors.                                     |
 | [**WebView**](../../src/components/web-view/index.md)         | An embedded web page with a two-way event bridge and the app's typography.         |
 

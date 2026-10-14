@@ -28,6 +28,7 @@ const SECTION_TITLES = [
   "Stepper",
   "Skeleton",
   "Chart",
+  "Map",
   "Barcode",
   "Timer",
   "Progress",

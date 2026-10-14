@@ -27,6 +27,9 @@ describe("permissions registry", () => {
     const gallery = jest
       .spyOn(permissions.gallery, "refresh")
       .mockResolvedValue(galleryResponse);
+    const location = jest
+      .spyOn(permissions.location, "refresh")
+      .mockResolvedValue(response as never);
     const notifications = jest
       .spyOn(permissions.notifications, "refresh")
       .mockResolvedValue(response);
@@ -34,11 +37,13 @@ describe("permissions registry", () => {
     await expect(permissions.refresh()).resolves.toEqual({
       camera: response,
       gallery: galleryResponse,
+      location: response,
       notifications: response,
     });
 
     expect(camera).toHaveBeenCalledTimes(1);
     expect(gallery).toHaveBeenCalledTimes(1);
+    expect(location).toHaveBeenCalledTimes(1);
     expect(notifications).toHaveBeenCalledTimes(1);
   });
 });

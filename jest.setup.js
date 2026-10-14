@@ -156,3 +156,35 @@ jest.mock("victory-native", () => {
     BarGroup,
   };
 });
+
+// MapLibre's native map is a GL surface with no JS renderer under Jest.
+// Stubbed to plain Views that keep their children (markers, pins) and
+// record the camera and style they were given, so Map's own logic — which
+// pins exist, where the camera goes, which colours the style uses — is
+// testable without a GPU.
+jest.mock("@maplibre/maplibre-react-native", () => {
+  const { View } = require("react-native");
+
+  const Map = ({ children, mapStyle, testID, onPress }) => (
+    <View
+      testID={testID}
+      accessibilityValue={{
+        text: JSON.stringify(mapStyle?.layers?.[0] ?? null),
+      }}
+      onPress={onPress}
+    >
+      {children}
+    </View>
+  );
+  const Camera = (props) => (
+    <View
+      testID="map-camera"
+      accessibilityValue={{ text: JSON.stringify(props) }}
+    />
+  );
+  const Marker = ({ children, id }) => (
+    <View testID={`map-marker-${id}`}>{children}</View>
+  );
+
+  return { __esModule: true, Map, Camera, Marker };
+});

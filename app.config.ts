@@ -117,6 +117,15 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         microphonePermission: false,
       },
     ],
+    [
+      "expo-location",
+      {
+        // Foreground only: enough to centre a map on the user and show
+        // what's nearby. No background location is ever requested.
+        locationWhenInUsePermission: `Allow ${env.appName} to show places near you.`,
+      },
+    ],
+    "@maplibre/maplibre-react-native",
     ...(storybookEnabled ? ["@react-native-community/datetimepicker"] : []),
     "@react-native-vector-icons/feather",
     "@react-native-vector-icons/material-icons",

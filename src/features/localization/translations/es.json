@@ -219,6 +219,7 @@
     "stepper": "Contador",
     "skeleton": "Esqueleto",
     "chart": "Gráfico",
+    "map": "Mapa",
     "barcode": "Código de barras",
     "timer": "Temporizador",
     "share": "Compartir",
@@ -302,5 +303,9 @@
     "error": "Error",
     "warning": "Advertencia",
     "info": "Información"
+  },
+  "map": {
+    "directions": "Cómo llegar",
+    "yourLocation": "Tu ubicación"
   }
 }

@@ -27,6 +27,7 @@
     "list": "public",
     "list-item": "public",
     "locale-switcher": "public",
+    "map": "public",
     "markdown": "public",
     "match": "public",
     "media-player": "public",

@@ -54,6 +54,30 @@ function color(key, value) {
   return normalized;
 }
 
+/**
+ * An optional https URL. Map tiles and glyphs are fetched by the native map
+ * engine and the browser alike, and both refuse plain http on a release
+ * build — so a mistyped scheme is caught here rather than as a blank map.
+ * `mustContain` names placeholders the engine fills in itself.
+ */
+function httpsUrl(key, value, mustContain = []) {
+  const normalized = optional(value);
+  if (normalized === undefined) return undefined;
+  if (!/^https:\/\/\S+$/.test(normalized)) {
+    throw new Error(
+      `Environment variable ${key} must be an https:// URL, got: ${normalized}`,
+    );
+  }
+  for (const placeholder of mustContain) {
+    if (!normalized.includes(placeholder)) {
+      throw new Error(
+        `Environment variable ${key} must contain ${placeholder}, which the map fills in per request.`,
+      );
+    }
+  }
+  return normalized;
+}
+
 /** A comma-separated var as a list, with blanks and stray spaces dropped. */
 function list(value) {
   return (value ?? "")
@@ -94,6 +118,19 @@ const env = {
   brandSplashBackground: color(
     "EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND",
     process.env.EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND,
+  ),
+  // Where `Map` gets its vector tiles and label fonts. Both optional: unset,
+  // @/features/maps falls back to OpenFreeMap, which needs no key. Public
+  // like every EXPO_PUBLIC_ value — a provider key in here ships in the app,
+  // so restrict it to this app's bundle id and web domains on the provider.
+  mapTilesUrl: httpsUrl(
+    "EXPO_PUBLIC_MAP_TILES_URL",
+    process.env.EXPO_PUBLIC_MAP_TILES_URL,
+  ),
+  mapGlyphsUrl: httpsUrl(
+    "EXPO_PUBLIC_MAP_GLYPHS_URL",
+    process.env.EXPO_PUBLIC_MAP_GLYPHS_URL,
+    ["{fontstack}", "{range}"],
   ),
 };
 

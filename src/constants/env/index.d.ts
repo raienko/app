@@ -9,6 +9,10 @@ declare const env: {
   readonly brandIconBackground: string;
   /** Hex colour behind the splash image. */
   readonly brandSplashBackground: string;
+  /** TileJSON URL of an OpenMapTiles-schema vector source; unset uses the default provider. */
+  readonly mapTilesUrl: string | undefined;
+  /** Label-font URL template with `{fontstack}` and `{range}`; unset uses the default provider. */
+  readonly mapGlyphsUrl: string | undefined;
 };
 
 export type Env = typeof env;

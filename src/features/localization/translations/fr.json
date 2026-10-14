@@ -219,6 +219,7 @@
     "stepper": "Incrémenteur",
     "skeleton": "Squelette",
     "chart": "Graphique",
+    "map": "Carte",
     "barcode": "Code-barres",
     "timer": "Minuteur",
     "share": "Partage",
@@ -302,5 +303,9 @@
     "error": "Erreur",
     "warning": "Avertissement",
     "info": "Information"
+  },
+  "map": {
+    "directions": "Itinéraire",
+    "yourLocation": "Votre position"
   }
 }
