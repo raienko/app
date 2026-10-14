@@ -75,7 +75,7 @@ export default function ImagePickerSection() {
           value="Open with ImagePicker.show"
           onPress={() => void ImagePicker.show(PICKER_ID)}
         />
-        <If condition={image !== undefined}>
+        <If condition={image}>
           <Button
             value="Clear"
             type="tertiary"

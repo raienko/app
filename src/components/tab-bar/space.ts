@@ -30,8 +30,9 @@ const FLOATING_INSET = 12;
  * the two can't disagree.
  *
  * @example
+ * // Inside a `Screen`, prefer `<TabBarSpace />`. Outside one:
  * const tabBarSpace = useTabBarSpace();
- * <Screen scrollable contentContainerStyle={{ paddingBottom: tabBarSpace }} />
+ * <ScrollView contentContainerStyle={{ paddingBottom: tabBarSpace }} />
  * @example
  * // matching a bar configured differently
  * const space = useTabBarSpace({ variant: "floating", avoidChin: false });

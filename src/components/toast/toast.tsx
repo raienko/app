@@ -117,7 +117,7 @@ function ToastComponent({
       <Icon name={config.icon} color={accent} size={spacing.x20} />
 
       <View style={styles.text}>
-        <If condition={title !== undefined}>
+        <If condition={title}>
           <Text value={title as string} type="headline" />
         </If>
         <Text
@@ -127,7 +127,7 @@ function ToastComponent({
         />
       </View>
 
-      <If condition={link !== undefined && actionLabel !== undefined}>
+      <If condition={link && actionLabel}>
         <Text
           value={actionLabel as string}
           type="footnote"

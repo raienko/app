@@ -25,7 +25,7 @@ const RangeInput = forwardRef<RNTextInputInstance, Props>(
       disabled,
       error,
       helperText,
-      necessity,
+      required,
       style,
       onFocus,
       onBlur,
@@ -49,7 +49,7 @@ const RangeInput = forwardRef<RNTextInputInstance, Props>(
       <FormField
         error={error}
         helperText={helperText}
-        necessity={necessity}
+        required={required}
         style={style}
       >
         {Array.isArray(value) ? (

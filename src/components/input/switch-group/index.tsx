@@ -29,7 +29,7 @@ const SwitchGroupInput = forwardRef<RNTextInputInstance, Props>(
       disabled = false,
       error,
       helperText,
-      necessity,
+      required,
       style,
     },
     _ref,
@@ -71,7 +71,7 @@ const SwitchGroupInput = forwardRef<RNTextInputInstance, Props>(
         label={groupSwitch ? undefined : label}
         error={error}
         helperText={helperText}
-        necessity={necessity}
+        required={required}
         style={style}
       >
         <View {...webGroupProps} style={styles.options}>

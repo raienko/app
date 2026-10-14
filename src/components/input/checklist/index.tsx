@@ -27,7 +27,7 @@ const ChecklistInput = forwardRef<RNTextInputInstance, Props>(
       disabled = false,
       error,
       helperText,
-      necessity,
+      required,
       style,
     },
     _ref,
@@ -53,7 +53,7 @@ const ChecklistInput = forwardRef<RNTextInputInstance, Props>(
         label={label}
         error={error}
         helperText={helperText}
-        necessity={necessity}
+        required={required}
         style={style}
       >
         <View {...webGroupProps} style={styles.options}>

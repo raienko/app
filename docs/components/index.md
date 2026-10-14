@@ -74,15 +74,15 @@ Content that sits above the screen — popups, bottom sheets, action sheets and 
 
 Screens, grouping and spacing primitives.
 
-| Component                                                | What it's for                                                                    |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [**Screen**](../../src/components/screen/index.md)       | The page container: fills the viewport, paints the background, pads the content. |
-| [**Section**](../../src/components/section/index.md)     | A titled group — settings, a fieldset, a list with a “See all” action.           |
-| [**Card**](../../src/components/card/index.md)           | A raised, outlined or filled surface for grouping content.                       |
-| [**Accordion**](../../src/components/accordion/index.md) | A titled section that collapses and expands.                                     |
-| [**Grid**](../../src/components/grid/index.md)           | 12-column rows and cells, with spans that change per breakpoint.                 |
-| [**Divider**](../../src/components/divider/index.md)     | A hairline between rows, form sections or columns, optionally labelled.          |
-| [**Spacer**](../../src/components/spacer/index.md)       | An explicit gap from the spacing scale, where a parent's `gap` can't express it. |
+| Component                                                | What it's for                                                                                                                             |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| [**Screen**](../../src/components/screen/index.md)       | The page container: `default` (header, footer, aside around the content, optionally scrolling) or `centered`, and it owns the safe areas. |
+| [**Section**](../../src/components/section/index.md)     | A titled group — settings, a fieldset, a list with a “See all” action.                                                                    |
+| [**Card**](../../src/components/card/index.md)           | A raised, outlined or filled surface for grouping content.                                                                                |
+| [**Accordion**](../../src/components/accordion/index.md) | A titled section that collapses and expands.                                                                                              |
+| [**Grid**](../../src/components/grid/index.md)           | 12-column rows and cells, with spans that change per breakpoint.                                                                          |
+| [**Divider**](../../src/components/divider/index.md)     | A hairline between rows, form sections or columns, optionally labelled.                                                                   |
+| [**Spacer**](../../src/components/spacer/index.md)       | An explicit gap from the spacing scale, where a parent's `gap` can't express it.                                                          |
 
 ## Lists
 

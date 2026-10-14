@@ -295,8 +295,7 @@
     "increase": "{{label}} erhöhen"
   },
   "formField": {
-    "required": "Erforderlich",
-    "optional": "Optional"
+    "required": "Erforderlich"
   },
   "alert": {
     "success": "Erfolg",

@@ -81,16 +81,11 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(style.maxHeight).toBe(style.minHeight * 2);
   });
 
-  it("says the field is optional as part of its name", async () => {
+  it("says the field is required as part of its name", async () => {
     await render(
-      <Component
-        value=""
-        onChange={jest.fn()}
-        label="Notes"
-        necessity="optional"
-      />,
+      <Component value="" onChange={jest.fn()} label="Notes" required />,
     );
 
-    expect(screen.getByLabelText("Notes, Optional")).toBeTruthy();
+    expect(screen.getByLabelText("Notes, Required")).toBeTruthy();
   });
 });

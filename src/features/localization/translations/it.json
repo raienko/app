@@ -295,8 +295,7 @@
     "increase": "Aumenta {{label}}"
   },
   "formField": {
-    "required": "Obbligatorio",
-    "optional": "Facoltativo"
+    "required": "Obbligatorio"
   },
   "alert": {
     "success": "Operazione riuscita",

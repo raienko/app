@@ -55,7 +55,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
       autoCorrect = false,
       error,
       helperText,
-      necessity,
+      required,
       onFocus,
       onBlur,
       onPress,
@@ -76,8 +76,8 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     // never reaches from inside the field, so it joins the field's own name.
     const name = label ?? placeholder;
     const accessibleName =
-      name !== undefined && necessity !== undefined
-        ? `${name}, ${t(`formField.${necessity}`)}`
+      name !== undefined && required
+        ? `${name}, ${t("formField.required")}`
         : name;
 
     // Sized in lines of the field's own type step, so a taller OS text size
@@ -164,7 +164,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     return (
       <FormField
         label={label}
-        necessity={necessity}
+        required={required}
         error={error}
         helperText={helperText}
         counter={counter}

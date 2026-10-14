@@ -95,6 +95,8 @@ const RAW_NAMED_SIZES = {
   contentMaxWidth: 720,
   /** How wide a self-contained overlay element gets — currently Modal's `popup`/`bottomSheet`/`actions` content, capped so it doesn't stretch edge-to-edge on a wide screen. */
   elementWidthLg: 360,
+  /** A screen's side column — `Screen`'s `aside`, e.g. section navigation on a tablet or the web. */
+  asideWidth: 280,
 } as const;
 
 type Scaled<T extends Record<string, number>> = { [K in keyof T]: number };

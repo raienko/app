@@ -295,8 +295,7 @@
     "increase": "Збільшити: {{label}}"
   },
   "formField": {
-    "required": "Обов'язково",
-    "optional": "Необов'язково"
+    "required": "Обов'язково"
   },
   "alert": {
     "success": "Успіх",

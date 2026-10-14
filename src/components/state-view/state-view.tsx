@@ -69,7 +69,7 @@ function StateViewComponent({
         <If condition={type === "loading"}>
           <Spinner size="large" label={null} />
         </If>
-        <If condition={config.icon !== null}>
+        <If condition={config.icon}>
           <Icon
             name={config.icon ?? "info"}
             size={spacing.x40}
@@ -78,7 +78,7 @@ function StateViewComponent({
         </If>
 
         <Text value={resolvedTitle} type="title3" style={styles.title} />
-        <If condition={message !== undefined}>
+        <If condition={message}>
           <Text
             value={message ?? ""}
             style={[styles.message, { color: theme.colors.textSecondary }]}
@@ -88,7 +88,7 @@ function StateViewComponent({
 
       {children}
 
-      <If condition={actionLabel !== undefined}>
+      <If condition={actionLabel}>
         <Button
           value={actionLabel ?? ""}
           type="primary"

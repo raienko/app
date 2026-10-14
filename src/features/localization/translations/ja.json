@@ -295,8 +295,7 @@
     "increase": "{{label}} を増やす"
   },
   "formField": {
-    "required": "必須",
-    "optional": "任意"
+    "required": "必須"
   },
   "alert": {
     "success": "成功",

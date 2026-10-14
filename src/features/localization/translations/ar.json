@@ -295,8 +295,7 @@
     "increase": "زيادة {{label}}"
   },
   "formField": {
-    "required": "مطلوب",
-    "optional": "اختياري"
+    "required": "مطلوب"
   },
   "alert": {
     "success": "نجاح",

@@ -295,8 +295,7 @@
     "increase": "增加{{label}}"
   },
   "formField": {
-    "required": "必填",
-    "optional": "选填"
+    "required": "必填"
   },
   "alert": {
     "success": "成功",

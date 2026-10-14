@@ -100,10 +100,10 @@ function PopupComponent(props: PopupProps) {
       onShow={onShow}
       onClose={onClose}
     >
-      <If condition={title !== undefined}>
+      <If condition={title}>
         <Text value={title ?? ""} type="title3" />
       </If>
-      <If condition={message !== undefined}>
+      <If condition={message}>
         <Text
           value={message ?? ""}
           type="footnote"

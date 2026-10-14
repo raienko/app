@@ -1,5 +1,3 @@
-import { View } from "react-native";
-
 import Accordion from "@/components/accordion";
 import Header from "@/components/header";
 import Screen from "@/components/screen";
@@ -130,27 +128,23 @@ export default function Showcase() {
   const styles = useStyles();
 
   return (
-    <View style={styles.page}>
-      {/* Pinned above the scroll rather than inside it, so it stays put and
-          is the one place the top safe-area inset is applied: this is the
-          first thing under the notch / Dynamic Island / status bar. Its
-          title is the screen's top-level heading. */}
-      <Header title={env.appName} avoidNotch />
-      <Screen scrollable style={styles.container}>
-        {SECTIONS.map(({ title, Component }) => (
-          <Accordion key={title} title={t(title)}>
-            <Component />
-          </Accordion>
-        ))}
-      </Screen>
-    </View>
+    // The header's title is the screen's top-level heading; Screen pins it
+    // and clears the notch above it.
+    <Screen
+      scrollable
+      header={<Header title={env.appName} />}
+      style={styles.container}
+    >
+      {SECTIONS.map(({ title, Component }) => (
+        <Accordion key={title} title={t(title)}>
+          <Component />
+        </Accordion>
+      ))}
+    </Screen>
   );
 }
 
 const useStyles = createStyles(({ spacing, sizes }) => ({
-  page: {
-    flex: 1,
-  },
   container: {
     gap: spacing.x16,
     // Sections stretch to this column rather than to the window, so the
@@ -158,5 +152,6 @@ const useStyles = createStyles(({ spacing, sizes }) => ({
     // wide enough for the grid section to actually reflow.
     width: "100%",
     maxWidth: sizes.contentMaxWidth,
+    alignSelf: "center",
   },
 }));

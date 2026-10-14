@@ -22,7 +22,7 @@ const RadioGroupInput = forwardRef<RNTextInputInstance, Props>(
       disabled,
       error,
       helperText,
-      necessity,
+      required,
       style,
     },
     _ref,
@@ -37,7 +37,7 @@ const RadioGroupInput = forwardRef<RNTextInputInstance, Props>(
         label={label}
         error={error}
         helperText={helperText}
-        necessity={necessity}
+        required={required}
         style={style}
       >
         <View {...webGroupProps} style={styles.options}>

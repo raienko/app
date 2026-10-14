@@ -96,7 +96,7 @@ export default function StateViewsProvider({ children }: Props) {
             },
           ]}
         >
-          <If condition={presentation.entry !== null}>
+          <If condition={presentation.entry}>
             <StateView {...presentation.entry!} />
           </If>
         </View>

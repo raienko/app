@@ -65,7 +65,7 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
     label,
     error,
     helperText,
-    necessity,
+    required,
     disabled,
     style,
     onFocus,
@@ -108,7 +108,7 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
       label={label}
       error={error}
       helperText={helperText}
-      necessity={necessity}
+      required={required}
       style={style}
     >
       {/* The invisible input would mostly catch the tap itself, but that

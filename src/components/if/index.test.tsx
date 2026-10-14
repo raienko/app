@@ -35,4 +35,17 @@ describe(`${Component.name} smoke test`, () => {
 
     expect(withIf.toJSON()).toEqual(bare.toJSON());
   });
+
+  it("takes any value and renders on truthiness", async () => {
+    const footer: React.ReactNode = <RNText>footer</RNText>;
+    await render(<Component condition={footer}>{footer}</Component>);
+    expect(screen.getByText("footer")).toBeTruthy();
+
+    await render(
+      <Component condition={undefined}>
+        <RNText>missing</RNText>
+      </Component>,
+    );
+    expect(screen.queryByText("missing")).toBeNull();
+  });
 });

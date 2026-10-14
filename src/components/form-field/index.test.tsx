@@ -54,20 +54,17 @@ describe(`${Component.name} smoke test`, () => {
     ).toBe("assertive");
   });
 
-  it.each([
-    ["required", "Required"],
-    ["optional", "Optional"],
-  ] as const)("marks a %s field beside its label", async (necessity, hint) => {
+  it("marks a required field beside its label", async () => {
     await render(
-      <Component label="Phone" necessity={necessity}>
+      <Component label="Phone" required>
         <View />
       </Component>,
     );
 
-    expect(screen.getByText(hint)).toBeTruthy();
+    expect(screen.getByText("Required")).toBeTruthy();
   });
 
-  it("marks nothing when necessity isn't given", async () => {
+  it("marks nothing on a field that isn't required", async () => {
     await render(
       <Component label="Phone">
         <View />

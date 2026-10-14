@@ -140,7 +140,7 @@ export default function Alert({
           />
         </View>
         <View style={styles.text}>
-          <If condition={!!title}>
+          <If condition={title}>
             <Text value={title ?? ""} type="headline" />
           </If>
           <Text
@@ -148,7 +148,7 @@ export default function Alert({
             type="subheadline"
             style={{ color: title ? theme.colors.textSecondary : undefined }}
           />
-          <If condition={action !== undefined}>
+          <If condition={action}>
             <Button
               testID="alert-action"
               value={action?.label ?? ""}
@@ -163,7 +163,7 @@ export default function Alert({
         </View>
       </View>
 
-      <If condition={onDismiss !== undefined}>
+      <If condition={onDismiss}>
         <IconButton
           testID="alert-dismiss"
           label={t("common.close")}

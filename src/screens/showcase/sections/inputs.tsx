@@ -112,7 +112,6 @@ export default function InputsSection() {
         value={notes}
         onChange={setNotes}
         maxLength={200}
-        necessity="optional"
         helperText={t("input.notes.helper")}
       />
       <Input

@@ -35,7 +35,7 @@ export function Required() {
   const [guests, setGuests] = useState(2);
 
   return (
-    <Component label="Guests" necessity="required">
+    <Component label="Guests" required>
       <Stepper
         label="Guests"
         hideLabel

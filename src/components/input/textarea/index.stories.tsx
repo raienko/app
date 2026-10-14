@@ -45,8 +45,8 @@ export function Tall() {
   return <Demo minLines={6} maxLines={10} />;
 }
 
-export function Optional() {
-  return <Demo necessity="optional" />;
+export function Required() {
+  return <Demo required />;
 }
 
 export function WithError() {

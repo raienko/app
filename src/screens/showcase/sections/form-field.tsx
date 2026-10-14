@@ -25,7 +25,6 @@ export default function FormFieldSection() {
 
       <FormField
         label="Volume"
-        necessity="optional"
         helperText="Applies to every device"
         counter={`${volume}%`}
         counterLabel={`${volume} percent`}
@@ -41,7 +40,7 @@ export default function FormFieldSection() {
 
       <FormField
         label="Guests"
-        necessity="required"
+        required
         helperText="Up to eight"
         error={guests > 8 ? "Tables seat eight at most" : undefined}
       >

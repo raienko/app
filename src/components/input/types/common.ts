@@ -1,8 +1,6 @@
 import type { ReactNode } from "react";
 import type { StyleProp, TextInputProps, ViewStyle } from "react-native";
 
-import type { FormFieldNecessity } from "@/components/form-field";
-
 /** Props every input variation shares. */
 
 /**
@@ -27,11 +25,10 @@ export type CommonInputProps = {
   /** Shown under the field when there's no error. */
   helperText?: string;
   /**
-   * Marks the field "Required" or "Optional" beside its label, and says so
-   * to a screen reader as part of the field's name. Mark whichever is the
-   * exception in the form — see `FormFieldNecessity`.
+   * Marks the field "Required" beside its label, and says so to a screen
+   * reader as part of the field's name. Not required means optional.
    */
-  necessity?: FormFieldNecessity;
+  required?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
 };

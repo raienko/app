@@ -9,15 +9,6 @@ import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 /**
- * Whether a field says it must be filled or may be left empty. Neither is
- * the default: a form marks whichever is the exception in it — "Optional"
- * on the one skippable field of a mostly-required form, "Required" on the
- * one mandatory field of a mostly-optional one — and marking every field
- * the same way tells the reader nothing.
- */
-export type FormFieldNecessity = "required" | "optional";
-
-/**
  * The ids a control can point at to be labelled and described by this
  * field's text — `aria-labelledby` / `aria-describedby` on the web,
  * `accessibilityLabelledBy` on Android. Handed to a render-function child,
@@ -30,7 +21,11 @@ export type FormFieldIds = {
 
 export type FormFieldProps = {
   label?: string;
-  necessity?: FormFieldNecessity;
+  /**
+   * Marks the field "Required" beside its label. Anything not required is
+   * optional, so there's no marker for that.
+   */
+  required?: boolean;
   /** Replaces `helperText` and is announced as soon as it appears. */
   error?: string;
   helperText?: string;
@@ -73,13 +68,13 @@ export type FormFieldProps = {
         />
  * </FormField>
  * @example
- * <FormField label="Guests" necessity="required" error={guestsError}>
+ * <FormField label="Guests" required error={guestsError}>
  *   {({ labelId }) => <Stepper aria-labelledby={labelId} … />}
  * </FormField>
  */
 export default function FormField({
   label,
-  necessity,
+  required = false,
   error,
   helperText,
   counter,
@@ -99,12 +94,12 @@ export default function FormField({
 
   return (
     <View testID={testID} style={[styles.container, style]}>
-      <If condition={!!label}>
+      <If condition={label}>
         <View style={styles.labelRow}>
           <Text value={label ?? ""} type="footnote" nativeID={labelId} />
-          <If condition={necessity !== undefined}>
+          <If condition={required}>
             <Text
-              value={t(`formField.${necessity ?? "optional"}`)}
+              value={t("formField.required")}
               type="footnote"
               style={{ color: theme.colors.textSecondary }}
             />
@@ -116,10 +111,10 @@ export default function FormField({
         ? children({ labelId, descriptionId })
         : children}
 
-      <If condition={!!helper || counter !== undefined}>
+      <If condition={helper || counter}>
         <View style={styles.helperRow}>
           <View style={styles.helper}>
-            <If condition={!!helper}>
+            <If condition={helper}>
               <Text
                 {...(error ? statusA11yProps({ urgency: "assertive" }) : null)}
                 nativeID={descriptionId}
@@ -133,7 +128,7 @@ export default function FormField({
               />
             </If>
           </View>
-          <If condition={counter !== undefined}>
+          <If condition={counter}>
             <Text
               value={counter ?? ""}
               type="caption1"
