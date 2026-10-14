@@ -1,4 +1,11 @@
-import { View, type StyleProp, type ViewStyle } from "react-native";
+import { useMemo, useState } from "react";
+import Animated from "react-native-reanimated";
+import {
+  View,
+  type LayoutRectangle,
+  type StyleProp,
+  type ViewStyle,
+} from "react-native";
 
 import Button, {
   IconButton,
@@ -6,13 +13,16 @@ import Button, {
   type ButtonType,
 } from "@/components/button";
 import Icon from "@/components/icon";
+import If from "@/components/if";
 import Text from "@/components/text";
 import { disabledA11yProps } from "@/features/accessibility";
 import { useIsRtl, useLocale } from "@/features/localization";
-import { createStyles } from "@/features/responsive";
+import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 import PaginationDot from "./dot";
+import PageIndicator from "./indicator";
+import useWindowShift from "./shift";
 import { GAP, clampPage, paginationRange } from "./range";
 
 export { GAP, clampPage, paginationRange } from "./range";
@@ -87,11 +97,14 @@ type Props = {
  * `"dots"` is the position indicator for a small, known set — a carousel,
  * an onboarding flow — where the count matters more than the index.
  *
- * **The dots are plain pressables.** They follow the settled page, with no
- * interpolation and nothing driven off a carousel's animated progress. An
- * earlier version did interpolate, so a dot would grow while the finger was
- * still moving; it produced two iOS bugs in a row and was removed. A
- * control that is reliably pressable is worth more than the animation was.
+ * **Changing page animates, from the settled page only.** The numbers'
+ * highlight — the `selected` tint with an `accent` edge — slides to the new
+ * page instead of one button switching off and another on, and a dot
+ * shrinks while the next grows. Both run when `value` changes, never off a
+ * carousel's live scroll progress: an earlier version interpolated that, so
+ * a dot grew while the finger was still moving, and it produced two iOS
+ * press bugs in a row. The pressables themselves never move. Reduce Motion
+ * makes both instant.
  *
  * **Fewer than two pages renders nothing at all.** A pagination bar for a
  * single page is a control that cannot do anything, and it is the state a
@@ -139,8 +152,19 @@ export default function Pagination({
   // `count` rather than reusing `total`: the prop is whatever the caller
   // passed and this is the floored, non-negative version the rest of the
   // component can rely on.
+  // Where each visible page's button sits in the row, by page number, so
+  // the highlight knows where to slide.
+  const [layouts, setLayouts] = useState<Record<number, LayoutRectangle>>({});
   const count = Math.max(0, Math.floor(total));
   const current = clampPage(value, count);
+  const items = useMemo(
+    () => paginationRange(current, count, siblings),
+    [current, count, siblings],
+  );
+  // One slot's travel: a page button and the gap after it.
+  const { spacing } = useSizes();
+  const slot = (layouts[current]?.width ?? 0) + spacing.x4;
+  const shift = useWindowShift(current, items, slot, isRTL);
 
   // A bar that cannot go anywhere is not a control. This is the state a
   // real screen is in most often, so it is handled first.
@@ -216,47 +240,76 @@ export default function Pagination({
       {step(-1)}
 
       <View style={styles.pages}>
-        {compact ? (
+        <If condition={!compact}>
+          <PageIndicator target={layouts[current]} />
+        </If>
+        <If condition={compact}>
           <Text
             value={t("pagination.page", { page: current, total: count })}
             type="footnote"
             style={[styles.summary, { color: theme.colors.textSecondary }]}
           />
-        ) : (
-          paginationRange(current, count, siblings).map((item, index) =>
-            item === GAP ? (
-              // An ellipsis is not a control and has nothing to announce:
-              // the pages it stands for are reachable through the numbers
-              // either side of it.
-              <Text
-                // Keyed by position because that is all a gap has: two can
-                // appear, and neither stands for anything stable.
-                key={`gap-${index}`}
-                {...disabledA11yProps()}
-                value="…"
-                style={[styles.gap, { color: theme.colors.textSecondary }]}
-              />
-            ) : (
-              <Button
-                key={item}
-                testID={testID === undefined ? undefined : `${testID}-${item}`}
-                value={String(item)}
-                // "Page 3 of 20", not "3": there is no visible row of numbers
-                // for a screen reader user to read it among.
-                label={describe(item)}
-                type={item === current ? "primary" : type}
-                size={size}
-                selected={item === current}
-                onPress={() => go(item)}
-                style={styles.page}
-              />
-            ),
-          )
-        )}
+        </If>
+        <If condition={!compact}>
+          <Animated.View style={[styles.row, shift]}>
+            {items.map((item, index) =>
+              item === GAP ? (
+                // An ellipsis is not a control and has nothing to announce:
+                // the pages it stands for are reachable through the numbers
+                // either side of it.
+                <Text
+                  // Keyed by position because that is all a gap has: two can
+                  // appear, and neither stands for anything stable.
+                  key={`gap-${index}`}
+                  {...disabledA11yProps()}
+                  value="…"
+                  style={[styles.gap, { color: theme.colors.textSecondary }]}
+                />
+              ) : (
+                <Button
+                  key={item}
+                  testID={
+                    testID === undefined ? undefined : `${testID}-${item}`
+                  }
+                  value={String(item)}
+                  // "Page 3 of 20", not "3": there is no visible row of numbers
+                  // for a screen reader user to read it among.
+                  label={describe(item)}
+                  type={type}
+                  size={size}
+                  selected={item === current}
+                  onPress={() => go(item)}
+                  onLayout={(event) => {
+                    const layout = event.nativeEvent.layout;
+                    setLayouts((known) =>
+                      sameRect(known[item], layout)
+                        ? known
+                        : { ...known, [item]: layout },
+                    );
+                  }}
+                  // The highlight behind the row draws the selection, so the
+                  // button's own selected tint is cleared — it would otherwise
+                  // jump while the highlight slides.
+                  style={[styles.page, styles.clear]}
+                />
+              ),
+            )}
+          </Animated.View>
+        </If>
       </View>
 
       {step(1)}
     </View>
+  );
+}
+
+function sameRect(a: LayoutRectangle | undefined, b: LayoutRectangle) {
+  return (
+    a !== undefined &&
+    a.x === b.x &&
+    a.y === b.y &&
+    a.width === b.width &&
+    a.height === b.height
   );
 }
 
@@ -283,12 +336,25 @@ const useStyles = createStyles(({ isRTL, spacing, sizes }) => ({
     justifyContent: "center",
     gap: spacing.x4,
   },
+  // The page buttons, laid out as the row itself was: they move as one
+  // when the window shifts, and the highlight behind them doesn't.
+  row: {
+    flexDirection: isRTL ? "row-reverse" : "row",
+    flexShrink: 1,
+    flexWrap: "wrap",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: spacing.x4,
+  },
   page: {
     // Square-ish, so 1 and 20 are the same width and the row does not
     // shift as the digits change — the same reason `Timer` uses tabular
     // figures.
     minWidth: sizes.elementHeightMd,
     paddingHorizontal: spacing.x8,
+  },
+  clear: {
+    backgroundColor: "transparent",
   },
   gap: {
     minWidth: sizes.elementHeightMd,

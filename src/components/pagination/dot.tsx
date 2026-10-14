@@ -1,6 +1,17 @@
-import { Pressable, View } from "react-native";
+import { useEffect } from "react";
+import { Pressable } from "react-native";
+import Animated, {
+  Easing,
+  interpolateColor,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 
-import { controlA11yProps } from "@/features/accessibility";
+import {
+  controlA11yProps,
+  useAnimationDuration,
+} from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
@@ -12,8 +23,19 @@ type Props = {
   testID?: string;
 };
 
+/** How long a dot takes to grow or shrink, in ms (0 under Reduce Motion). */
+const DOT_DURATION = 220;
+
 /**
  * One dot.
+ *
+ * **It animates between states, not along a drag.** When the page changes
+ * the dot that lost it shrinks and fades to `border` while the new one
+ * grows into `accent`, over the same 220 ms, so the length looks like it
+ * travels. It's driven by `active` alone — the settled page — never by a
+ * carousel's live scroll progress: interpolating that produced two iOS
+ * press bugs and was removed (see `Pagination`). Only the inner shape
+ * animates; the `Pressable` target never moves or resizes.
  *
  * **The pressable area is a real box, not `hitSlop`.** An 8pt dot needs a
  * touch target several times its size, and the obvious way to get one is
@@ -33,9 +55,36 @@ export default function PaginationDot({
   const theme = useTheme();
   const { spacing } = useSizes();
   const styles = useStyles();
+  const duration = useAnimationDuration();
 
   const rest = spacing.x8;
   const grown = spacing.x20;
+  const vertical = orientation === "vertical";
+  const idle = theme.colors.border;
+  const current = theme.colors.accent;
+
+  const progress = useSharedValue(active ? 1 : 0);
+  useEffect(() => {
+    progress.value = withTiming(active ? 1 : 0, {
+      duration: duration(DOT_DURATION),
+      easing: Easing.out(Easing.cubic),
+    });
+  }, [active, duration, progress]);
+
+  const shape = useAnimatedStyle(() => {
+    const length = rest + (grown - rest) * progress.value;
+    return {
+      width: vertical ? rest : length,
+      height: vertical ? length : rest,
+      // Longer as well as recoloured: colour is never the sole carrier of
+      // state (WCAG 1.4.1), and a shape change survives greyscale.
+      backgroundColor: interpolateColor(
+        progress.value,
+        [0, 1],
+        [idle, current],
+      ),
+    };
+  });
 
   return (
     <Pressable
@@ -50,18 +99,9 @@ export default function PaginationDot({
         pressed ? { backgroundColor: theme.colors.pressed } : null,
       ]}
     >
-      <View
-        style={[
-          styles.dot,
-          {
-            width: orientation === "vertical" ? rest : active ? grown : rest,
-            height: orientation === "vertical" ? (active ? grown : rest) : rest,
-            // Longer as well as recoloured: colour is never the sole
-            // carrier of state (WCAG 1.4.1), and a shape change survives
-            // greyscale.
-            backgroundColor: active ? theme.colors.accent : theme.colors.border,
-          },
-        ]}
+      <Animated.View
+        testID="pagination-dot-shape"
+        style={[styles.dot, shape]}
       />
     </Pressable>
   );
