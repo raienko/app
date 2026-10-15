@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
+import { Easing } from "react-native-reanimated";
 
-import { isAndroid, isIOS, isWeb, wait } from "./index";
+import { easeOutClamped, isAndroid, isIOS, isWeb, wait } from "./index";
 
 describe("platform constants", () => {
   // Constants, not functions: the platform can't change while the app runs.
@@ -43,5 +44,16 @@ describe("wait", () => {
     await jest.advanceTimersByTimeAsync(1);
     expect(resolved).toHaveBeenCalled();
     jest.useRealTimers();
+  });
+});
+
+describe("easeOutClamped", () => {
+  it("never leaves 0–1, even for progress just outside it", () => {
+    expect(easeOutClamped(-0.05)).toBe(0);
+    expect(easeOutClamped(1.05)).toBe(1);
+  });
+
+  it("is ease-out cubic in between", () => {
+    expect(easeOutClamped(0.3)).toBe(Easing.out(Easing.cubic)(0.3));
   });
 });

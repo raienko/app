@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Pressable } from "react-native";
 import Animated, {
-  Easing,
   interpolateColor,
   useAnimatedStyle,
   useSharedValue,
@@ -14,6 +13,7 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { easeOutClamped } from "@/utils";
 
 type Props = {
   active: boolean;
@@ -67,7 +67,7 @@ export default function PaginationDot({
   useEffect(() => {
     progress.value = withTiming(active ? 1 : 0, {
       duration: duration(DOT_DURATION),
-      easing: Easing.out(Easing.cubic),
+      easing: easeOutClamped,
     });
   }, [active, duration, progress]);
 

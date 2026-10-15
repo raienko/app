@@ -1,12 +1,12 @@
 import { useEffect, useRef } from "react";
 import {
-  Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 
 import { useAnimationDuration } from "@/features/accessibility";
+import { easeOutClamped } from "@/utils";
 
 import type { PaginationItem } from "./range";
 
@@ -52,7 +52,7 @@ export default function useWindowShift(
     const direction = forward !== mirrored ? 1 : -1;
     const timing = {
       duration: duration(SHIFT_DURATION),
-      easing: Easing.out(Easing.cubic),
+      easing: easeOutClamped,
     };
     offset.value = direction * slot;
     offset.value = withTiming(0, timing);

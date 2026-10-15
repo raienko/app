@@ -1,5 +1,7 @@
 import { Platform } from "react-native";
 
+export { easeOutClamped } from "./easing";
+
 /**
  * Which platform the app is running on, as three constants rather than a
  * comparison repeated at every call site.

@@ -15,8 +15,8 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { easeOutClamped } from "@/utils";
 
-import easeOutClamped from "./easing";
 import type { TabBarIconState, TabBarItem } from "./types";
 
 /** How long a tab's icon and label take to change colour, in ms. */

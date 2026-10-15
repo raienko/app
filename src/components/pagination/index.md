@@ -32,6 +32,7 @@ Which of these am I on, and take me to another one.
 - **`value`/`onChange`, not `page`/`onPageChange`.** The same pair `Checkbox`, `Switch`, `Slider`, `SegmentedControl`, `Stepper` and `Input` take, so a controlled component reads the same wherever you meet one. `value` is 1-based — the number the reader sees, not an array index — and carries none of the zero-based implication `index` would. The active item is wider or recoloured depending on the variant, so state survives greyscale (WCAG 1.4.1).
 - **Every item announces its position**: "Page 3 of 20", not "3", because a screen-reader user has no visible row to read it among — and `getItemLabel` lets a carousel say "A pug wrapped in a blanket, Slide 2 of 4" instead. The current item is marked selected. The bar itself is not `accessible`: that would collapse its buttons into one announcement and make them unreachable, the trap `Card` and `ListItem` both document.
 - **Out-of-range input is clamped, not trusted.** A `page` past the end selects the last page and disables "next" rather than rendering a bar with nothing selected.
+- **The easing is clamped.** The highlight, the dots and the window shift all ease with `easeOutClamped` from `@/utils`, not plain `Easing.out(Easing.cubic)`. On web, Reanimated's first frame can be stamped just before the press, so progress starts slightly below 0 and the plain curve extrapolates it: recorded in web Storybook, every page change on five pages opened with a wrong-way frame, up to 43 px on a 0→236 slide. With the clamp, none.
 
 ---
 

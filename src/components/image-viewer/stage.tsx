@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { View, type LayoutChangeEvent } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import {
-  Easing,
   runOnJS,
   useSharedValue,
   withTiming,
@@ -11,6 +10,7 @@ import {
 
 import { useAnimationDuration } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
+import { easeOutClamped } from "@/utils";
 
 import ViewerPage from "./page";
 import type { ImageViewerItem } from "./types";
@@ -116,10 +116,9 @@ export default function ViewerStage({
   const focalY = useSharedValue(0);
   const mode = useSharedValue<Mode>("none");
 
-  // Built once on the JS thread and captured by the worklets below: a
-  // worklet can use the curve, but not call the JS function that makes it.
-  const easing = Easing.out(Easing.cubic);
-  const timing = { duration: settle, easing };
+  // Clamped, so a first web frame stamped before the turn began doesn't
+  // kick the page the wrong way (see `easeOutClamped`).
+  const timing = { duration: settle, easing: easeOutClamped };
 
   function resetZoom(time: number) {
     "worklet";

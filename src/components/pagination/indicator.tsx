@@ -1,7 +1,6 @@
 import { useEffect, useRef } from "react";
 import type { LayoutRectangle } from "react-native";
 import Animated, {
-  Easing,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
@@ -13,6 +12,7 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { easeOutClamped } from "@/utils";
 
 /** How long the highlight takes to slide to a new page, in ms (0 under Reduce Motion). */
 const SLIDE_DURATION = 240;
@@ -59,7 +59,7 @@ export default function PageIndicator({ target }: Props) {
     }
     const timing = {
       duration: duration(SLIDE_DURATION),
-      easing: Easing.out(Easing.cubic),
+      easing: easeOutClamped,
     };
     x.value = withTiming(target.x, timing);
     y.value = withTiming(target.y, timing);

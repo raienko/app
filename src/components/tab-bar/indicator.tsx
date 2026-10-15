@@ -12,8 +12,8 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { easeOutClamped } from "@/utils";
 
-import easeOutClamped from "./easing";
 import sameRect from "./same-rect";
 
 /** How long the indicator takes to slide to a new tab, in ms (0 under Reduce Motion). */
