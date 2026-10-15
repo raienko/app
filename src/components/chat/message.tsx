@@ -1,4 +1,4 @@
-import { memo, type ComponentProps } from "react";
+import { memo, useMemo } from "react";
 import {
   Pressable,
   View,
@@ -17,7 +17,7 @@ import Animated, {
 import Avatar from "@/components/avatar";
 import Icon from "@/components/icon";
 import If from "@/components/if";
-import Text from "@/components/text";
+import Text, { type TextSpan } from "@/components/text";
 import {
   controlA11yProps,
   disabledA11yProps,
@@ -29,17 +29,13 @@ import { useTheme } from "@/features/theme";
 import { isWeb } from "@/utils";
 
 import Attachments from "./attachments";
+import { linkify } from "./linkify";
 import { formatMessageTime } from "./format";
 import Receipt from "./receipt";
 import { endsGroup, startsGroup, toTime, type GroupPosition } from "./rows";
-import type { ChatMessage, ChatParticipant } from "./types";
+import type { ChatMessage, ChatMessageEvent, ChatParticipant } from "./types";
 
-type AttachmentHandlers = Pick<
-  ComponentProps<typeof Attachments>,
-  "onOpenImage" | "onOpenVideo" | "onOpenFile"
->;
-
-export type MessageProps = AttachmentHandlers & {
+export type MessageProps = {
   message: ChatMessage;
   /** Who sent it. Falls back to the sender id as a name. */
   sender?: ChatParticipant;
@@ -57,19 +53,19 @@ export type MessageProps = AttachmentHandlers & {
   replyTarget?: { message: ChatMessage; senderName: string };
   /** Used to highlight the reactions the current user made. */
   currentUserId?: string;
-  /** Long-press, or the screen reader's "Message actions" action. */
-  onOpenActions?: (message: ChatMessage) => void;
-  /** Swipe toward the end side, or the screen reader's "Reply" action. */
-  onReply?: (message: ChatMessage) => void;
-  onRetry?: (message: ChatMessage) => void;
-  /** A press on an existing reaction chip — usually toggles the user's own. */
-  onReact?: (message: ChatMessage, emoji: string) => void;
   /**
-   * A press on the sender's avatar or name — usually navigates to their
-   * profile. Others' messages only. Also a screen-reader action, so it
-   * works in a one-to-one chat, where neither is drawn.
+   * Everything the bubble reports — long-press, swipe-to-reply, retry, a
+   * reaction chip, the sender's avatar or name, a link, an attachment —
+   * as one `ChatMessageEvent`, with the message it happened on. Without it
+   * the bubble is display-only: nothing is pressable and no links are drawn.
    */
-  onOpenProfile?: (sender: ChatParticipant, message: ChatMessage) => void;
+  onEvent?: (event: ChatMessageEvent, message: ChatMessage) => void;
+  /**
+   * Shown but not acted on: no actions sheet, reply, reaction or retry.
+   * Profiles, links and attachments still open — reading a thread you
+   * can't write to still means following what's in it.
+   */
+  readOnly?: boolean;
   style?: StyleProp<ViewStyle>;
   testID?: string;
 };
@@ -93,14 +89,17 @@ const REPLY_MAX = 72;
  * failed message shows its receipt wherever it is, because it needs acting
  * on.
  *
- * **Actions are one gesture away, and reachable without it.** A long-press
- * calls `onOpenActions`; a swipe toward the end side calls `onReply`
- * (native only — on the web a horizontal drag is text selection). Screen
- * readers get both as named custom actions on the message text, so neither
- * depends on a gesture they can't make.
+ * **One callback, `onEvent`**, for everything that can happen to it — see
+ * `ChatMessageEvent`.
  *
- * **The sender opens their profile**: the avatar is a button, the name is
- * pressable, and both call `onOpenProfile` with the participant.
+ * **Actions are one gesture away, and reachable without it.** A long-press
+ * reports `actions`; a swipe toward the end side reports `reply` (native
+ * only — on the web a horizontal drag is text selection). Screen readers
+ * get both, plus the profile and each link, as named custom actions on the
+ * message text, so none depends on a gesture they can't make.
+ *
+ * **The sender opens their profile**: the avatar is a button and the name
+ * is pressable, on others' messages only.
  *
  * **To a screen reader the text is one element**: "Ada, 14:05. See you
  * there. Read." — sender, time, body and state in reading order, with the
@@ -115,14 +114,8 @@ function Message({
   showSender = true,
   replyTarget,
   currentUserId,
-  onOpenActions,
-  onReply,
-  onRetry,
-  onReact,
-  onOpenProfile,
-  onOpenImage,
-  onOpenVideo,
-  onOpenFile,
+  onEvent,
+  readOnly = false,
   style,
   testID,
 }: MessageProps) {
@@ -133,12 +126,16 @@ function Message({
   const duration = useAnimationDuration();
 
   const name = sender?.name ?? message.senderId;
-  const profile = own ? undefined : onOpenProfile;
+  const emit = (event: ChatMessageEvent) => onEvent?.(event, message);
+  // What can be done here, from the one callback and the read-only flag.
+  const live = onEvent !== undefined;
+  const canAct = live && !readOnly && !message.deleted;
+  const profile = live && !own;
   const openProfile = () =>
-    profile?.(
-      sender ?? { id: message.senderId, name: message.senderId },
-      message,
-    );
+    emit({
+      type: "profile",
+      participant: sender ?? { id: message.senderId, name: message.senderId },
+    });
   const profileLabel = t("chat.openProfile", { name });
   const time = formatMessageTime(toTime(message.createdAt), locale);
   const first = startsGroup(position);
@@ -155,8 +152,8 @@ function Message({
   // Toward the end side: right in LTR, left in RTL.
   const direction = isRTL ? -1 : 1;
   const translateX = useSharedValue(0);
-  const canSwipe = !isWeb && onReply !== undefined && !message.deleted;
-  const reply = () => onReply?.(message);
+  const canSwipe = !isWeb && canAct;
+  const reply = () => emit({ type: "reply" });
 
   const swipe = Gesture.Pan()
     .enabled(canSwipe)
@@ -183,6 +180,22 @@ function Message({
     ? t(`chat.receipt.${message.status ?? "sent"}`)
     : undefined;
   const body = message.deleted ? t("chat.deleted") : message.text;
+  const segments = useMemo(
+    () =>
+      message.deleted || message.text === undefined || !live
+        ? []
+        : linkify(message.text),
+    [message.deleted, message.text, live],
+  );
+  const links = segments.filter((segment) => segment.type === "link");
+  const spans: TextSpan[] = segments.map((segment) =>
+    segment.type === "text"
+      ? { text: segment.text }
+      : {
+          text: segment.text,
+          onPress: () => emit({ type: "link", url: segment.url }),
+        },
+  );
   const reactionsLabel =
     message.reactions && message.reactions.length > 0
       ? t("chat.message.reactions", {
@@ -209,20 +222,29 @@ function Message({
     .filter(Boolean)
     .join(". ");
 
-  const actionable = !message.deleted;
-  const accessibilityActions = actionable
+  const accessibilityActions = !message.deleted
     ? [
-        ...(onOpenActions
-          ? [{ name: "actions", label: t("chat.actions.title") }]
+        ...(canAct
+          ? [
+              { name: "actions", label: t("chat.actions.title") },
+              { name: "reply", label: t("chat.actions.reply") },
+            ]
           : []),
-        ...(onReply ? [{ name: "reply", label: t("chat.actions.reply") }] : []),
         ...(profile ? [{ name: "profile", label: profileLabel }] : []),
+        ...links.map((link, index) => ({
+          name: `link:${index}`,
+          label: t("chat.openLink", { link: link.text }),
+        })),
       ]
     : [];
   const onAccessibilityAction = (event: AccessibilityActionEvent) => {
-    if (event.nativeEvent.actionName === "actions") onOpenActions?.(message);
-    if (event.nativeEvent.actionName === "reply") onReply?.(message);
-    if (event.nativeEvent.actionName === "profile") openProfile();
+    const { actionName } = event.nativeEvent;
+    if (actionName === "actions") emit({ type: "actions" });
+    if (actionName === "reply") reply();
+    if (actionName === "profile") openProfile();
+    const link = /^link:(\d+)$/.exec(actionName);
+    const target = link ? links[Number(link[1])] : undefined;
+    if (target) emit({ type: "link", url: target.url });
   };
 
   const bubbleColors = own
@@ -284,8 +306,8 @@ function Message({
           <Animated.View style={swipeStyle}>
             <Pressable
               accessible={false}
-              disabled={!actionable || onOpenActions === undefined}
-              onLongPress={() => onOpenActions?.(message)}
+              disabled={!canAct}
+              onLongPress={() => emit({ type: "actions" })}
               delayLongPress={350}
               style={({ pressed }) => [
                 styles.bubble,
@@ -358,7 +380,7 @@ function Message({
 
                   <If condition={body}>
                     <Text
-                      value={body ?? ""}
+                      value={links.length > 0 ? spans : (body ?? "")}
                       selectable={isWeb}
                       style={
                         message.deleted
@@ -376,9 +398,7 @@ function Message({
               <If condition={hasAttachments}>
                 <Attachments
                   attachments={message.attachments ?? []}
-                  onOpenImage={onOpenImage}
-                  onOpenVideo={onOpenVideo}
-                  onOpenFile={onOpenFile}
+                  onOpen={live ? emit : undefined}
                 />
               </If>
 
@@ -405,7 +425,11 @@ function Message({
                   <If condition={showReceipt}>
                     <Receipt
                       status={message.status ?? "sent"}
-                      onRetry={onRetry ? () => onRetry(message) : undefined}
+                      onRetry={
+                        live && !readOnly
+                          ? () => emit({ type: "retry" })
+                          : undefined
+                      }
                     />
                   </If>
                 </View>
@@ -424,12 +448,12 @@ function Message({
               return (
                 <Pressable
                   key={reaction.emoji}
-                  disabled={onReact === undefined}
-                  onPress={() => onReact?.(message, reaction.emoji)}
+                  disabled={!live || readOnly}
+                  onPress={() => emit({ type: "react", emoji: reaction.emoji })}
                   {...controlA11yProps({
                     label: `${reaction.emoji} ${count}`,
                     selected: mine,
-                    disabled: onReact === undefined,
+                    disabled: !live || readOnly,
                   })}
                   style={({ pressed }) => [
                     styles.reaction,

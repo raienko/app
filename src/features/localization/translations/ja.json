@@ -396,6 +396,7 @@
     },
     "jumpToLatest": "最新のメッセージへ移動",
     "jumpToLatestUnseen": "最新のメッセージへ移動、新着 {{count}} 件",
-    "openProfile": "{{name}}さんのプロフィールを表示"
+    "openProfile": "{{name}}さんのプロフィールを表示",
+    "openLink": "{{link}} を開く"
   }
 }

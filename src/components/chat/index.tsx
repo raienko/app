@@ -7,7 +7,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Linking, View, type StyleProp, type ViewStyle } from "react-native";
+import { View, type StyleProp, type ViewStyle } from "react-native";
 
 import Button from "@/components/button";
 import If from "@/components/if";
@@ -15,6 +15,7 @@ import ImageViewer, { type ImageViewerItem } from "@/components/image-viewer";
 import MediaPlayer from "@/components/media-player";
 import Modal from "@/components/modal";
 import Popup from "@/components/popup";
+import { deepLinks } from "@/features/deep-links";
 import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
@@ -36,6 +37,7 @@ import type {
   ChatAttachment,
   ChatAttachmentKind,
   ChatMessage,
+  ChatMessageEvent,
   ChatParticipant,
   ChatSendPayload,
 } from "./types";
@@ -45,8 +47,10 @@ export type {
   ChatActivity,
   ChatActivityKind,
   ChatAttachment,
+  ChatAttachmentEvent,
   ChatAttachmentKind,
   ChatMessage,
+  ChatMessageEvent,
   ChatParticipant,
   ChatReaction,
   ChatReceiptStatus,
@@ -56,7 +60,6 @@ export type { ConversationProps as ChatConversationProps } from "./conversation"
 export type { MessageProps as ChatMessageProps } from "./message";
 
 type VideoAttachment = Extract<ChatAttachment, { kind: "video" }>;
-type FileAttachment = Extract<ChatAttachment, { kind: "file" }>;
 
 export type ChatProps = {
   /** The thread, oldest first. */
@@ -70,17 +73,14 @@ export type ChatProps = {
   /** The composer's send. Chat clears the draft once it has called this. */
   onSend: (payload: ChatSendPayload) => void;
   /**
-   * Everything done from the actions sheet or a reaction chip, plus
-   * `profile` when a sender's avatar or name is pressed (navigate from
-   * here). `copy` is already done by the time this is called (it's here
-   * for a toast); a `delete` arrives only after the user has confirmed it.
-   * Without it, reactions and avatars aren't pressable.
+   * The one callback for everything done to a message — see `ChatAction`:
+   * the actions sheet and reaction chips, a swipe-to-reply, a retry on a
+   * failed receipt, a sender's avatar or name (`profile`: navigate from
+   * here), an opened link or file. Some are already done by the time it's
+   * called and arrive for the record (`copy`, `link`, `file`); a `delete`
+   * arrives only after the user has confirmed it.
    */
-  onAction?: (action: ChatAction, message: ChatMessage) => void;
-  /** Makes a failed message's receipt a retry button. */
-  onRetry?: (message: ChatMessage) => void;
-  /** Opens a file attachment. Defaults to handing its URI to the OS. */
-  onOpenFile?: (file: FileAttachment) => void;
+  onAction: (action: ChatAction, message: ChatMessage) => void;
   onLoadEarlier?: () => void;
   hasEarlier?: boolean;
   loadingEarlier?: boolean;
@@ -115,8 +115,8 @@ export type ChatProps = {
  * arrangement.
  *
  * **Controlled.** Messages, participants and activity come in as props, and
- * everything the user does goes out through `onSend`, `onAction` and
- * `onRetry`; the transport, the store and optimistic updates are the
+ * everything the user does goes out through two callbacks — `onSend` for
+ * the composer, `onAction` for everything else; the transport, the store and optimistic updates are the
  * caller's. Chat owns only what is UI: the draft, pending attachments,
  * which message is being replied to or edited, and which sheet is open.
  *
@@ -133,7 +133,6 @@ export type ChatProps = {
  *     activity={typing}
  *     onSend={send}
  *     onAction={act}
- *     onRetry={resend}
  *     attachmentKinds={["image", "file"]}
  *   />
  * </Screen>
@@ -145,8 +144,6 @@ function Chat({
   activity,
   onSend,
   onAction,
-  onRetry,
-  onOpenFile,
   onLoadEarlier,
   hasEarlier,
   loadingEarlier,
@@ -209,61 +206,59 @@ function Chat({
     if (viewer) void ImageViewer.show(viewerId, viewer.index);
   }, [viewer, viewerId]);
 
-  const openActions = useCallback(
-    (message: ChatMessage) => {
-      setSelected(message);
-      void Modal.show(actionsId);
-    },
-    [actionsId],
-  );
-
   const startReply = useCallback((message: ChatMessage) => {
     setEditingId(undefined);
     setReplyToId(message.id);
   }, []);
 
-  const react = useCallback(
-    (message: ChatMessage, emoji: string) =>
-      onAction?.({ type: "react", emoji }, message),
-    [onAction],
-  );
-
-  // A press on a sender's avatar or name, reported as one more action —
-  // the message it was pressed on comes along for context.
-  const openProfile = useCallback(
-    (participant: ChatParticipant, message: ChatMessage) =>
-      onAction?.({ type: "profile", participant }, message),
-    [onAction],
-  );
-
-  const openImage = useCallback(
-    (
-      images: readonly Extract<ChatAttachment, { kind: "image" }>[],
-      index: number,
-    ) =>
-      setViewer((previous) => ({
-        images: images.map((image) => ({
-          source: image.uri,
-          alt: image.alt ?? image.name ?? t("chat.attachment.image"),
-        })),
-        index,
-        nonce: (previous?.nonce ?? 0) + 1,
-      })),
-    [t],
-  );
-
-  const openVideo = useCallback(
-    (attachment: VideoAttachment) => {
-      setVideo(attachment);
-      void Modal.show(videoId);
+  // Everything a bubble reports, in one place: the parts of it that are
+  // UI (the sheet, the viewer, the reply banner) happen here, and whatever
+  // the app needs to hear about goes on to `onAction`.
+  const handleEvent = useCallback(
+    (event: ChatMessageEvent, message: ChatMessage) => {
+      switch (event.type) {
+        case "actions":
+          setSelected(message);
+          void Modal.show(actionsId);
+          return;
+        case "reply":
+          startReply(message);
+          onAction(event, message);
+          return;
+        case "image":
+          setViewer((previous) => ({
+            images: event.images.map((image) => ({
+              source: image.uri,
+              alt: image.alt ?? image.name ?? t("chat.attachment.image"),
+            })),
+            index: event.index,
+            nonce: (previous?.nonce ?? 0) + 1,
+          }));
+          return;
+        case "video":
+          setVideo(event.attachment);
+          void Modal.show(videoId);
+          return;
+        // Opened here rather than left to the caller: through the
+        // deep-link pipeline, as `Markdown` does, so a link to the app
+        // itself routes in-app and anything else goes to the browser, mail
+        // or phone app. The app hears about it afterwards.
+        case "link":
+          void deepLinks.open(event.url);
+          onAction(event, message);
+          return;
+        case "file":
+          void deepLinks.open(event.attachment.uri);
+          onAction(event, message);
+          return;
+        case "retry":
+        case "react":
+        case "profile":
+          onAction(event, message);
+          return;
+      }
     },
-    [videoId],
-  );
-
-  const openFile = useCallback(
-    (file: FileAttachment) =>
-      onOpenFile ? onOpenFile(file) : void Linking.openURL(file.uri),
-    [onOpenFile],
+    [actionsId, videoId, onAction, startReply, t],
   );
 
   const select = async (action: ChatAction) => {
@@ -288,11 +283,10 @@ function Chat({
         setToDelete(message);
         await Popup.show(deleteId);
         return;
-      case "react":
-      case "profile":
+      default:
         break;
     }
-    onAction?.(action, message);
+    onAction(action, message);
   };
 
   const send = () => {
@@ -328,14 +322,8 @@ function Chat({
         onLoadEarlier={onLoadEarlier}
         hasEarlier={hasEarlier}
         loadingEarlier={loadingEarlier}
-        onOpenActions={disabled ? undefined : openActions}
-        onReply={disabled ? undefined : startReply}
-        onRetry={onRetry}
-        onOpenProfile={onAction === undefined ? undefined : openProfile}
-        onReact={disabled || onAction === undefined ? undefined : react}
-        onOpenImage={openImage}
-        onOpenVideo={openVideo}
-        onOpenFile={openFile}
+        onEvent={handleEvent}
+        readOnly={disabled}
         empty={
           <EmptyState
             title={emptyState?.title}
@@ -384,7 +372,7 @@ function Chat({
         <MessageActions
           message={selected ?? EMPTY_MESSAGE}
           own={selected?.senderId === currentUserId}
-          reactions={onAction ? reactions : []}
+          reactions={reactions}
           currentUserId={currentUserId}
           onSelect={(action) => void select(action)}
           onCancel={() => void Modal.hide(actionsId)}
@@ -397,7 +385,7 @@ function Chat({
         message={t("chat.actions.deleteMessage")}
         confirmLabel={t("chat.actions.delete")}
         onConfirm={() => {
-          if (toDelete) onAction?.({ type: "delete" }, toDelete);
+          if (toDelete) onAction({ type: "delete" }, toDelete);
           setToDelete(undefined);
         }}
         onCancel={() => setToDelete(undefined)}

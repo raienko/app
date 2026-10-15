@@ -42,7 +42,7 @@ function initialThread(): ChatMessage[] {
       id: "s1",
       senderId: "ada",
       createdAt: at(26 * 60),
-      text: "Has anyone looked at the new engine notes?",
+      text: "Has anyone looked at the new engine notes? https://example.com/engine",
     },
     {
       id: "s2",
@@ -169,6 +169,7 @@ export default function ChatSection() {
   };
 
   const act = (action: ChatAction, message: ChatMessage) => {
+    if (action.type === "retry") deliver(message.id);
     // In a real flow this is a navigation to the profile route.
     if (action.type === "profile") {
       void Toast.show({
@@ -231,7 +232,6 @@ export default function ChatSection() {
             activity={activity}
             onSend={send}
             onAction={act}
-            onRetry={(message) => deliver(message.id)}
             attachmentKinds={["image", "video", "audio", "file"]}
           />
         </If>
@@ -241,6 +241,7 @@ export default function ChatSection() {
             currentUserId={ME}
             participants={PEOPLE.slice(0, 2)}
             onSend={send}
+            onAction={act}
             emptyState={{ suggestions: ["Hi! 👋", "Are you free today?"] }}
           />
         </If>

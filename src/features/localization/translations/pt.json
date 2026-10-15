@@ -396,6 +396,7 @@
     },
     "jumpToLatest": "Ir para as mensagens mais recentes",
     "jumpToLatestUnseen": "Ir para as mensagens mais recentes, {{count}} novas",
-    "openProfile": "Ver o perfil de {{name}}"
+    "openProfile": "Ver o perfil de {{name}}",
+    "openLink": "Abrir {{link}}"
   }
 }

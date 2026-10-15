@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { Fragment, useMemo, type ReactNode } from "react";
 import {
   Text as RNText,
   type TextProps as RNTextProps,
@@ -6,6 +6,7 @@ import {
   type TextStyle,
 } from "react-native";
 
+import If from "@/components/if";
 import { headingA11yProps, type HeadingLevel } from "@/features/accessibility";
 import { useIsRtl } from "@/features/localization";
 import { useResponsive, type TypographyToken } from "@/features/responsive";
@@ -39,8 +40,25 @@ const HEADING_LEVEL_BY_TYPE: Partial<Record<TypographyToken, HeadingLevel>> = {
   title3: 4,
 };
 
+/**
+ * A run of text inside a `Text`. Give it `onPress` and it becomes an
+ * inline link: accent-coloured, underlined (colour alone isn't enough —
+ * WCAG 1.4.1), announced as a link, and pressable without breaking the
+ * line it sits in.
+ */
+export type TextSpan = {
+  text: string;
+  onPress?: () => void;
+  /** What a screen reader calls the link, when the text alone won't do. */
+  label?: string;
+};
+
 type Props = Omit<RNTextProps, "children"> & {
-  value: string;
+  /**
+   * The text. Pass spans instead of a string to make parts of it links —
+   * chat messages with URLs in them, "Read the [terms]" in a form footer.
+   */
+  value: string | readonly TextSpan[];
   /**
    * One of Apple's HIG type-scale names — see `@/features/responsive`'s
    * typography styleguide. Defaults to `"body"`.
@@ -60,6 +78,29 @@ type Props = Omit<RNTextProps, "children"> & {
  * `StyleSheet.create`, so every `<Text>` instance allocated twelve style
  * objects to use exactly one of them. Reading `typography[type]` costs one.
  */
+function renderSpans(
+  spans: readonly TextSpan[],
+  linkStyle: TextStyle,
+): ReactNode[] {
+  return spans.map((span, index) => (
+    // Spans have no identity beyond their place in the text.
+    <Fragment key={index}>
+      <If condition={span.onPress === undefined}>{span.text}</If>
+      <If condition={span.onPress}>
+        <RNText
+          onPress={span.onPress}
+          accessibilityRole="link"
+          role="link"
+          accessibilityLabel={span.label}
+          style={linkStyle}
+        >
+          {span.text}
+        </RNText>
+      </If>
+    </Fragment>
+  ));
+}
+
 export default function Text({
   value,
   type = "body",
@@ -72,6 +113,10 @@ export default function Text({
   const isRTL = useIsRtl();
 
   const headingLevel = HEADING_LEVEL_BY_TYPE[type];
+  const linkStyle: TextStyle = {
+    color: theme.colors.accent,
+    textDecorationLine: "underline",
+  };
 
   const baseStyle = useMemo<StyleProp<TextStyle>>(() => {
     const token = typography[type];
@@ -98,7 +143,10 @@ export default function Text({
       {...(headingLevel === undefined ? null : headingA11yProps(headingLevel))}
       {...props}
     >
-      {value}
+      {/* A plain string stays the only child — one text node, as before
+          spans existed. Spans become nested text, which keeps a link
+          inline rather than breaking the line around a separate element. */}
+      {typeof value === "string" ? value : renderSpans(value, linkStyle)}
     </RNText>
   );
 }

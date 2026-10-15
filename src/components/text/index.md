@@ -17,7 +17,7 @@ import Text from "@/components/text";
 
 - **This is the only way to draw text.** ESLint rejects `Text` imported from `react-native` anywhere under `src/app`, `components`, `root` and `screens`, and also rejects ad-hoc `fontSize` / `fontWeight` / `lineHeight` style properties. Type comes from the HIG-named scale in `@/features/responsive`.
 - **`type` also sets heading semantics.** `largeTitle`, `title1`, `title2` and `title3` announce as headings 1–4 and render as real `<h1>`–`<h4>` on web. Everything else is plain text. There is no separate `heading` prop because the type scale already is the hierarchy.
-- **Takes a string `value`, not children.** Rich inline formatting belongs in [`Markdown`](../markdown/index.md).
+- **Takes a string `value`, not children** — or an array of spans, where a span with `onPress` is an inline link: accent-coloured and underlined (colour alone isn't enough), announced as a link, and nested in the same text so it never breaks the line. Chat uses it for URLs in messages. Rich formatting beyond links belongs in [`Markdown`](../markdown/index.md).
 - **Colour and alignment** default to `text` and the reading direction (right-aligned in RTL). Override with `style`.
 - **`allowFontScaling={false}`** also undoes the pre-scaled line height, so opting out of Dynamic Type doesn't leave oversized line boxes.
 

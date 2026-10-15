@@ -396,6 +396,7 @@
     },
     "jumpToLatest": "الانتقال إلى أحدث الرسائل",
     "jumpToLatestUnseen": "الانتقال إلى أحدث الرسائل، {{count}} جديدة",
-    "openProfile": "عرض الملف الشخصي لـ {{name}}"
+    "openProfile": "عرض الملف الشخصي لـ {{name}}",
+    "openLink": "فتح {{link}}"
   }
 }

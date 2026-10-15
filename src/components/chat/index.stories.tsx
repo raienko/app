@@ -100,7 +100,6 @@ export const Group = () => {
         participants={PEOPLE}
         onSend={send}
         onAction={onAction}
-        onRetry={() => {}}
         attachmentKinds={["image", "file"]}
       />
     </Frame>
@@ -155,6 +154,7 @@ export const Empty = () => (
       currentUserId={ME}
       participants={PEOPLE.slice(0, 2)}
       onSend={() => {}}
+      onAction={onAction}
       emptyState={{ suggestions: ["Hi! 👋", "Are you free today?"] }}
     />
   </Frame>
@@ -167,6 +167,7 @@ export const ReadOnly = () => (
       currentUserId={ME}
       participants={PEOPLE}
       onSend={() => {}}
+      onAction={onAction}
       disabled
     />
   </Frame>

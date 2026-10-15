@@ -75,7 +75,7 @@ export function sampleThread(endingAt = Date.now()): ChatMessage[] {
       id: "m4",
       senderId: "ada",
       createdAt: at(30),
-      text: "Morning! Notes v2 below.",
+      text: "Morning! Notes v2 below, older ones at www.example.com/notes.",
       attachments: [
         {
           id: "a4",

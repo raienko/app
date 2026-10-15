@@ -396,6 +396,7 @@
     },
     "jumpToLatest": "До найновіших повідомлень",
     "jumpToLatestUnseen": "До найновіших повідомлень, нових: {{count}}",
-    "openProfile": "Профіль: {{name}}"
+    "openProfile": "Профіль: {{name}}",
+    "openLink": "Відкрити {{link}}"
   }
 }

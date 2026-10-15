@@ -31,19 +31,7 @@ import Message, { type MessageProps } from "./message";
 import { buildRows, startOfDay, type ChatRow } from "./rows";
 import type { ChatActivity, ChatMessage, ChatParticipant } from "./types";
 
-type MessageHandlers = Pick<
-  MessageProps,
-  | "onOpenActions"
-  | "onReply"
-  | "onRetry"
-  | "onReact"
-  | "onOpenProfile"
-  | "onOpenImage"
-  | "onOpenVideo"
-  | "onOpenFile"
->;
-
-export type ConversationProps = MessageHandlers & {
+export type ConversationProps = Pick<MessageProps, "onEvent" | "readOnly"> & {
   /** Oldest first — the order they happened in. */
   messages: readonly ChatMessage[];
   currentUserId: string;
@@ -98,9 +86,10 @@ const Conversation = forwardRef<LegendListRef, ConversationProps>(
       hasEarlier = false,
       loadingEarlier = false,
       empty,
+      onEvent,
+      readOnly,
       style,
       testID,
-      ...handlers
     },
     ref,
   ) {
@@ -166,17 +155,6 @@ const Conversation = forwardRef<LegendListRef, ConversationProps>(
     // timestamp here would rebuild every row's renderer on every render.
     const now = startOfDay(Date.now());
 
-    const {
-      onOpenActions,
-      onReply,
-      onRetry,
-      onReact,
-      onOpenProfile,
-      onOpenImage,
-      onOpenVideo,
-      onOpenFile,
-    } = handlers;
-
     const renderItem = useCallback(
       ({ item }: { item: ChatRow }) => {
         if (item.type === "date") {
@@ -205,33 +183,12 @@ const Conversation = forwardRef<LegendListRef, ConversationProps>(
                           target.senderId),
                   }
             }
-            onOpenActions={onOpenActions}
-            onReply={onReply}
-            onRetry={onRetry}
-            onReact={onReact}
-            onOpenProfile={onOpenProfile}
-            onOpenImage={onOpenImage}
-            onOpenVideo={onOpenVideo}
-            onOpenFile={onOpenFile}
+            onEvent={onEvent}
+            readOnly={readOnly}
           />
         );
       },
-      [
-        now,
-        byId,
-        participants,
-        currentUserId,
-        senders,
-        t,
-        onOpenActions,
-        onReply,
-        onRetry,
-        onReact,
-        onOpenProfile,
-        onOpenImage,
-        onOpenVideo,
-        onOpenFile,
-      ],
+      [now, byId, participants, currentUserId, senders, t, onEvent, readOnly],
     );
 
     return (

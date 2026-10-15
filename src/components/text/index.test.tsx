@@ -1,6 +1,6 @@
 import { StyleSheet, type TextStyle } from "react-native";
 
-import { render, screen } from "@/root/testing";
+import { fireEvent, render, screen } from "@/root/testing";
 
 import Component from "./index";
 
@@ -133,5 +133,22 @@ describe("Text and OS font scaling", () => {
     // latter. Opting out has to undo that half too, or the glyphs stay put
     // while the line box keeps growing.
     expect(styleOf("off").lineHeight!).toBeLessThan(styleOf("on").lineHeight!);
+  });
+
+  it("renders spans with onPress as inline links", async () => {
+    const onPress = jest.fn();
+    await render(
+      <Component
+        value={[
+          { text: "Read the " },
+          { text: "terms", onPress },
+          { text: "." },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText("Read the terms.")).toBeTruthy();
+    await fireEvent.press(screen.getByRole("link", { name: "terms" }));
+    expect(onPress).toHaveBeenCalled();
   });
 });

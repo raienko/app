@@ -1,5 +1,7 @@
 import { act, fireEvent, render, screen, waitFor } from "@/root/testing";
 
+import { deepLinks } from "@/features/deep-links";
+
 import { ME, PEOPLE, sampleThread } from "./fixtures";
 import Component from "./index";
 
@@ -35,12 +37,22 @@ jest.mock("expo-clipboard", () => ({
   setStringAsync: jest.fn(() => Promise.resolve(true)),
 }));
 
+// Midday, with the clock pinned to it: "Today" and "Yesterday" are worked
+// out from Date.now(), and the fixtures date messages minutes before NOW —
+// so run just after midnight against the real clock, they'd be yesterday's.
 const NOW = new Date(2026, 9, 15, 12, 0).getTime();
+
+beforeEach(() => {
+  jest.spyOn(Date, "now").mockReturnValue(NOW);
+});
+
+afterEach(() => {
+  jest.restoreAllMocks();
+});
 
 async function setup(props: Partial<Parameters<typeof Component>[0]> = {}) {
   const onSend = jest.fn();
   const onAction = jest.fn();
-  const onRetry = jest.fn();
   const view = await render(
     <Component
       messages={sampleThread(NOW)}
@@ -48,11 +60,10 @@ async function setup(props: Partial<Parameters<typeof Component>[0]> = {}) {
       participants={PEOPLE}
       onSend={onSend}
       onAction={onAction}
-      onRetry={onRetry}
       {...props}
     />,
   );
-  return { view, onSend, onAction, onRetry };
+  return { view, onSend, onAction };
 }
 
 describe(`${Component.name} smoke test`, () => {
@@ -89,13 +100,16 @@ describe(`${Component.name} smoke test`, () => {
   });
 
   it("makes a failed receipt a retry button", async () => {
-    const { onRetry } = await setup();
+    const { onAction } = await setup();
 
     await fireEvent.press(
       screen.getByRole("button", { name: "Not sent. Tap to retry" }),
     );
 
-    expect(onRetry).toHaveBeenCalledWith(expect.objectContaining({ id: "m8" }));
+    expect(onAction).toHaveBeenCalledWith(
+      { type: "retry" },
+      expect.objectContaining({ id: "m8" }),
+    );
   });
 
   it("replies through the screen reader's custom action", async () => {
@@ -195,6 +209,7 @@ describe(`${Component.name} smoke test`, () => {
         currentUserId={ME}
         participants={PEOPLE}
         onSend={() => {}}
+        onAction={() => {}}
       />,
     );
     expect(
@@ -242,5 +257,52 @@ describe(`${Component.name} smoke test`, () => {
     expect(
       screen.queryByRole("button", { name: "View You's profile" }),
     ).toBeNull();
+  });
+
+  describe("links in messages", () => {
+    const withLink = () => [
+      ...sampleThread(NOW),
+      {
+        id: "link",
+        senderId: "ada",
+        createdAt: NOW,
+        text: "Agenda: https://example.com/agenda.",
+      },
+    ];
+
+    it("opens a tapped link through the deep-link pipeline, then reports it", async () => {
+      const open = jest.spyOn(deepLinks, "open").mockResolvedValue();
+      const { onAction } = await setup({ messages: withLink() });
+
+      // The sentence's full stop stays out of the link.
+      await fireEvent.press(
+        screen.getByText("https://example.com/agenda", {
+          includeHiddenElements: true,
+        }),
+      );
+
+      expect(open).toHaveBeenCalledWith("https://example.com/agenda");
+      expect(onAction).toHaveBeenCalledWith(
+        { type: "link", url: "https://example.com/agenda" },
+        expect.objectContaining({ id: "link" }),
+      );
+      open.mockRestore();
+    });
+
+    it("offers each link as a screen-reader action on the message", async () => {
+      const open = jest.spyOn(deepLinks, "open").mockResolvedValue();
+      await setup({ messages: withLink() });
+      const message = screen.getByLabelText(/Agenda: https/);
+
+      expect(message.props.accessibilityActions).toContainEqual({
+        name: "link:0",
+        label: "Open https://example.com/agenda",
+      });
+      await fireEvent(message, "accessibilityAction", {
+        nativeEvent: { actionName: "link:0" },
+      });
+      expect(open).toHaveBeenCalledWith("https://example.com/agenda");
+      open.mockRestore();
+    });
   });
 });

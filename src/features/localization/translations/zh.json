@@ -396,6 +396,7 @@
     },
     "jumpToLatest": "跳到最新消息",
     "jumpToLatestUnseen": "跳到最新消息，{{count}} 条新消息",
-    "openProfile": "查看{{name}}的资料"
+    "openProfile": "查看{{name}}的资料",
+    "openLink": "打开 {{link}}"
   }
 }

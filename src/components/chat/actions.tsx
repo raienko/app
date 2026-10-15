@@ -11,6 +11,9 @@ import { useTheme } from "@/features/theme";
 
 import type { ChatAction, ChatMessage } from "./types";
 
+/** The rows the sheet can offer — the subset of `ChatAction` it starts. */
+type SheetAction = "reply" | "copy" | "edit" | "delete";
+
 export const DEFAULT_REACTIONS = ["👍", "❤️", "😂", "😮", "😢", "🙏"] as const;
 
 type Props = {
@@ -20,7 +23,7 @@ type Props = {
   /** The quick-reaction row. Pass `[]` to drop it. */
   reactions?: readonly string[];
   /** Which of reply, copy, edit, delete to offer at all. Defaults to all four. */
-  actions?: readonly Exclude<ChatAction["type"], "react" | "profile">[];
+  actions?: readonly SheetAction[];
   /** The emoji the current user has already reacted with, shown selected. */
   currentUserId?: string;
   onSelect: (action: ChatAction) => void;

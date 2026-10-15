@@ -396,6 +396,7 @@
     },
     "jumpToLatest": "Zu den neuesten Nachrichten",
     "jumpToLatestUnseen": "Zu den neuesten Nachrichten, {{count}} neu",
-    "openProfile": "Profil von {{name}} anzeigen"
+    "openProfile": "Profil von {{name}} anzeigen",
+    "openLink": "{{link}} öffnen"
   }
 }

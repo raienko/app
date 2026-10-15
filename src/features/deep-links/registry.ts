@@ -3,6 +3,7 @@ import { router, type Href } from "expo-router";
 
 import { createEventBus } from "@/features/event-bus";
 import logger from "@/features/logger";
+import { isWeb } from "@/utils";
 
 import { matchPath } from "./match";
 import DeepLinkQueue from "./queue";
@@ -187,7 +188,7 @@ class DeepLinks {
       const normalized = normalizeUrl(url);
 
       if (!normalized) {
-        await openURL(url);
+        await openExternal(url);
         return;
       }
 
@@ -256,6 +257,22 @@ function withGates(match: Match): GatedMatch {
  * else — a push tapped during a cold start can't navigate before the
  * navigator exists.
  */
+/**
+ * Hands a link that isn't the app's to whatever opens it. On the web,
+ * `expo-linking` navigates the current tab, so a web address tapped in a
+ * chat message or a Markdown block replaced the whole app; it opens in a
+ * new tab instead, without giving that page a handle back on this one.
+ * `mailto:` and `tel:` still go through `openURL`, which hands them to
+ * the mail or phone app without leaving the page.
+ */
+async function openExternal(url: string): Promise<void> {
+  if (isWeb && /^https?:\/\//i.test(url)) {
+    window.open(url, "_blank", "noopener,noreferrer");
+    return;
+  }
+  await openURL(url);
+}
+
 function fallback(normalized: NormalizedUrl): Match {
   return {
     link: { ...normalized, params: {}, initial: false },

@@ -218,7 +218,10 @@ export default function ChatInput({
             onChange={(image) => onAddAttachment?.(fromImage(image))}
             style={styles.picker}
           >
-            <Icon name="image" size={spacing.x20} color={theme.colors.text} />
+            {/* A plain icon, not an IconButton — ImagePicker is the pressable,
+                and nesting a second one swallows the press — so it takes the
+                tertiary IconButton's accent by hand, to match the paperclip. */}
+            <Icon name="image" size={spacing.x20} color={theme.colors.accent} />
           </ImagePicker>
         </If>
 
