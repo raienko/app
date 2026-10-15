@@ -1,4 +1,10 @@
-import { forwardRef, useState, type ReactNode } from "react";
+import {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import {
   Pressable,
   TextInput as RNTextInput,
@@ -13,6 +19,7 @@ import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 import FormField from "@/components/form-field";
+import { isWeb } from "@/utils";
 
 import type { BaseInputProps } from "./types";
 import useMultilineHeight from "./use-multiline-height";
@@ -87,7 +94,24 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
     // platform: native TextInput grows between min and max on its own, but
     // react-native-web's textarea doesn't, and would scroll from the first
     // overflowing line.
-    const autoHeight = useMultilineHeight(multiline);
+    const input = useRef<RNTextInputInstance>(null);
+    useImperativeHandle(ref, () => input.current as RNTextInputInstance, []);
+    const autoHeight = useMultilineHeight(multiline, value);
+
+    // Web only — see useMultilineHeight. Collapsing the textarea for one
+    // synchronous read gives its content's real height, which the browser
+    // otherwise never reports as smaller than the box; the next render
+    // puts the height back.
+    const handleChangeText = (text: string) => {
+      onChangeText?.(text);
+      if (!isWeb || multiline === undefined) return;
+      const node = input.current as unknown as HTMLTextAreaElement | null;
+      if (!node) return;
+      const previous = node.style.height;
+      node.style.height = "0px";
+      autoHeight.setContentHeight(node.scrollHeight);
+      node.style.height = previous;
+    };
 
     const fieldStyle = [
       styles.field,
@@ -123,14 +147,23 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
       />
     ) : (
       <RNTextInput
-        ref={ref}
+        ref={input}
         style={[styles.input, autoHeight.style, { color: theme.colors.text }]}
         value={value}
-        onChangeText={onChangeText}
+        onChangeText={handleChangeText}
         placeholder={placeholder}
         placeholderTextColor={theme.colors.textSecondary}
         editable={!disabled}
         multiline={multiline !== undefined}
+        // Web only: react-native-web renders a multiline field as a
+        // <textarea> with the browser's default two rows, and measures its
+        // content size against that — so a one-line field reported two
+        // lines' worth and never shrank to `minLines`. Native platforms
+        // size from content alone (and on Android this prop would fix the
+        // line count instead).
+        {...(isWeb && multiline !== undefined
+          ? { numberOfLines: multiline.minLines }
+          : null)}
         onContentSizeChange={autoHeight.onContentSizeChange}
         // Android centres multiline text vertically by default; a block of
         // text reads from the top.
@@ -220,66 +253,76 @@ export default BaseInput;
 // than this file overriding only `fontSize` on top of `body`. That partial
 // override was a real bug: an 11px label kept body's 19px line height.
 const useStyles = createStyles(
-  ({ isRTL, spacing, sizes, typography, radius }) => ({
-    field: {
-      borderRadius: radius.control,
-      flexDirection: isRTL ? "row-reverse" : "row",
-      alignItems: "center",
-      gap: spacing.x8,
-      minHeight: sizes.elementHeightMd,
-      paddingHorizontal: spacing.x12,
-      // Reserved for the emphasised border below. A field is usually as tall
-      // as `minHeight`, but one holding a full-size slot (Password's eye
-      // button) is as tall as its content — there a thicker border would
-      // grow the box and push the text down unless it has padding to eat.
-      paddingVertical: spacing.x1,
-      borderWidth: spacing.x1,
-    },
-    // Whatever the border gains comes out of the padding on every side, so
-    // neither the field's size nor its text moves when it gains focus.
-    // Written as the difference of the two widths rather than "one pixel":
-    // both go through `units()`, and after rounding `x2` isn't always `x1`
-    // plus one (2px and 3px on a wide window).
-    fieldEmphasised: {
-      borderWidth: spacing.x2,
-      paddingHorizontal: spacing.x12 - (spacing.x2 - spacing.x1),
-      paddingVertical: spacing.x1 - (spacing.x2 - spacing.x1),
-    },
-    // A block of text starts at the top, with room above and below the
-    // first and last lines rather than the single-line row's centring.
-    fieldMultiline: {
-      alignItems: "flex-start",
-      paddingVertical: spacing.x12,
-    },
-    // The same focus compensation as above, from the taller padding.
-    fieldMultilineEmphasised: {
-      borderWidth: spacing.x2,
-      paddingHorizontal: spacing.x12 - (spacing.x2 - spacing.x1),
-      paddingVertical: spacing.x12 - (spacing.x2 - spacing.x1),
-    },
-    // The RN TextInput host is not our Text component, so it takes the type
-    // scale as a style rather than a `type` prop.
-    input: {
-      ...typography.callout,
-      flex: 1,
-      // Web inputs default to `min-width: auto`, so a long unbroken value
-      // can force this flex child wider than the field. Zero lets it shrink
-      // beside slots; the input itself then scrolls its text horizontally.
-      minWidth: 0,
-      padding: 0,
-      // Browsers draw their own focus outline inside our styled field. The
-      // field's focused border is the design-system focus treatment.
-      outlineColor: "transparent",
-      outlineStyle: "solid",
-      outlineWidth: 0,
-      writingDirection: isRTL ? "rtl" : "ltr",
-    },
-    // The press-mode host *is* our Text component, so it only needs the
-    // layout half of the above — `type="callout"` carries the type scale.
-    text: {
-      flex: 1,
-      minWidth: 0,
-      writingDirection: isRTL ? "rtl" : "ltr",
-    },
-  }),
+  ({ isRTL, spacing, sizes, typography, radius }) => {
+    const multilinePadding = Math.max(
+      spacing.x4,
+      (sizes.elementHeightMd - typography.callout.lineHeight) / 2 - spacing.x1,
+    );
+
+    return {
+      field: {
+        borderRadius: radius.control,
+        flexDirection: isRTL ? "row-reverse" : "row",
+        alignItems: "center",
+        gap: spacing.x8,
+        minHeight: sizes.elementHeightMd,
+        paddingHorizontal: spacing.x12,
+        // Reserved for the emphasised border below. A field is usually as tall
+        // as `minHeight`, but one holding a full-size slot (Password's eye
+        // button) is as tall as its content — there a thicker border would
+        // grow the box and push the text down unless it has padding to eat.
+        paddingVertical: spacing.x1,
+        borderWidth: spacing.x1,
+      },
+      // Whatever the border gains comes out of the padding on every side, so
+      // neither the field's size nor its text moves when it gains focus.
+      // Written as the difference of the two widths rather than "one pixel":
+      // both go through `units()`, and after rounding `x2` isn't always `x1`
+      // plus one (2px and 3px on a wide window).
+      fieldEmphasised: {
+        borderWidth: spacing.x2,
+        paddingHorizontal: spacing.x12 - (spacing.x2 - spacing.x1),
+        paddingVertical: spacing.x1 - (spacing.x2 - spacing.x1),
+      },
+      // A block of text starts at the top rather than the single-line row's
+      // centring. The padding is whatever makes *one* line exactly
+      // `elementHeightMd` tall, so a one-line textarea (Chat's composer) sits
+      // level with the buttons and single-line fields beside it, and only
+      // grows from there. Never below x4, so very large text keeps a margin.
+      fieldMultiline: {
+        alignItems: "flex-start",
+        paddingVertical: multilinePadding,
+      },
+      // The same focus compensation as above, from that padding.
+      fieldMultilineEmphasised: {
+        borderWidth: spacing.x2,
+        paddingHorizontal: spacing.x12 - (spacing.x2 - spacing.x1),
+        paddingVertical: multilinePadding - (spacing.x2 - spacing.x1),
+      },
+      // The RN TextInput host is not our Text component, so it takes the type
+      // scale as a style rather than a `type` prop.
+      input: {
+        ...typography.callout,
+        flex: 1,
+        // Web inputs default to `min-width: auto`, so a long unbroken value
+        // can force this flex child wider than the field. Zero lets it shrink
+        // beside slots; the input itself then scrolls its text horizontally.
+        minWidth: 0,
+        padding: 0,
+        // Browsers draw their own focus outline inside our styled field. The
+        // field's focused border is the design-system focus treatment.
+        outlineColor: "transparent",
+        outlineStyle: "solid",
+        outlineWidth: 0,
+        writingDirection: isRTL ? "rtl" : "ltr",
+      },
+      // The press-mode host *is* our Text component, so it only needs the
+      // layout half of the above — `type="callout"` carries the type scale.
+      text: {
+        flex: 1,
+        minWidth: 0,
+        writingDirection: isRTL ? "rtl" : "ltr",
+      },
+    };
+  },
 );

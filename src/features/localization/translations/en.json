@@ -230,6 +230,7 @@
     "formField": "Form field",
     "images": "Images",
     "imageViewer": "Image viewer",
+    "chat": "Chat",
     "cards": "Cards",
     "section": "Section",
     "listItems": "List items",
@@ -314,5 +315,87 @@
     "share": "Share",
     "position": "{{index}} / {{total}}",
     "label": "Photo {{index}} of {{total}}"
+  },
+  "avatarGroup": {
+    "separator": ", ",
+    "andMore": "{{names}} and {{count}} more",
+    "overflow": "+{{count}}"
+  },
+  "chat": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "you": "You",
+    "placeholder": "Message",
+    "send": "Send",
+    "attach": "Attach a file",
+    "attachPhoto": "Attach a photo",
+    "removeAttachment": "Remove {{name}}",
+    "replyingTo": "Replying to {{name}}",
+    "cancelReply": "Cancel reply",
+    "editing": "Editing message",
+    "cancelEdit": "Cancel editing",
+    "edited": "edited",
+    "deleted": "This message was deleted",
+    "retry": "Retry",
+    "loadingEarlier": "Loading earlier messages",
+    "activity": {
+      "typingOne": "{{name}} is typing…",
+      "typingTwo": "{{first}} and {{second}} are typing…",
+      "typingMany": "{{count}} people are typing…",
+      "recordingOne": "{{name}} is recording audio…",
+      "recordingTwo": "{{first}} and {{second}} are recording audio…",
+      "recordingMany": "{{count}} people are recording audio…",
+      "uploadingOne": "{{name}} is sending a file…",
+      "uploadingTwo": "{{first}} and {{second}} are sending files…",
+      "uploadingMany": "{{count}} people are sending files…"
+    },
+    "receipt": {
+      "sending": "Sending",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "read": "Read",
+      "failed": "Not sent. Tap to retry"
+    },
+    "actions": {
+      "title": "Message actions",
+      "reply": "Reply",
+      "copy": "Copy",
+      "edit": "Edit",
+      "delete": "Delete",
+      "react": "React with {{emoji}}",
+      "deleteTitle": "Delete this message?",
+      "deleteMessage": "It will be removed for everyone in the chat.",
+      "hint": "Long-press for actions"
+    },
+    "attachment": {
+      "image": "Photo",
+      "video": "Video",
+      "audio": "Voice message",
+      "file": "File",
+      "more": "+{{count}}",
+      "open": "Open {{name}}",
+      "playVideo": "Play video"
+    },
+    "fileSize": {
+      "b": "{{size}} B",
+      "kb": "{{size}} KB",
+      "mb": "{{size}} MB",
+      "gb": "{{size}} GB"
+    },
+    "message": {
+      "label": "{{name}}, {{time}}",
+      "reactions": "Reactions: {{reactions}}"
+    },
+    "empty": {
+      "title": "No messages yet",
+      "message": "Say hello to start the conversation."
+    },
+    "participants": {
+      "members": "{{count}} members",
+      "online": "{{count}} online"
+    },
+    "jumpToLatest": "Jump to newest messages",
+    "jumpToLatestUnseen": "Jump to newest messages, {{count}} new",
+    "openProfile": "View {{name}}'s profile"
   }
 }

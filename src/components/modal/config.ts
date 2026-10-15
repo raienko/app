@@ -16,6 +16,12 @@ export type ModalTypeConfig = {
    */
   contentBackground: boolean;
   /**
+   * Whether a page-coloured fade sits behind the content, solid under it
+   * and dissolving into the backdrop above — see ./fade.tsx. For
+   * "actions", whose items have no card to sit on.
+   */
+  contentFade: boolean;
+  /**
    * Whether children sit in Modal's ScrollView. Off for `immersive`, whose
    * content runs its own gestures (pinch, pan, swipe-to-dismiss) that a
    * surrounding ScrollView would steal.
@@ -36,6 +42,7 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     animation: "fade",
     backdrop: true,
     contentBackground: true,
+    contentFade: false,
     scroll: true,
     edgeToEdge: false,
   },
@@ -44,6 +51,7 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     animation: "slideUp",
     backdrop: true,
     contentBackground: true,
+    contentFade: false,
     scroll: true,
     edgeToEdge: false,
   },
@@ -52,6 +60,7 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     animation: "slideUp",
     backdrop: true,
     contentBackground: false,
+    contentFade: true,
     scroll: true,
     edgeToEdge: false,
   },
@@ -60,6 +69,7 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     animation: "fade",
     backdrop: false,
     contentBackground: true,
+    contentFade: false,
     scroll: true,
     edgeToEdge: false,
   },
@@ -68,6 +78,7 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     animation: "fade",
     backdrop: false,
     contentBackground: false,
+    contentFade: false,
     scroll: false,
     edgeToEdge: true,
   },

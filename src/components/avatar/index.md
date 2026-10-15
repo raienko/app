@@ -4,7 +4,7 @@
 
 > A person or thing as a picture, initials or icon, with an optional status dot.
 
-<sub>`src/components/avatar` · [Stories](index.stories.tsx) · Tests: [`index.test.tsx`](index.test.tsx), [`initials.test.ts`](initials.test.ts), [`style.test.tsx`](style.test.tsx)</sub>
+<sub>`src/components/avatar` · [Stories](index.stories.tsx) · Tests: [`index.test.tsx`](index.test.tsx), [`group.test.tsx`](group.test.tsx), [`initials.test.ts`](initials.test.ts), [`style.test.tsx`](style.test.tsx)</sub>
 
 ```tsx
 import Avatar from "@/components/avatar";
@@ -12,6 +12,8 @@ import Avatar from "@/components/avatar";
 <Avatar name="Ada Lovelace" source={user.avatarUrl} />
 <Avatar name="Ada Lovelace" status="success" statusLabel="Online" />
 <Avatar name="Design team" icon={<Icon name="users" />} size="large" />
+
+<Avatar.Group people={members} max={4} />   // also: import { AvatarGroup } from "@/components/avatar"
 ```
 
 The picture of a person or a thing, in a square: a list row's leading slot, a comment's author, the account button in a header.
@@ -24,6 +26,7 @@ The picture of a person or a thing, in a square: a list row's leading slot, a co
 - **The monogram doesn't scale with the OS text size** (`allowFontScaling={false}`). The square is a fixed graphic that has to line up down a list, so letters that grew would clip rather than help — and the name is available in full to anyone reading by screen reader. Everything else scales with the device through `units()` as usual.
 - **The square sides (32/48/64) are local to this component** rather than entries in the sizes styleguide: nothing else in the app is measured in avatars, and the styleguide's own note says a bespoke measurement stays local. The status dot's side is chosen from `isRTL` rather than RN's `end`, which resolves through `I18nManager` and so lags a locale switch by a native reload — verified live by switching to العربية and watching the dot move from x=60 to x=10 on a 70px avatar.
 - **There is no per-person colour tint.** Deterministic here means the _monogram_ is deterministic; tinting each avatar by a hash of the name would need a set of avatar colours in the palette and a contrast check for each of them against both schemes, which is a palette change rather than a component one. Every avatar uses `backgroundElement` over a `border` edge, the same surface `ImageFallback` and `Button`'s `secondary` use, and for the same reason.
+- **`Avatar.Group` overlaps several** (`group.tsx`): a chat's members, a document's collaborators. The "+N" tile takes the last slot, so the row is never wider than `max` squares. Each square sits in a ring of the page colour, the same cut-out the status dot uses, and the row flips in RTL. The whole group is one accessibility element — "Ada, Grace and 3 more" — and the squares inside are hidden. The square sides it lines up with are shared from `avatar.tsx` as `AVATAR_SIDE`.
 - **It isn't pressable.** An avatar that navigates is a button with an avatar in it; wrap it rather than growing a second press channel here.
 
 ---

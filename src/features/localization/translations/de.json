@@ -230,6 +230,7 @@
     "formField": "Formularfeld",
     "images": "Bilder",
     "imageViewer": "Bildbetrachter",
+    "chat": "Chat",
     "cards": "Karten",
     "section": "Abschnitt",
     "listItems": "Listenelemente",
@@ -314,5 +315,87 @@
     "share": "Teilen",
     "position": "{{index}} / {{total}}",
     "label": "Foto {{index}} von {{total}}"
+  },
+  "avatarGroup": {
+    "separator": ", ",
+    "andMore": "{{names}} und {{count}} weitere",
+    "overflow": "+{{count}}"
+  },
+  "chat": {
+    "today": "Heute",
+    "yesterday": "Gestern",
+    "you": "Du",
+    "placeholder": "Nachricht",
+    "send": "Senden",
+    "attach": "Datei anhängen",
+    "attachPhoto": "Foto anhängen",
+    "removeAttachment": "{{name}} entfernen",
+    "replyingTo": "Antwort an {{name}}",
+    "cancelReply": "Antwort abbrechen",
+    "editing": "Nachricht bearbeiten",
+    "cancelEdit": "Bearbeiten abbrechen",
+    "edited": "bearbeitet",
+    "deleted": "Diese Nachricht wurde gelöscht",
+    "retry": "Erneut versuchen",
+    "loadingEarlier": "Ältere Nachrichten werden geladen",
+    "activity": {
+      "typingOne": "{{name}} schreibt…",
+      "typingTwo": "{{first}} und {{second}} schreiben…",
+      "typingMany": "{{count}} Personen schreiben…",
+      "recordingOne": "{{name}} nimmt Audio auf…",
+      "recordingTwo": "{{first}} und {{second}} nehmen Audio auf…",
+      "recordingMany": "{{count}} Personen nehmen Audio auf…",
+      "uploadingOne": "{{name}} sendet eine Datei…",
+      "uploadingTwo": "{{first}} und {{second}} senden Dateien…",
+      "uploadingMany": "{{count}} Personen senden Dateien…"
+    },
+    "receipt": {
+      "sending": "Wird gesendet",
+      "sent": "Gesendet",
+      "delivered": "Zugestellt",
+      "read": "Gelesen",
+      "failed": "Nicht gesendet. Tippen zum Wiederholen"
+    },
+    "actions": {
+      "title": "Nachrichtenaktionen",
+      "reply": "Antworten",
+      "copy": "Kopieren",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "react": "Mit {{emoji}} reagieren",
+      "deleteTitle": "Diese Nachricht löschen?",
+      "deleteMessage": "Sie wird für alle im Chat entfernt.",
+      "hint": "Lange drücken für Aktionen"
+    },
+    "attachment": {
+      "image": "Foto",
+      "video": "Video",
+      "audio": "Sprachnachricht",
+      "file": "Datei",
+      "more": "+{{count}}",
+      "open": "{{name}} öffnen",
+      "playVideo": "Video abspielen"
+    },
+    "fileSize": {
+      "b": "{{size}} B",
+      "kb": "{{size}} KB",
+      "mb": "{{size}} MB",
+      "gb": "{{size}} GB"
+    },
+    "message": {
+      "label": "{{name}}, {{time}}",
+      "reactions": "Reaktionen: {{reactions}}"
+    },
+    "empty": {
+      "title": "Noch keine Nachrichten",
+      "message": "Sag Hallo, um das Gespräch zu beginnen."
+    },
+    "participants": {
+      "members": "{{count}} Mitglieder",
+      "online": "{{count}} online"
+    },
+    "jumpToLatest": "Zu den neuesten Nachrichten",
+    "jumpToLatestUnseen": "Zu den neuesten Nachrichten, {{count}} neu",
+    "openProfile": "Profil von {{name}} anzeigen"
   }
 }

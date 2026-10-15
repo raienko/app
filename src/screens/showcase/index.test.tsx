@@ -38,6 +38,7 @@ const SECTION_TITLES = [
   "Form field",
   "Images",
   "Image viewer",
+  "Chat",
   "Cards",
   "Section",
   "List items",

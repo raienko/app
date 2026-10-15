@@ -13,6 +13,7 @@ import BarcodeSection from "./sections/barcode";
 import CardSection from "./sections/card";
 import CarouselSection from "./sections/carousel";
 import ChartSection from "./sections/chart";
+import ChatSection from "./sections/chat";
 import MapSection from "./sections/map";
 import CheckboxesSection from "./sections/checkboxes";
 import DeepLinksSection from "./sections/deep-links";
@@ -106,6 +107,7 @@ const SECTIONS: {
   { title: "showcase.formField", Component: FormFieldSection },
   { title: "showcase.images", Component: ImagesSection },
   { title: "showcase.imageViewer", Component: ImageViewerSection },
+  { title: "showcase.chat", Component: ChatSection },
   { title: "showcase.cards", Component: CardSection },
   { title: "showcase.section", Component: SectionSection },
   { title: "showcase.listItems", Component: ListItemSection },

@@ -230,6 +230,7 @@
     "formField": "表单字段",
     "images": "图片",
     "imageViewer": "图片查看器",
+    "chat": "聊天",
     "cards": "卡片",
     "section": "区块",
     "listItems": "列表项",
@@ -314,5 +315,87 @@
     "share": "分享",
     "position": "{{index}} / {{total}}",
     "label": "第 {{index}} 张，共 {{total}} 张"
+  },
+  "avatarGroup": {
+    "separator": "、",
+    "andMore": "{{names}}等另外 {{count}} 人",
+    "overflow": "+{{count}}"
+  },
+  "chat": {
+    "today": "今天",
+    "yesterday": "昨天",
+    "you": "你",
+    "placeholder": "消息",
+    "send": "发送",
+    "attach": "添加文件",
+    "attachPhoto": "添加照片",
+    "removeAttachment": "移除{{name}}",
+    "replyingTo": "回复 {{name}}",
+    "cancelReply": "取消回复",
+    "editing": "正在编辑消息",
+    "cancelEdit": "取消编辑",
+    "edited": "已编辑",
+    "deleted": "此消息已删除",
+    "retry": "重试",
+    "loadingEarlier": "正在加载更早的消息",
+    "activity": {
+      "typingOne": "{{name}} 正在输入…",
+      "typingTwo": "{{first}} 和 {{second}} 正在输入…",
+      "typingMany": "{{count}} 人正在输入…",
+      "recordingOne": "{{name}} 正在录音…",
+      "recordingTwo": "{{first}} 和 {{second}} 正在录音…",
+      "recordingMany": "{{count}} 人正在录音…",
+      "uploadingOne": "{{name}} 正在发送文件…",
+      "uploadingTwo": "{{first}} 和 {{second}} 正在发送文件…",
+      "uploadingMany": "{{count}} 人正在发送文件…"
+    },
+    "receipt": {
+      "sending": "正在发送",
+      "sent": "已发送",
+      "delivered": "已送达",
+      "read": "已读",
+      "failed": "发送失败，轻点重试"
+    },
+    "actions": {
+      "title": "消息操作",
+      "reply": "回复",
+      "copy": "复制",
+      "edit": "编辑",
+      "delete": "删除",
+      "react": "用 {{emoji}} 回应",
+      "deleteTitle": "删除这条消息？",
+      "deleteMessage": "所有成员都将看不到它。",
+      "hint": "长按查看操作"
+    },
+    "attachment": {
+      "image": "照片",
+      "video": "视频",
+      "audio": "语音消息",
+      "file": "文件",
+      "more": "+{{count}}",
+      "open": "打开{{name}}",
+      "playVideo": "播放视频"
+    },
+    "fileSize": {
+      "b": "{{size}} B",
+      "kb": "{{size}} KB",
+      "mb": "{{size}} MB",
+      "gb": "{{size}} GB"
+    },
+    "message": {
+      "label": "{{name}}，{{time}}",
+      "reactions": "回应：{{reactions}}"
+    },
+    "empty": {
+      "title": "还没有消息",
+      "message": "打个招呼，开始对话吧。"
+    },
+    "participants": {
+      "members": "{{count}} 位成员",
+      "online": "{{count}} 人在线"
+    },
+    "jumpToLatest": "跳到最新消息",
+    "jumpToLatestUnseen": "跳到最新消息，{{count}} 条新消息",
+    "openProfile": "查看{{name}}的资料"
   }
 }

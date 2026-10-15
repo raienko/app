@@ -230,6 +230,7 @@
     "formField": "Поле форми",
     "images": "Зображення",
     "imageViewer": "Перегляд зображень",
+    "chat": "Чат",
     "cards": "Картки",
     "section": "Секція",
     "listItems": "Елементи списку",
@@ -314,5 +315,87 @@
     "share": "Поділитися",
     "position": "{{index}} / {{total}}",
     "label": "Фото {{index}} з {{total}}"
+  },
+  "avatarGroup": {
+    "separator": ", ",
+    "andMore": "{{names}} та ще {{count}}",
+    "overflow": "+{{count}}"
+  },
+  "chat": {
+    "today": "Сьогодні",
+    "yesterday": "Учора",
+    "you": "Ви",
+    "placeholder": "Повідомлення",
+    "send": "Надіслати",
+    "attach": "Прикріпити файл",
+    "attachPhoto": "Прикріпити фото",
+    "removeAttachment": "Прибрати {{name}}",
+    "replyingTo": "Відповідь для {{name}}",
+    "cancelReply": "Скасувати відповідь",
+    "editing": "Редагування повідомлення",
+    "cancelEdit": "Скасувати редагування",
+    "edited": "змінено",
+    "deleted": "Повідомлення видалено",
+    "retry": "Повторити",
+    "loadingEarlier": "Завантаження попередніх повідомлень",
+    "activity": {
+      "typingOne": "{{name}} друкує…",
+      "typingTwo": "{{first}} і {{second}} друкують…",
+      "typingMany": "Друкують: {{count}}…",
+      "recordingOne": "{{name}} записує аудіо…",
+      "recordingTwo": "{{first}} і {{second}} записують аудіо…",
+      "recordingMany": "Записують аудіо: {{count}}…",
+      "uploadingOne": "{{name}} надсилає файл…",
+      "uploadingTwo": "{{first}} і {{second}} надсилають файли…",
+      "uploadingMany": "Надсилають файли: {{count}}…"
+    },
+    "receipt": {
+      "sending": "Надсилається",
+      "sent": "Надіслано",
+      "delivered": "Доставлено",
+      "read": "Прочитано",
+      "failed": "Не надіслано. Торкніться, щоб повторити"
+    },
+    "actions": {
+      "title": "Дії з повідомленням",
+      "reply": "Відповісти",
+      "copy": "Копіювати",
+      "edit": "Редагувати",
+      "delete": "Видалити",
+      "react": "Реакція {{emoji}}",
+      "deleteTitle": "Видалити це повідомлення?",
+      "deleteMessage": "Його буде видалено для всіх учасників чату.",
+      "hint": "Утримуйте для дій"
+    },
+    "attachment": {
+      "image": "Фото",
+      "video": "Відео",
+      "audio": "Голосове повідомлення",
+      "file": "Файл",
+      "more": "+{{count}}",
+      "open": "Відкрити {{name}}",
+      "playVideo": "Відтворити відео"
+    },
+    "fileSize": {
+      "b": "{{size}} Б",
+      "kb": "{{size}} КБ",
+      "mb": "{{size}} МБ",
+      "gb": "{{size}} ГБ"
+    },
+    "message": {
+      "label": "{{name}}, {{time}}",
+      "reactions": "Реакції: {{reactions}}"
+    },
+    "empty": {
+      "title": "Поки немає повідомлень",
+      "message": "Привітайтеся, щоб почати розмову."
+    },
+    "participants": {
+      "members": "Учасників: {{count}}",
+      "online": "У мережі: {{count}}"
+    },
+    "jumpToLatest": "До найновіших повідомлень",
+    "jumpToLatestUnseen": "До найновіших повідомлень, нових: {{count}}",
+    "openProfile": "Профіль: {{name}}"
   }
 }

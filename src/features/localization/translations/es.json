@@ -230,6 +230,7 @@
     "formField": "Campo de formulario",
     "images": "Imágenes",
     "imageViewer": "Visor de imágenes",
+    "chat": "Chat",
     "cards": "Tarjetas",
     "section": "Sección",
     "listItems": "Elementos de lista",
@@ -314,5 +315,87 @@
     "share": "Compartir",
     "position": "{{index}} / {{total}}",
     "label": "Foto {{index}} de {{total}}"
+  },
+  "avatarGroup": {
+    "separator": ", ",
+    "andMore": "{{names}} y {{count}} más",
+    "overflow": "+{{count}}"
+  },
+  "chat": {
+    "today": "Hoy",
+    "yesterday": "Ayer",
+    "you": "Tú",
+    "placeholder": "Mensaje",
+    "send": "Enviar",
+    "attach": "Adjuntar archivo",
+    "attachPhoto": "Adjuntar foto",
+    "removeAttachment": "Quitar {{name}}",
+    "replyingTo": "Respondiendo a {{name}}",
+    "cancelReply": "Cancelar respuesta",
+    "editing": "Editando mensaje",
+    "cancelEdit": "Cancelar edición",
+    "edited": "editado",
+    "deleted": "Se eliminó este mensaje",
+    "retry": "Reintentar",
+    "loadingEarlier": "Cargando mensajes anteriores",
+    "activity": {
+      "typingOne": "{{name}} está escribiendo…",
+      "typingTwo": "{{first}} y {{second}} están escribiendo…",
+      "typingMany": "{{count}} personas están escribiendo…",
+      "recordingOne": "{{name}} está grabando audio…",
+      "recordingTwo": "{{first}} y {{second}} están grabando audio…",
+      "recordingMany": "{{count}} personas están grabando audio…",
+      "uploadingOne": "{{name}} está enviando un archivo…",
+      "uploadingTwo": "{{first}} y {{second}} están enviando archivos…",
+      "uploadingMany": "{{count}} personas están enviando archivos…"
+    },
+    "receipt": {
+      "sending": "Enviando",
+      "sent": "Enviado",
+      "delivered": "Entregado",
+      "read": "Leído",
+      "failed": "No enviado. Toca para reintentar"
+    },
+    "actions": {
+      "title": "Acciones del mensaje",
+      "reply": "Responder",
+      "copy": "Copiar",
+      "edit": "Editar",
+      "delete": "Eliminar",
+      "react": "Reaccionar con {{emoji}}",
+      "deleteTitle": "¿Eliminar este mensaje?",
+      "deleteMessage": "Se eliminará para todos en el chat.",
+      "hint": "Mantén pulsado para ver acciones"
+    },
+    "attachment": {
+      "image": "Foto",
+      "video": "Vídeo",
+      "audio": "Mensaje de voz",
+      "file": "Archivo",
+      "more": "+{{count}}",
+      "open": "Abrir {{name}}",
+      "playVideo": "Reproducir vídeo"
+    },
+    "fileSize": {
+      "b": "{{size}} B",
+      "kb": "{{size}} KB",
+      "mb": "{{size}} MB",
+      "gb": "{{size}} GB"
+    },
+    "message": {
+      "label": "{{name}}, {{time}}",
+      "reactions": "Reacciones: {{reactions}}"
+    },
+    "empty": {
+      "title": "Aún no hay mensajes",
+      "message": "Saluda para empezar la conversación."
+    },
+    "participants": {
+      "members": "{{count}} miembros",
+      "online": "{{count}} en línea"
+    },
+    "jumpToLatest": "Ir a los mensajes más recientes",
+    "jumpToLatestUnseen": "Ir a los mensajes más recientes, {{count}} nuevos",
+    "openProfile": "Ver el perfil de {{name}}"
   }
 }

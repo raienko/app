@@ -12,6 +12,7 @@
     "card": "public",
     "carousel": "public",
     "chart": "public",
+    "chat": "public",
     "checkbox": "public",
     "divider": "public",
     "expo-ui-host": "internal",

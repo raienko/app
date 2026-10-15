@@ -97,29 +97,30 @@ Virtualised lists and the rows that go in them.
 
 Icons, images, people and labels.
 
-| Component                                              | What it's for                                                                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------- |
-| [**Icon**](../../src/components/icon/index.md)         | Five vector-icon families plus the app's own SVG set, themed by default.        |
-| [**Image**](../../src/components/image/index.md)       | `expo-image` with a themed placeholder, a fallback on error and cache controls. |
-| [**Avatar**](../../src/components/avatar/index.md)     | A person or thing as a picture, initials or icon, with an optional status dot.  |
-| [**Badge**](../../src/components/badge/index.md)       | A small status marker: an unread count, a label, or a dot.                      |
-| [**Tag**](../../src/components/tag/index.md)           | A short label: static, selectable as a filter, or removable.                    |
-| [**Markdown**](../../src/components/markdown/index.md) | Markdown rendered as native text in the app's type scale and palette.           |
-| [**Text**](../../src/components/text/index.md)         | All app text: type scale, theme colour, direction and heading semantics.        |
+| Component                                              | What it's for                                                                                                   |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------- |
+| [**Icon**](../../src/components/icon/index.md)         | Five vector-icon families plus the app's own SVG set, themed by default.                                        |
+| [**Image**](../../src/components/image/index.md)       | `expo-image` with a themed placeholder, a fallback on error and cache controls.                                 |
+| [**Avatar**](../../src/components/avatar/index.md)     | A person or thing as a picture, initials or icon, with an optional status dot; `Avatar.Group` overlaps several. |
+| [**Badge**](../../src/components/badge/index.md)       | A small status marker: an unread count, a label, or a dot.                                                      |
+| [**Tag**](../../src/components/tag/index.md)           | A short label: static, selectable as a filter, or removable.                                                    |
+| [**Markdown**](../../src/components/markdown/index.md) | Markdown rendered as native text in the app's type scale and palette.                                           |
+| [**Text**](../../src/components/text/index.md)         | All app text: type scale, theme colour, direction and heading semantics.                                        |
 
 ## Media & rich content
 
 Video, audio, carousels, charts, maps, scannable codes and embedded web pages.
 
-| Component                                                     | What it's for                                                                        |
-| ------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
-| [**MediaPlayer**](../../src/components/media-player/index.md) | Video or audio with app-owned controls.                                              |
-| [**Carousel**](../../src/components/carousel/index.md)        | Swipeable slides with accessible pagination.                                         |
-| [**Chart**](../../src/components/chart/index.md)              | Line, area and bar charts (Skia on native, SVG on web) with an accessible summary.   |
-| [**ImageViewer**](../../src/components/image-viewer/index.md) | Full-screen pictures: pinch and double-tap zoom, swipe to page, swipe down to close. |
-| [**Map**](../../src/components/map/index.md)                  | Places on a map in the app theme, with Directions handed to the platform map app.    |
-| [**Barcode**](../../src/components/barcode/index.md)          | A QR code or linear barcode, drawn as vectors.                                       |
-| [**WebView**](../../src/components/web-view/index.md)         | An embedded web page with a two-way event bridge and the app's typography.           |
+| Component                                                     | What it's for                                                                          |
+| ------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| [**MediaPlayer**](../../src/components/media-player/index.md) | Video or audio with app-owned controls.                                                |
+| [**Carousel**](../../src/components/carousel/index.md)        | Swipeable slides with accessible pagination.                                           |
+| [**Chart**](../../src/components/chart/index.md)              | Line, area and bar charts (Skia on native, SVG on web) with an accessible summary.     |
+| [**ImageViewer**](../../src/components/image-viewer/index.md) | Full-screen pictures: pinch and double-tap zoom, swipe to page, swipe down to close.   |
+| [**Map**](../../src/components/map/index.md)                  | Places on a map in the app theme, with Directions handed to the platform map app.      |
+| [**Barcode**](../../src/components/barcode/index.md)          | A QR code or linear barcode, drawn as vectors.                                         |
+| [**WebView**](../../src/components/web-view/index.md)         | An embedded web page with a two-way event bridge and the app's typography.             |
+| [**Chat**](../../src/components/chat/index.md)                | A message thread and composer: grouping, receipts, attachments, reactions and actions. |
 
 ## Utilities
 

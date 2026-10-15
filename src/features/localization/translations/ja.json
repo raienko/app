@@ -230,6 +230,7 @@
     "formField": "フォームフィールド",
     "images": "画像",
     "imageViewer": "画像ビューア",
+    "chat": "チャット",
     "cards": "カード",
     "section": "セクション",
     "listItems": "リスト項目",
@@ -314,5 +315,87 @@
     "share": "共有",
     "position": "{{index}} / {{total}}",
     "label": "写真 {{index}}/{{total}}"
+  },
+  "avatarGroup": {
+    "separator": "、",
+    "andMore": "{{names}}、ほか {{count}} 人",
+    "overflow": "+{{count}}"
+  },
+  "chat": {
+    "today": "今日",
+    "yesterday": "昨日",
+    "you": "あなた",
+    "placeholder": "メッセージ",
+    "send": "送信",
+    "attach": "ファイルを添付",
+    "attachPhoto": "写真を添付",
+    "removeAttachment": "{{name}}を削除",
+    "replyingTo": "{{name}}に返信",
+    "cancelReply": "返信をキャンセル",
+    "editing": "メッセージを編集中",
+    "cancelEdit": "編集をキャンセル",
+    "edited": "編集済み",
+    "deleted": "このメッセージは削除されました",
+    "retry": "再試行",
+    "loadingEarlier": "以前のメッセージを読み込み中",
+    "activity": {
+      "typingOne": "{{name}}さんが入力中…",
+      "typingTwo": "{{first}}さんと{{second}}さんが入力中…",
+      "typingMany": "{{count}} 人が入力中…",
+      "recordingOne": "{{name}}さんが録音中…",
+      "recordingTwo": "{{first}}さんと{{second}}さんが録音中…",
+      "recordingMany": "{{count}} 人が録音中…",
+      "uploadingOne": "{{name}}さんがファイルを送信中…",
+      "uploadingTwo": "{{first}}さんと{{second}}さんがファイルを送信中…",
+      "uploadingMany": "{{count}} 人がファイルを送信中…"
+    },
+    "receipt": {
+      "sending": "送信中",
+      "sent": "送信済み",
+      "delivered": "配信済み",
+      "read": "既読",
+      "failed": "送信できませんでした。タップして再試行"
+    },
+    "actions": {
+      "title": "メッセージの操作",
+      "reply": "返信",
+      "copy": "コピー",
+      "edit": "編集",
+      "delete": "削除",
+      "react": "{{emoji}} でリアクション",
+      "deleteTitle": "このメッセージを削除しますか？",
+      "deleteMessage": "チャットの全員から削除されます。",
+      "hint": "長押しで操作を表示"
+    },
+    "attachment": {
+      "image": "写真",
+      "video": "動画",
+      "audio": "ボイスメッセージ",
+      "file": "ファイル",
+      "more": "+{{count}}",
+      "open": "{{name}}を開く",
+      "playVideo": "動画を再生"
+    },
+    "fileSize": {
+      "b": "{{size}} B",
+      "kb": "{{size}} KB",
+      "mb": "{{size}} MB",
+      "gb": "{{size}} GB"
+    },
+    "message": {
+      "label": "{{name}}、{{time}}",
+      "reactions": "リアクション：{{reactions}}"
+    },
+    "empty": {
+      "title": "まだメッセージはありません",
+      "message": "あいさつして会話を始めましょう。"
+    },
+    "participants": {
+      "members": "メンバー {{count}} 人",
+      "online": "{{count}} 人がオンライン"
+    },
+    "jumpToLatest": "最新のメッセージへ移動",
+    "jumpToLatestUnseen": "最新のメッセージへ移動、新着 {{count}} 件",
+    "openProfile": "{{name}}さんのプロフィールを表示"
   }
 }

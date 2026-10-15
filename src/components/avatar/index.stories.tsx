@@ -150,3 +150,18 @@ const useStyles = createStyles(({ isRTL, spacing }) => ({
     gap: spacing.x4,
   },
 }));
+
+/** Overlapping avatars; the last slot counts whoever didn't fit. */
+export const Group = () => (
+  <Component.Group
+    people={[
+      { name: "Ada Lovelace", source: PHOTO },
+      { name: "Grace Hopper", source: OTHER },
+      { name: "Alan Turing" },
+      { name: "Edsger Dijkstra" },
+      { name: "Barbara Liskov" },
+    ]}
+    max={4}
+    size="medium"
+  />
+);

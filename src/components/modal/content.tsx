@@ -11,10 +11,12 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import If from "@/components/if";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 import type { ModalTypeConfig } from "./config";
+import ModalFade from "./fade";
 
 type Props = {
   config: ModalTypeConfig;
@@ -83,6 +85,11 @@ export default function ModalContent({
         style,
       ]}
     >
+      {/* First, so it paints behind the items. Inside the animated view, so
+          it slides in and out with them. */}
+      <If condition={config.contentFade}>
+        <ModalFade />
+      </If>
       {children}
     </Animated.View>
   );

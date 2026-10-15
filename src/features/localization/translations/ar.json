@@ -230,6 +230,7 @@
     "formField": "حقل النموذج",
     "images": "الصور",
     "imageViewer": "عارض الصور",
+    "chat": "الدردشة",
     "cards": "البطاقات",
     "section": "القسم",
     "listItems": "عناصر القائمة",
@@ -314,5 +315,87 @@
     "share": "مشاركة",
     "position": "{{index}} / {{total}}",
     "label": "الصورة {{index}} من {{total}}"
+  },
+  "avatarGroup": {
+    "separator": "، ",
+    "andMore": "{{names}} و{{count}} آخرون",
+    "overflow": "+{{count}}"
+  },
+  "chat": {
+    "today": "اليوم",
+    "yesterday": "أمس",
+    "you": "أنت",
+    "placeholder": "رسالة",
+    "send": "إرسال",
+    "attach": "إرفاق ملف",
+    "attachPhoto": "إرفاق صورة",
+    "removeAttachment": "إزالة {{name}}",
+    "replyingTo": "الرد على {{name}}",
+    "cancelReply": "إلغاء الرد",
+    "editing": "تعديل الرسالة",
+    "cancelEdit": "إلغاء التعديل",
+    "edited": "معدّلة",
+    "deleted": "تم حذف هذه الرسالة",
+    "retry": "إعادة المحاولة",
+    "loadingEarlier": "جارٍ تحميل الرسائل السابقة",
+    "activity": {
+      "typingOne": "{{name}} يكتب…",
+      "typingTwo": "{{first}} و{{second}} يكتبان…",
+      "typingMany": "{{count}} أشخاص يكتبون…",
+      "recordingOne": "{{name}} يسجّل صوتًا…",
+      "recordingTwo": "{{first}} و{{second}} يسجّلان صوتًا…",
+      "recordingMany": "{{count}} أشخاص يسجّلون صوتًا…",
+      "uploadingOne": "{{name}} يرسل ملفًا…",
+      "uploadingTwo": "{{first}} و{{second}} يرسلان ملفات…",
+      "uploadingMany": "{{count}} أشخاص يرسلون ملفات…"
+    },
+    "receipt": {
+      "sending": "جارٍ الإرسال",
+      "sent": "تم الإرسال",
+      "delivered": "تم التسليم",
+      "read": "تمت القراءة",
+      "failed": "لم تُرسل. انقر لإعادة المحاولة"
+    },
+    "actions": {
+      "title": "إجراءات الرسالة",
+      "reply": "رد",
+      "copy": "نسخ",
+      "edit": "تعديل",
+      "delete": "حذف",
+      "react": "التفاعل بـ {{emoji}}",
+      "deleteTitle": "حذف هذه الرسالة؟",
+      "deleteMessage": "ستُحذف لدى جميع المشاركين في الدردشة.",
+      "hint": "اضغط مطولًا لعرض الإجراءات"
+    },
+    "attachment": {
+      "image": "صورة",
+      "video": "فيديو",
+      "audio": "رسالة صوتية",
+      "file": "ملف",
+      "more": "+{{count}}",
+      "open": "فتح {{name}}",
+      "playVideo": "تشغيل الفيديو"
+    },
+    "fileSize": {
+      "b": "{{size}} بايت",
+      "kb": "{{size}} ك.ب",
+      "mb": "{{size}} م.ب",
+      "gb": "{{size}} ج.ب"
+    },
+    "message": {
+      "label": "{{name}}، {{time}}",
+      "reactions": "التفاعلات: {{reactions}}"
+    },
+    "empty": {
+      "title": "لا توجد رسائل بعد",
+      "message": "ألقِ التحية لبدء المحادثة."
+    },
+    "participants": {
+      "members": "{{count}} أعضاء",
+      "online": "{{count}} متصلون الآن"
+    },
+    "jumpToLatest": "الانتقال إلى أحدث الرسائل",
+    "jumpToLatestUnseen": "الانتقال إلى أحدث الرسائل، {{count}} جديدة",
+    "openProfile": "عرض الملف الشخصي لـ {{name}}"
   }
 }

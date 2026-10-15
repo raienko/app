@@ -204,6 +204,16 @@ const ICON_SIZE: Record<AvatarSize, "x16" | "x24" | "x32"> = {
 };
 
 /**
+ * The square's side at each size, before `units()`. Shared with `./group`
+ * so its "+N" tile lines up with the avatars beside it.
+ */
+export const AVATAR_SIDE: Record<AvatarSize, number> = {
+  small: 32,
+  medium: 48,
+  large: 64,
+};
+
+/**
  * The square sides are this component's own business rather than
  * entries in the sizes styleguide: nothing else in the app is measured in
  * avatars, and the styleguide's own note says a bespoke measurement stays
@@ -245,18 +255,18 @@ const useStyles = createStyles(({ units, isRTL, radius }) => ({
   },
   small: {
     borderRadius: radius.surface,
-    width: units(32),
-    height: units(32),
+    width: units(AVATAR_SIDE.small),
+    height: units(AVATAR_SIDE.small),
   },
   medium: {
     borderRadius: radius.surface,
-    width: units(48),
-    height: units(48),
+    width: units(AVATAR_SIDE.medium),
+    height: units(AVATAR_SIDE.medium),
   },
   large: {
     borderRadius: radius.surface,
-    width: units(64),
-    height: units(64),
+    width: units(AVATAR_SIDE.large),
+    height: units(AVATAR_SIDE.large),
   },
   // A presence dot is about a quarter of the square at every size — fixed
   // at `Badge`'s own 8pt it would vanish on a large avatar.
