@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { View } from "react-native";
 
+import If from "@/components/if";
 import { imageA11yProps } from "@/features/accessibility";
 import logger from "@/features/logger";
 import { formatNumber, useLocale } from "@/features/localization";
@@ -88,7 +89,9 @@ export default function ChartFrame<Row extends ChartRow>({
     >
       {children({ series, height, data: data as ChartRow[] })}
       {/* One series needs no key: the chart's own title names it. */}
-      {series.length > 1 ? <ChartLegend series={series} /> : null}
+      <If condition={series.length > 1}>
+        <ChartLegend series={series} />
+      </If>
     </View>
   );
 }

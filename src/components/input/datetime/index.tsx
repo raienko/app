@@ -11,6 +11,7 @@ import DateTimePicker, { type DateType } from "react-native-ui-datepicker";
 
 import Button from "@/components/button";
 import Icon from "@/components/icon";
+import If from "@/components/if";
 import Modal, { type ModalHandle } from "@/components/modal";
 import Text from "@/components/text";
 import { useLocale } from "@/features/localization";
@@ -219,7 +220,9 @@ const DateTimeInput = forwardRef<RNTextInputInstance, Props>(
               same width the other self-contained overlay content uses and
               centres in whatever is left. */}
           <View style={styles.sheet}>
-            {label ? <Text value={label} type="title3" /> : null}
+            <If condition={label}>
+              <Text value={label ?? ""} type="title3" />
+            </If>
 
             {/* The library decides its own RTL-ness from `I18nManager.isRTL`,
                 which this app never sets — it drives direction from the

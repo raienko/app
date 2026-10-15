@@ -25,7 +25,7 @@ await ImagePicker.show("avatar");
 - **Web goes straight to the file dialog.** A desktop browser has no camera to offer, and browsers only open a file dialog from the user gesture that asked for it. So both the press and `ImagePicker.show(id)` reach `launchImageLibraryAsync` synchronously, through the picker's own event bus.
 - **One image, images only.** `options` accepts the rest of `ImagePickerOptions`. Multiple selection and media type are fixed. A cancelled pick calls nothing. A failure is logged, and the next press can try again.
 - The trigger announces `expanded` while the native sheet is open. Give it an `accessibilityLabel`, because its children are often just an image.
-- **Known gap:** the sheet's "Choose image", "Gallery" and "Camera" strings are not localized yet (Roadmap step 10).
+- The sheet's title and buttons are localized under `imagePicker.*`.
 
 ---
 

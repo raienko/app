@@ -316,6 +316,11 @@
     "position": "{{index}} / {{total}}",
     "label": "Foto {{index}} von {{total}}"
   },
+  "imagePicker": {
+    "title": "Bild auswählen",
+    "gallery": "Galerie",
+    "camera": "Kamera"
+  },
   "avatarGroup": {
     "separator": ", ",
     "andMore": "{{names}} und {{count}} weitere",

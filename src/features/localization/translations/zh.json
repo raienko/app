@@ -316,6 +316,11 @@
     "position": "{{index}} / {{total}}",
     "label": "第 {{index}} 张，共 {{total}} 张"
   },
+  "imagePicker": {
+    "title": "选择图片",
+    "gallery": "图库",
+    "camera": "相机"
+  },
   "avatarGroup": {
     "separator": "、",
     "andMore": "{{names}}等另外 {{count}} 人",

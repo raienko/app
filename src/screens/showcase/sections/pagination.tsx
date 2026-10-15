@@ -3,6 +3,7 @@ import { View } from "react-native";
 
 import Card from "@/components/card";
 import Divider from "@/components/divider";
+import If from "@/components/if";
 import ListItem from "@/components/list-item";
 import Pagination from "@/components/pagination";
 import Section from "@/components/section";
@@ -49,7 +50,9 @@ export default function PaginationSection() {
                   title={`Order #${order.id}`}
                   subtitle={order.status}
                 />
-                {index < shown.length - 1 ? <Divider inset="x16" /> : null}
+                <If condition={index < shown.length - 1}>
+                  <Divider inset="x16" />
+                </If>
               </View>
             ))}
           </View>

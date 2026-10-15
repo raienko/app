@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View } from "react-native";
 import Svg, { G, Line, Path, Text as SvgText } from "react-native-svg";
 
+import If from "@/components/if";
 import { disabledA11yProps } from "@/features/accessibility";
 import { formatNumber, useLocale } from "@/features/localization";
 import { createStyles, useResponsive } from "@/features/responsive";
@@ -147,13 +148,13 @@ export default function SvgPlot({
       });
       return (
         <G key={entry.key}>
-          {type === "area" ? (
+          <If condition={type === "area"}>
             <Path
               d={areaPath(points, baseline)}
               fill={entry.color}
               fillOpacity={AREA_OPACITY}
             />
-          ) : null}
+          </If>
           <Path
             d={linePath(points)}
             stroke={entry.color}
@@ -175,54 +176,53 @@ export default function SvgPlot({
       onLayout={(event) => setWidth(event.nativeEvent.layout.width)}
       style={[styles.plot, { height }]}
     >
-      {width > 0 ? (
+      <If condition={width > 0}>
         <Svg width={width} height={height}>
-          {axes
-            ? scale.ticks.map((tick, index) => (
-                <G key={`y-${tick}`}>
-                  {/* Recessive for the reason given in ./plot.tsx. */}
-                  <Line
-                    x1={left}
-                    x2={width}
-                    y1={toY(tick)}
-                    y2={toY(tick)}
-                    stroke={theme.colors.backgroundElementSelected}
-                    strokeWidth={1}
-                  />
-                  <SvgText
-                    x={left - spacing.x8}
-                    y={toY(tick)}
-                    fontSize={fontSize}
-                    fontFamily={caption.fontFamily}
-                    fill={theme.colors.textSecondary}
-                    textAnchor="end"
-                    alignmentBaseline="middle"
-                  >
-                    {tickLabels[index]}
-                  </SvgText>
-                </G>
-              ))
-            : null}
+          <If condition={axes}>
+            {scale.ticks.map((tick, index) => (
+              <G key={`y-${tick}`}>
+                {/* Recessive for the reason given in ./plot.tsx. */}
+                <Line
+                  x1={left}
+                  x2={width}
+                  y1={toY(tick)}
+                  y2={toY(tick)}
+                  stroke={theme.colors.backgroundElementSelected}
+                  strokeWidth={1}
+                />
+                <SvgText
+                  x={left - spacing.x8}
+                  y={toY(tick)}
+                  fontSize={fontSize}
+                  fontFamily={caption.fontFamily}
+                  fill={theme.colors.textSecondary}
+                  textAnchor="end"
+                  alignmentBaseline="middle"
+                >
+                  {tickLabels[index]}
+                </SvgText>
+              </G>
+            ))}
+          </If>
           {marks()}
-          {axes
-            ? data.map((row, index) =>
-                index % stride === 0 ? (
-                  <SvgText
-                    key={`x-${index}`}
-                    x={centres[index]}
-                    y={height - spacing.x4}
-                    fontSize={fontSize}
-                    fontFamily={caption.fontFamily}
-                    fill={theme.colors.textSecondary}
-                    textAnchor="middle"
-                  >
-                    {readX(row[xKey])}
-                  </SvgText>
-                ) : null,
-              )
-            : null}
+          <If condition={axes}>
+            {data.map((row, index) => (
+              <If key={`x-${index}`} condition={index % stride === 0}>
+                <SvgText
+                  x={centres[index]}
+                  y={height - spacing.x4}
+                  fontSize={fontSize}
+                  fontFamily={caption.fontFamily}
+                  fill={theme.colors.textSecondary}
+                  textAnchor="middle"
+                >
+                  {readX(row[xKey])}
+                </SvgText>
+              </If>
+            ))}
+          </If>
         </Svg>
-      ) : null}
+      </If>
     </View>
   );
 }

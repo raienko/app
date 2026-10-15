@@ -316,6 +316,11 @@
     "position": "{{index}} / {{total}}",
     "label": "Фото {{index}} з {{total}}"
   },
+  "imagePicker": {
+    "title": "Виберіть зображення",
+    "gallery": "Галерея",
+    "camera": "Камера"
+  },
   "avatarGroup": {
     "separator": ", ",
     "andMore": "{{names}} та ще {{count}}",

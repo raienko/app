@@ -56,6 +56,7 @@
 | `yarn test`                       | Jest                                                                    |
 | `yarn format` / `format:check`    | Prettier write / check                                                  |
 | `yarn secretlint`                 | Scan the repo for committed secrets                                     |
+| `yarn verify`                     | Every gate in one go: format check, lint, typecheck, secretlint, tests  |
 | `yarn storybook`                  | On-device Storybook (Metro, opens on whatever device/emulator you pick) |
 | `yarn storybook:ios` / `:android` | On-device Storybook, direct to one platform                             |
 | `yarn storybook:web`              | Web Storybook (Vite) at `localhost:6006`                                |

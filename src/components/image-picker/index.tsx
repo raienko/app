@@ -13,6 +13,7 @@ import If from "@/components/if";
 import Modal from "@/components/modal";
 import Text from "@/components/text";
 import { controlA11yProps } from "@/features/accessibility";
+import { useLocale } from "@/features/localization";
 import logger from "@/features/logger";
 import { permissions } from "@/features/permissions";
 import { isWeb } from "@/utils";
@@ -70,6 +71,7 @@ function ImagePickerComponent({
   accessibilityLabel,
   ...pressableProps
 }: ImagePickerProps) {
+  const { t } = useLocale();
   const picking = useRef(false);
   const [open, setOpen] = useState(false);
 
@@ -180,9 +182,15 @@ function ImagePickerComponent({
           onShow={() => setOpen(true)}
           onClose={() => setOpen(false)}
         >
-          <Text value="Choose image" type="title3" />
-          <Button value="Gallery" onPress={() => void pick("gallery")} />
-          <Button value="Camera" onPress={() => void pick("camera")} />
+          <Text value={t("imagePicker.title")} type="title3" />
+          <Button
+            value={t("imagePicker.gallery")}
+            onPress={() => void pick("gallery")}
+          />
+          <Button
+            value={t("imagePicker.camera")}
+            onPress={() => void pick("camera")}
+          />
         </Modal>
       </If>
     </>

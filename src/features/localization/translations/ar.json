@@ -316,6 +316,11 @@
     "position": "{{index}} / {{total}}",
     "label": "الصورة {{index}} من {{total}}"
   },
+  "imagePicker": {
+    "title": "اختر صورة",
+    "gallery": "المعرض",
+    "camera": "الكاميرا"
+  },
   "avatarGroup": {
     "separator": "، ",
     "andMore": "{{names}} و{{count}} آخرون",

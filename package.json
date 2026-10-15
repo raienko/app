@@ -116,6 +116,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "secretlint": "secretlint \"**/*\"",
+    "verify": "yarn format:check && yarn lint && yarn typecheck && yarn secretlint && yarn test",
     "postinstall": "patch-package",
     "prepare": "husky",
     "storybook": "STORYBOOK_ENABLED=true expo start",

@@ -2,6 +2,7 @@ import { forwardRef, useId, useRef, useState } from "react";
 import type { TextInput as RNTextInputInstance } from "react-native";
 
 import Icon from "@/components/icon";
+import If from "@/components/if";
 import Modal, { type ModalHandle } from "@/components/modal";
 import Text from "@/components/text";
 import { useSizes } from "@/features/responsive";
@@ -84,7 +85,9 @@ const SelectInput = forwardRef<RNTextInputInstance, Props>(function SelectInput(
         // false for the whole opening animation.)
         onClose={() => setOpen(false)}
       >
-        {label ? <Text value={label} type="title3" /> : null}
+        <If condition={label}>
+          <Text value={label ?? ""} type="title3" />
+        </If>
         {options.map((option) => (
           <SelectOptionRow
             key={option.value}
