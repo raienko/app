@@ -1,10 +1,14 @@
-import { View } from "react-native";
+import { useState } from "react";
+import { View, type LayoutRectangle } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { tabListA11yProps } from "@/features/accessibility";
+import { useIsRtl } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 import { useElevationStyle, useTheme } from "@/features/theme";
 
+import TabIndicator from "./indicator";
+import sameRect from "./same-rect";
 import { useTabBarMetrics } from "./space";
 import Tab from "./tab";
 import type { TabBarProps } from "./types";
@@ -22,6 +26,11 @@ import type { TabBarProps } from "./types";
  * // app/(tabs)/_layout.tsx
  * <Tabs tabBar={(props) => <NavigationTabBar {...props} />} />
  * ```
+ *
+ * **Changing tab animates**: the indicator slides from the old tab to the
+ * new one, measured rather than assumed equal, and the tabs' icons and
+ * labels crossfade between their two colours. Under Reduce Motion the
+ * indicator moves instantly and only the crossfade remains.
  *
  * **A screen has to reserve room for it**, because the bar is drawn over
  * the screen rather than beside it — see `useTabBarSpace()`, which takes
@@ -44,6 +53,10 @@ export default function TabBar({
   const styles = useStyles();
   const insets = useSafeAreaInsets();
   const { height, floatingInset } = useTabBarMetrics();
+
+  const [layouts, setLayouts] = useState<Record<string, LayoutRectangle>>({});
+
+  const direction = useIsRtl() ? "rtl" : "ltr";
 
   const chin = avoidChin ? insets.bottom : 0;
   const floating = variant === "floating";
@@ -85,20 +98,45 @@ export default function TabBar({
         style,
       ]}
     >
-      {items.map((item) => (
-        <Tab
-          key={item.key}
-          item={item}
-          selected={item.key === value}
-          onPress={() => onChange(item.key)}
-        />
-      ))}
+      {/* Tabs and indicator share a row with no border or padding of its
+          own, so a tab's measured position and the indicator's offset are
+          counted from the same origin.
+
+          Remounted, and measured afresh, when the direction flips: the
+          tabs swap places without changing size, and react-native-web
+          reports layout from a ResizeObserver, which never hears of a
+          move. Keying the measurements by direction too keeps the
+          indicator off the old side until the new ones arrive. */}
+      <View key={direction} style={styles.row}>
+        <TabIndicator target={layouts[`${direction}/${value}`]} />
+        {items.map((item) => (
+          <Tab
+            key={item.key}
+            item={item}
+            selected={item.key === value}
+            onPress={() => onChange(item.key)}
+            onLayout={(event) => {
+              const layout = event.nativeEvent.layout;
+              const slot = `${direction}/${item.key}`;
+              setLayouts((known) =>
+                sameRect(known[slot], layout)
+                  ? known
+                  : { ...known, [slot]: layout },
+              );
+            }}
+          />
+        ))}
+      </View>
     </View>
   );
 }
 
 const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
   bar: {
+    alignItems: "stretch",
+  },
+  row: {
+    flex: 1,
     flexDirection: isRTL ? "row-reverse" : "row",
     alignItems: "stretch",
   },
@@ -109,7 +147,7 @@ const useStyles = createStyles(({ isRTL, spacing, radius }) => ({
   floating: {
     borderRadius: radius.surface,
     borderWidth: spacing.x1,
-    // Keeps a pressed tab's highlight inside the bar's corners.
+    // Keeps the indicator and a pressed tab inside the bar's corners.
     overflow: "hidden",
   },
 }));

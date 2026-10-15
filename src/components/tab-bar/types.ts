@@ -13,6 +13,13 @@ import type { StyleProp, ViewStyle } from "react-native";
  */
 export type TabBarVariant = "sticky" | "floating";
 
+/** What a function `icon` is drawn for. */
+export type TabBarIconState = {
+  focused: boolean;
+  color: string;
+  size: number;
+};
+
 /** One destination in the bar. */
 export type TabBarItem = {
   /** Identifies the tab: what `value` is matched against and `onChange` reports. */
@@ -23,8 +30,12 @@ export type TabBarItem = {
    * Usually an `<Icon />`. It takes the bar's own colour for its state
    * without the call site restating it — the same way a `Button` fills one
    * in for its child.
+   *
+   * Or a function of that state, for an icon that picks its own glyph or
+   * colour — a navigator's `tabBarIcon` is one. It's called once per colour
+   * the tab crossfades between, so it should depend only on its arguments.
    */
-  icon?: ReactNode;
+  icon?: ReactNode | ((state: TabBarIconState) => ReactNode);
   testID?: string;
 };
 

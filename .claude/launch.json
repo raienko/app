@@ -12,6 +12,12 @@
       "runtimeExecutable": "yarn",
       "runtimeArgs": ["start"],
       "port": 8081
+    },
+    {
+      "name": "storybook-web",
+      "runtimeExecutable": "yarn",
+      "runtimeArgs": ["storybook:web", "--no-open"],
+      "port": 6006
     }
   ]
 }

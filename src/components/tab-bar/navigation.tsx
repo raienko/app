@@ -1,9 +1,6 @@
 import type { ComponentProps } from "react";
 import { Tabs } from "expo-router";
 
-import { useSizes } from "@/features/responsive";
-import { useTheme } from "@/features/theme";
-
 import TabBar from "./tab-bar";
 import type { TabBarItem, TabBarLayoutProps } from "./types";
 
@@ -50,9 +47,6 @@ export default function NavigationTabBar({
   navigation,
   ...layout
 }: Props) {
-  const theme = useTheme();
-  const { spacing } = useSizes();
-
   const routes = state.routes.filter((route) => {
     // Expo Router hides a tab with `href: null`. It isn't in React
     // Navigation's own options type, so it's read defensively rather than
@@ -63,19 +57,14 @@ export default function NavigationTabBar({
 
   const items: TabBarItem[] = routes.map((route) => {
     const { options } = descriptors[route.key];
-    const focused = state.routes[state.index]?.key === route.key;
-
     return {
       key: route.key,
       label: options.title ?? route.name,
-      icon: options.tabBarIcon?.({
-        focused,
-        // The route's own icon renderer gets the colour this bar would have
-        // used anyway, so an icon that ignores the argument and an icon
-        // that honours it both come out right.
-        color: focused ? theme.colors.text : theme.colors.textSecondary,
-        size: spacing.x24,
-      }),
+      // Handed over as a function rather than called here: the tab draws
+      // its icon once per colour it crossfades between, and the route's own
+      // renderer gets the colour of each, so an icon that honours the
+      // argument fades with the label and one that ignores it is unharmed.
+      icon: options.tabBarIcon,
       testID: options.tabBarButtonTestID,
     };
   });

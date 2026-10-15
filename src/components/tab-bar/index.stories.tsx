@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { View } from "react-native";
 
 import Icon from "@/components/icon";
@@ -68,6 +68,63 @@ export const LongLabels = () => {
       items={ITEMS.map((item) => ({
         ...item,
         label: `${item.label} and then some`,
+      }))}
+      value={value}
+      onChange={setValue}
+    />
+  );
+};
+
+/**
+ * The selection change, on a loop: the indicator slides to the new tab
+ * while the icons and labels crossfade. With Reduce Motion on the indicator
+ * jumps instead and only the crossfade remains.
+ */
+export const ChangingTab = () => {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(
+      () => setIndex((current) => (current + 1) % ITEMS.length),
+      1200,
+    );
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <Component
+      items={ITEMS}
+      value={ITEMS[index]?.key ?? ""}
+      onChange={(key) => setIndex(ITEMS.findIndex((item) => item.key === key))}
+    />
+  );
+};
+
+/**
+ * Icons given as a function of the tab's state, the way a navigator's
+ * `tabBarIcon` arrives. The tab calls it once per colour, so these fade
+ * with their labels exactly as plain `<Icon />`s do.
+ */
+export const IconRenderer = () => {
+  const [value, setValue] = useState("home");
+  const names = {
+    home: "home",
+    search: "search",
+    saved: "bookmark",
+    profile: "user",
+  } as const;
+
+  return (
+    <Component
+      items={ITEMS.map((item) => ({
+        ...item,
+        icon: ({ color, size }) => (
+          <Icon
+            name={names[item.key as keyof typeof names]}
+            color={color}
+            size={size}
+          />
+        ),
       }))}
       value={value}
       onChange={setValue}

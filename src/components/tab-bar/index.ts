@@ -10,6 +10,7 @@ export { default as useTabBarSpace } from "./space";
 export { default as TabBarSpace } from "./tab-bar-space";
 export type { NavigationTabBarProps } from "./navigation";
 export type {
+  TabBarIconState,
   TabBarItem,
   TabBarLayoutProps,
   TabBarProps,
