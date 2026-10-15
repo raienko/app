@@ -146,7 +146,11 @@ export default function Alert({
           <Text
             value={message}
             type="subheadline"
-            style={{ color: title ? theme.colors.textSecondary : undefined }}
+            // Always a real colour: an `undefined` here still overrides
+            // Text's own and falls back to the platform default (black).
+            style={{
+              color: title ? theme.colors.textSecondary : theme.colors.text,
+            }}
           />
           <If condition={action}>
             <Button

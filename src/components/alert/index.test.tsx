@@ -67,4 +67,17 @@ describe(`${Component.name} smoke test`, () => {
         .backgroundColor,
     ).toBe(colors.light.backgroundElement);
   });
+
+  // An `undefined` colour would still override Text's and fall back to black.
+  it("colours the message from the theme with or without a title", async () => {
+    const { rerender } = await render(<Component message="Alone" />);
+    expect(
+      StyleSheet.flatten(screen.getByText("Alone").props.style).color,
+    ).toBe(colors.light.text);
+
+    await rerender(<Component title="Title" message="Under" />);
+    expect(
+      StyleSheet.flatten(screen.getByText("Under").props.style).color,
+    ).toBe(colors.light.textSecondary);
+  });
 });
