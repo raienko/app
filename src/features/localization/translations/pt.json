@@ -229,6 +229,7 @@
     "inputs": "Campos de entrada",
     "formField": "Campo de formulário",
     "images": "Imagens",
+    "imageViewer": "Visualizador de imagens",
     "cards": "Cartões",
     "section": "Secção",
     "listItems": "Itens de lista",
@@ -307,5 +308,11 @@
   "map": {
     "directions": "Como chegar",
     "yourLocation": "Sua localização"
+  },
+  "imageViewer": {
+    "close": "Fechar",
+    "share": "Compartilhar",
+    "position": "{{index}} / {{total}}",
+    "label": "Foto {{index}} de {{total}}"
   }
 }

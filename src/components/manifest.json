@@ -23,6 +23,7 @@
     "if": "public",
     "image": "public",
     "image-picker": "public",
+    "image-viewer": "public",
     "input": "public",
     "list": "public",
     "list-item": "public",

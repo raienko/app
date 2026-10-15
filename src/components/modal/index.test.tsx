@@ -206,6 +206,7 @@ describe(`${Component.displayName} smoke test`, () => {
     ["actions", true],
     ["popup", false],
     ["fullscreen", false],
+    ["immersive", false],
   ] as const)(
     "drag handle presence for type=%s is %s",
     async (type, hasHandle) => {
@@ -229,23 +230,26 @@ describe(`${Component.displayName} smoke test`, () => {
     },
   );
 
-  it.each(["popup", "bottomSheet", "actions", "fullscreen"] as const)(
-    "renders content for type=%s",
-    async (type) => {
-      const ref = createRef<ModalHandle>();
-      await render(
-        <Component ref={ref} id={`test-${type}`} type={type}>
-          <RNText>content</RNText>
-        </Component>,
-      );
+  it.each([
+    "popup",
+    "bottomSheet",
+    "actions",
+    "fullscreen",
+    "immersive",
+  ] as const)("renders content for type=%s", async (type) => {
+    const ref = createRef<ModalHandle>();
+    await render(
+      <Component ref={ref} id={`test-${type}`} type={type}>
+        <RNText>content</RNText>
+      </Component>,
+    );
 
-      await act(() => ref.current?.show());
+    await act(() => ref.current?.show());
 
-      await waitFor(() => {
-        expect(screen.queryByText("content")).toBeTruthy();
-      });
-    },
-  );
+    await waitFor(() => {
+      expect(screen.queryByText("content")).toBeTruthy();
+    });
+  });
 });
 
 describe(`${Component.displayName} async static API`, () => {
@@ -281,4 +285,26 @@ describe(`${Component.displayName} async static API`, () => {
       warn.mockRestore();
     },
   );
+});
+
+describe(`${Component.displayName} immersive type`, () => {
+  it("leaves its content unscrolled and edge to edge", async () => {
+    const ref = createRef<ModalHandle>();
+    await render(
+      <Component ref={ref} id="test-immersive" type="immersive">
+        <RNText>photo</RNText>
+      </Component>,
+    );
+
+    await act(() => ref.current?.show());
+    await waitFor(() => expect(screen.queryByText("photo")).toBeTruthy());
+
+    // No ScrollView between the content and the modal, so its own gestures
+    // aren't taken by one.
+    let node = screen.getByText("photo").parent;
+    while (node) {
+      expect(node.type).not.toBe("RCTScrollView");
+      node = node.parent;
+    }
+  });
 });

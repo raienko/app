@@ -17,6 +17,8 @@ import type { ShareContent, ShareOutcome } from "./types";
 
 export type { ShareContent, ShareOutcome } from "./types";
 export { toCopyText, hasContent } from "./content";
+/** The share sheet without the button — for a control that already has its own. */
+export { shareContent } from "./share";
 
 /** What the button does when pressed. */
 export type ShareMode = "share" | "copy";

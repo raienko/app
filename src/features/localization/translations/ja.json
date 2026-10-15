@@ -229,6 +229,7 @@
     "inputs": "入力フィールド",
     "formField": "フォームフィールド",
     "images": "画像",
+    "imageViewer": "画像ビューア",
     "cards": "カード",
     "section": "セクション",
     "listItems": "リスト項目",
@@ -307,5 +308,11 @@
   "map": {
     "directions": "経路",
     "yourLocation": "現在地"
+  },
+  "imageViewer": {
+    "close": "閉じる",
+    "share": "共有",
+    "position": "{{index}} / {{total}}",
+    "label": "写真 {{index}}/{{total}}"
   }
 }

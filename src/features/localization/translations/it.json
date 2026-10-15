@@ -229,6 +229,7 @@
     "inputs": "Campi di inserimento",
     "formField": "Campo modulo",
     "images": "Immagini",
+    "imageViewer": "Visualizzatore immagini",
     "cards": "Schede",
     "section": "Sezione",
     "listItems": "Elementi di elenco",
@@ -307,5 +308,11 @@
   "map": {
     "directions": "Indicazioni",
     "yourLocation": "La tua posizione"
+  },
+  "imageViewer": {
+    "close": "Chiudi",
+    "share": "Condividi",
+    "position": "{{index}} / {{total}}",
+    "label": "Foto {{index}} di {{total}}"
   }
 }

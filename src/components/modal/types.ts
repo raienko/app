@@ -1,7 +1,13 @@
 import type { ReactNode } from "react";
 import type { StyleProp, ViewStyle } from "react-native";
 
-export type ModalType = "popup" | "bottomSheet" | "actions" | "fullscreen";
+export type ModalType =
+  | "popup"
+  | "bottomSheet"
+  | "actions"
+  | "fullscreen"
+  /** Edge-to-edge, unscrolled, for content that brings its own gestures — `ImageViewer`. */
+  | "immersive";
 
 export type ModalProps = {
   /** Identifies this modal instance for `Modal.show(id)`/`Modal.hide(id)`. */

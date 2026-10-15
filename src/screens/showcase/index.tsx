@@ -24,6 +24,7 @@ import HeaderSection from "./sections/header";
 import IconsSection from "./sections/icons";
 import ImagePickerSection from "./sections/image-picker";
 import ImagesSection from "./sections/images";
+import ImageViewerSection from "./sections/image-viewer";
 import AlertsSection from "./sections/alerts";
 import InputsSection from "./sections/inputs";
 import ListItemSection from "./sections/list-item";
@@ -104,6 +105,7 @@ const SECTIONS: {
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.formField", Component: FormFieldSection },
   { title: "showcase.images", Component: ImagesSection },
+  { title: "showcase.imageViewer", Component: ImageViewerSection },
   { title: "showcase.cards", Component: CardSection },
   { title: "showcase.section", Component: SectionSection },
   { title: "showcase.listItems", Component: ListItemSection },

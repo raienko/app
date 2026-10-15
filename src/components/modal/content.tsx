@@ -65,7 +65,12 @@ export default function ModalContent({
       ? styles.popupContent
       : config.position === "bottom"
         ? styles.sheetContent
-        : [styles.fullscreenContent, { paddingTop: spacing.x20 + insets.top }];
+        : config.edgeToEdge
+          ? styles.edgeToEdge
+          : [
+              styles.fullscreenContent,
+              { paddingTop: spacing.x20 + insets.top },
+            ];
 
   return (
     <Animated.View
@@ -100,5 +105,8 @@ const useStyles = createStyles(({ spacing, sizes, radius }) => ({
   fullscreenContent: {
     flex: 1,
     padding: spacing.x20,
+  },
+  edgeToEdge: {
+    flex: 1,
   },
 }));

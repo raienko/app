@@ -229,6 +229,7 @@
     "inputs": "Inputs",
     "formField": "Form field",
     "images": "Images",
+    "imageViewer": "Image viewer",
     "cards": "Cards",
     "section": "Section",
     "listItems": "List items",
@@ -307,5 +308,11 @@
   "map": {
     "directions": "Directions",
     "yourLocation": "Your location"
+  },
+  "imageViewer": {
+    "close": "Close",
+    "share": "Share",
+    "position": "{{index}} / {{total}}",
+    "label": "Photo {{index}} of {{total}}"
   }
 }

@@ -229,6 +229,7 @@
     "inputs": "Eingabefelder",
     "formField": "Formularfeld",
     "images": "Bilder",
+    "imageViewer": "Bildbetrachter",
     "cards": "Karten",
     "section": "Abschnitt",
     "listItems": "Listenelemente",
@@ -307,5 +308,11 @@
   "map": {
     "directions": "Route",
     "yourLocation": "Dein Standort"
+  },
+  "imageViewer": {
+    "close": "Schließen",
+    "share": "Teilen",
+    "position": "{{index}} / {{total}}",
+    "label": "Foto {{index}} von {{total}}"
   }
 }

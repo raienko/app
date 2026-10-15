@@ -37,6 +37,7 @@ const SECTION_TITLES = [
   "Inputs",
   "Form field",
   "Images",
+  "Image viewer",
   "Cards",
   "Section",
   "List items",

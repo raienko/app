@@ -15,6 +15,14 @@ export type ModalTypeConfig = {
    * their own background) with no unifying card behind them.
    */
   contentBackground: boolean;
+  /**
+   * Whether children sit in Modal's ScrollView. Off for `immersive`, whose
+   * content runs its own gestures (pinch, pan, swipe-to-dismiss) that a
+   * surrounding ScrollView would steal.
+   */
+  scroll: boolean;
+  /** Content runs to every edge: no padding and no top inset of Modal's own. */
+  edgeToEdge: boolean;
 };
 
 /**
@@ -28,23 +36,39 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     animation: "fade",
     backdrop: true,
     contentBackground: true,
+    scroll: true,
+    edgeToEdge: false,
   },
   bottomSheet: {
     position: "bottom",
     animation: "slideUp",
     backdrop: true,
     contentBackground: true,
+    scroll: true,
+    edgeToEdge: false,
   },
   actions: {
     position: "bottom",
     animation: "slideUp",
     backdrop: true,
     contentBackground: false,
+    scroll: true,
+    edgeToEdge: false,
   },
   fullscreen: {
     position: "fullscreen",
     animation: "fade",
     backdrop: false,
     contentBackground: true,
+    scroll: true,
+    edgeToEdge: false,
+  },
+  immersive: {
+    position: "fullscreen",
+    animation: "fade",
+    backdrop: false,
+    contentBackground: false,
+    scroll: false,
+    edgeToEdge: true,
   },
 };

@@ -229,6 +229,7 @@
     "inputs": "Champs de saisie",
     "formField": "Champ de formulaire",
     "images": "Images",
+    "imageViewer": "Visionneuse d’images",
     "cards": "Cartes",
     "section": "Section",
     "listItems": "Éléments de liste",
@@ -307,5 +308,11 @@
   "map": {
     "directions": "Itinéraire",
     "yourLocation": "Votre position"
+  },
+  "imageViewer": {
+    "close": "Fermer",
+    "share": "Partager",
+    "position": "{{index}} / {{total}}",
+    "label": "Photo {{index}} sur {{total}}"
   }
 }

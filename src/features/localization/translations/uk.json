@@ -229,6 +229,7 @@
     "inputs": "Поля введення",
     "formField": "Поле форми",
     "images": "Зображення",
+    "imageViewer": "Перегляд зображень",
     "cards": "Картки",
     "section": "Секція",
     "listItems": "Елементи списку",
@@ -307,5 +308,11 @@
   "map": {
     "directions": "Маршрут",
     "yourLocation": "Ваше місцезнаходження"
+  },
+  "imageViewer": {
+    "close": "Закрити",
+    "share": "Поділитися",
+    "position": "{{index}} / {{total}}",
+    "label": "Фото {{index}} з {{total}}"
   }
 }

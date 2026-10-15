@@ -229,6 +229,7 @@
     "inputs": "حقول الإدخال",
     "formField": "حقل النموذج",
     "images": "الصور",
+    "imageViewer": "عارض الصور",
     "cards": "البطاقات",
     "section": "القسم",
     "listItems": "عناصر القائمة",
@@ -307,5 +308,11 @@
   "map": {
     "directions": "الاتجاهات",
     "yourLocation": "موقعك"
+  },
+  "imageViewer": {
+    "close": "إغلاق",
+    "share": "مشاركة",
+    "position": "{{index}} / {{total}}",
+    "label": "الصورة {{index}} من {{total}}"
   }
 }

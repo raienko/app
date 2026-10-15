@@ -183,7 +183,7 @@ function ImageComponent({
   if (showFallback && (fallback === undefined || fallback === null)) {
     // `null` means "show nothing", which still has to occupy the layout box
     // the image would have — so the same styled, empty View, just without
-    // the placeholder chrome ImageFallback draws.
+    // the placeholder frame ImageFallback draws.
     return fallback === null ? null : (
       <ImageFallback style={style} a11yProps={a11yProps} />
     );

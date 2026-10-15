@@ -229,6 +229,7 @@
     "inputs": "输入框",
     "formField": "表单字段",
     "images": "图片",
+    "imageViewer": "图片查看器",
     "cards": "卡片",
     "section": "区块",
     "listItems": "列表项",
@@ -307,5 +308,11 @@
   "map": {
     "directions": "路线",
     "yourLocation": "你的位置"
+  },
+  "imageViewer": {
+    "close": "关闭",
+    "share": "分享",
+    "position": "{{index}} / {{total}}",
+    "label": "第 {{index}} 张，共 {{total}} 张"
   }
 }

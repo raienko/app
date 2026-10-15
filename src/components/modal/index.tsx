@@ -6,6 +6,8 @@ import {
   useState,
 } from "react";
 import { Modal as RNModal } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import Animated, {
   runOnJS,
   useSharedValue,
@@ -157,24 +159,39 @@ const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
       onShow={onShow}
       onRequestClose={dismiss}
     >
-      <Animated.View style={containerStyle} accessibilityViewIsModal>
-        <If condition={config.backdrop}>
-          <ModalBackdrop progress={progress} onDismiss={dismiss} />
-        </If>
-        <ModalContent
-          config={config}
-          progress={progress}
-          dragY={dragY}
-          style={style}
-        >
-          <If condition={config.position === "bottom"}>
-            <ModalHandle dragY={dragY} onDismiss={dismiss} />
-          </If>
-          <ModalScrollArea position={config.position}>
-            {children}
-          </ModalScrollArea>
-        </ModalContent>
-      </Animated.View>
+      {/* A native Modal is its own full-screen window, so it measures its
+          own safe area. Inherited insets describe wherever the app's root
+          happens to sit — in Storybook that's below the status bar, so a
+          full-screen modal would put its top bar under the notch. */}
+      <SafeAreaProvider>
+        {/* Gesture handler needs a root of its own inside the Modal's window
+            too, for the same reason — the app's root view is in another
+            window. react-native-gesture-handler requires it for gestures
+            inside a native Modal on Android. */}
+        <GestureHandlerRootView style={styles.gestureRoot}>
+          <Animated.View style={containerStyle} accessibilityViewIsModal>
+            <If condition={config.backdrop}>
+              <ModalBackdrop progress={progress} onDismiss={dismiss} />
+            </If>
+            <ModalContent
+              config={config}
+              progress={progress}
+              dragY={dragY}
+              style={style}
+            >
+              <If condition={config.position === "bottom"}>
+                <ModalHandle dragY={dragY} onDismiss={dismiss} />
+              </If>
+              <If condition={config.scroll}>
+                <ModalScrollArea position={config.position}>
+                  {children}
+                </ModalScrollArea>
+              </If>
+              <If condition={!config.scroll}>{children}</If>
+            </ModalContent>
+          </Animated.View>
+        </GestureHandlerRootView>
+      </SafeAreaProvider>
     </RNModal>
   );
 });
@@ -220,6 +237,9 @@ const useStyles = createStyles(({ spacing }) => ({
     justifyContent: "flex-end",
   },
   containerFullscreen: {
+    flex: 1,
+  },
+  gestureRoot: {
     flex: 1,
   },
 }));
