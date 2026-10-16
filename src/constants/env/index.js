@@ -78,6 +78,19 @@ function httpsUrl(key, value, mustContain = []) {
   return normalized;
 }
 
+function apiUrl(value) {
+  const normalized = optional(value);
+  if (normalized === undefined) return undefined;
+  const local =
+    /^http:\/\/(localhost|127\.0\.0\.1|10\.0\.2\.2)(:\d+)?(\/\S*)?$/;
+  if (!/^https:\/\/\S+$/.test(normalized) && !local.test(normalized)) {
+    throw new Error(
+      `Environment variable EXPO_PUBLIC_API_URL must be an https:// URL (plain http only for localhost), got: ${normalized}`,
+    );
+  }
+  return normalized.replace(/\/+$/, "");
+}
+
 /** A comma-separated var as a list, with blanks and stray spaces dropped. */
 function list(value) {
   return (value ?? "")
@@ -104,6 +117,11 @@ const env = {
   // links here at all, and @/features/deep-links checks incoming URLs
   // against them so a link for someone else's site opens in the browser.
   appLinkDomains: list(process.env.EXPO_PUBLIC_APP_LINK_DOMAINS),
+  // The backend the request client (@/features/api) talks to. Optional:
+  // unset until a brand has one. https only, except plain http to a local
+  // dev server — localhost, or 10.0.2.2, the Android emulator's name for
+  // the host machine — since release builds refuse cleartext traffic.
+  apiUrl: apiUrl(process.env.EXPO_PUBLIC_API_URL),
   // The two surfaces the OS paints for us, before any of this app's own
   // code runs: the plate an Android adaptive icon's foreground sits on, and
   // the splash background behind the launch image. They live here rather

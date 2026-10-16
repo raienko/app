@@ -6,6 +6,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ToastsProvider } from "@/components/toast";
 import { StateViewsProvider } from "@/components/state-view";
 import { AccessibilityProvider } from "@/features/accessibility";
+import { ApiProvider } from "@/features/api";
 import { DeepLinks } from "@/features/deep-links";
 import {
   LocaleProvider,
@@ -60,15 +61,17 @@ export default function Providers({ children, config }: Props) {
       <SafeAreaProvider>
         <AccessibilityProvider>
           <Permissions>
-            <DeepLinks>
-              <ThemeProvider config={config?.theme}>
-                <LocaleProvider config={config?.locale}>
-                  <ToastsProvider>
-                    <StateViewsProvider>{children}</StateViewsProvider>
-                  </ToastsProvider>
-                </LocaleProvider>
-              </ThemeProvider>
-            </DeepLinks>
+            <ApiProvider>
+              <DeepLinks>
+                <ThemeProvider config={config?.theme}>
+                  <LocaleProvider config={config?.locale}>
+                    <ToastsProvider>
+                      <StateViewsProvider>{children}</StateViewsProvider>
+                    </ToastsProvider>
+                  </LocaleProvider>
+                </ThemeProvider>
+              </DeepLinks>
+            </ApiProvider>
           </Permissions>
         </AccessibilityProvider>
       </SafeAreaProvider>

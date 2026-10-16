@@ -34,6 +34,7 @@ const SECTION_TITLES = [
   "Progress",
   "Segmented control",
   "Color picker",
+  "API",
   "State views",
   "Inputs",
   "Form field",

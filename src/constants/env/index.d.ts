@@ -5,6 +5,8 @@ declare const env: {
   readonly appBundleId: string;
   readonly projectId: string | undefined;
   readonly appLinkDomains: readonly string[];
+  /** Base URL of the backend API, without a trailing slash; unset until a brand has one. */
+  readonly apiUrl: string | undefined;
   /** Hex colour behind the Android adaptive icon's foreground. */
   readonly brandIconBackground: string;
   /** Hex colour behind the splash image. */

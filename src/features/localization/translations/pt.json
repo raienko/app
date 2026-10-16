@@ -255,7 +255,8 @@
     "logger": "Registo",
     "utilities": "Utilitários",
     "sampleSentence": "Um pequeno jabuti xereta viu dez cegonhas felizes.",
-    "colorPicker": "Seletor de cor"
+    "colorPicker": "Seletor de cor",
+    "api": "API"
   },
   "checkbox": {
     "custom": "Caixa de verificação personalizada",

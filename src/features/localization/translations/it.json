@@ -255,7 +255,8 @@
     "logger": "Registro",
     "utilities": "Utilità",
     "sampleSentence": "Pranzo d'acqua fa volti sghembi.",
-    "colorPicker": "Selettore colore"
+    "colorPicker": "Selettore colore",
+    "api": "API"
   },
   "checkbox": {
     "custom": "Casella di controllo personalizzata",

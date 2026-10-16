@@ -15,6 +15,8 @@ export type Brand = {
   bundleId: string;
   easProjectId: string;
   appLinkDomains: string[];
+  /** The backend the request client talks to; empty when there's none yet. */
+  apiUrl: string;
   colors: {
     primary: string;
     iconBackground: string;
@@ -65,6 +67,18 @@ export async function loadBrand(dir: string): Promise<Brand> {
   text("slug", SLUG, "must be lowercase letters, digits and dashes");
   text("scheme", SCHEME, "must be a lowercase URL scheme");
   text("bundleId", BUNDLE_ID, "must be reverse-DNS, like com.acme.app");
+
+  if (
+    raw.apiUrl !== undefined &&
+    raw.apiUrl !== "" &&
+    !/^https:\/\/\S+$|^http:\/\/(localhost|127\.0\.0\.1|10\.0\.2\.2)(:\d+)?(\/\S*)?$/.test(
+      raw.apiUrl,
+    )
+  ) {
+    problems.push(
+      `"apiUrl" must be an https:// URL (plain http only for localhost), got "${raw.apiUrl}"`,
+    );
+  }
 
   const colors = (raw.colors ?? {}) as Partial<Brand["colors"]>;
   for (const key of [
@@ -127,5 +141,6 @@ export async function loadBrand(dir: string): Promise<Brand> {
     logoPath: logoPath!,
     easProjectId: raw.easProjectId ?? "",
     appLinkDomains: raw.appLinkDomains ?? [],
+    apiUrl: raw.apiUrl ?? "",
   };
 }

@@ -255,7 +255,8 @@
     "logger": "ロガー",
     "utilities": "ユーティリティ",
     "sampleSentence": "素早い茶色の狐が怠け者の犬を飛び越えた。",
-    "colorPicker": "カラーピッカー"
+    "colorPicker": "カラーピッカー",
+    "api": "API"
   },
   "checkbox": {
     "custom": "カスタムチェックボックス",

@@ -255,7 +255,8 @@
     "logger": "Protokollierung",
     "utilities": "Hilfsmittel",
     "sampleSentence": "Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich.",
-    "colorPicker": "Farbwähler"
+    "colorPicker": "Farbwähler",
+    "api": "API"
   },
   "checkbox": {
     "custom": "Eigenes Kontrollkästchen",

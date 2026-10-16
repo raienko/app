@@ -255,7 +255,8 @@
     "logger": "Journalisation",
     "utilities": "Utilitaires",
     "sampleSentence": "Portez ce vieux whisky au juge blond qui fume.",
-    "colorPicker": "Sélecteur de couleur"
+    "colorPicker": "Sélecteur de couleur",
+    "api": "API"
   },
   "checkbox": {
     "custom": "Case à cocher personnalisée",

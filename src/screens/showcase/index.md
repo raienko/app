@@ -33,6 +33,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Progress          | A live determinate bar, custom value wording, and the indeterminate state                                             |
 | Segmented control | Both implementations side by side, a disabled option, and a disabled control                                          |
 | Color picker      | The picker on its own with presets, and its value read out live                                                       |
+| API               | The request client and TanStack Query: a persisted query, a mutation echoing the headers sent, and an `ApiError`      |
 | Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding                               |
 | Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                                         |
 | Inputs            | Text, textarea, numeric, email, password, code, phone, select and date/time variations                                |

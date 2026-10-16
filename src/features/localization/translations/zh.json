@@ -255,7 +255,8 @@
     "logger": "日志",
     "utilities": "实用工具",
     "sampleSentence": "敏捷的棕色狐狸跳过了那只懒狗。",
-    "colorPicker": "颜色选择器"
+    "colorPicker": "颜色选择器",
+    "api": "API"
   },
   "checkbox": {
     "custom": "自定义复选框",

@@ -19,12 +19,13 @@ The shared systems every component is built on. Change these and the whole app f
 
 Capabilities the app uses behind the UI.
 
-| Feature                                                  | What it's for                                                                                |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| [**Storage**](../../src/features/storage/index.md)       | `LocalValue<T>` for preferences and `SecureValue<T>` for small secrets.                      |
-| [**Deep links**](../../src/features/deep-links/index.md) | One pipeline for every incoming link: parsing, matching, queueing and routing.               |
-| [**Maps**](../../src/features/maps/index.md)             | Themed map style, tile config, the user's location, and directions via the platform map app. |
-| [**Event bus**](../../src/features/event-bus/index.md)   | Typed, scoped publish/subscribe for decoupled parts of the app.                              |
+| Feature                                                  | What it's for                                                                                              |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| [**API**](../../src/features/api/index.md)               | `api` request client (axios) with token, headers and logging; TanStack Query with an MMKV-persisted cache. |
+| [**Storage**](../../src/features/storage/index.md)       | `LocalValue<T>` for preferences and `SecureValue<T>` for small secrets.                                    |
+| [**Deep links**](../../src/features/deep-links/index.md) | One pipeline for every incoming link: parsing, matching, queueing and routing.                             |
+| [**Maps**](../../src/features/maps/index.md)             | Themed map style, tile config, the user's location, and directions via the platform map app.               |
+| [**Event bus**](../../src/features/event-bus/index.md)   | Typed, scoped publish/subscribe for decoupled parts of the app.                                            |
 
 ## Not documented yet
 

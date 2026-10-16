@@ -255,7 +255,8 @@
     "logger": "Logger",
     "utilities": "Utilities",
     "sampleSentence": "The quick brown fox jumps over the lazy dog.",
-    "colorPicker": "Color picker"
+    "colorPicker": "Color picker",
+    "api": "API"
   },
   "checkbox": {
     "custom": "Custom checkbox",

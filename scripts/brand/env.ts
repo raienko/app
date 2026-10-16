@@ -15,6 +15,7 @@ function brandKeys(brand: Brand): [string, string][] {
     ["EXPO_PUBLIC_APP_BUNDLE_ID", brand.bundleId],
     ["EXPO_PUBLIC_EAS_PROJECT_ID", brand.easProjectId],
     ["EXPO_PUBLIC_APP_LINK_DOMAINS", brand.appLinkDomains.join(",")],
+    ["EXPO_PUBLIC_API_URL", brand.apiUrl],
     ["EXPO_PUBLIC_BRAND_ICON_BACKGROUND", brand.colors.iconBackground],
     ["EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND", brand.colors.splashBackground],
     [

@@ -255,7 +255,8 @@
     "logger": "السجل",
     "utilities": "الأدوات",
     "sampleSentence": "نص حكيم له سر قاطع وذو شأن عظيم مكتوب على ثوب أخضر.",
-    "colorPicker": "منتقي الألوان"
+    "colorPicker": "منتقي الألوان",
+    "api": "واجهة API"
   },
   "checkbox": {
     "custom": "مربع اختيار مخصص",

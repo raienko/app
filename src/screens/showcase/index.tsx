@@ -47,6 +47,7 @@ import StepperSection from "./sections/stepper";
 import StorageSection from "./sections/storage";
 import StateViewsSection from "./sections/state-views";
 import SectionSection from "./sections/section";
+import ApiSection from "./sections/api";
 import ColorPickerSection from "./sections/color-picker";
 import SegmentedControlSection from "./sections/segmented-control";
 import ShareSection from "./sections/share";
@@ -106,6 +107,7 @@ const SECTIONS: {
   { title: "showcase.progress", Component: ProgressBarSection },
   { title: "showcase.segmentedControl", Component: SegmentedControlSection },
   { title: "showcase.colorPicker", Component: ColorPickerSection },
+  { title: "showcase.api", Component: ApiSection },
   { title: "showcase.stateViews", Component: StateViewsSection },
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.formField", Component: FormFieldSection },
