@@ -106,7 +106,6 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
   const view = useRef<RNWebView>(null);
 
   const send = useCallback((encoded: string) => {
-    console.log("PROBE inject", encoded.slice(0, 80), !!view.current);
     view.current?.injectJavaScript(deliverInjection(encoded));
   }, []);
 
@@ -161,7 +160,6 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
     // `html` source loads as. Falling back to the opaque origin rather than
     // to nothing is what makes those documents heard: they are ours, and
     // `resolveOrigins` names exactly that case.
-    console.log("PROBE msg", String(event.nativeEvent.data).slice(0, 60));
     const origin = originOf(event.nativeEvent.url) ?? OPAQUE_ORIGIN;
     bridge.receive(event.nativeEvent.data, origin);
   }
@@ -169,12 +167,6 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
   function handleNavigation(event: WebViewNavigation) {
     // A new document means a new shim, which has not announced itself yet.
     // Without this, `post` would keep injecting into a page that has gone.
-    console.log(
-      "PROBE nav",
-      event.loading,
-      event.url?.slice(0, 40),
-      event.navigationType,
-    );
     if (event.loading) bridge.reset();
   }
 
