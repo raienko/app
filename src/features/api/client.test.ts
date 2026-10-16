@@ -205,13 +205,31 @@ describe("api", () => {
     it("logs each request and its response through the app logger", async () => {
       await api.post("/posts", { title: "Hi" });
 
-      expect(logger.out).toHaveBeenCalledWith("POST /posts", {
-        body: { title: "Hi" },
-      });
+      expect(logger.out).toHaveBeenCalledWith(
+        expect.stringMatching(/^#\d+ POST \/posts$/),
+        { body: { title: "Hi" } },
+      );
       expect(logger.in).toHaveBeenCalledWith(
-        expect.stringMatching(/^200 POST \/posts \(\d+ms\)$/),
+        expect.stringMatching(/^#\d+ 200 POST \/posts \(\d+ms\)$/),
         {},
       );
+    });
+
+    // Two in flight: each response carries the number its request left with,
+    // whichever arrives first.
+    it("numbers each request, and its response with the same number", async () => {
+      await Promise.all([api.get("/a"), api.get("/b")]);
+
+      const number = (line: string) => line.match(/^#(\d+) /)?.[1];
+      const out = jest.mocked(logger.out).mock.calls.map(([m]) => m);
+      const back = jest.mocked(logger.in).mock.calls.map(([m]) => m);
+      const outA = number(out.find((m) => m.endsWith("GET /a"))!);
+      const outB = number(out.find((m) => m.endsWith("GET /b"))!);
+
+      expect(outA).not.toBe(outB);
+      expect(Number(outB)).toBe(Number(outA) + 1);
+      expect(number(back.find((m) => m.includes("GET /a"))!)).toBe(outA);
+      expect(number(back.find((m) => m.includes("GET /b"))!)).toBe(outB);
     });
 
     it("logs failures, and nothing for a request that opts out", async () => {

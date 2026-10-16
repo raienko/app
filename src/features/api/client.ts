@@ -29,6 +29,8 @@ declare module "axios" {
     startedAt?: number;
     /** Whether it went to our own API, and so carried the session. */
     toOwnApi?: boolean;
+    /** Its number in this launch, shared by its OUT and IN/FAILED log lines. */
+    requestId?: number;
   }
 }
 
@@ -93,8 +95,19 @@ function baseHeaders(): Headers {
   };
 }
 
+/**
+ * Numbers requests as they leave, so an `IN` can be matched to its `OUT`
+ * when several are in flight and their responses arrive out of order.
+ */
+let lastRequestId = 0;
+
 function describe(config: AxiosRequestConfig): string {
   return `${(config.method ?? "get").toUpperCase()} ${config.url ?? ""}`;
+}
+
+/** `#3` for a numbered request; empty for one that failed before it got a number. */
+function tag(config: InternalAxiosRequestConfig | undefined): string {
+  return config?.requestId === undefined ? "" : `#${config.requestId} `;
 }
 
 /** `https://host:port` of an absolute URL, lower-cased; `undefined` for a path. */
@@ -140,8 +153,9 @@ http.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   }
 
   config.startedAt = Date.now();
+  config.requestId = ++lastRequestId;
   if (!config.skipLog) {
-    logger.out(describe(config), {
+    logger.out(`${tag(config)}${describe(config)}`, {
       ...(config.params ? { params: config.params } : null),
       ...(config.data !== undefined ? { body: config.data } : null),
     });
@@ -155,7 +169,7 @@ http.interceptors.response.use(
     if (!config.skipLog) {
       const took = config.startedAt ? Date.now() - config.startedAt : 0;
       logger.in(
-        `${response.status} ${describe(config)} (${took}ms)`,
+        `${tag(config)}${response.status} ${describe(config)} (${took}ms)`,
         response.data,
       );
     }
@@ -168,7 +182,7 @@ http.interceptors.response.use(
     if (!apiError.isCancelled && !config?.skipLog) {
       const took = config?.startedAt ? Date.now() - config.startedAt : 0;
       logger.failed(
-        `${apiError.status ?? "—"} ${config ? describe(config) : "request"} (${took}ms): ${apiError.message}`,
+        `${tag(config)}${apiError.status ?? "—"} ${config ? describe(config) : "request"} (${took}ms): ${apiError.message}`,
         apiError.data,
       );
     }
