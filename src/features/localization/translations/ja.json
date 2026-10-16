@@ -258,7 +258,9 @@
     "colorPicker": "カラーピッカー",
     "api": "API",
     "forms": "フォーム",
-    "formatting": "書式"
+    "formatting": "書式",
+    "network": "ネットワーク",
+    "haptics": "触覚フィードバック"
   },
   "checkbox": {
     "custom": "カスタムチェックボックス",

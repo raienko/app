@@ -258,7 +258,9 @@
     "colorPicker": "Selettore colore",
     "api": "API",
     "forms": "Moduli",
-    "formatting": "Formattazione"
+    "formatting": "Formattazione",
+    "network": "Rete",
+    "haptics": "Feedback aptico"
   },
   "checkbox": {
     "custom": "Casella di controllo personalizzata",

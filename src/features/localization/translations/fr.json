@@ -258,7 +258,9 @@
     "colorPicker": "Sélecteur de couleur",
     "api": "API",
     "forms": "Formulaires",
-    "formatting": "Mise en forme"
+    "formatting": "Mise en forme",
+    "network": "Réseau",
+    "haptics": "Retour haptique"
   },
   "checkbox": {
     "custom": "Case à cocher personnalisée",

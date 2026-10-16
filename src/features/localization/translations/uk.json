@@ -258,7 +258,9 @@
     "colorPicker": "Вибір кольору",
     "api": "API",
     "forms": "Форми",
-    "formatting": "Форматування"
+    "formatting": "Форматування",
+    "network": "Мережа",
+    "haptics": "Тактильний відгук"
   },
   "checkbox": {
     "custom": "Власний прапорець",

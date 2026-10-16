@@ -204,3 +204,27 @@ jest.mock("expo-secure-store", () => {
     __store: store,
   };
 });
+
+// expo-network's native module is stubbed by jest-expo without a working
+// listener, and TanStack Query subscribes to it in every rendered tree
+// (src/features/api/query-client.ts). Online, on Wi-Fi, never changing —
+// src/features/network's own test mocks it again to drive changes.
+jest.mock("expo-network", () => {
+  const state = { isConnected: true, isInternetReachable: true, type: "WIFI" };
+  return {
+    NetworkStateType: {
+      NONE: "NONE",
+      UNKNOWN: "UNKNOWN",
+      CELLULAR: "CELLULAR",
+      WIFI: "WIFI",
+      BLUETOOTH: "BLUETOOTH",
+      ETHERNET: "ETHERNET",
+      WIMAX: "WIMAX",
+      VPN: "VPN",
+      OTHER: "OTHER",
+    },
+    getNetworkStateAsync: async () => state,
+    addNetworkStateListener: () => ({ remove: () => {} }),
+    useNetworkState: () => state,
+  };
+});

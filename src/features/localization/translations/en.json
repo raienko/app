@@ -258,7 +258,9 @@
     "colorPicker": "Color picker",
     "api": "API",
     "forms": "Forms",
-    "formatting": "Formatting"
+    "formatting": "Formatting",
+    "network": "Network",
+    "haptics": "Haptics"
   },
   "checkbox": {
     "custom": "Custom checkbox",

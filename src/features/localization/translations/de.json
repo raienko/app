@@ -258,7 +258,9 @@
     "colorPicker": "Farbwähler",
     "api": "API",
     "forms": "Formulare",
-    "formatting": "Formatierung"
+    "formatting": "Formatierung",
+    "network": "Netzwerk",
+    "haptics": "Haptik"
   },
   "checkbox": {
     "custom": "Eigenes Kontrollkästchen",

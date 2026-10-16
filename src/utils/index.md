@@ -2,7 +2,7 @@
 
 # Utilities
 
-> Platform constants, time spans in milliseconds, and the kit's easing — small helpers with no state, all imported from `@/utils`.
+> Platform constants, time spans in milliseconds, common hooks and the kit's easing — small helpers, all imported from `@/utils`.
 
 ## Platform constants
 
@@ -45,6 +45,38 @@ toUnit(elapsed, "minute"); // 2.5 — round it yourself
 | `wait(milliseconds)`                                                | A promise that resolves after that long                                   |
 
 Months and years are fixed lengths, 30 and 365 days: right for "about how long ago" and cache lifetimes, wrong for calendar maths. For "same day next month", change the `Date`'s month instead. Showing a span to people (`1:05:09`, `5 minutes ago`) is [Format](../features/format/index.md)'s job.
+
+## Hooks
+
+```tsx
+import {
+  useDebouncedValue,
+  useInterval,
+  useOnForeground,
+  useToggle,
+} from "@/utils";
+
+const query = useDebouncedValue(text, 300);
+const [open, toggleOpen, setOpen] = useToggle();
+useInterval(refresh, isOnline ? seconds(30) : null);
+useOnForeground(() => queryClient.invalidateQueries({ queryKey: ["inbox"] }));
+```
+
+| Hook                              | Does                                                                      |
+| --------------------------------- | ------------------------------------------------------------------------- |
+| `useDebouncedValue(value, delay)` | `value`, once it has stopped changing for `delay` ms — search-as-you-type |
+| `useDebouncedCallback(fn, delay)` | `fn`, run `delay` ms after the last call; `.cancel()` drops a pending one |
+| `usePrevious(value)`              | The value before the last change; `undefined` until it first changes      |
+| `useToggle(initial?)`             | `[value, toggle, set]`, with a stable `toggle` for `onPress`              |
+| `useInterval(fn, delay \| null)`  | `fn` every `delay` ms; `null` pauses                                      |
+| `useTimeout(fn, delay \| null)`   | `fn` once after `delay` ms; `null` cancels                                |
+| `useAppState()`                   | `active` / `background` / `inactive`, live                                |
+| `useOnForeground(fn)`             | `fn` each time the app returns to the foreground, not on mount            |
+| `useKeyboard()`                   | `{ isVisible, height }` of the software keyboard                          |
+
+- **Callbacks are always the latest.** The timer and app-state hooks call the callback from the most recent render (`useEffectEvent`), so it can read current state without the timer restarting, and an inline arrow function is fine.
+- **Timers are cleaned up on unmount.** Nothing fires into an unmounted component.
+- **Not here on purpose:** `useIsMounted` (a cleanup function does that job properly) and a `useFetch` (use TanStack Query through [`@/features/api`](../features/api/index.md)).
 
 ## `easeOutClamped`
 

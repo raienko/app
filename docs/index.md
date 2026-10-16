@@ -22,11 +22,11 @@
 
 ## Also in the code
 
-| Guide                                                    | What it covers                                                                             |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
-| [**Root & Providers**](../src/root/index.md)             | The provider tree around every screen, shared with tests and Storybook                     |
-| [**The showcase app**](../src/screens/showcase/index.md) | What each section of the running app demonstrates                                          |
-| [**Utilities**](../src/utils/index.md)                   | `isWeb`/`isIOS`/`isAndroid`, `seconds(17)`/`days(30)` time spans, `wait`, `easeOutClamped` |
+| Guide                                                    | What it covers                                                                                           |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| [**Root & Providers**](../src/root/index.md)             | The provider tree around every screen, shared with tests and Storybook                                   |
+| [**The showcase app**](../src/screens/showcase/index.md) | What each section of the running app demonstrates                                                        |
+| [**Utilities**](../src/utils/index.md)                   | `isWeb`/`isIOS`/`isAndroid`, `seconds(17)`/`days(30)` time spans, `wait`, common hooks, `easeOutClamped` |
 
 ## Conventions
 

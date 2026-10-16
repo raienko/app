@@ -19,18 +19,20 @@ The shared systems every component is built on. Change these and the whole app f
 
 Capabilities the app uses behind the UI.
 
-| Feature                                                  | What it's for                                                                                                  |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| [**API**](../../src/features/api/index.md)               | `api` request client (axios) with token, headers and logging; TanStack Query with an MMKV-persisted cache.     |
-| [**Device**](../../src/features/device/index.md)         | App version and build, OS, model, timezone and install id; a custom user agent and per-request device headers. |
-| [**Format**](../../src/features/format/index.md)         | Locale-aware dates, times, relative time, numbers, money, sizes, durations, and ISO helpers for APIs.          |
-| [**Forms**](../../src/features/forms/index.md)           | `useAppForm` (react-hook-form + zod) and `FormInput`, an `Input` bound to a field.                             |
-| [**Storage**](../../src/features/storage/index.md)       | `LocalValue<T>` for preferences and `SecureValue<T>` for small secrets.                                        |
-| [**Validation**](../../src/features/validation/index.md) | zod field rules (email, password, name, phone, url, …) with translated messages.                               |
-| [**Deep links**](../../src/features/deep-links/index.md) | One pipeline for every incoming link: parsing, matching, queueing and routing.                                 |
-| [**Maps**](../../src/features/maps/index.md)             | Themed map style, tile config, the user's location, and directions via the platform map app.                   |
-| [**Event bus**](../../src/features/event-bus/index.md)   | Typed, scoped publish/subscribe for decoupled parts of the app.                                                |
-| [**Web app**](../../src/features/web-app/index.md)       | The web build as an installable app (PWA): manifest, icons, offline service worker and theme colour.           |
+| Feature                                                  | What it's for                                                                                                         |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
+| [**API**](../../src/features/api/index.md)               | `api` request client (axios) with token, headers and logging; TanStack Query with an MMKV-persisted cache.            |
+| [**Device**](../../src/features/device/index.md)         | App version and build, OS, model, timezone and install id; a custom user agent and per-request device headers.        |
+| [**Format**](../../src/features/format/index.md)         | Locale-aware dates, times, relative time, numbers, money, sizes, durations, and ISO helpers for APIs.                 |
+| [**Forms**](../../src/features/forms/index.md)           | `useAppForm` (react-hook-form + zod) and `FormInput`, an `Input` bound to a field.                                    |
+| [**Storage**](../../src/features/storage/index.md)       | `LocalValue<T>` for preferences and `SecureValue<T>` for small secrets.                                               |
+| [**Validation**](../../src/features/validation/index.md) | zod field rules (email, password, name, phone, url, …) with translated messages.                                      |
+| [**Deep links**](../../src/features/deep-links/index.md) | One pipeline for every incoming link: parsing, matching, queueing and routing.                                        |
+| [**Maps**](../../src/features/maps/index.md)             | Themed map style, tile config, the user's location, and directions via the platform map app.                          |
+| [**Event bus**](../../src/features/event-bus/index.md)   | Typed, scoped publish/subscribe for decoupled parts of the app.                                                       |
+| [**Web app**](../../src/features/web-app/index.md)       | The web build as an installable app (PWA): manifest, icons, offline service worker and theme colour.                  |
+| [**Network**](../../src/features/network/index.md)       | Online/offline and connection type, live; keeps TanStack Query's online state in sync.                                |
+| [**Haptics**](../../src/features/haptics/index.md)       | One-call haptic feedback (tap, selection, success, warning, error) that respects a user setting and is silent on web. |
 
 ## Not documented yet
 

@@ -258,7 +258,9 @@
     "colorPicker": "Seletor de cor",
     "api": "API",
     "forms": "Formulários",
-    "formatting": "Formatação"
+    "formatting": "Formatação",
+    "network": "Rede",
+    "haptics": "Háptica"
   },
   "checkbox": {
     "custom": "Caixa de verificação personalizada",

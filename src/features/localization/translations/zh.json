@@ -258,7 +258,9 @@
     "colorPicker": "颜色选择器",
     "api": "API",
     "forms": "表单",
-    "formatting": "格式化"
+    "formatting": "格式化",
+    "network": "网络",
+    "haptics": "触感反馈"
   },
   "checkbox": {
     "custom": "自定义复选框",

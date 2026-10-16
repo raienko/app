@@ -62,6 +62,8 @@ const SECTION_TITLES = [
   "Utilities",
   "Forms",
   "Formatting",
+  "Network",
+  "Haptics",
 ];
 
 describe(`${Component.name} smoke test`, () => {

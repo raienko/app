@@ -5952,6 +5952,11 @@ expo-glass-effect@57.0.4, expo-glass-effect@^57.0.4:
   resolved "https://registry.yarnpkg.com/expo-glass-effect/-/expo-glass-effect-57.0.4.tgz#9b7e65b1475970f0662c045b71fce99bf2710a5c"
   integrity sha512-/AG2Kljbqfgxu+GchI2YFIbxiF9cPsIpCy4iNDzlRiZk9rvR6BwRfB6gfQVu3V2ExaoGf2h5IsEnqVI5MYNBAg==
 
+expo-haptics@57.0.3:
+  version "57.0.3"
+  resolved "https://registry.yarnpkg.com/expo-haptics/-/expo-haptics-57.0.3.tgz#0a5c8dd099ed4f9121d19ec200ce2e1b11eaa454"
+  integrity sha512-qucUXtwtJdtECKSQK5D6TQBc/0SxKj7s5wQ4mrfSxhZsHrS9a4rcxINl/gbruMaY9spTXStco32ST4pV0vXmxw==
+
 expo-image-loader@~57.0.1:
   version "57.0.1"
   resolved "https://registry.yarnpkg.com/expo-image-loader/-/expo-image-loader-57.0.1.tgz#b031dc3e62ac09004f3e436d7081487236791f53"
@@ -6033,6 +6038,11 @@ expo-modules-jsi@~57.1.1:
   version "57.1.1"
   resolved "https://registry.yarnpkg.com/expo-modules-jsi/-/expo-modules-jsi-57.1.1.tgz#0821e42a6a7b1b962cb14416889107481182f62b"
   integrity sha512-ssnwz3ZuIgCbZj5A3J6NlhQrXZojg+BjkeWrOWqVJhyMHlV/A/cRT7s986chKku97BFt6ucmDu6/BCzrV45Wcw==
+
+expo-network@57.0.2:
+  version "57.0.2"
+  resolved "https://registry.yarnpkg.com/expo-network/-/expo-network-57.0.2.tgz#d79914a260ee05dbf5420811e0ee55d390d41849"
+  integrity sha512-BfK1kdftZcM6o9o1FAG7/y0l6vWX0n8td0M5lwkvaMeRXZ9LkRwOi9CQXwvsMTQGQiPwtQXgwiAze13cqjt75g==
 
 expo-notifications@57.0.21:
   version "57.0.21"

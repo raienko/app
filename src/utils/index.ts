@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 
 export { easeOutClamped } from "./easing";
+export * from "./hooks";
 export * from "./time";
 
 /**

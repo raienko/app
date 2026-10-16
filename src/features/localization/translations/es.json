@@ -258,7 +258,9 @@
     "colorPicker": "Selector de color",
     "api": "API",
     "forms": "Formularios",
-    "formatting": "Formato"
+    "formatting": "Formato",
+    "network": "Red",
+    "haptics": "Háptica"
   },
   "checkbox": {
     "custom": "Casilla personalizada",

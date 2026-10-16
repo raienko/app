@@ -1,5 +1,6 @@
-import { QueryClient } from "@tanstack/react-query";
+import { onlineManager, QueryClient } from "@tanstack/react-query";
 
+import { onNetworkChange } from "@/features/network";
 import { days, seconds } from "@/utils";
 
 import { isApiError } from "./errors";
@@ -39,3 +40,10 @@ export function createQueryClient(): QueryClient {
 
 /** The app's single client. Exported for cache work outside React (e.g. sign-out). */
 export const queryClient = createQueryClient();
+
+// Queries pause while offline and refetch on reconnect — TanStack Query's
+// own listener only knows the browser's online events, so on a phone it
+// would think it's always online.
+onlineManager.setEventListener((setOnline) =>
+  onNetworkChange(({ isOnline }) => setOnline(isOnline)),
+);
