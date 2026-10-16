@@ -151,4 +151,13 @@ describe("Text and OS font scaling", () => {
     await fireEvent.press(screen.getByRole("link", { name: "terms" }));
     expect(onPress).toHaveBeenCalled();
   });
+
+  // A control's label shouldn't highlight on a web double-click; content opts in.
+  it("is not selectable unless asked to be", async () => {
+    const { rerender } = await render(<Component value="Label" />);
+    expect(screen.getByText("Label").props.selectable).toBe(false);
+
+    await rerender(<Component value="Copy me" selectable />);
+    expect(screen.getByText("Copy me").props.selectable).toBe(true);
+  });
 });

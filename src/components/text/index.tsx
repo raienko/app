@@ -68,6 +68,14 @@ type Props = Omit<RNTextProps, "children"> & {
    * plain text.
    */
   type?: TypographyToken;
+  /**
+   * Whether the reader can select and copy it. Off by default, as it is on
+   * native, so a button label, a tab, a counter or a page number never
+   * highlights on a web double-click or drag — and a new control is right
+   * without having to remember anything. Turn it on for content worth
+   * copying: a chat message, an address, an error code.
+   */
+  selectable?: boolean;
 };
 
 /**
@@ -106,6 +114,7 @@ export default function Text({
   type = "body",
   style,
   allowFontScaling,
+  selectable = false,
   ...props
 }: Props) {
   const theme = useTheme();
@@ -140,6 +149,7 @@ export default function Text({
     <RNText
       style={[baseStyle, style]}
       allowFontScaling={allowFontScaling}
+      selectable={selectable}
       {...(headingLevel === undefined ? null : headingA11yProps(headingLevel))}
       {...props}
     >

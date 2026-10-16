@@ -152,10 +152,6 @@ export default function Showcase() {
 
 const useStyles = createStyles(({ spacing, sizes }) => ({
   container: {
-    gap: spacing.x16,
-    // Sections stretch to this column rather than to the window, so the
-    // showcase stays readable on a desktop-width screen while still being
-    // wide enough for the grid section to actually reflow.
     width: "100%",
     maxWidth: sizes.contentMaxWidth,
     alignSelf: "center",
