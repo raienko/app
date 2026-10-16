@@ -1,0 +1,23 @@
+name: Verify
+
+# The one check every flow runs: the same `yarn verify` as .husky/pre-push.
+# Call it from another workflow with `uses: ./.github/workflows/verify.yml`,
+# or run it by hand on any branch from the Actions tab.
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: yarn
+      - run: yarn install --frozen-lockfile
+      # .env is untracked; the example holds the required public values
+      - run: cp .env.example .env
+      - run: yarn verify
