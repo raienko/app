@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { useIsScreenReaderEnabled } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
+import { isWeb } from "@/utils";
 
 import ToastItem from "./item";
 import toasts, { useToasts } from "./store";
@@ -78,7 +79,11 @@ export default function ToastsProvider({ children, position = "top" }: Props) {
 
 const useStyles = createStyles(({ spacing }) => ({
   overlay: {
-    position: "absolute",
+    // On web the page itself can scroll (Storybook, a long screen without a
+    // ScrollView), and `absolute` would scroll the stack away with it;
+    // `fixed` pins it to the viewport. React Native's types don't list
+    // `fixed`, but react-native-web passes it through to CSS.
+    position: isWeb ? ("fixed" as "absolute") : "absolute",
     left: 0,
     right: 0,
     alignItems: "center",
