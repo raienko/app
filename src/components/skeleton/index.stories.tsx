@@ -19,7 +19,7 @@ export default meta;
 const CARD = require("@/assets/images/skeleton-card.svg");
 const ROW = require("@/assets/images/skeleton-row.svg");
 
-/** A file exported from Figma, recoloured and masked. */
+/** A file exported from Figma, recoloured, with the highlight inside its shapes. */
 export const FromAFile = () => {
   const styles = useStyles();
 
@@ -46,7 +46,7 @@ export const AListOfRows = () => {
   );
 };
 
-/** Children the caller draws — the highlight sweeps their bounding box. */
+/** Children the caller draws — with no file to light up, they dim as a whole. */
 export const FromChildren = () => {
   const theme = useTheme();
   const styles = useStyles();

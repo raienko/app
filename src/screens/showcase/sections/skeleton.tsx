@@ -13,7 +13,7 @@ import { useTheme } from "@/features/theme";
 const CARD = require("@/assets/images/skeleton-card.svg");
 const ROW = require("@/assets/images/skeleton-row.svg");
 
-/** The artwork, the sweep, the static case, and a list of placeholders. */
+/** The artwork, the pulse, the static case, and a list of placeholders. */
 export default function SkeletonSection() {
   const theme = useTheme();
   const styles = useStyles();
@@ -25,7 +25,7 @@ export default function SkeletonSection() {
   return (
     <View style={styles.container}>
       <Text
-        value="A loading placeholder: your own artwork with a highlight travelling through it. The shapes come from a file exported from Figma, not from primitives reassembled in code."
+        value="A loading placeholder: your own artwork with a highlight pulsing through its shapes. The shapes come from a file exported from Figma, not from primitives reassembled in code."
         type="footnote"
         style={{ color: theme.colors.textSecondary }}
       />
@@ -58,14 +58,14 @@ export default function SkeletonSection() {
         </View>
       </Card>
       <Text
-        value="The highlight is clipped to the shapes, so it travels through them rather than across the gaps between."
+        value="The highlight is a second copy of the artwork, so it stays inside the shapes rather than lighting the gaps between."
         type="caption1"
         style={{ color: theme.colors.textSecondary }}
       />
 
       <Text value="Your own children" type="headline" />
       <Text
-        value="A lone Image child is the same thing as source, and is drawn the same way — masked to its own shapes."
+        value="A lone Image child is the same thing as source, and is drawn the same way — lit inside its own shapes."
         type="caption1"
         style={{ color: theme.colors.textSecondary }}
       />
@@ -74,7 +74,7 @@ export default function SkeletonSection() {
       </Skeleton>
 
       <Text
-        value="Anything else — an SVG component out of Figma, or several elements — has no alpha channel to mask against, so the highlight sweeps the bounding box instead, at a third of the strength."
+        value="Anything else — an SVG component out of Figma, or several elements — has no shapes to light up separately, so it dims and brightens as a whole instead."
         type="caption1"
         style={{ color: theme.colors.textSecondary }}
       />

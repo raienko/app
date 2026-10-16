@@ -1,10 +1,7 @@
-import { useState, type ReactNode } from "react";
-import {
-  View,
-  type LayoutChangeEvent,
-  type StyleProp,
-  type ViewStyle,
-} from "react-native";
+import type { ReactNode } from "react";
+import type { StyleProp, ViewStyle } from "react-native";
+import Animated from "react-native-reanimated";
+
 import Image, { type ImageSourceProp } from "@/components/image";
 import {
   disabledA11yProps,
@@ -15,15 +12,15 @@ import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 import { SKELETON_COLORS } from "./colors";
-import SkeletonShimmer from "./shimmer";
-import { artworkFromChildren, svgHref } from "./source";
+import { SkeletonHighlight, useDimStyle } from "./pulse";
+import { artworkFromChildren } from "./source";
 
 export { SKELETON_COLORS } from "./colors";
 
 /**
  * Two ways to say what is shimmering, as a union rather than two optional
  * props: a file this component draws and recolours itself, or content the
- * caller draws. They aren't interchangeable — see the note on the mask —
+ * caller draws. They aren't interchangeable — see the note on the highlight —
  * so passing both should be a `tsc` error rather than a silent precedence
  * rule.
  */
@@ -54,7 +51,7 @@ type Props = ContentProps & {
    */
   label?: string;
   /**
-   * Turns the sweep off and leaves the content sitting there. For a screen
+   * Turns the pulse off and leaves the content sitting there. For a screen
    * with many placeholders at once, where a dozen independent shimmers is
    * worse than none.
    */
@@ -64,8 +61,8 @@ type Props = ContentProps & {
 };
 
 /**
- * A loading placeholder: your own artwork, with a highlight travelling
- * through it.
+ * A loading placeholder: your own artwork, with a highlight pulsing
+ * through its shapes.
  *
  * **It draws no shapes of its own.** There are no `<SkeletonLine>` /
  * `<SkeletonCircle>` primitives to reassemble the design in code — a
@@ -85,21 +82,25 @@ type Props = ContentProps & {
  * </Skeleton>
  * ```
  *
- * **The highlight is masked to the artwork's shapes whenever the artwork is
- * a file.** Given a `source` — or a lone `<Image>` child, which is the same
- * thing said another way — the file's own alpha clips the highlight, so it
- * travels through the shapes and never across the gaps between them.
- * `<Skeleton source={x} />` and `<Skeleton><Image source={x} /></Skeleton>`
- * are therefore the same placeholder, drawn the same way.
+ * **The highlight stays inside the artwork's shapes whenever the artwork
+ * is a file.** Given a `source` — or a lone `<Image>` child, which is the
+ * same thing said another way — a second copy of the file, in the
+ * highlight colour, fades in and out over the first, so the light lives in
+ * the shapes and never in the gaps between them. `<Skeleton source={x} />`
+ * and `<Skeleton><Image source={x} /></Skeleton>` are therefore the same
+ * placeholder, drawn the same way.
  *
- * **Anything else gets the highlight across its bounding box**, because a
- * React element tree has no alpha channel to ask about. An SVG component
- * out of Figma, or several elements, will shimmer — the band is just held
- * to a third of the masked strength, since it is painting the empty space
- * as well and at full strength that reads as a panel sliding over the
- * placeholder rather than as light. Pass the artwork as `source` where you
- * can; it is the better of the two on shapes with a lot of space between
- * them.
+ * **Anything else breathes as a whole**, because a React element tree has
+ * no alpha channel to ask about. An SVG component out of Figma, or several
+ * elements, fade gently down and back up. Pass the artwork as `source`
+ * where you can; the light reads better than the dimming.
+ *
+ * **Why a pulse and not a travelling band.** A band has to be clipped to
+ * the shapes, which takes a mask built from the artwork, and
+ * react-native-svg's mask `<Image>` can't decode an SVG on iOS or Android:
+ * the mask came out empty and the band never showed. Unclipped, it painted
+ * the gaps too and looked like a panel sliding past. The pulse needs no
+ * mask, so it looks the same on every platform.
  *
  * **A `source` is recoloured, not used as drawn.** It goes through `Image`'s
  * `tintColor`, so only its alpha matters — a Figma export in any grey comes
@@ -115,7 +116,7 @@ type Props = ContentProps & {
  * size the skeleton themselves.
  *
  * **Reduce Motion stops it dead**, with nothing substituted. `ProgressBar`
- * swaps its sweep for a cross-fade because there the movement carries
+ * swaps its motion for a cross-fade because there the movement carries
  * information — "this is still going" — and something has to. A skeleton's
  * does not: the shapes already say the content hasn't arrived, so a
  * placeholder that simply sits still is the whole answer rather than a
@@ -142,44 +143,31 @@ export default function Skeleton({
   const theme = useTheme();
   const styles = useStyles();
   const { isReduceMotionEnabled } = useAccessibility();
-  const [size, setSize] = useState({ width: 0, height: 0 });
 
-  // The artwork to mask against: the `source`, or a lone `<Image>` child's
-  // own source, so the two ways of saying the same thing render the same
-  // thing. Undefined for anything else, and for the handful of
-  // `expo-image` sources that name something rather than a file — see
-  // ./source.ts.
+  // The artwork to light up: the `source`, or a lone `<Image>` child's own
+  // source, so the two ways of saying the same thing render the same
+  // thing. Undefined for anything else — see ./source.ts.
   const artwork =
     source === undefined
       ? artworkFromChildren(children)
       : { source, contentFit: "contain" };
-  const href = artwork === undefined ? undefined : svgHref(artwork.source);
 
-  // Reduce Motion is the whole answer, not a slower one: the sweep is
+  // Reduce Motion is the whole answer, not a slower one: the pulse is
   // dropped and the placeholder sits still. `ProgressBar` substitutes a
   // cross-fade in the same spot because its movement carries information —
   // "this is still going" — but a skeleton's does not. The shapes already
   // say the content hasn't arrived, so there is nothing left for an
   // animation to convey and the honest substitution is none at all.
   const shimmering = animated && !isReduceMotionEnabled;
-
-  function handleLayout(event: LayoutChangeEvent) {
-    const { width, height } = event.nativeEvent.layout;
-    setSize((current) =>
-      current.width === width && current.height === height
-        ? current
-        : { width, height },
-    );
-  }
+  const dimStyle = useDimStyle(shimmering && artwork === undefined);
 
   return (
-    <View
+    <Animated.View
       testID={testID}
       {...(label === undefined
         ? disabledA11yProps()
         : statusA11yProps({ label }))}
-      onLayout={handleLayout}
-      style={[styles.skeleton, style]}
+      style={[styles.skeleton, style, artwork === undefined ? dimStyle : null]}
     >
       {source === undefined ? (
         children
@@ -196,22 +184,21 @@ export default function Skeleton({
         />
       )}
 
-      {!shimmering || size.width === 0 ? null : (
-        <SkeletonShimmer
-          width={size.width}
-          height={size.height}
-          href={href}
-          contentFit={artwork?.contentFit}
+      {artwork === undefined ? null : (
+        <SkeletonHighlight
+          active={shimmering}
+          source={artwork.source}
+          contentFit={artwork.contentFit}
           testID={testID === undefined ? undefined : `${testID}-shimmer`}
         />
       )}
-    </View>
+    </Animated.View>
   );
 }
 
 const useStyles = createStyles(() => ({
   skeleton: {
-    // Keeps the travelling highlight inside the placeholder's own box.
+    // Keeps the highlight copy inside the placeholder's own box.
     overflow: "hidden",
   },
   // A file has no layout to contribute, so it fills the box `style` gave.

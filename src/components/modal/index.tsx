@@ -171,7 +171,11 @@ const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
         <GestureHandlerRootView style={styles.gestureRoot}>
           <Animated.View style={containerStyle} accessibilityViewIsModal>
             <If condition={config.backdrop}>
-              <ModalBackdrop progress={progress} onDismiss={dismiss} />
+              <ModalBackdrop
+                progress={progress}
+                maxOpacity={config.backdropOpacity}
+                onDismiss={dismiss}
+              />
             </If>
             <ModalContent
               config={config}

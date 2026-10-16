@@ -26,7 +26,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Badges            | Every type, the count formatting and its zero case, the dot, and where a badge sits                                   |
 | Avatars           | The fallback stack, the sizes switchable live, the status dot, and awkward names                                      |
 | Stepper           | The limits disabling their own button, a fractional step, the sizes, and the typing alternative                       |
-| Skeleton          | A card and a list of rows from one file, the children form beside them, and the sweep switchable live                 |
+| Skeleton          | A card and a list of rows from one file, the children form beside them, and the pulse switchable live                 |
 | Chart             | The three forms switchable live, the theme series palette, and the sentence it reads out                              |
 | Barcode           | A live-editable QR, the linear formats switchable, and an invalid value falling back                                  |
 | Timer             | A countdown with its ring, a stopwatch, the formats, and pause                                                        |

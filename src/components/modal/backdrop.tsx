@@ -7,10 +7,10 @@ import Animated, {
 import { controlA11yProps } from "@/features/accessibility";
 import { useTheme } from "@/features/theme";
 
-const BACKDROP_MAX_OPACITY = 0.5;
-
 type Props = {
   progress: SharedValue<number>;
+  /** How dark it gets once fully shown — the type's `backdropOpacity`. */
+  maxOpacity: number;
   onDismiss: () => void;
 };
 
@@ -21,11 +21,15 @@ type Props = {
  * a self-contained concern (its own Pressable, its own accessibility props)
  * that types without a backdrop (`fullscreen`) simply don't render.
  */
-export default function ModalBackdrop({ progress, onDismiss }: Props) {
+export default function ModalBackdrop({
+  progress,
+  maxOpacity,
+  onDismiss,
+}: Props) {
   const theme = useTheme();
 
   const backdropStyle = useAnimatedStyle(() => ({
-    opacity: progress.value * BACKDROP_MAX_OPACITY,
+    opacity: progress.value * maxOpacity,
   }));
 
   return (

@@ -1,9 +1,11 @@
-import { View } from "react-native";
+import { useState } from "react";
+import { View, type LayoutRectangle } from "react-native";
 
 import { radioGroupA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
+import SegmentIndicator from "./indicator";
 import Segment from "./segment";
 import type { SegmentedControlImplementationProps } from "./types";
 
@@ -19,6 +21,9 @@ import type { SegmentedControlImplementationProps } from "./types";
  * scheme; the bar alone clears the 3:1 WCAG 1.4.11 asks of the only thing
  * marking the choice, and as a shape it survives greyscale and a
  * colour-blindness filter where a hue change alone would not.
+ *
+ * The tint and bar are one indicator that slides between segments
+ * (./indicator.tsx), the way TabBar's moves between tabs.
  */
 export default function CustomSegmentedControl({
   value,
@@ -31,6 +36,8 @@ export default function CustomSegmentedControl({
 }: SegmentedControlImplementationProps) {
   const theme = useTheme();
   const styles = useStyles();
+  // Each segment's box, by value, for the indicator to slide between.
+  const [layouts, setLayouts] = useState<Record<string, LayoutRectangle>>({});
 
   return (
     <View
@@ -43,6 +50,8 @@ export default function CustomSegmentedControl({
         style,
       ]}
     >
+      {/* First, so it paints behind the segments and their hairlines. */}
+      <SegmentIndicator target={layouts[value]} />
       {options.map((option, index) => (
         <Segment
           key={option.value}
@@ -51,9 +60,26 @@ export default function CustomSegmentedControl({
           selected={option.value === value}
           disabled={disabled || (option.disabled ?? false)}
           onPress={() => onChange(option.value)}
+          onLayout={(layout) =>
+            setLayouts((known) =>
+              sameLayout(known[option.value], layout)
+                ? known
+                : { ...known, [option.value]: layout },
+            )
+          }
         />
       ))}
     </View>
+  );
+}
+
+function sameLayout(a: LayoutRectangle | undefined, b: LayoutRectangle) {
+  return (
+    a !== undefined &&
+    a.x === b.x &&
+    a.y === b.y &&
+    a.width === b.width &&
+    a.height === b.height
   );
 }
 

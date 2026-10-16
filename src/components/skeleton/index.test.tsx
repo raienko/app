@@ -1,39 +1,27 @@
 import { AccessibilityInfo, View } from "react-native";
 
 import Text from "@/components/text";
-import { act, render, waitFor } from "@/root/testing";
+import { render, waitFor } from "@/root/testing";
 
 import Component from "./index";
 
 const ARTWORK = 1 as never;
 const hidden = { includeHiddenElements: true } as const;
 
-type View_ = Awaited<ReturnType<typeof render>>;
-
-/**
- * The shimmer only mounts once the box has measured itself. Driven through
- * `onLayout` directly rather than `fireEvent`, which declines to dispatch
- * into a subtree this component deliberately hides from accessibility.
- */
-async function measure(view: View_, width = 300, height = 100) {
-  const { onLayout } = view.getByTestId("skeleton", hidden).props;
-  await act(async () => {
-    onLayout({ nativeEvent: { layout: { width, height, x: 0, y: 0 } } });
-  });
-}
-
 describe(`${Component.name} smoke test`, () => {
   it("draws the artwork it was given", async () => {
     const view = await render(<Component testID="skeleton" source={ARTWORK} />);
 
-    expect(view.getByTestId("image", hidden)).toBeTruthy();
+    expect(view.getAllByTestId("image", hidden)[0]).toBeTruthy();
   });
 
   // Only the alpha survives: the export's own greys never reach the screen.
   it("recolours the artwork to the app's own surface", async () => {
     const view = await render(<Component testID="skeleton" source={ARTWORK} />);
 
-    expect(view.getByTestId("image", hidden).props.tintColor).toBeTruthy();
+    expect(
+      view.getAllByTestId("image", hidden)[0].props.tintColor,
+    ).toBeTruthy();
   });
 
   it("draws children instead, exactly as given", async () => {
@@ -47,38 +35,39 @@ describe(`${Component.name} smoke test`, () => {
     expect(view.queryByTestId("image", hidden)).toBeNull();
   });
 
-  describe("the shimmer", () => {
-    it("waits for the box to measure itself", async () => {
+  describe("the highlight", () => {
+    // A second copy of the file in the highlight colour, so the light
+    // stays inside the shapes without a mask.
+    it("pulses a highlight copy of the artwork over it", async () => {
       const view = await render(
         <Component testID="skeleton" source={ARTWORK} />,
       );
 
-      expect(view.queryByTestId("skeleton-shimmer", hidden)).toBeNull();
-
-      await measure(view);
-
-      expect(view.getByTestId("skeleton-shimmer", hidden)).toBeTruthy();
+      const highlight = view.getByTestId("skeleton-shimmer", hidden);
+      const [base, copy] = view.getAllByTestId("image", hidden);
+      expect(highlight).toBeTruthy();
+      expect(copy.props.tintColor).not.toBe(base.props.tintColor);
     });
 
     it("is absent entirely when the caller turns it off", async () => {
       const view = await render(
         <Component testID="skeleton" source={ARTWORK} animated={false} />,
       );
-      await measure(view);
 
       expect(view.queryByTestId("skeleton-shimmer", hidden)).toBeNull();
-      expect(view.getByTestId("image", hidden)).toBeTruthy();
+      expect(view.getAllByTestId("image", hidden)).toHaveLength(1);
     });
 
-    it("sweeps over children too", async () => {
+    // No file to copy: the children dim as a whole rather than getting a
+    // band across their box.
+    it("leaves children with no artwork to dim instead", async () => {
       const view = await render(
         <Component testID="skeleton">
           <View />
         </Component>,
       );
-      await measure(view);
 
-      expect(view.getByTestId("skeleton-shimmer", hidden)).toBeTruthy();
+      expect(view.queryByTestId("skeleton-shimmer", hidden)).toBeNull();
     });
   });
 
@@ -103,7 +92,6 @@ describe(`${Component.name} smoke test`, () => {
       const view = await render(
         <Component testID="skeleton" source={ARTWORK} />,
       );
-      await measure(view);
 
       await waitFor(() => {
         expect(view.queryByTestId("skeleton-shimmer", hidden)).toBeNull();
@@ -114,9 +102,10 @@ describe(`${Component.name} smoke test`, () => {
       const view = await render(
         <Component testID="skeleton" source={ARTWORK} />,
       );
-      await measure(view);
 
-      expect(view.getByTestId("image", hidden)).toBeTruthy();
+      await waitFor(() => {
+        expect(view.getAllByTestId("image", hidden)).toHaveLength(1);
+      });
     });
   });
 
@@ -165,7 +154,9 @@ describe(`${Component.name} smoke test`, () => {
         <Component testID="skeleton" source={ARTWORK} label="Loading" />,
       );
 
-      expect(view.getByTestId("image", hidden).props.accessible).toBe(false);
+      for (const image of view.getAllByTestId("image", hidden)) {
+        expect(image.props.accessible).toBe(false);
+      }
     });
   });
 

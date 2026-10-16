@@ -1,4 +1,4 @@
-import { Pressable } from "react-native";
+import { Pressable, type LayoutRectangle } from "react-native";
 
 import Text from "@/components/text";
 import { radioA11yProps } from "@/features/accessibility";
@@ -14,11 +14,13 @@ type Props = {
   selected: boolean;
   disabled: boolean;
   onPress: () => void;
+  /** Reports this segment's box, which the sliding indicator moves to. */
+  onLayout: (layout: LayoutRectangle) => void;
 };
 
 /**
- * One segment: the touch target, its label, and the tint and bar that mark
- * it as the current choice.
+ * One segment: the touch target and its label. The tint and bar that mark
+ * the current choice are the parent's sliding indicator, drawn behind.
  *
  * Announced as a radio rather than a button, because that's what it is —
  * one of a set of mutually exclusive options, inside the `radiogroup` its
@@ -32,6 +34,7 @@ export default function Segment({
   selected,
   disabled,
   onPress,
+  onLayout,
 }: Props) {
   const theme = useTheme();
   const styles = useStyles();
@@ -41,6 +44,7 @@ export default function Segment({
       {...radioA11yProps({ label: option.label, checked: selected, disabled })}
       testID={option.testID}
       disabled={disabled}
+      onLayout={(event) => onLayout(event.nativeEvent.layout)}
       // A press on the current segment is not a change — reporting it would
       // fire `onChange` for a value the caller already holds, which turns
       // an idle tap into a state update (and, for a call site that persists
@@ -52,12 +56,6 @@ export default function Segment({
         styles.segment,
         separated
           ? [styles.separated, { borderStartColor: theme.colors.border }]
-          : null,
-        selected
-          ? {
-              backgroundColor: theme.colors.selected,
-              borderBottomColor: theme.colors.accent,
-            }
           : null,
         // Dimmed per segment, not only when the whole control is disabled:
         // one unavailable choice among available ones is otherwise
@@ -92,8 +90,8 @@ const useStyles = createStyles(({ spacing, sizes }) => ({
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: spacing.x8,
-    // Reserved on every segment, so selecting one doesn't nudge its label
-    // up by the bar's height.
+    // Reserved on every segment, so the label sits clear of the
+    // indicator's bar, centred in what's left above it.
     borderBottomWidth: spacing.x2,
     borderBottomColor: "transparent",
   },

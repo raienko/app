@@ -11,13 +11,13 @@
  *
  * **The highlight is `grabber`**, the one neutral that is the same value in
  * both schemes. That makes it reliably *visible* against the base rather
- * than reliably brighter — it reads as a lighter sweep in the dark scheme
+ * than reliably brighter — it reads as a lighter glow in the dark scheme
  * and a darker one in the light. No token is brighter than the base in both
  * (the palette has no step above `backgroundElementSelected` in light, and
  * `background` inverts), so visibility is the property worth pinning; a
  * conventional always-brighter shine would need a palette entry of its own.
- * It is drawn at `BAND_OPACITY`, which is what keeps a mid-grey from
- * reading as a bar rather than a shine.
+ * The pulse only ever takes it part of the way (`HIGHLIGHT_OPACITY` in
+ * ./pulse.tsx), which keeps a mid-grey reading as light rather than paint.
  */
 export const SKELETON_COLORS = {
   base: "backgroundElementSelected",

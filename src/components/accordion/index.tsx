@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -16,7 +16,7 @@ import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 import { easeOutClamped } from "@/utils/easing";
 
-import Collapsible, { sectionTransition } from "./collapsible";
+import Collapsible from "./collapsible";
 
 /** Short enough to feel instant on a tap, long enough to read as motion. */
 const ANIMATION_DURATION = 220;
@@ -37,8 +37,7 @@ type Props = {
  * them reads as one ruled list rather than a pile of cards.
  *
  * Content grows and fades in, and shrinks and fades out, on the same
- * timing as the chevron. How it grows differs by platform — see
- * ./collapsible.tsx and ./collapsible.web.tsx. Collapsed content is
+ * timing as the chevron — see ./collapsible.tsx. Collapsed content is
  * unmounted, so a closed section costs nothing to render.
  */
 export default function Accordion({
@@ -71,10 +70,7 @@ export default function Accordion({
   }));
 
   return (
-    // On every section, not just the one being toggled, so the ones below
-    // it move with it instead of jumping (native only — see ./collapsible).
-    <Animated.View
-      layout={sectionTransition(ms)}
+    <View
       style={[styles.container, { borderBottomColor: theme.colors.divider }]}
     >
       <Pressable
@@ -97,7 +93,7 @@ export default function Accordion({
       <Collapsible open={open} duration={ms} contentStyle={styles.content}>
         {children}
       </Collapsible>
-    </Animated.View>
+    </View>
   );
 }
 

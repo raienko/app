@@ -8,19 +8,14 @@ export type ModalTypeConfig = {
   animation: ModalAnimation;
   /** Whether a dimmed, tap-to-dismiss layer renders behind the content. */
   backdrop: boolean;
+  /** How dark that layer gets once fully shown. */
+  backdropOpacity: number;
   /**
    * Whether the content wrapper itself gets theme.colors.background. Off
-   * for "actions" — it behaves like a native action sheet, a stack of
-   * independently-styled action items (e.g. Buttons, which already supply
-   * their own background) with no unifying card behind them.
+   * for "actions", a bare stack of items, and "immersive", which draws edge
+   * to edge over its own media.
    */
   contentBackground: boolean;
-  /**
-   * Whether a page-coloured fade sits behind the content, solid under it
-   * and dissolving into the backdrop above — see ./fade.tsx. For
-   * "actions", whose items have no card to sit on.
-   */
-  contentFade: boolean;
   /**
    * Whether children sit in Modal's ScrollView. Off for `immersive`, whose
    * content runs its own gestures (pinch, pan, swipe-to-dismiss) that a
@@ -41,8 +36,8 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     position: "center",
     animation: "fade",
     backdrop: true,
+    backdropOpacity: 0.5,
     contentBackground: true,
-    contentFade: false,
     scroll: true,
     edgeToEdge: false,
   },
@@ -50,8 +45,8 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     position: "bottom",
     animation: "slideUp",
     backdrop: true,
+    backdropOpacity: 0.5,
     contentBackground: true,
-    contentFade: false,
     scroll: true,
     edgeToEdge: false,
   },
@@ -59,8 +54,12 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     position: "bottom",
     animation: "slideUp",
     backdrop: true,
+    // Barely dimmed: with no surface of its own, the items read against
+    // the page itself, so the page shouldn't go dark behind them.
+    backdropOpacity: 0.2,
+    // No surface: a stack of items straight over the backdrop, like a
+    // native action sheet.
     contentBackground: false,
-    contentFade: true,
     scroll: true,
     edgeToEdge: false,
   },
@@ -68,8 +67,8 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     position: "fullscreen",
     animation: "fade",
     backdrop: false,
+    backdropOpacity: 0,
     contentBackground: true,
-    contentFade: false,
     scroll: true,
     edgeToEdge: false,
   },
@@ -77,8 +76,8 @@ export const MODAL_TYPE_CONFIG: Record<ModalType, ModalTypeConfig> = {
     position: "fullscreen",
     animation: "fade",
     backdrop: false,
+    backdropOpacity: 0,
     contentBackground: false,
-    contentFade: false,
     scroll: false,
     edgeToEdge: true,
   },

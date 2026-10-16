@@ -80,6 +80,7 @@ export default function WebViewSection() {
         onPress={() => {
           const next = greetings + 1;
           setGreetings(next);
+          console.log("PROBE greet", next, ready, !!web.current);
           web.current?.post("app.greeting", { text: `hello #${next}` });
         }}
       />

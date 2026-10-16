@@ -199,6 +199,26 @@ describe("WebView smoke test", () => {
   // — and neither platform gives one. Both report an opaque origin, which
   // is what `resolveOrigins` names for an `html` source.
   describe("an html source", () => {
+    // Android can run injectedJavaScriptBeforeContentLoaded after the
+    // document's inline scripts, so a page registering AppBridge.on() while
+    // it parses would miss every message from the app. The shim goes into
+    // the document itself, ahead of the page's own markup.
+    it("carries the shim at the top of the document", async () => {
+      const view = await render(
+        <Component
+          testID="web"
+          label="Receipt"
+          source={{ html: "<html><head></head><body><p>hi</p></body></html>" }}
+        />,
+      );
+
+      const { html } = web(view).source as { html: string };
+      expect(html.indexOf("window.AppBridge")).toBeGreaterThan(-1);
+      expect(html.indexOf("window.AppBridge")).toBeLessThan(
+        html.indexOf("<p>hi</p>"),
+      );
+    });
+
     it("is listened to even though it has no origin", async () => {
       const onMessage = jest.fn();
       const view = await render(

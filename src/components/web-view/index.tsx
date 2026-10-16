@@ -1,4 +1,10 @@
-import { forwardRef, useCallback, useImperativeHandle, useRef } from "react";
+import {
+  forwardRef,
+  useCallback,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+} from "react";
 import { View } from "react-native";
 import RNWebView, {
   type WebViewMessageEvent,
@@ -11,7 +17,7 @@ import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 import { OPAQUE_ORIGIN, originOf } from "./bridge";
-import { deliverInjection, nativeInjection } from "./injection";
+import { deliverInjection, htmlWithBridge, nativeInjection } from "./injection";
 import type { WebViewHandle, WebViewProps } from "./types";
 import { useBridge } from "./use-bridge";
 
@@ -100,6 +106,7 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
   const view = useRef<RNWebView>(null);
 
   const send = useCallback((encoded: string) => {
+    console.log("PROBE inject", encoded.slice(0, 80), !!view.current);
     view.current?.injectJavaScript(deliverInjection(encoded));
   }, []);
 
@@ -125,6 +132,26 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
     [bridge.post],
   );
 
+  // An `html` source carries the shim at the top of the document itself,
+  // the way the web build does. `injectedJavaScriptBeforeContentLoaded`
+  // alone isn't enough there: on Android it runs from `onPageStarted`,
+  // which can lose the race against the document's inline scripts, so a
+  // page calling `AppBridge.on(...)` while it parses threw, never
+  // registered, and every message from the app went nowhere — while the
+  // page's own `post`, called later from a tap, kept working. The injected
+  // copy stays for `uri` pages; whichever copy runs second is a no-op.
+  // `initialStylesheet` is fixed at mount, so this never reloads the page.
+  const nativeSource = useMemo(
+    () =>
+      "html" in source && typeof source.html === "string"
+        ? {
+            ...source,
+            html: htmlWithBridge(source.html, bridge.initialStylesheet),
+          }
+        : source,
+    [source, bridge.initialStylesheet],
+  );
+
   function handleMessage(event: WebViewMessageEvent) {
     // The event carries the URL the message came from, which is what the
     // origin check has to be run against — not the URL we asked for, since
@@ -134,6 +161,7 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
     // `html` source loads as. Falling back to the opaque origin rather than
     // to nothing is what makes those documents heard: they are ours, and
     // `resolveOrigins` names exactly that case.
+    console.log("PROBE msg", String(event.nativeEvent.data).slice(0, 60));
     const origin = originOf(event.nativeEvent.url) ?? OPAQUE_ORIGIN;
     bridge.receive(event.nativeEvent.data, origin);
   }
@@ -141,6 +169,12 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
   function handleNavigation(event: WebViewNavigation) {
     // A new document means a new shim, which has not announced itself yet.
     // Without this, `post` would keep injecting into a page that has gone.
+    console.log(
+      "PROBE nav",
+      event.loading,
+      event.url?.slice(0, 40),
+      event.navigationType,
+    );
     if (event.loading) bridge.reset();
   }
 
@@ -155,7 +189,7 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
       <RNWebView
         ref={view}
         {...disabledA11yProps()}
-        source={source}
+        source={nativeSource}
         // Before the page's own scripts, so `AppBridge` is already there
         // when they look for it — and so the stylesheet lands with the
         // first paint rather than after a flash of the page's own.
