@@ -118,6 +118,7 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
+    "web:build": "node --env-file=.env node_modules/expo/bin/cli export -p web",
     "atlas": "EXPO_ATLAS=true expo start",
     "atlas:export": "EXPO_ATLAS=true expo export",
     "atlas:open": "expo-atlas .expo/atlas.jsonl",

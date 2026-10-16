@@ -30,6 +30,7 @@ Capabilities the app uses behind the UI.
 | [**Deep links**](../../src/features/deep-links/index.md) | One pipeline for every incoming link: parsing, matching, queueing and routing.                                 |
 | [**Maps**](../../src/features/maps/index.md)             | Themed map style, tile config, the user's location, and directions via the platform map app.                   |
 | [**Event bus**](../../src/features/event-bus/index.md)   | Typed, scoped publish/subscribe for decoupled parts of the app.                                                |
+| [**Web app**](../../src/features/web-app/index.md)       | The web build as an installable app (PWA): manifest, icons, offline service worker and theme colour.           |
 
 ## Not documented yet
 

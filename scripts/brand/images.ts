@@ -24,6 +24,9 @@ const ICON_LOGO = 0.6;
 // The safe zone is a 66dp *circle*, so a square-ish logo has to sit well
 // inside it for its corners to survive a circular mask.
 const ADAPTIVE_LOGO = (66 / 108) * 0.75;
+// A maskable web icon is cropped to a circle 80% of its width, so the logo
+// sits inside that circle the same way it does in Android's safe zone.
+const MASKABLE_LOGO = 0.8 * 0.65;
 
 /** Apple's Icon Composer bundle — a folder, despite the extension. */
 const ICON_BUNDLE = "icon-ios.icon";
@@ -33,6 +36,12 @@ export const SPLASH_WIDTH = 76;
 
 type Output = {
   file: string;
+  /**
+   * Written to public/ instead of generated/: the web build serves that
+   * folder as-is from the site root, which is where a browser looks for an
+   * installed app's icons.
+   */
+  web?: true;
   /** Pixel size the file must be, when a brand supplies it by hand. */
   size?: [number, number];
   generate: (logo: sharp.Sharp, brand: Brand) => Promise<sharp.Sharp | null>;
@@ -63,10 +72,7 @@ const OUTPUTS: Output[] = [
     // Opaque on purpose: App Store Connect rejects an icon with alpha.
     file: "icon.png",
     size: [1024, 1024],
-    generate: async (logo, brand) =>
-      sharp(
-        await (await placed(logo, 1024, 1024 * ICON_LOGO)).png().toBuffer(),
-      ).flatten({ background: brand.colors.iconBackground }),
+    generate: (logo, brand) => opaqueIcon(logo, brand, 1024, ICON_LOGO),
   },
   {
     file: "icon-android-foreground.png",
@@ -121,12 +127,42 @@ const OUTPUTS: Output[] = [
   {
     file: "favicon.png",
     size: [48, 48],
-    generate: async (logo, brand) =>
-      sharp(await (await placed(logo, 48, 48 * 0.75)).png().toBuffer()).flatten(
-        { background: brand.colors.iconBackground },
-      ),
+    generate: (logo, brand) => opaqueIcon(logo, brand, 48, 0.75),
+  },
+  // The installed web app's icons, listed in public/manifest.json. Opaque
+  // like icon.png: iOS fills a transparent home-screen icon with black.
+  {
+    file: "icon-web-192.png",
+    size: [192, 192],
+    web: true,
+    generate: (logo, brand) => opaqueIcon(logo, brand, 192, ICON_LOGO),
+  },
+  {
+    file: "icon-web-512.png",
+    size: [512, 512],
+    web: true,
+    generate: (logo, brand) => opaqueIcon(logo, brand, 512, ICON_LOGO),
+  },
+  {
+    // Android crops this one to the launcher's shape, like the adaptive icon.
+    file: "icon-web-maskable.png",
+    size: [512, 512],
+    web: true,
+    generate: (logo, brand) => opaqueIcon(logo, brand, 512, MASKABLE_LOGO),
   },
 ];
+
+/** The logo at `share` of a `size` square, on `iconBackground`, with no transparency. */
+async function opaqueIcon(
+  logo: sharp.Sharp,
+  brand: Brand,
+  size: number,
+  share: number,
+) {
+  return sharp(
+    await (await placed(logo, size, size * share)).png().toBuffer(),
+  ).flatten({ background: brand.colors.iconBackground });
+}
 
 /**
  * Written as small as it goes without visibly changing: maximum zlib
@@ -146,14 +182,18 @@ export type ImageReport = { file: string; source: "generated" | "brand" }[];
 
 /**
  * Writes every brand image into `outDir`, which is emptied first so a file
- * the previous brand had and this one doesn't can't linger.
+ * the previous brand had and this one doesn't can't linger — and the web
+ * app's icons into `publicDir`, which also holds hand-written files and so
+ * is only ever overwritten, file by file.
  */
 export async function writeImages(
   brand: Brand,
   outDir: string,
+  publicDir: string,
 ): Promise<ImageReport> {
   rmSync(outDir, { recursive: true, force: true });
   mkdirSync(outDir, { recursive: true });
+  mkdirSync(publicDir, { recursive: true });
 
   // Rendered large once, so every output downsamples from the same pixels.
   const logo = sharp(brand.logoPath, { density: 600 }).resize(2048, 2048, {
@@ -167,7 +207,7 @@ export async function writeImages(
 
   for (const output of OUTPUTS) {
     const override = join(brand.dir, output.file);
-    const target = join(outDir, output.file);
+    const target = join(output.web ? publicDir : outDir, output.file);
 
     if (existsSync(override)) {
       await optimised(sharp(override)).toFile(target);

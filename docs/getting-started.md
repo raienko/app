@@ -53,6 +53,7 @@
 | --------------------------------- | ----------------------------------------------------------------------- |
 | `yarn start`                      | Metro, choose platform interactively (opens Expo Go)                    |
 | `yarn web` / `ios` / `android`    | Run on a given platform (ios/android build a real dev client)           |
+| `yarn web:build`                  | Build the installable web app into `dist/`, for any static host         |
 | `yarn lint`                       | ESLint (`expo lint`)                                                    |
 | `yarn typecheck`                  | `tsc --noEmit`                                                          |
 | `yarn test`                       | Jest                                                                    |

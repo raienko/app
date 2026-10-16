@@ -62,3 +62,7 @@ yarn-error.*
 
 expo-env.d.ts
 # @end expo-cli
+
+# Also written by `yarn brand`: the web app's manifest and icons
+/public/manifest.json
+/public/icon-web-*.png

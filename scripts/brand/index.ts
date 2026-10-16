@@ -4,7 +4,8 @@
  *   yarn brand
  *
  * Writes the generated, gitignored outputs — assets/brand/generated/*,
- * src/features/theme/palette.json — and the brand's keys in .env. Runs on
+ * the web app's manifest and icons in public/, src/features/theme/palette.json
+ * — and the brand's keys in .env. Runs on
  * every `yarn install` (postinstall), so a fresh clone or a CI runner always
  * has a complete brand. Rebranding is replacing assets/brand and running it
  * again. See assets/brand/README.md.
@@ -17,7 +18,7 @@ import { contrast } from "./color.ts";
 import { writeEnv } from "./env.ts";
 import { checkOverrides, writeImages } from "./images.ts";
 import { buildPalette, type Palettes } from "./palette.ts";
-import { BrandError, loadBrand } from "./resolve.ts";
+import { type Brand, BrandError, loadBrand } from "./resolve.ts";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const paths = {
@@ -25,6 +26,7 @@ const paths = {
   env: join(root, ".env"),
   envExample: join(root, ".env.example"),
   generated: join(root, "assets", "brand", "generated"),
+  public: join(root, "public"),
   paletteBase: join(root, "src", "features", "theme", "palette.base.json"),
   palette: join(root, "src", "features", "theme", "palette.json"),
 };
@@ -48,8 +50,9 @@ async function main() {
       )?.[1]
     : undefined;
 
-  const images = await writeImages(brand, paths.generated);
+  const images = await writeImages(brand, paths.generated, paths.public);
   writeFileSync(paths.palette, `${JSON.stringify(palette, null, 2)}\n`);
+  writeManifest(brand, palette, join(paths.public, "manifest.json"));
   writeEnv(brand, paths.env, paths.envExample);
 
   const ratio = (fg: string, bg: string) => contrast(fg, bg).toFixed(1);
@@ -65,7 +68,7 @@ async function main() {
     );
   }
   console.log(
-    `  wrote ${relative(root, paths.generated)}/, ${relative(root, paths.palette)}, .env`,
+    `  wrote ${relative(root, paths.generated)}/, ${relative(root, paths.public)}/, ${relative(root, paths.palette)}, .env`,
   );
 
   const nativeDirs = ["ios", "android"].filter((dir) =>
@@ -80,6 +83,39 @@ async function main() {
       `\n  Icons and splash are baked into ${nativeDirs.join("/")} at prebuild — run \`npx expo prebuild --clean\` to pick up changes.`,
     );
   }
+}
+
+/**
+ * What a browser needs to install the web build as an app: its name, the
+ * icons writeImages put in public/, and the colours of the window it opens
+ * in. `background_color` is the splash Chrome shows while the app loads, so
+ * it matches the native splash; `theme_color` is the title bar, so it
+ * matches the app's own light background. The page keeps the latter in step
+ * with the active theme at runtime — see @/features/web-app.
+ */
+function writeManifest(brand: Brand, palette: Palettes, file: string) {
+  const manifest = {
+    id: "/",
+    name: brand.name,
+    short_name: brand.name,
+    start_url: "/",
+    scope: "/",
+    display: "standalone",
+    orientation: "portrait",
+    background_color: brand.colors.splashBackground,
+    theme_color: palette.light.background,
+    icons: [
+      { src: "/icon-web-192.png", sizes: "192x192", type: "image/png" },
+      { src: "/icon-web-512.png", sizes: "512x512", type: "image/png" },
+      {
+        src: "/icon-web-maskable.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "maskable",
+      },
+    ],
+  };
+  writeFileSync(file, `${JSON.stringify(manifest, null, 2)}\n`);
 }
 
 main().catch((error: unknown) => {

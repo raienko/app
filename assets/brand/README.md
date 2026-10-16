@@ -23,6 +23,7 @@ It also runs on every `yarn install`, so a fresh clone or a CI runner always has
 | `generated/`: every icon, the splash and the favicon (gitignored) | `logo.*`, or a hand-made override below                                           |
 | `src/features/theme/palette.json` (gitignored)                    | `palette.base.json` + colours derived from `colors.primary` + `palette` overrides |
 | The brand keys in `.env`; every other key is left alone           | `brand.json`                                                                      |
+| `public/manifest.json` and the web icons (gitignored)             | `brand.json`, `logo.*` — what a browser needs to install the web build            |
 
 Icons and the splash are baked into `ios/` and `android/` at prebuild. After a rebrand, run `npx expo prebuild --clean`; the script reminds you when those folders exist.
 
@@ -39,6 +40,9 @@ Every file has one name, used both for the generated output in `generated/` and 
 | `icon-android-background.png` | 432×432                    | not generated: the background is `colors.iconBackground` unless you add one |
 | `splash.png`                  | any; shown 76pt wide       | the logo                                                                    |
 | `favicon.png`                 | 48×48                      | the logo on `colors.iconBackground`                                         |
+| `icon-web-192.png`            | 192×192                    | like `icon.png`, for the installed web app; written to `public/`            |
+| `icon-web-512.png`            | 512×512                    | like `icon.png`, for the installed web app; written to `public/`            |
+| `icon-web-maskable.png`       | 512×512                    | the logo inside the circle Android crops web icons to; written to `public/` |
 
 The logo is used as drawn, in its own colours. So a white logo wants a coloured `iconBackground`/`splashBackground`, and a coloured logo a light one.
 

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { WebApp } from "@/features/web-app";
+
 import Providers from "./providers";
 import withObserve from "./with-observe";
 import type { ProvidersConfig } from "./providers";
@@ -32,6 +34,7 @@ function Root({ children, config }: Props) {
   return (
     <Providers config={config}>
       {children}
+      <WebApp />
 
       {/* Global overlay UI the real app alone needs goes here. */}
     </Providers>
