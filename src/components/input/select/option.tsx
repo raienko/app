@@ -58,7 +58,7 @@ const useStyles = createStyles(({ isRTL, spacing, sizes, radius }) => ({
     alignItems: "center",
     gap: spacing.x8,
     minHeight: sizes.elementHeightMd,
-    paddingHorizontal: spacing.x16,
+    paddingHorizontal: sizes.rowInset,
   },
   label: {
     flex: 1,

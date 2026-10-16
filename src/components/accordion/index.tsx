@@ -110,12 +110,17 @@ const useStyles = createStyles(({ isRTL, spacing, sizes }) => ({
     gap: spacing.x12,
     minHeight: sizes.elementHeightLg,
     paddingVertical: spacing.x12,
+    // Without it the pressed fill and the keyboard focus ring sit flush
+    // against the title and the chevron.
+    paddingHorizontal: sizes.rowInset,
   },
   title: {
     flex: 1,
   },
   content: {
     gap: spacing.x12,
+    // Matches the header's inset so the body lines up under the title.
+    paddingHorizontal: sizes.rowInset,
     paddingBottom: spacing.x24,
   },
 }));

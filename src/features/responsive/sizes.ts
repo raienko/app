@@ -97,6 +97,8 @@ const RAW_NAMED_SIZES = {
   elementWidthLg: 360,
   /** A screen's side column — `Screen`'s `aside`, e.g. section navigation on a tablet or the web. */
   asideWidth: 280,
+  /** Side padding inside a full-width row — ListItem, Accordion, Select and country options — so their text, icons, pressed fill and focus ring all sit the same distance from the edge. */
+  rowInset: 16,
 } as const;
 
 type Scaled<T extends Record<string, number>> = { [K in keyof T]: number };

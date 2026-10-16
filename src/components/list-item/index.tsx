@@ -177,7 +177,7 @@ const useStyles = createStyles(({ isRTL, spacing, sizes }) => ({
     // same reason `Card` and `Accordion` use alignSelf rather than a width.
     alignSelf: "stretch",
     minHeight: sizes.elementHeightMd,
-    paddingHorizontal: spacing.x16,
+    paddingHorizontal: sizes.rowInset,
     paddingVertical: spacing.x8,
     gap: spacing.x12,
   },
