@@ -1,7 +1,8 @@
+import { DAY } from "@/utils";
+
 import { buildRows, GROUP_WINDOW_MS, startOfDay } from "./rows";
 import type { ChatMessage } from "./types";
 
-const DAY = 24 * 60 * 60 * 1000;
 const NOON = new Date(2026, 9, 15, 12, 0).getTime();
 
 const message = (

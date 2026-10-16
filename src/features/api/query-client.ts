@@ -1,9 +1,11 @@
 import { QueryClient } from "@tanstack/react-query";
 
+import { days, seconds } from "@/utils";
+
 import { isApiError } from "./errors";
 
 /** How long cached data is kept, in memory and on disk. */
-export const CACHE_TIME = 24 * 60 * 60 * 1000;
+export const CACHE_TIME = days(1);
 
 /**
  * Retry what might work a second time — a dropped connection, a timeout,
@@ -23,7 +25,7 @@ export function createQueryClient(): QueryClient {
       queries: {
         retry: shouldRetry,
         // Fresh for 30s: switching screens back and forth doesn't refetch.
-        staleTime: 30_000,
+        staleTime: seconds(30),
         // Kept as long as it's persisted, or a restored entry would be
         // garbage-collected before anything reads it.
         gcTime: CACHE_TIME,

@@ -1,11 +1,10 @@
 import { formatNumber, type Locale } from "@/features/localization";
+import { DAY } from "@/utils";
 
 import { startOfDay } from "./rows";
 import type { ChatActivity, ChatActivityKind, ChatParticipant } from "./types";
 
 type Translate = Locale["t"];
-
-const DAY_MS = 24 * 60 * 60 * 1000;
 
 // One formatter per locale and shape, built on first use — the constructor
 // is the expensive half, and a long thread formats a time on every row.
@@ -51,7 +50,7 @@ export function formatDay(
 ): string {
   const today = startOfDay(now);
   // Rounded, not floored: a day across a DST change is 23 or 25 hours.
-  const daysAgo = Math.round((today - startOfDay(day)) / DAY_MS);
+  const daysAgo = Math.round((today - startOfDay(day)) / DAY);
   if (daysAgo === 0) return t("chat.today");
   if (daysAgo === 1) return t("chat.yesterday");
 

@@ -256,7 +256,9 @@
     "utilities": "Utilitaires",
     "sampleSentence": "Portez ce vieux whisky au juge blond qui fume.",
     "colorPicker": "Sélecteur de couleur",
-    "api": "API"
+    "api": "API",
+    "forms": "Formulaires",
+    "formatting": "Mise en forme"
   },
   "checkbox": {
     "custom": "Case à cocher personnalisée",
@@ -418,5 +420,19 @@
     "hueValue": "{{degrees}} degrés",
     "preset": "Couleur {{hex}}",
     "hex": "Hex"
+  },
+  "validation": {
+    "required": "Obligatoire",
+    "email": "Saisissez un e-mail valide",
+    "passwordMin": "Au moins {{min}} caractères",
+    "passwordLetter": "Incluez au moins une lettre",
+    "passwordDigit": "Incluez au moins un chiffre",
+    "passwordSymbol": "Incluez au moins un symbole",
+    "name": "Utilisez uniquement des lettres",
+    "tooShort": "Au moins {{min}} caractères",
+    "tooLong": "Au plus {{max}} caractères",
+    "phone": "Saisissez un numéro de téléphone valide",
+    "url": "Saisissez une adresse web valide",
+    "mismatch": "Ne correspond pas"
   }
 }

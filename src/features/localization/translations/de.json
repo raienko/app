@@ -256,7 +256,9 @@
     "utilities": "Hilfsmittel",
     "sampleSentence": "Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich.",
     "colorPicker": "Farbwähler",
-    "api": "API"
+    "api": "API",
+    "forms": "Formulare",
+    "formatting": "Formatierung"
   },
   "checkbox": {
     "custom": "Eigenes Kontrollkästchen",
@@ -418,5 +420,19 @@
     "hueValue": "{{degrees}} Grad",
     "preset": "Farbe {{hex}}",
     "hex": "Hex"
+  },
+  "validation": {
+    "required": "Pflichtfeld",
+    "email": "Gib eine gültige E-Mail-Adresse ein",
+    "passwordMin": "Mindestens {{min}} Zeichen",
+    "passwordLetter": "Mindestens einen Buchstaben verwenden",
+    "passwordDigit": "Mindestens eine Ziffer verwenden",
+    "passwordSymbol": "Mindestens ein Sonderzeichen verwenden",
+    "name": "Nur Buchstaben verwenden",
+    "tooShort": "Mindestens {{min}} Zeichen",
+    "tooLong": "Höchstens {{max}} Zeichen",
+    "phone": "Gib eine gültige Telefonnummer ein",
+    "url": "Gib eine gültige Webadresse ein",
+    "mismatch": "Stimmt nicht überein"
   }
 }

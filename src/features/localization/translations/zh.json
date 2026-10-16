@@ -256,7 +256,9 @@
     "utilities": "实用工具",
     "sampleSentence": "敏捷的棕色狐狸跳过了那只懒狗。",
     "colorPicker": "颜色选择器",
-    "api": "API"
+    "api": "API",
+    "forms": "表单",
+    "formatting": "格式化"
   },
   "checkbox": {
     "custom": "自定义复选框",
@@ -418,5 +420,19 @@
     "hueValue": "{{degrees}} 度",
     "preset": "颜色 {{hex}}",
     "hex": "十六进制"
+  },
+  "validation": {
+    "required": "必填",
+    "email": "请输入有效的电子邮件",
+    "passwordMin": "至少 {{min}} 个字符",
+    "passwordLetter": "至少包含一个字母",
+    "passwordDigit": "至少包含一个数字",
+    "passwordSymbol": "至少包含一个符号",
+    "name": "只能使用字母",
+    "tooShort": "至少 {{min}} 个字符",
+    "tooLong": "最多 {{max}} 个字符",
+    "phone": "请输入有效的电话号码",
+    "url": "请输入有效的网址",
+    "mismatch": "不匹配"
   }
 }

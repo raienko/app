@@ -1,3 +1,5 @@
+import { minutes } from "@/utils";
+
 import type { ChatMessage } from "./types";
 
 /**
@@ -17,7 +19,7 @@ export type ChatRow =
     };
 
 /** Two messages further apart than this start a new group. */
-export const GROUP_WINDOW_MS = 5 * 60 * 1000;
+export const GROUP_WINDOW_MS = minutes(5);
 
 export function toTime(value: Date | number): number {
   return typeof value === "number" ? value : value.getTime();

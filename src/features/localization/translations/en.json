@@ -256,7 +256,9 @@
     "utilities": "Utilities",
     "sampleSentence": "The quick brown fox jumps over the lazy dog.",
     "colorPicker": "Color picker",
-    "api": "API"
+    "api": "API",
+    "forms": "Forms",
+    "formatting": "Formatting"
   },
   "checkbox": {
     "custom": "Custom checkbox",
@@ -418,5 +420,19 @@
     "hueValue": "{{degrees}} degrees",
     "preset": "Colour {{hex}}",
     "hex": "Hex"
+  },
+  "validation": {
+    "required": "Required",
+    "email": "Enter a valid email",
+    "passwordMin": "At least {{min}} characters",
+    "passwordLetter": "Include at least one letter",
+    "passwordDigit": "Include at least one digit",
+    "passwordSymbol": "Include at least one symbol",
+    "name": "Use letters only",
+    "tooShort": "At least {{min}} characters",
+    "tooLong": "At most {{max}} characters",
+    "phone": "Enter a valid phone number",
+    "url": "Enter a valid web address",
+    "mismatch": "Doesn't match"
   }
 }

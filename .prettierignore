@@ -6,3 +6,4 @@ ios
 android
 .rnstorybook/storybook.requires.ts
 storybook-static
+templates

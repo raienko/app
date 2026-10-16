@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
 import { Easing } from "react-native-reanimated";
 
-import { easeOutClamped, isAndroid, isIOS, isWeb, wait } from "./index";
+import { easeOutClamped, isAndroid, isIOS, isWeb } from "./index";
 
 describe("platform constants", () => {
   // Constants, not functions: the platform can't change while the app runs.
@@ -29,21 +29,6 @@ describe("platform constants", () => {
   it("does not follow the build-time env read, which Jest pins to ios", () => {
     expect(process.env.EXPO_OS).toBe("ios");
     expect(isIOS).toBe(Platform.OS === "ios");
-  });
-});
-
-describe("wait", () => {
-  it("resolves after the requested delay", async () => {
-    jest.useFakeTimers();
-    const resolved = jest.fn();
-
-    void wait(50).then(resolved);
-    await jest.advanceTimersByTimeAsync(49);
-    expect(resolved).not.toHaveBeenCalled();
-
-    await jest.advanceTimersByTimeAsync(1);
-    expect(resolved).toHaveBeenCalled();
-    jest.useRealTimers();
   });
 });
 

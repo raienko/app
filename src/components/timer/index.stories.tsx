@@ -4,6 +4,7 @@ import { View } from "react-native";
 import Button from "@/components/button";
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
+import { hours, minutes } from "@/utils";
 
 import Component from "./index";
 
@@ -14,17 +15,15 @@ const meta = {
 
 export default meta;
 
-const MINUTE = 60_000;
-
 export const Countdown = () => {
-  const [until] = useState(() => Date.now() + 2 * MINUTE);
+  const [until] = useState(() => Date.now() + minutes(2));
 
   return <Component label="Time remaining" until={until} />;
 };
 
 /** The ring is the animated half, and it never re-renders React. */
 export const WithRing = () => {
-  const [until] = useState(() => Date.now() + 2 * MINUTE);
+  const [until] = useState(() => Date.now() + minutes(2));
 
   return <Component label="Time remaining" until={until} ring size={160} />;
 };
@@ -43,14 +42,14 @@ export const Formats = () => {
   return (
     <View style={styles.row}>
       <Component label="Under a minute" until={now + 45_000} type="body" />
-      <Component label="Over an hour" until={now + 3 * 3600_000} type="body" />
-      <Component label="Over a day" until={now + 50 * 3600_000} type="body" />
+      <Component label="Over an hour" until={now + hours(3)} type="body" />
+      <Component label="Over a day" until={now + hours(50)} type="body" />
     </View>
   );
 };
 
 export const Paused = () => {
-  const [until] = useState(() => Date.now() + 2 * MINUTE);
+  const [until] = useState(() => Date.now() + minutes(2));
 
   return <Component label="Time remaining" until={until} ring paused />;
 };

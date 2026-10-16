@@ -8,16 +8,15 @@ import Text from "@/components/text";
 import Timer from "@/components/timer";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { hours, minutes } from "@/utils";
 
 import Readout from "./readout";
-
-const MINUTE = 60_000;
 
 /** Both directions, the ring, and what the two rates actually cost. */
 export default function TimerSection() {
   const theme = useTheme();
   const styles = useStyles();
-  const [deadline, setDeadline] = useState(() => Date.now() + 2 * MINUTE);
+  const [deadline, setDeadline] = useState(() => Date.now() + minutes(2));
   const [startedAt, setStartedAt] = useState(() => Date.now());
   const [paused, setPaused] = useState(false);
   const [finishedAt, setFinishedAt] = useState<string | null>(null);
@@ -26,8 +25,8 @@ export default function TimerSection() {
   // only exist to show the format changing with the magnitude.
   const [formats] = useState(() => ({
     minutes: Date.now() + 45_000,
-    hours: Date.now() + 3 * 3600_000,
-    days: Date.now() + 50 * 3600_000,
+    hours: Date.now() + hours(3),
+    days: Date.now() + hours(50),
   }));
 
   return (
@@ -56,7 +55,7 @@ export default function TimerSection() {
             size="small"
             onPress={() => {
               setFinishedAt(null);
-              setDeadline(Date.now() + 2 * MINUTE);
+              setDeadline(Date.now() + minutes(2));
             }}
           />
           <Button

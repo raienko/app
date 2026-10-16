@@ -5,10 +5,9 @@ import {
   type AxiosResponse,
   type InternalAxiosRequestConfig,
 } from "axios";
-import Constants from "expo-constants";
-import { Platform } from "react-native";
 
 import env from "@/constants/env";
+import { deviceHeaders } from "@/features/device";
 import { createEventBus } from "@/features/event-bus";
 import logger from "@/features/logger";
 
@@ -86,14 +85,15 @@ export const configureApi = {
   },
 };
 
-/** What every request says about the app, whoever sends it. */
+/** Fixed for every request, whoever sends it. */
 function baseHeaders(): Headers {
-  return {
-    Accept: "application/json",
-    "X-App-Version": Constants.expoConfig?.version ?? "unknown",
-    "X-Platform": Platform.OS,
-  };
+  return { Accept: "application/json" };
 }
+
+// What the app and device are (version, build, OS, model, timezone,
+// install id): read per request rather than once, since the timezone can
+// change while the app runs. See @/features/device.
+headerProviders.add(deviceHeaders);
 
 /**
  * Numbers requests as they leave, so an `IN` can be matched to its `OUT`

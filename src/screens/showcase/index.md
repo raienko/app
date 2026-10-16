@@ -56,6 +56,8 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Storage           | A `LocalValue` stepper and imperative get/set/reset, plus a `SecureValue` with reactive reads and awaited deletion UI |
 | Logger            | Every logger method and structured metadata                                                                           |
 | Utilities         | `If` toggling content, `Match` cycling four states, and a scoped event bus emitting and counting pings                |
+| Forms             | A sign-up form: zod rules, translated errors, focus on the first invalid field.                                       |
+| Formatting        | Dates, numbers, money and sizes in the active language, and what the device reports.                                  |
 
 Each section is its own file under `src/screens/showcase/sections/`. They're screen-local — the showcase is their only consumer — but split for the same reason `Modal`'s internals are: one file per concern beats one large screen file. The section list itself is a table in `screens/showcase/index.tsx`, so adding one is an entry there plus a file.
 

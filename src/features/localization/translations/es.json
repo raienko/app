@@ -256,7 +256,9 @@
     "utilities": "Utilidades",
     "sampleSentence": "El veloz murciélago hindú comía feliz cardillo y kiwi.",
     "colorPicker": "Selector de color",
-    "api": "API"
+    "api": "API",
+    "forms": "Formularios",
+    "formatting": "Formato"
   },
   "checkbox": {
     "custom": "Casilla personalizada",
@@ -418,5 +420,19 @@
     "hueValue": "{{degrees}} grados",
     "preset": "Color {{hex}}",
     "hex": "Hex"
+  },
+  "validation": {
+    "required": "Obligatorio",
+    "email": "Introduce un correo válido",
+    "passwordMin": "Al menos {{min}} caracteres",
+    "passwordLetter": "Incluye al menos una letra",
+    "passwordDigit": "Incluye al menos un dígito",
+    "passwordSymbol": "Incluye al menos un símbolo",
+    "name": "Usa solo letras",
+    "tooShort": "Al menos {{min}} caracteres",
+    "tooLong": "Como máximo {{max}} caracteres",
+    "phone": "Introduce un teléfono válido",
+    "url": "Introduce una dirección web válida",
+    "mismatch": "No coincide"
   }
 }

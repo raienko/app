@@ -14,6 +14,7 @@ import Text from "@/components/text";
 import Toast from "@/components/toast";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { MINUTE } from "@/utils";
 
 const ME = "me";
 
@@ -31,8 +32,6 @@ const PEOPLE: ChatParticipant[] = [
     avatar: "https://picsum.photos/id/1025/200/200",
   },
 ];
-
-const MINUTE = 60 * 1000;
 
 function initialThread(): ChatMessage[] {
   const now = Date.now();

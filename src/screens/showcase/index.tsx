@@ -63,6 +63,8 @@ import ToastsSection from "./sections/toasts";
 import TypographySection from "./sections/typography";
 import UtilitiesSection from "./sections/utilities";
 import WebViewSection from "./sections/web-view";
+import FormsSection from "./sections/forms";
+import FormattingSection from "./sections/formatting";
 
 /**
  * One entry per feature or component that can be demonstrated on screen.
@@ -133,6 +135,8 @@ const SECTIONS: {
   { title: "showcase.storage", Component: StorageSection },
   { title: "showcase.logger", Component: LoggerSection },
   { title: "showcase.utilities", Component: UtilitiesSection },
+  { title: "showcase.forms", Component: FormsSection },
+  { title: "showcase.formatting", Component: FormattingSection },
 ];
 
 export default function Showcase() {

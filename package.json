@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "dependencies": {
     "@expo/ui": "57.0.20",
+    "@hookform/resolvers": "5.9.1",
     "@legendapp/list": "3.3.10",
     "@maplibre/maplibre-react-native": "11.5.0",
     "@react-native-async-storage/async-storage": "2.2.0",
@@ -20,6 +21,7 @@
     "axios": "1.20.0",
     "dayjs": "1.11.23",
     "expo": "57.0.25",
+    "expo-application": "57.0.3",
     "expo-audio": "57.0.5",
     "expo-clipboard": "57.0.2",
     "expo-constants": "57.0.19",
@@ -49,6 +51,7 @@
     "qrcode-generator": "2.0.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-hook-form": "7.90.0",
     "react-native": "0.86.3",
     "react-native-enriched-markdown": "1.0.2",
     "react-native-gesture-handler": "2.32.0",
@@ -63,7 +66,8 @@
     "react-native-web": "0.21.2",
     "react-native-webview": "13.16.1",
     "react-native-worklets": "0.10.1",
-    "victory-native": "42.0.1"
+    "victory-native": "42.0.1",
+    "zod": "4.6.7"
   },
   "devDependencies": {
     "@gorhom/bottom-sheet": "5.2.14",
@@ -96,6 +100,7 @@
     "jest-expo": "57.0.5",
     "lint-staged": "17.3.0",
     "patch-package": "8.0.1",
+    "plop": "4.0.5",
     "prettier": "3.9.6",
     "secretlint": "13.0.4",
     "sharp": "0.34.4",
@@ -130,7 +135,8 @@
     "storybook:android": "STORYBOOK_ENABLED=true expo start --android",
     "storybook:web": "storybook dev -p 6006 -c .storybook",
     "storybook:web:build": "storybook build -c .storybook",
-    "brand": "node scripts/brand/index.ts"
+    "brand": "node scripts/brand/index.ts",
+    "new": "plop"
   },
   "private": true,
   "jest": {

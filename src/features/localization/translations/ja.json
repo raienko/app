@@ -256,7 +256,9 @@
     "utilities": "ユーティリティ",
     "sampleSentence": "素早い茶色の狐が怠け者の犬を飛び越えた。",
     "colorPicker": "カラーピッカー",
-    "api": "API"
+    "api": "API",
+    "forms": "フォーム",
+    "formatting": "書式"
   },
   "checkbox": {
     "custom": "カスタムチェックボックス",
@@ -418,5 +420,19 @@
     "hueValue": "{{degrees}} 度",
     "preset": "色 {{hex}}",
     "hex": "16進数"
+  },
+  "validation": {
+    "required": "必須項目です",
+    "email": "有効なメールアドレスを入力してください",
+    "passwordMin": "{{min}}文字以上",
+    "passwordLetter": "文字を1つ以上含めてください",
+    "passwordDigit": "数字を1つ以上含めてください",
+    "passwordSymbol": "記号を1つ以上含めてください",
+    "name": "文字のみを使用してください",
+    "tooShort": "{{min}}文字以上",
+    "tooLong": "{{max}}文字以内",
+    "phone": "有効な電話番号を入力してください",
+    "url": "有効なウェブアドレスを入力してください",
+    "mismatch": "一致しません"
   }
 }

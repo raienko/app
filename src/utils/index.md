@@ -1,8 +1,10 @@
 [Docs](../../docs/index.md) › [Components](../../docs/components/index.md) › Utilities
 
-# Platform constants
+# Utilities
 
-> `isWeb`, `isIOS`, `isAndroid` — one place for every platform branch.
+> Platform constants, time spans in milliseconds, and the kit's easing — small helpers with no state, all imported from `@/utils`.
+
+## Platform constants
 
 <sub>`src/utils` · [Tests](index.test.ts)</sub>
 
@@ -18,6 +20,31 @@ Three constants instead of a platform comparison written out at every call site 
 - **Constants, not functions.** The platform can't change while the app runs, so there's nothing to re-evaluate, and `if (isWeb)` reads as a fact rather than a question.
 - **They read `Platform.OS`, not `process.env.EXPO_OS`** — and the difference matters more than it looks. The env read is inlined by `babel-preset-expo` at transform time, so it collapses to a literal and its branches are dead-code-eliminated per platform: cheaper, but under Jest it is permanently `"ios"`, which makes every non-iOS branch unreachable by any test. That's how `ImagePicker`'s web behaviour was first written — shipped, with no test able to see it. `Platform.OS` costs one comparison at module load and leaves the other branches in the bundle; being able to prove platform-specific behaviour is worth more. `src/utils/index.test.ts` asserts the env read is still pinned to `"ios"` under Jest, so a change back fails there rather than silently freezing every branch.
 - **A test that needs a different platform mocks `@/utils`**, not react-native's `Platform` — replacing that module breaks `expo-modules-core`, which reads `select` from it during setup. Because the values are settled at module load, that mock belongs at the top of its own test file; `image-picker`'s web behaviour is covered in `web.test.tsx` beside the native cases in `index.test.tsx` for exactly that reason.
+
+## Time
+
+```ts
+import { days, duration, hours, seconds, toUnit, wait } from "@/utils";
+
+setTimeout(close, seconds(17));
+const expiresAt = Date.now() + days(30);
+if (Date.now() - fetchedAt > hours(1)) refresh();
+await wait(seconds(2));
+
+duration({ hours: 1, minutes: 30 }); // 5_400_000
+toUnit(elapsed, "minute"); // 2.5 — round it yourself
+```
+
+| What                                                                | Is                                                                        |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `seconds` `minutes` `hours` `days` `weeks` `months` `years`         | `(count) => milliseconds`                                                 |
+| `SECOND` `MINUTE` `HOUR` `DAY` `WEEK` `MONTH` `YEAR`                | One of each, in milliseconds — for dividing: `Math.round(span / DAY)`     |
+| `duration({ years, months, weeks, days, hours, minutes, seconds })` | Several units added together                                              |
+| `toUnit(milliseconds, unit)`                                        | Milliseconds in another unit, fraction kept                               |
+| `TIME_UNITS`                                                        | `[unit, length]` pairs, largest first — what `format.relative` picks from |
+| `wait(milliseconds)`                                                | A promise that resolves after that long                                   |
+
+Months and years are fixed lengths, 30 and 365 days: right for "about how long ago" and cache lifetimes, wrong for calendar maths. For "same day next month", change the `Date`'s month instead. Showing a span to people (`1:05:09`, `5 minutes ago`) is [Format](../features/format/index.md)'s job.
 
 ## `easeOutClamped`
 

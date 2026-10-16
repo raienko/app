@@ -1,3 +1,5 @@
+import { DAY, MINUTE } from "@/utils";
+
 import type { ChatMessage, ChatParticipant } from "./types";
 
 /**
@@ -21,9 +23,6 @@ export const PEOPLE: ChatParticipant[] = [
   },
   { id: "alan", name: "Alan Turing", online: true },
 ];
-
-const MINUTE = 60 * 1000;
-const DAY = 24 * 60 * MINUTE;
 
 /** A thread ending `endingAt`, spanning yesterday and today. */
 export function sampleThread(endingAt = Date.now()): ChatMessage[] {

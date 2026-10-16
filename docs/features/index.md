@@ -19,13 +19,17 @@ The shared systems every component is built on. Change these and the whole app f
 
 Capabilities the app uses behind the UI.
 
-| Feature                                                  | What it's for                                                                                              |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| [**API**](../../src/features/api/index.md)               | `api` request client (axios) with token, headers and logging; TanStack Query with an MMKV-persisted cache. |
-| [**Storage**](../../src/features/storage/index.md)       | `LocalValue<T>` for preferences and `SecureValue<T>` for small secrets.                                    |
-| [**Deep links**](../../src/features/deep-links/index.md) | One pipeline for every incoming link: parsing, matching, queueing and routing.                             |
-| [**Maps**](../../src/features/maps/index.md)             | Themed map style, tile config, the user's location, and directions via the platform map app.               |
-| [**Event bus**](../../src/features/event-bus/index.md)   | Typed, scoped publish/subscribe for decoupled parts of the app.                                            |
+| Feature                                                  | What it's for                                                                                                  |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| [**API**](../../src/features/api/index.md)               | `api` request client (axios) with token, headers and logging; TanStack Query with an MMKV-persisted cache.     |
+| [**Device**](../../src/features/device/index.md)         | App version and build, OS, model, timezone and install id; a custom user agent and per-request device headers. |
+| [**Format**](../../src/features/format/index.md)         | Locale-aware dates, times, relative time, numbers, money, sizes, durations, and ISO helpers for APIs.          |
+| [**Forms**](../../src/features/forms/index.md)           | `useAppForm` (react-hook-form + zod) and `FormInput`, an `Input` bound to a field.                             |
+| [**Storage**](../../src/features/storage/index.md)       | `LocalValue<T>` for preferences and `SecureValue<T>` for small secrets.                                        |
+| [**Validation**](../../src/features/validation/index.md) | zod field rules (email, password, name, phone, url, …) with translated messages.                               |
+| [**Deep links**](../../src/features/deep-links/index.md) | One pipeline for every incoming link: parsing, matching, queueing and routing.                                 |
+| [**Maps**](../../src/features/maps/index.md)             | Themed map style, tile config, the user's location, and directions via the platform map app.                   |
+| [**Event bus**](../../src/features/event-bus/index.md)   | Typed, scoped publish/subscribe for decoupled parts of the app.                                                |
 
 ## Not documented yet
 

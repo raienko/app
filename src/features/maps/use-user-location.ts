@@ -8,6 +8,7 @@ import {
 
 import logger from "@/features/logger";
 import { permissions } from "@/features/permissions";
+import { minutes } from "@/utils";
 
 import type { Coordinate } from "./types";
 
@@ -76,7 +77,9 @@ export default function useUserLocation({
           return;
         }
 
-        const lastKnown = await getLastKnownPositionAsync({ maxAge: 60_000 });
+        const lastKnown = await getLastKnownPositionAsync({
+          maxAge: minutes(1),
+        });
         if (lastKnown) {
           found = toCoordinate(lastKnown);
           update({ status: "ready", coordinate: found });

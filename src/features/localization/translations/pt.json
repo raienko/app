@@ -256,7 +256,9 @@
     "utilities": "Utilitários",
     "sampleSentence": "Um pequeno jabuti xereta viu dez cegonhas felizes.",
     "colorPicker": "Seletor de cor",
-    "api": "API"
+    "api": "API",
+    "forms": "Formulários",
+    "formatting": "Formatação"
   },
   "checkbox": {
     "custom": "Caixa de verificação personalizada",
@@ -418,5 +420,19 @@
     "hueValue": "{{degrees}} graus",
     "preset": "Cor {{hex}}",
     "hex": "Hex"
+  },
+  "validation": {
+    "required": "Obrigatório",
+    "email": "Digite um e-mail válido",
+    "passwordMin": "Pelo menos {{min}} caracteres",
+    "passwordLetter": "Inclua pelo menos uma letra",
+    "passwordDigit": "Inclua pelo menos um dígito",
+    "passwordSymbol": "Inclua pelo menos um símbolo",
+    "name": "Use apenas letras",
+    "tooShort": "Pelo menos {{min}} caracteres",
+    "tooLong": "No máximo {{max}} caracteres",
+    "phone": "Digite um telefone válido",
+    "url": "Digite um endereço web válido",
+    "mismatch": "Não corresponde"
   }
 }

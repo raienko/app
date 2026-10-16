@@ -1,6 +1,7 @@
 import { Platform } from "react-native";
 
 export { easeOutClamped } from "./easing";
+export * from "./time";
 
 /**
  * Which platform the app is running on, as three constants rather than a
@@ -33,8 +34,3 @@ export { easeOutClamped } from "./easing";
 export const isWeb = Platform.OS === "web";
 export const isIOS = Platform.OS === "ios";
 export const isAndroid = Platform.OS === "android";
-
-/** Resolves after the requested number of milliseconds. */
-export function wait(duration: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, duration));
-}

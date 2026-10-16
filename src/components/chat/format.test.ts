@@ -1,4 +1,5 @@
 import { translate } from "@/features/localization/translations";
+import { DAY } from "@/utils";
 
 import { activitySentence, formatDay, formatFileSize } from "./format";
 import type { ChatParticipant } from "./types";
@@ -7,7 +8,6 @@ const t = ((key: string, params?: Record<string, string | number>) =>
   translate("en", key as never, params)) as Parameters<typeof formatDay>[3];
 
 const NOW = new Date(2026, 9, 15, 12, 0).getTime();
-const DAY = 24 * 60 * 60 * 1000;
 
 const people = new Map<string, ChatParticipant>(
   [

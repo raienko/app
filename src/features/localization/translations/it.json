@@ -256,7 +256,9 @@
     "utilities": "Utilità",
     "sampleSentence": "Pranzo d'acqua fa volti sghembi.",
     "colorPicker": "Selettore colore",
-    "api": "API"
+    "api": "API",
+    "forms": "Moduli",
+    "formatting": "Formattazione"
   },
   "checkbox": {
     "custom": "Casella di controllo personalizzata",
@@ -418,5 +420,19 @@
     "hueValue": "{{degrees}} gradi",
     "preset": "Colore {{hex}}",
     "hex": "Hex"
+  },
+  "validation": {
+    "required": "Obbligatorio",
+    "email": "Inserisci un’email valida",
+    "passwordMin": "Almeno {{min}} caratteri",
+    "passwordLetter": "Includi almeno una lettera",
+    "passwordDigit": "Includi almeno una cifra",
+    "passwordSymbol": "Includi almeno un simbolo",
+    "name": "Usa solo lettere",
+    "tooShort": "Almeno {{min}} caratteri",
+    "tooLong": "Al massimo {{max}} caratteri",
+    "phone": "Inserisci un numero di telefono valido",
+    "url": "Inserisci un indirizzo web valido",
+    "mismatch": "Non corrisponde"
   }
 }
