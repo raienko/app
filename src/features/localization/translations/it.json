@@ -117,6 +117,11 @@
       "label": "Note",
       "placeholder": "C'è qualcosa che dovremmo sapere?",
       "helper": "Cresce con il testo fino a sei righe, poi scorre"
+    },
+    "color": {
+      "label": "Colore di accento",
+      "placeholder": "Scegli un colore",
+      "helper": "Trascina, scegli un colore predefinito o digita un valore hex: confermato con Fine"
     }
   },
   "modal": {
@@ -249,7 +254,8 @@
     "storage": "Archiviazione",
     "logger": "Registro",
     "utilities": "Utilità",
-    "sampleSentence": "Pranzo d'acqua fa volti sghembi."
+    "sampleSentence": "Pranzo d'acqua fa volti sghembi.",
+    "colorPicker": "Selettore colore"
   },
   "checkbox": {
     "custom": "Casella di controllo personalizzata",
@@ -403,5 +409,13 @@
     "jumpToLatestUnseen": "Vai ai messaggi più recenti, {{count}} nuovi",
     "openProfile": "Vedi il profilo di {{name}}",
     "openLink": "Apri {{link}}"
+  },
+  "colorPicker": {
+    "area": "Saturazione e luminosità",
+    "areaValue": "Saturazione {{saturation}}%, luminosità {{brightness}}%",
+    "hue": "Tonalità",
+    "hueValue": "{{degrees}} gradi",
+    "preset": "Colore {{hex}}",
+    "hex": "Hex"
   }
 }

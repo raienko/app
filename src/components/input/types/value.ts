@@ -56,6 +56,20 @@ export type DateTimeInputTypeProps = {
   max?: Date;
 };
 
+export type ColorInputTypeProps = {
+  type: "color";
+  /** `#RRGGBB`, or `null` when nothing is picked yet — the field then shows its placeholder. */
+  value: string | null;
+  /**
+   * Fires once per confirmed pick, with `#RRGGBB` in upper case — never
+   * mid-drag: the sheet stages changes in a draft and only reports on
+   * "Done", the same contract as `datetime`.
+   */
+  onChange: (value: string) => void;
+  /** Colours offered as one-tap swatches in the sheet. */
+  presets?: readonly string[];
+};
+
 /** What `expo-document-picker` reports back, re-exported for call sites. */
 export type FileInputAsset = DocumentPickerAsset;
 

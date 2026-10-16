@@ -22,20 +22,21 @@ Things you press to make something happen.
 
 Fields, the frame around them, and controls for picking values.
 
-| Component                                                               | What it's for                                                                                                                               |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| [**Input**](../../src/components/input/index.md)                        | One field component, switched by `type`: text, textarea, numeric, email, password, code, phone, select, date/time, file, groups and ranges. |
-| [**FormField**](../../src/components/form-field/index.md)               | The label, helper and error frame around any control, with a required/optional hint and a counter.                                          |
-| [**Stepper**](../../src/components/stepper/index.md)                    | A number with − and + either side: quantities, party sizes, small counts.                                                                   |
-| [**SegmentedControl**](../../src/components/segmented-control/index.md) | A row of mutually exclusive options, for switching between a few views or modes.                                                            |
-| [**FilePicker**](../../src/components/file-picker/index.md)             | Wraps any trigger in a pressable that opens the system file browser.                                                                        |
-| [**Checkbox**](../../src/components/checkbox/index.md)                  | A labelled on/off choice that stands on its own; custom or Expo UI indicator.                                                               |
-| [**Switch**](../../src/components/switch/index.md)                      | A setting that is on or off and takes effect immediately.                                                                                   |
-| [**RadioButton**](../../src/components/radio-button/index.md)           | One option of a set; usually used through `<Input type="radioGroup">`.                                                                      |
-| [**Slider**](../../src/components/slider/index.md)                      | A value or a range, picked by dragging; one or more thumbs.                                                                                 |
-| [**ImagePicker**](../../src/components/image-picker/index.md)           | Wraps any trigger to pick one image from the camera or the library.                                                                         |
-| [**ThemeSwitcher**](../../src/components/theme-switcher/index.md)       | Light, dark or system appearance, persisted.                                                                                                |
-| [**LocaleSwitcher**](../../src/components/locale-switcher/index.md)     | The app language as one select field, each language in its own name.                                                                        |
+| Component                                                               | What it's for                                                                                                                                       |
+| ----------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [**Input**](../../src/components/input/index.md)                        | One field component, switched by `type`: text, textarea, numeric, email, password, code, phone, select, date/time, colour, file, groups and ranges. |
+| [**FormField**](../../src/components/form-field/index.md)               | The label, helper and error frame around any control, with a required/optional hint and a counter.                                                  |
+| [**Stepper**](../../src/components/stepper/index.md)                    | A number with − and + either side: quantities, party sizes, small counts.                                                                           |
+| [**SegmentedControl**](../../src/components/segmented-control/index.md) | A row of mutually exclusive options, for switching between a few views or modes.                                                                    |
+| [**FilePicker**](../../src/components/file-picker/index.md)             | Wraps any trigger in a pressable that opens the system file browser.                                                                                |
+| [**Checkbox**](../../src/components/checkbox/index.md)                  | A labelled on/off choice that stands on its own; custom or Expo UI indicator.                                                                       |
+| [**Switch**](../../src/components/switch/index.md)                      | A setting that is on or off and takes effect immediately.                                                                                           |
+| [**RadioButton**](../../src/components/radio-button/index.md)           | One option of a set; usually used through `<Input type="radioGroup">`.                                                                              |
+| [**Slider**](../../src/components/slider/index.md)                      | A value or a range, picked by dragging; one or more thumbs.                                                                                         |
+| [**ColorPicker**](../../src/components/color-picker/index.md)           | A colour picked freely: saturation/brightness square, hue bar, optional presets.                                                                    |
+| [**ImagePicker**](../../src/components/image-picker/index.md)           | Wraps any trigger to pick one image from the camera or the library.                                                                                 |
+| [**ThemeSwitcher**](../../src/components/theme-switcher/index.md)       | Light, dark or system appearance, persisted.                                                                                                        |
+| [**LocaleSwitcher**](../../src/components/locale-switcher/index.md)     | The app language as one select field, each language in its own name.                                                                                |
 
 ## Feedback & status
 

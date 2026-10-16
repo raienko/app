@@ -117,6 +117,11 @@
       "label": "Notizen",
       "placeholder": "Sollten wir etwas wissen?",
       "helper": "Wächst mit dem Text bis zu sechs Zeilen, danach scrollt es"
+    },
+    "color": {
+      "label": "Akzentfarbe",
+      "placeholder": "Farbe wählen",
+      "helper": "Ziehen, eine Vorgabe wählen oder einen Hex-Wert eingeben – übernommen mit „Fertig“"
     }
   },
   "modal": {
@@ -249,7 +254,8 @@
     "storage": "Speicher",
     "logger": "Protokollierung",
     "utilities": "Hilfsmittel",
-    "sampleSentence": "Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich."
+    "sampleSentence": "Victor jagt zwölf Boxkämpfer quer über den großen Sylter Deich.",
+    "colorPicker": "Farbwähler"
   },
   "checkbox": {
     "custom": "Eigenes Kontrollkästchen",
@@ -403,5 +409,13 @@
     "jumpToLatestUnseen": "Zu den neuesten Nachrichten, {{count}} neu",
     "openProfile": "Profil von {{name}} anzeigen",
     "openLink": "{{link}} öffnen"
+  },
+  "colorPicker": {
+    "area": "Sättigung und Helligkeit",
+    "areaValue": "{{saturation}} % Sättigung, {{brightness}} % Helligkeit",
+    "hue": "Farbton",
+    "hueValue": "{{degrees}} Grad",
+    "preset": "Farbe {{hex}}",
+    "hex": "Hex"
   }
 }

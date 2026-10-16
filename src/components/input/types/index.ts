@@ -20,6 +20,7 @@ import type {
   SwitchGroupInputTypeProps,
 } from "./choice";
 import type {
+  ColorInputTypeProps,
   DateTimeInputTypeProps,
   FileInputTypeProps,
   RangeInputTypeProps,
@@ -41,6 +42,7 @@ export type InputProps = (
   | RadioGroupInputTypeProps
   | RangeInputTypeProps
   | DateTimeInputTypeProps
+  | ColorInputTypeProps
   | PasswordInputTypeProps
   | CodeInputTypeProps
   | PhoneInputTypeProps

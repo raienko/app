@@ -117,6 +117,11 @@
       "label": "Notas",
       "placeholder": "Algo que devamos saber?",
       "helper": "Cresce com o texto até seis linhas e depois rola"
+    },
+    "color": {
+      "label": "Cor de destaque",
+      "placeholder": "Escolha uma cor",
+      "helper": "Arraste, escolha uma predefinição ou digite um valor hex — aplicado ao tocar em Concluído"
     }
   },
   "modal": {
@@ -249,7 +254,8 @@
     "storage": "Armazenamento",
     "logger": "Registo",
     "utilities": "Utilitários",
-    "sampleSentence": "Um pequeno jabuti xereta viu dez cegonhas felizes."
+    "sampleSentence": "Um pequeno jabuti xereta viu dez cegonhas felizes.",
+    "colorPicker": "Seletor de cor"
   },
   "checkbox": {
     "custom": "Caixa de verificação personalizada",
@@ -403,5 +409,13 @@
     "jumpToLatestUnseen": "Ir para as mensagens mais recentes, {{count}} novas",
     "openProfile": "Ver o perfil de {{name}}",
     "openLink": "Abrir {{link}}"
+  },
+  "colorPicker": {
+    "area": "Saturação e brilho",
+    "areaValue": "{{saturation}}% de saturação, {{brightness}}% de brilho",
+    "hue": "Matiz",
+    "hueValue": "{{degrees}} graus",
+    "preset": "Cor {{hex}}",
+    "hex": "Hex"
   }
 }

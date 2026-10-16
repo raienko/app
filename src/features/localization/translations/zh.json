@@ -117,6 +117,11 @@
       "label": "备注",
       "placeholder": "有什么需要我们知道的吗？",
       "helper": "随文字增高至六行，之后滚动"
+    },
+    "color": {
+      "label": "强调色",
+      "placeholder": "选择颜色",
+      "helper": "拖动、选择预设颜色或输入十六进制值——点按“完成”后生效"
     }
   },
   "modal": {
@@ -249,7 +254,8 @@
     "storage": "存储",
     "logger": "日志",
     "utilities": "实用工具",
-    "sampleSentence": "敏捷的棕色狐狸跳过了那只懒狗。"
+    "sampleSentence": "敏捷的棕色狐狸跳过了那只懒狗。",
+    "colorPicker": "颜色选择器"
   },
   "checkbox": {
     "custom": "自定义复选框",
@@ -403,5 +409,13 @@
     "jumpToLatestUnseen": "跳到最新消息，{{count}} 条新消息",
     "openProfile": "查看{{name}}的资料",
     "openLink": "打开 {{link}}"
+  },
+  "colorPicker": {
+    "area": "饱和度和亮度",
+    "areaValue": "饱和度 {{saturation}}%，亮度 {{brightness}}%",
+    "hue": "色相",
+    "hueValue": "{{degrees}} 度",
+    "preset": "颜色 {{hex}}",
+    "hex": "十六进制"
   }
 }

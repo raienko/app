@@ -117,6 +117,11 @@
       "label": "Notes",
       "placeholder": "Anything we should know?",
       "helper": "Grows with its text up to six lines, then scrolls"
+    },
+    "color": {
+      "label": "Accent colour",
+      "placeholder": "Pick a colour",
+      "helper": "Drag, pick a preset or type a hex value — committed on Done"
     }
   },
   "modal": {
@@ -249,7 +254,8 @@
     "storage": "Storage",
     "logger": "Logger",
     "utilities": "Utilities",
-    "sampleSentence": "The quick brown fox jumps over the lazy dog."
+    "sampleSentence": "The quick brown fox jumps over the lazy dog.",
+    "colorPicker": "Color picker"
   },
   "checkbox": {
     "custom": "Custom checkbox",
@@ -403,5 +409,13 @@
     "jumpToLatestUnseen": "Jump to newest messages, {{count}} new",
     "openProfile": "View {{name}}'s profile",
     "openLink": "Open {{link}}"
+  },
+  "colorPicker": {
+    "area": "Saturation and brightness",
+    "areaValue": "{{saturation}}% saturation, {{brightness}}% brightness",
+    "hue": "Hue",
+    "hueValue": "{{degrees}} degrees",
+    "preset": "Colour {{hex}}",
+    "hex": "Hex"
   }
 }

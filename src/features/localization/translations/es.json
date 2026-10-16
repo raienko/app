@@ -117,6 +117,11 @@
       "label": "Notas",
       "placeholder": "¿Algo que debamos saber?",
       "helper": "Crece con el texto hasta seis líneas y luego se desplaza"
+    },
+    "color": {
+      "label": "Color de acento",
+      "placeholder": "Elige un color",
+      "helper": "Arrastra, elige un color predefinido o escribe un valor hex; se aplica al pulsar Listo"
     }
   },
   "modal": {
@@ -249,7 +254,8 @@
     "storage": "Almacenamiento",
     "logger": "Registro",
     "utilities": "Utilidades",
-    "sampleSentence": "El veloz murciélago hindú comía feliz cardillo y kiwi."
+    "sampleSentence": "El veloz murciélago hindú comía feliz cardillo y kiwi.",
+    "colorPicker": "Selector de color"
   },
   "checkbox": {
     "custom": "Casilla personalizada",
@@ -403,5 +409,13 @@
     "jumpToLatestUnseen": "Ir a los mensajes más recientes, {{count}} nuevos",
     "openProfile": "Ver el perfil de {{name}}",
     "openLink": "Abrir {{link}}"
+  },
+  "colorPicker": {
+    "area": "Saturación y brillo",
+    "areaValue": "{{saturation}} % de saturación, {{brightness}} % de brillo",
+    "hue": "Tono",
+    "hueValue": "{{degrees}} grados",
+    "preset": "Color {{hex}}",
+    "hex": "Hex"
   }
 }

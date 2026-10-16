@@ -46,6 +46,24 @@ export function Select() {
   );
 }
 
+// Picked, not typed, like `select`: the value only changes on Done. The
+// hex strings are the demo's data, not UI colours.
+/* eslint-disable no-restricted-syntax */
+export function Color() {
+  const [value, setValue] = useState<string | null>("#3F5BD9");
+  return (
+    <Component
+      type="color"
+      label="Accent colour"
+      placeholder="Pick a colour"
+      value={value}
+      onChange={setValue}
+      presets={["#3F5BD9", "#E4002B", "#00A86B", "#FFD400"]}
+    />
+  );
+}
+/* eslint-enable no-restricted-syntax */
+
 export function Password() {
   const [value, setValue] = useState("");
   return (

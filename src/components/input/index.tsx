@@ -8,6 +8,7 @@ import type { TextInput as RNTextInputInstance } from "react-native";
 
 import CodeInput from "./code";
 import ChecklistInput from "./checklist";
+import ColorInput from "./color";
 import DateTimeInput from "./datetime";
 import EmailInput from "./email";
 import FileInput from "./file";
@@ -51,7 +52,7 @@ function renderVariant<P>(
  * is rendered), so `<Input ref={...} />` can be focused/blurred
  * imperatively. The exception is `select`, which has no text field to
  * forward to — its value is picked in a Modal, not typed — so its ref
- * stays `null`. Same for `file`, `datetime`, groups, and `range`.
+ * stays `null`. Same for `file`, `datetime`, `color`, groups, and `range`.
  *
  * @example <Input value={text} onChange={setText} label="Name" />
  * @example <Input type="textarea" value={notes} onChange={setNotes} maxLength={500} />
@@ -59,6 +60,7 @@ function renderVariant<P>(
  * @example <Input type="email" value={email} onChange={setEmail} />
  * @example <Input type="select" value={country} onChange={setCountry} options={COUNTRIES} />
  * @example <Input type="datetime" value={when} onChange={setWhen} mode="date" />
+ * @example <Input type="color" value={accent} onChange={setAccent} presets={BRAND_COLORS} />
  * @example <Input type="password" value={password} onChange={setPassword} />
  * @example <Input type="code" value={code} onChange={setCode} onComplete={verify} />
  * @example <Input type="file" value={file} onChange={setFile} label="Attachment" />
@@ -84,6 +86,8 @@ const Input = forwardRef<RNTextInputInstance, InputProps>(
         return renderVariant(FileInput, props, ref);
       case "datetime":
         return renderVariant(DateTimeInput, props, ref);
+      case "color":
+        return renderVariant(ColorInput, props, ref);
       case "password":
         return renderVariant(PasswordInput, props, ref);
       case "code":
@@ -113,6 +117,7 @@ export default Input;
 // importing from ./types directly.
 export type {
   ChecklistOption,
+  ColorInputTypeProps,
   DateTimeMode,
   InputProps,
   PhoneCountryCode,

@@ -117,6 +117,11 @@
       "label": "Notes",
       "placeholder": "Quelque chose à nous dire ?",
       "helper": "S'agrandit avec le texte jusqu'à six lignes, puis défile"
+    },
+    "color": {
+      "label": "Couleur d’accent",
+      "placeholder": "Choisir une couleur",
+      "helper": "Faites glisser, choisissez un préréglage ou saisissez une valeur hex — appliqué avec Terminé"
     }
   },
   "modal": {
@@ -249,7 +254,8 @@
     "storage": "Stockage",
     "logger": "Journalisation",
     "utilities": "Utilitaires",
-    "sampleSentence": "Portez ce vieux whisky au juge blond qui fume."
+    "sampleSentence": "Portez ce vieux whisky au juge blond qui fume.",
+    "colorPicker": "Sélecteur de couleur"
   },
   "checkbox": {
     "custom": "Case à cocher personnalisée",
@@ -403,5 +409,13 @@
     "jumpToLatestUnseen": "Aller aux messages les plus récents, {{count}} nouveaux",
     "openProfile": "Voir le profil de {{name}}",
     "openLink": "Ouvrir {{link}}"
+  },
+  "colorPicker": {
+    "area": "Saturation et luminosité",
+    "areaValue": "Saturation {{saturation}} %, luminosité {{brightness}} %",
+    "hue": "Teinte",
+    "hueValue": "{{degrees}} degrés",
+    "preset": "Couleur {{hex}}",
+    "hex": "Hex"
   }
 }

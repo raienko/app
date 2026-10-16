@@ -14,6 +14,7 @@
     "chart": "public",
     "chat": "public",
     "checkbox": "public",
+    "color-picker": "public",
     "divider": "public",
     "expo-ui-host": "internal",
     "file-picker": "public",

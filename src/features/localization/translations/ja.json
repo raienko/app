@@ -117,6 +117,11 @@
       "label": "メモ",
       "placeholder": "お知らせいただくことはありますか？",
       "helper": "6行までは文字に合わせて広がり、それ以降はスクロールします"
+    },
+    "color": {
+      "label": "アクセントカラー",
+      "placeholder": "色を選択",
+      "helper": "ドラッグ、プリセットの選択、または16進数の入力 — 「完了」で確定"
     }
   },
   "modal": {
@@ -249,7 +254,8 @@
     "storage": "ストレージ",
     "logger": "ロガー",
     "utilities": "ユーティリティ",
-    "sampleSentence": "素早い茶色の狐が怠け者の犬を飛び越えた。"
+    "sampleSentence": "素早い茶色の狐が怠け者の犬を飛び越えた。",
+    "colorPicker": "カラーピッカー"
   },
   "checkbox": {
     "custom": "カスタムチェックボックス",
@@ -403,5 +409,13 @@
     "jumpToLatestUnseen": "最新のメッセージへ移動、新着 {{count}} 件",
     "openProfile": "{{name}}さんのプロフィールを表示",
     "openLink": "{{link}} を開く"
+  },
+  "colorPicker": {
+    "area": "彩度と明度",
+    "areaValue": "彩度 {{saturation}}%、明度 {{brightness}}%",
+    "hue": "色相",
+    "hueValue": "{{degrees}} 度",
+    "preset": "色 {{hex}}",
+    "hex": "16進数"
   }
 }
