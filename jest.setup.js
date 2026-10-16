@@ -188,3 +188,19 @@ jest.mock("@maplibre/maplibre-react-native", () => {
 
   return { __esModule: true, Map, Camera, Marker };
 });
+
+// expo-secure-store has no JS fallback under Jest; a Map stands in for the
+// Keychain, with the same sync get/set and async delete the app relies on.
+jest.mock("expo-secure-store", () => {
+  const store = new Map();
+  return {
+    getItem: (key) => (store.has(key) ? store.get(key) : null),
+    setItem: (key, value) => {
+      store.set(key, value);
+    },
+    deleteItemAsync: async (key) => {
+      store.delete(key);
+    },
+    __store: store,
+  };
+});

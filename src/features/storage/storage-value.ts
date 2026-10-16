@@ -4,16 +4,16 @@ import type { StorageAdapter } from "./types";
 
 /**
  * Shared get/set/reset/use implementation for a single stored value, backed
- * by a swappable StorageAdapter. LocalValue (MMKV), and future SessionValue /
- * SecureValue, all extend this with their own adapter.
+ * by a StorageAdapter. The reset return type follows the backend: local
+ * deletion is synchronous, while secure deletion must be awaited.
  */
-export default class StorageValue<T> {
+export default class StorageValue<T, RemoveResult = void> {
   private cachedRaw: string | undefined;
   private cachedValue: T | undefined;
   private hasCached = false;
 
   constructor(
-    private readonly adapter: StorageAdapter,
+    private readonly adapter: StorageAdapter<RemoveResult>,
     private readonly key: string,
   ) {}
 
@@ -54,8 +54,8 @@ export default class StorageValue<T> {
     this.adapter.setItem(this.key, JSON.stringify(value));
   }
 
-  reset(): void {
-    this.adapter.removeItem(this.key);
+  reset(): RemoveResult {
+    return this.adapter.removeItem(this.key);
   }
 
   useValue(): T | undefined {

@@ -1,31 +1,49 @@
 [Docs](../../../docs/index.md) › [Features](../../../docs/features/index.md) › App services
 
-# Local storage
+# Storage
 
-> `LocalValue<T>` — a small MMKV-backed reactive value.
+Two reactive values cover different data: `LocalValue` for ordinary on-device preferences, and `SecureValue` for small secrets.
 
-<sub>`src/features/storage` · Tests: [`persistence.test.ts`](persistence.test.ts)</sub>
+<sub>`src/features/storage` · Tests: [`local-value`](local-value/index.test.ts), [`secure-value`](secure-value/index.test.ts), [`persistence.test.ts`](persistence.test.ts)</sub>
 
 ```ts
-import { LocalValue } from "@/features/storage";
+import { LocalValue, SecureValue } from "@/features/storage";
 
-const value = new LocalValue<T>("some-key");
-value.getValue(); // read once
-value.setValue(v); // write
-value.reset(); // clear
-value.useValue(); // reactive read inside a component — see note below
+const theme = new LocalValue<string>("theme");
+theme.setValue("dark");
+theme.getValue(); // "dark"
+theme.useValue(); // reactive read inside a component
+theme.reset(); // synchronous
+
+const token = new SecureValue<string>("access-token");
+token.setValue("jwt");
+token.getValue(); // "jwt"
+token.useValue(); // reactive read inside a component
+await token.reset(); // asynchronous deletion
 ```
 
-Backed by MMKV on **every** platform, web included. `react-native-mmkv` ships its own web implementation (`createMMKV.web.ts`, storing into `localStorage` under keys namespaced by the store's `id`), so platform resolution swaps it in and there's a single adapter with nothing to branch on.
+|                | `LocalValue`                | `SecureValue`                           |
+| -------------- | --------------------------- | --------------------------------------- |
+| Use for        | theme, locale, app settings | tokens, keys, other small secrets       |
+| Native backend | MMKV                        | iOS Keychain / Android Keystore         |
+| Web backend    | browser `localStorage`      | memory only; values disappear on reload |
+| Deletion       | synchronous                 | asynchronous; await `reset()`           |
 
-**The one web-specific case — `isStoragePersistent()`.** When a browser refuses `localStorage` (private browsing, blocked site data, an enterprise policy), MMKV doesn't fail — it quietly substitutes an in-memory `Map`. Writes look like they worked and vanish on the next reload, which is exactly the data loss [MMKV's docs warn about](https://github.com/mrousavy/react-native-mmkv). MMKV doesn't expose which of the two is in play, so `features/storage/persistence.web.ts` asks directly and the app can tell the user rather than losing their data silently. Native always answers `true` — MMKV writes a real file there, and no user setting turns that off.
+Both use the same JSON encoding and corrupt-value fallback. `SecureValue` keys must contain only letters, digits, `.`, `-`, or `_`; invalid keys are rejected so different keys cannot alias the same secret.
 
-- It **writes** a probe key rather than just reading `window.localStorage`, because the two aren't equivalent: Safari's private mode has historically exposed a perfectly normal-looking `localStorage` whose quota is zero, so it only throws once something is actually stored. Only a round-trip matches what a real write will do — and the probe cleans up after itself.
-- The answer is cached for the page's lifetime (the probe hits synchronous storage, and a component rendering a warning would otherwise pay for it every render) — **except** the server-prerender answer. Expo's static web export renders once with no `window`, where nothing persists; caching `false` from that pass would poison the browser that loads the result.
-- The showcase's Storage section reads it live, and switches its explanatory line to a warning in `theme.colors.error` when storage isn't persistent.
-- Covered by `persistence.test.ts` across all four states: a working round-trip, a write that throws despite the API existing, access denied outright, and the prerender pass.
+## Auth and account data
 
-> **Migration note:** MMKV namespaces web keys as `local-storage\<key>`. An app that previously stored bare `localStorage` keys won't see that old data — irrelevant for a fresh project, but a real migration step for anything already deployed.
+Authentication owns its own state and cleanup. During sign-out it should await deletion of every credential it owns before allowing another sign-in. If deletion fails, `reset()` rejects and the value is re-read from secure storage so the caller can handle the failure. A write to the same key while deletion is pending throws; this prevents an old deletion from removing a new credential.
+
+There is no storage-owned session or persisted user identity. If the app later needs account-scoped drafts or carts, the authenticated account should select their storage namespace. It should use a collision-free account identifier, and decide whether that data survives sign-out.
+
+On web, secrets are kept in memory only. A browser page has no persistent storage that its own scripts cannot read. A reload therefore requires the auth flow to re-establish credentials.
+
+## LocalValue on the web
+
+MMKV supplies a web implementation backed by `localStorage`. When access is denied, it may fall back to memory. `isStoragePersistent()` probes a real write so the app can warn that values may disappear on reload. Its server-side answer is not cached for the later browser visit.
+
+> **Migration note:** MMKV namespaces web keys as `local-storage\<key>`. Apps previously storing bare `localStorage` keys need a migration.
 
 ---
 

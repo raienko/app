@@ -17,7 +17,7 @@ src/
   screens/<name>/        One folder per screen, index.tsx is the screen component
   screens/showcase/sections/ One file per showcase section — see "The app" below
   components/<name>/     One folder per component: index.tsx, index.stories.tsx, index.test.tsx
-  features/storage/       LocalValue<T> — a small MMKV-backed reactive value primitive
+  features/storage/       LocalValue<T> for preferences; SecureValue<T> for small secrets
   features/deep-links/    One pipeline for every incoming link — see below
   constants/env/          Validated EXPO_PUBLIC_* env vars, used by both app code and app.config.ts
 assets/

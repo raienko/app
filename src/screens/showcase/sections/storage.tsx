@@ -5,13 +5,18 @@ import Button from "@/components/button";
 import Stepper from "@/components/stepper";
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
-import { isStoragePersistent, LocalValue } from "@/features/storage";
+import {
+  isStoragePersistent,
+  LocalValue,
+  SecureValue,
+} from "@/features/storage";
 import { useTheme } from "@/features/theme";
 
 import Readout from "./readout";
 
 const note = new LocalValue<string>("showcase-note");
 const count = new LocalValue<number>("showcase-counter");
+const secret = new SecureValue<number>("showcase-secret");
 
 /**
  * Two views onto the same primitive. The stepper reads through
@@ -27,6 +32,8 @@ export default function StorageSection() {
   const [stored, setStored] = useState(() => note.getValue() ?? "—");
   const persistent = isStoragePersistent();
   const storedCount = count.useValue() ?? 0;
+  const secureValue = secret.useValue();
+  const [secureError, setSecureError] = useState<string | null>(null);
 
   return (
     <View style={styles.container}>
@@ -55,6 +62,46 @@ export default function StorageSection() {
 
       <Readout label='LocalValue("showcase-note")' value={stored} />
       <Readout label="isStoragePersistent()" value={String(persistent)} />
+
+      <Text value="Secure" type="headline" />
+      <View style={styles.row}>
+        <Button
+          value="+1 secret"
+          onPress={() => {
+            try {
+              secret.setValue((secret.getValue() ?? 0) + 1);
+              setSecureError(null);
+            } catch (error) {
+              setSecureError(String(error));
+            }
+          }}
+        />
+        <Button
+          value="clear secret"
+          onPress={async () => {
+            try {
+              await secret.reset();
+              setSecureError(null);
+            } catch (error) {
+              setSecureError(String(error));
+            }
+          }}
+        />
+      </View>
+      <Readout
+        label='SecureValue("showcase-secret")'
+        value={secureValue === undefined ? "—" : String(secureValue)}
+      />
+      <Text
+        value={
+          secureError ??
+          "Keychain on iOS, Keystore on Android, memory only on the web. Clearing completes after secure deletion finishes."
+        }
+        type="caption1"
+        style={{
+          color: secureError ? theme.colors.error : theme.colors.textSecondary,
+        }}
+      />
 
       <Text
         value={

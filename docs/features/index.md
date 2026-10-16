@@ -21,7 +21,7 @@ Capabilities the app uses behind the UI.
 
 | Feature                                                  | What it's for                                                                                |
 | -------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| [**Local storage**](../../src/features/storage/index.md) | `LocalValue<T>` — a small MMKV-backed reactive value.                                        |
+| [**Storage**](../../src/features/storage/index.md)       | `LocalValue<T>` for preferences and `SecureValue<T>` for small secrets.                      |
 | [**Deep links**](../../src/features/deep-links/index.md) | One pipeline for every incoming link: parsing, matching, queueing and routing.               |
 | [**Maps**](../../src/features/maps/index.md)             | Themed map style, tile config, the user's location, and directions via the platform map app. |
 | [**Event bus**](../../src/features/event-bus/index.md)   | Typed, scoped publish/subscribe for decoupled parts of the app.                              |

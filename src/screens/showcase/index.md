@@ -52,7 +52,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Alerts            | Every type, a title with an action that updates its message, and one that can be dismissed                            |
 | Permissions       | Persisted camera, gallery and notification permission state and actions                                               |
 | Deep links        | Dispatching a link by URL, the registered patterns, and a gate holding one back                                       |
-| Storage           | A `Stepper` bound to a `LocalValue` (reactive `.useValue()`) beside imperative `.setValue()`/`.getValue()`/`.reset()` |
+| Storage           | A `LocalValue` stepper and imperative get/set/reset, plus a `SecureValue` with reactive reads and awaited deletion UI |
 | Logger            | Every logger method and structured metadata                                                                           |
 | Utilities         | `If` toggling content, `Match` cycling four states, and a scoped event bus emitting and counting pings                |
 
