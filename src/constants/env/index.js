@@ -110,7 +110,7 @@ const env = {
   // than in theme/palette.json because nothing in the app ever draws them —
   // they are baked into the native projects at prebuild, and the app is not
   // running yet when they are on screen. Both pair with a file in
-  // assets/brand, so a rebrand is those files plus these two values.
+  // assets/brand; all of them are written by `yarn brand` from brand.json.
   brandIconBackground: color(
     "EXPO_PUBLIC_BRAND_ICON_BACKGROUND",
     process.env.EXPO_PUBLIC_BRAND_ICON_BACKGROUND,
@@ -119,6 +119,16 @@ const env = {
     "EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND",
     process.env.EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND,
   ),
+  // The splash background under a dark OS appearance. Optional: unset, the
+  // splash uses the light one either way.
+  brandSplashBackgroundDark: optional(
+    process.env.EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND_DARK,
+  )
+    ? color(
+        "EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND_DARK",
+        process.env.EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND_DARK,
+      )
+    : undefined,
   // Where `Map` gets its vector tiles and label fonts. Both optional: unset,
   // @/features/maps falls back to OpenFreeMap, which needs no key. Public
   // like every EXPO_PUBLIC_ value — a provider key in here ships in the app,

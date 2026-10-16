@@ -17,7 +17,7 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: yarn
+      # postinstall applies assets/brand (writes .env, generated assets and
+      # the palette), so nothing else needs setting up.
       - run: yarn install --frozen-lockfile
-      # .env is untracked; the example holds the required public values
-      - run: cp .env.example .env
       - run: yarn verify

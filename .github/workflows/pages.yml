@@ -31,8 +31,6 @@ jobs:
           node-version-file: .nvmrc
           cache: yarn
       - run: yarn install --frozen-lockfile
-      # .storybook/main.ts inlines EXPO_PUBLIC_* from .env, which is untracked
-      - run: cp .env.example .env
       - run: yarn storybook:web:build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3

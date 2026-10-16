@@ -21,15 +21,17 @@
    yarn install
    ```
 
-2. Set up environment variables
+2. Environment variables and brand
+
+   `yarn install` already created `.env` from `.env.example` and applied the brand in `assets/brand` (its postinstall runs `yarn brand`). After changing anything in `assets/brand`, run it again:
 
    ```bash
-   cp .env.example .env
+   yarn brand
    ```
 
-   `.env` is read by Expo CLI (via `@expo/env`) and used both by `app.config.ts` (app name/slug/scheme/bundle id) and by the app itself through [`src/constants/env`](../src/constants/env/index.js). Only `EXPO_PUBLIC_*`-prefixed vars are available at runtime — Metro inlines them into the bundle at build time, so they must be referenced as a static `process.env.EXPO_PUBLIC_X`, never a dynamic key. See the comment in `src/constants/env/index.js` before adding new ones.
+   See [Brand](../assets/brand/README.md). `.env` is read by Expo CLI (via `@expo/env`) and used both by `app.config.ts` (app name/slug/scheme/bundle id) and by the app itself through [`src/constants/env`](../src/constants/env/index.js). Only `EXPO_PUBLIC_*`-prefixed vars are available at runtime — Metro inlines them into the bundle at build time, so they must be referenced as a static `process.env.EXPO_PUBLIC_X`, never a dynamic key. See the comment in `src/constants/env/index.js` before adding new ones.
 
-   **`EXPO_PUBLIC_BRAND_ICON_BACKGROUND` and `EXPO_PUBLIC_BRAND_SPLASH_BACKGROUND` must be quoted.** They are hex colours, and an unquoted `#` starts a comment in a `.env` file — so `KEY=#208AEF` reads as empty while the line sits there looking correct. The validator says so by name when it finds one missing, because the error is otherwise indistinguishable from having forgotten the variable entirely.
+   **The brand keys are rewritten on every `yarn brand`** — change `assets/brand/brand.json` instead. Other keys (map tiles) are left alone. If you ever set a hex colour by hand, quote it: an unquoted `#` starts a comment in a `.env` file, so `KEY=#208AEF` reads as empty.
 
 3. Start the app
 

@@ -7,23 +7,29 @@ import type { ConfigContext, ExpoConfig } from "expo/config";
 // object itself), matching its default export.
 // eslint-disable-next-line @typescript-eslint/no-require-imports -- see comment above
 const env = require("./src/constants/env");
+// Same reason, and typed by hand: the app's tsconfig has no Node types, and
+// pulling them in for this one call would type every timer in src/ as Node's.
+// eslint-disable-next-line @typescript-eslint/no-require-imports -- see above
+const { existsSync } = require("fs") as {
+  existsSync: (path: string) => boolean;
+};
 const storybookEnabled = process.env.STORYBOOK_ENABLED === "true";
 
 /**
  * Everything that carries the app's identity — the icons, the splash, the
- * favicon — lives in one directory, so a rebrand is a matter of replacing
- * the contents of `assets/brand` rather than hunting the files that happen
- * to be branding among the ones that happen not to be.
+ * favicon — is generated into one directory by `yarn brand` (and every
+ * `yarn install`) from assets/brand/brand.json and its logo, together with
+ * the brand's .env keys and the theme palette. See assets/brand/README.md.
  *
  * `assets/images` keeps what a *screen* draws; nothing under here is
  * imported by the app at runtime. The two are separate for that reason
  * rather than by file type: these paths are read by Expo at config time and
  * baked into the native projects, while the others go through Metro.
  */
-const BRAND_DIR = "./assets/brand";
+const BRAND_DIR = "./assets/brand/generated";
 
 /**
- * A path under `assets/brand`, relative to the project root, which is what
+ * A path under `assets/brand/generated`, relative to the project root, which is what
  * every Expo config field here expects.
  *
  * A helper rather than the literal seven times over: the directory name
@@ -32,6 +38,14 @@ const BRAND_DIR = "./assets/brand";
  * as a missing icon on a build machine.
  */
 const brandAsset = (file: string): string => `${BRAND_DIR}/${file}`;
+
+/**
+ * The optional brand file — only there when a brand ships a hand-made
+ * Android icon background. Passing Expo a path that doesn't exist fails prebuild, so each is
+ * included only when it's there.
+ */
+const hasBrandAsset = (projectRoot: string, file: string): boolean =>
+  existsSync(`${projectRoot}/${BRAND_DIR}/${file}`);
 
 // Universal links (iOS) and app links (Android) only ever reach the app if
 // the OS knows the app claims those domains, so both native declarations are
@@ -65,7 +79,7 @@ const androidAppLinks =
       }
     : {};
 
-export default ({ config }: ConfigContext): ExpoConfig => ({
+export default ({ config, projectRoot }: ConfigContext): ExpoConfig => ({
   ...config,
   name: env.appName,
   slug: env.appSlug,
@@ -77,9 +91,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ios: {
     ...config.ios,
     bundleIdentifier: env.appBundleId,
-    // Apple's Icon Composer bundle, which iOS uses in preference to the
-    // flat `icon` above where it is supported.
-    icon: brandAsset("app.icon"),
+    // Apple's Icon Composer bundle, which iOS 26+ uses in preference to the
+    // flat `icon` above for its glass treatment.
+    icon: brandAsset("icon-ios.icon"),
     ...iosAppLinks,
   },
   android: {
@@ -87,9 +101,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     package: env.appBundleId,
     adaptiveIcon: {
       backgroundColor: env.brandIconBackground,
-      foregroundImage: brandAsset("android-icon-foreground.png"),
-      backgroundImage: brandAsset("android-icon-background.png"),
-      monochromeImage: brandAsset("android-icon-monochrome.png"),
+      foregroundImage: brandAsset("icon-android-foreground.png"),
+      // Usually just `backgroundColor`; an image only for a brand that ships
+      // a textured or gradient background by hand.
+      ...(hasBrandAsset(projectRoot, "icon-android-background.png")
+        ? { backgroundImage: brandAsset("icon-android-background.png") }
+        : {}),
+      monochromeImage: brandAsset("icon-android-monochrome.png"),
     },
     predictiveBackGestureEnabled: false,
     ...androidAppLinks,
@@ -136,8 +154,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       "expo-splash-screen",
       {
         backgroundColor: env.brandSplashBackground,
-        image: brandAsset("splash-icon.png"),
+        image: brandAsset("splash.png"),
         imageWidth: 76,
+        ...(env.brandSplashBackgroundDark
+          ? {
+              dark: {
+                backgroundColor: env.brandSplashBackgroundDark,
+                image: brandAsset("splash.png"),
+              },
+            }
+          : {}),
       },
     ],
   ],
