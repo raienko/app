@@ -1,12 +1,11 @@
 import { useState, type ReactNode } from "react";
-import { Pressable, View } from "react-native";
+import { Pressable } from "react-native";
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
 
-import If from "@/components/if";
 import Icon from "@/components/icon";
 import Text from "@/components/text";
 import {
@@ -15,8 +14,12 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { easeOutClamped } from "@/utils/easing";
 
-const ANIMATION_DURATION = 200;
+import Collapsible, { sectionTransition } from "./collapsible";
+
+/** Short enough to feel instant on a tap, long enough to read as motion. */
+const ANIMATION_DURATION = 220;
 
 type Props = {
   title: string;
@@ -33,9 +36,10 @@ type Props = {
  * It draws no box — only a hairline under each section — so a stack of
  * them reads as one ruled list rather than a pile of cards.
  *
- * Content itself shows/hides instantly (via `If`), not height-animated —
- * animating to/from an unmeasured "auto" height is the fiddly part of an
- * accordion; not worth it until a real need for that polish shows up.
+ * Content grows and fades in, and shrinks and fades out, on the same
+ * timing as the chevron. How it grows differs by platform — see
+ * ./collapsible.tsx and ./collapsible.web.tsx. Collapsed content is
+ * unmounted, so a closed section costs nothing to render.
  */
 export default function Accordion({
   title,
@@ -49,13 +53,16 @@ export default function Accordion({
   const styles = useStyles();
   const duration = useAnimationDuration();
 
+  // duration() collapses to 0 under "Reduce Motion" — everything still
+  // ends up in the right place, it just doesn't move to get there.
+  const ms = duration(ANIMATION_DURATION);
+
   function toggle() {
     const next = !open;
     setOpen(next);
-    // duration() collapses to 0 under "Reduce Motion" — the chevron still
-    // ends up in the right place, it just doesn't spin to get there.
     rotation.value = withTiming(next ? 1 : 0, {
-      duration: duration(ANIMATION_DURATION),
+      duration: ms,
+      easing: easeOutClamped,
     });
   }
 
@@ -64,7 +71,10 @@ export default function Accordion({
   }));
 
   return (
-    <View
+    // On every section, not just the one being toggled, so the ones below
+    // it move with it instead of jumping (native only — see ./collapsible).
+    <Animated.View
+      layout={sectionTransition(ms)}
       style={[styles.container, { borderBottomColor: theme.colors.divider }]}
     >
       <Pressable
@@ -84,10 +94,10 @@ export default function Accordion({
           />
         </Animated.View>
       </Pressable>
-      <If condition={open}>
-        <View style={styles.content}>{children}</View>
-      </If>
-    </View>
+      <Collapsible open={open} duration={ms} contentStyle={styles.content}>
+        {children}
+      </Collapsible>
+    </Animated.View>
   );
 }
 
