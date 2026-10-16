@@ -7,8 +7,18 @@ import "expo-font";
 import type { Preview } from "@storybook/react-native-web-vite";
 import { useEffect, type ReactNode } from "react";
 
+import { deepLinks } from "@/features/deep-links";
 import { useTheme } from "@/features/theme";
 import { Providers } from "@/root";
+
+/**
+ * A story has no navigator, so <DeepLinks> never opens the built-in `ready`
+ * gate and every link would queue forever (the showcase's deep-links demo
+ * sat at "waiting on a gate"). Nothing here is waiting to mount, so it's
+ * ready from the start; a handler that returns an href still has no router
+ * to go to, which the registry logs rather than throws.
+ */
+deepLinks.setGate("ready", true);
 
 /**
  * Paints the canvas in the theme's own background. Storybook's canvas is

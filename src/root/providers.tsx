@@ -38,7 +38,8 @@ type Props = {
  * "add it in one place" terms as the providers. The first two do nothing in
  * Storybook or Jest: their state lives outside React (a LocalValue, a
  * singleton), and the deep-link pipeline stays gated shut without a
- * navigator to route into. `ToastsProvider` is the exception that earns its
+ * navigator to route into — until something opens `ready` by hand, as both
+ * Storybook previews do. `ToastsProvider` is the exception that earns its
  * place here rather than in `Root` — a story or a test that calls
  * `Toast.show()` should see a toast, which it only can if the thing that
  * renders them is part of the shared tree.
