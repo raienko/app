@@ -11,7 +11,7 @@ import {
   wait,
   weeks,
   years,
-} from "./time";
+} from ".";
 
 describe("time", () => {
   it("turns each unit into milliseconds", () => {

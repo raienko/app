@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import Icon from "@/components/icon";
 
-import Component from "./icon-button";
+import Component from ".";
 
 const meta = {
   title: "components/Button/IconButton",

@@ -3,7 +3,7 @@ import { router } from "expo-router";
 
 import env from "@/constants/env";
 
-import deepLinks, { deepLinkEvents } from "./registry";
+import deepLinks, { deepLinkEvents } from ".";
 
 jest.mock("expo-linking", () => ({ openURL: jest.fn() }));
 jest.mock("expo-router", () => ({ router: { navigate: jest.fn() } }));

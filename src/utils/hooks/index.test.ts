@@ -11,7 +11,7 @@ import {
   usePrevious,
   useTimeout,
   useToggle,
-} from "./hooks";
+} from ".";
 
 /** Lets a test drive AppState's change events by hand. */
 function mockAppState() {

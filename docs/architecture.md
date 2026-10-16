@@ -39,6 +39,14 @@ describe(`${Component.name} smoke test`, () => {
 });
 ```
 
+**Inside a unit, a file gets its own folder only when it has more than a file and its test.** A private helper and its test stay flat beside each other (`chat/rows.ts`, `chat/rows.test.ts`): two files don't need a folder, and a flat name reads better in tabs, stack traces and file search than another `index.ts`. A folder with an `index` entry point is for:
+
+- a module with platform variants (`storage/persistence/index.ts` + `index.web.ts`, `radio-button/expo/index.ios.tsx`);
+- a module with more than a source and one test — a story, a second test (`button/icon-button`, `deep-links/registry`);
+- each top-level group in `src/utils` (`utils/time`, `utils/hooks`), which `@/utils` re-exports.
+
+Imports don't change either way: `./persistence` resolves to `persistence.ts` or `persistence/index.ts`, so a helper can move into a folder when it grows a variant without touching anything that imports it.
+
 ### Component implementation types
 
 Custom design-system components are always the default. When a component

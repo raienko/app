@@ -1,6 +1,6 @@
 import { openURL } from "expo-linking";
 
-import deepLinks from "./registry";
+import deepLinks from ".";
 
 jest.mock("expo-linking", () => ({ openURL: jest.fn() }));
 jest.mock("expo-router", () => ({ router: { navigate: jest.fn() } }));

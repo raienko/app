@@ -13,7 +13,7 @@ function loadIsStoragePersistent() {
   let fn!: () => boolean;
   jest.isolateModules(() => {
     // eslint-disable-next-line @typescript-eslint/no-require-imports -- see comment above
-    fn = (require("./persistence.web") as typeof import("./persistence.web"))
+    fn = (require("./index.web") as typeof import("./index.web"))
       .isStoragePersistent;
   });
   return fn;

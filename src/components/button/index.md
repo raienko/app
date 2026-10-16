@@ -4,7 +4,7 @@
 
 > The one pressable action: `primary`, `secondary` or `tertiary`, in three sizes, with loading, selected and pressed states.
 
-<sub>`src/components/button` · [Stories](index.stories.tsx) · Tests: [`content.test.tsx`](content.test.tsx), [`icon-button.test.tsx`](icon-button.test.tsx), [`index.test.tsx`](index.test.tsx)</sub>
+<sub>`src/components/button` · [Stories](index.stories.tsx) · Tests: [`content.test.tsx`](content.test.tsx), [`icon-button.test.tsx`](icon-button/index.test.tsx), [`index.test.tsx`](index.test.tsx)</sub>
 
 ```tsx
 import Button from "@/components/button";

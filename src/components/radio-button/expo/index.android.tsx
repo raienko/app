@@ -4,11 +4,11 @@ import { View } from "react-native";
 import ExpoUIHost from "@/components/expo-ui-host";
 import { createStyles } from "@/features/responsive";
 
-import RadioButtonRow from "./row";
+import RadioButtonRow from "../row";
 import type {
   RadioButtonImplementationProps,
   RadioIndicatorProps,
-} from "./types";
+} from "../types";
 
 function ExpoIndicator({ selected }: RadioIndicatorProps) {
   const styles = useStyles();

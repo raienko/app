@@ -5,16 +5,16 @@ import { createEventBus } from "@/features/event-bus";
 import logger from "@/features/logger";
 import { isWeb } from "@/utils";
 
-import { matchPath } from "./match";
-import DeepLinkQueue from "./queue";
-import staticRoutes from "./routes";
+import { matchPath } from "../match";
+import DeepLinkQueue from "../queue";
+import staticRoutes from "../routes";
 import {
   READY_GATE,
   type DeepLink,
   type DeepLinkGate,
   type DeepLinkRoute,
-} from "./types";
-import { normalizeUrl, type NormalizedUrl } from "./url";
+} from "../types";
+import { normalizeUrl, type NormalizedUrl } from "../url";
 
 type Match = {
   link: DeepLink;

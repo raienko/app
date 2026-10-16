@@ -4,7 +4,7 @@
 
 Two reactive values cover different data: `LocalValue` for ordinary on-device preferences, and `SecureValue` for small secrets.
 
-<sub>`src/features/storage` · Tests: [`local-value`](local-value/index.test.ts), [`secure-value`](secure-value/index.test.ts), [`persistence.test.ts`](persistence.test.ts)</sub>
+<sub>`src/features/storage` · Tests: [`local-value`](local-value/index.test.ts), [`secure-value`](secure-value/index.test.ts), [`persistence.test.ts`](persistence/index.test.ts)</sub>
 
 ```ts
 import { LocalValue, SecureValue } from "@/features/storage";

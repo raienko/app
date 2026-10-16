@@ -1,11 +1,11 @@
 import { StyleSheet, Text as RNText, type ViewStyle } from "react-native";
 
 import Icon from "@/components/icon";
-import Button from "./index";
+import Button from "..";
 import { useTheme } from "@/features/theme";
 import { fireEvent, render, screen } from "@/root/testing";
 
-import Component from "./icon-button";
+import Component from ".";
 
 /** The style prop is an array of layers; only the flattened result is real. */
 function boxStyle(name: string): ViewStyle {

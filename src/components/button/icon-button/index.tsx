@@ -4,8 +4,8 @@ import type { PressableProps, StyleProp, ViewStyle } from "react-native";
 import { withIconDefaults } from "@/components/icon";
 import { createStyles, useSizes } from "@/features/responsive";
 
-import Button from "./button";
-import type { ButtonType } from "./palette";
+import Button from "../button";
+import type { ButtonType } from "../palette";
 
 /** `auto` is deliberately absent — a square has nothing to hug. */
 export type IconButtonSize = "small" | "medium" | "large";
