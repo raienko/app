@@ -1,3 +1,5 @@
+import { useMemo } from "react";
+
 import Accordion from "@/components/accordion";
 import Header from "@/components/header";
 import Screen from "@/components/screen";
@@ -45,6 +47,7 @@ import StepperSection from "./sections/stepper";
 import StorageSection from "./sections/storage";
 import StateViewsSection from "./sections/state-views";
 import SectionSection from "./sections/section";
+import ColorPickerSection from "./sections/color-picker";
 import SegmentedControlSection from "./sections/segmented-control";
 import ShareSection from "./sections/share";
 import SkeletonSection from "./sections/skeleton";
@@ -102,6 +105,7 @@ const SECTIONS: {
   { title: "showcase.timer", Component: TimerSection },
   { title: "showcase.progress", Component: ProgressBarSection },
   { title: "showcase.segmentedControl", Component: SegmentedControlSection },
+  { title: "showcase.colorPicker", Component: ColorPickerSection },
   { title: "showcase.stateViews", Component: StateViewsSection },
   { title: "showcase.inputs", Component: InputsSection },
   { title: "showcase.formField", Component: FormFieldSection },
@@ -130,8 +134,19 @@ const SECTIONS: {
 ];
 
 export default function Showcase() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const styles = useStyles();
+
+  // Alphabetical by the title as shown, in the active language and its own
+  // collation, so the list reads in order whichever language it's in — a
+  // fixed order in English would be scrambled in Ukrainian or Japanese.
+  const sections = useMemo(() => {
+    const collator = new Intl.Collator(locale);
+    return SECTIONS.map((section) => ({
+      ...section,
+      label: t(section.title),
+    })).sort((a, b) => collator.compare(a.label, b.label));
+  }, [locale, t]);
 
   return (
     // The header's title is the screen's top-level heading; Screen pins it
@@ -141,8 +156,8 @@ export default function Showcase() {
       header={<Header title={env.appName} />}
       style={styles.container}
     >
-      {SECTIONS.map(({ title, Component }) => (
-        <Accordion key={title} title={t(title)}>
+      {sections.map(({ title, label, Component }) => (
+        <Accordion key={title} title={label}>
           <Component />
         </Accordion>
       ))}
@@ -153,7 +168,7 @@ export default function Showcase() {
 const useStyles = createStyles(({ spacing, sizes }) => ({
   container: {
     width: "100%",
-    maxWidth: sizes.contentMaxWidth,
     alignSelf: "center",
+    paddingHorizontal: 0,
   },
 }));

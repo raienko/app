@@ -6,7 +6,7 @@
 
 <sub>`src/screens/showcase` · [Stories](index.stories.tsx) · Tests: [`index.test.tsx`](index.test.tsx)</sub>
 
-The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are ordered foundations-first — the styleguides and app-wide settings everything else is built on, then the components that consume them.
+The app itself is a **showcase**: one collapsible section per feature or component, so everything below can be seen running rather than only read about. Sections are listed alphabetically by their title in the active language (sorted with that language's own collation), so the list stays in order after switching languages.
 
 | Section           | What it demonstrates                                                                                                  |
 | ----------------- | --------------------------------------------------------------------------------------------------------------------- |
@@ -32,6 +32,7 @@ The app itself is a **showcase**: one collapsible section per feature or compone
 | Timer             | A countdown with its ring, a stopwatch, the formats, and pause                                                        |
 | Progress          | A live determinate bar, custom value wording, and the indeterminate state                                             |
 | Segmented control | Both implementations side by side, a disabled option, and a disabled control                                          |
+| Color picker      | The picker on its own with presets, and its value read out live                                                       |
 | Header            | All three zones, uneven slots staying centred, a component in the middle, notch padding                               |
 | Tab bar           | Both variants over a scrolling stage, with the reserved space switchable live                                         |
 | Inputs            | Text, textarea, numeric, email, password, code, phone, select and date/time variations                                |

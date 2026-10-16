@@ -16,6 +16,10 @@ const INTEREST_CODES = ["design", "engineering", "research"] as const;
 const NOTIFICATION_CODES = ["product", "security", "marketing"] as const;
 const PLAN_CODES = ["free", "pro", "business"] as const;
 
+// Swatches offered in the colour sheet: colour data, not UI colours.
+// eslint-disable-next-line no-restricted-syntax -- values, not styles
+const COLOR_PRESETS = ["#3F5BD9", "#E4002B", "#00A86B", "#FFD400", "#1F2023"];
+
 // Hoisted out of render: a fresh `new Date()` every render is a new
 // `maxDate` for the picker on every render, which keeps it re-syncing.
 const TODAY = new Date();
@@ -52,6 +56,7 @@ export default function InputsSection() {
   const [startsAt, setStartsAt] = useState<Date | null>(null);
   const [birthday, setBirthday] = useState<Date | null>(null);
   const [alarm, setAlarm] = useState<Date | null>(null);
+  const [accent, setAccent] = useState<string | null>(null);
   const emailRef = useRef<RNTextInputInstance>(null);
 
   const countries = COUNTRY_CODES.map((code) => ({
@@ -236,6 +241,15 @@ export default function InputsSection() {
         onChange={setAlarm}
         leftSlot={<Icon name="clock" />}
         helperText={t("input.alarm.helper")}
+      />
+      <Input
+        type="color"
+        label={t("input.color.label")}
+        placeholder={t("input.color.placeholder")}
+        value={accent}
+        onChange={setAccent}
+        presets={COLOR_PRESETS}
+        helperText={t("input.color.helper")}
       />
       <Input
         label={t("input.disabled.label")}

@@ -1,5 +1,5 @@
 import env from "@/constants/env";
-import { render, screen } from "@/root/testing";
+import { render, screen, within } from "@/root/testing";
 
 import Component from "./index";
 
@@ -33,6 +33,7 @@ const SECTION_TITLES = [
   "Timer",
   "Progress",
   "Segmented control",
+  "Color picker",
   "State views",
   "Inputs",
   "Form field",
@@ -85,6 +86,20 @@ describe(`${Component.name} smoke test`, () => {
     for (const title of SECTION_TITLES) {
       expect(screen.getByText(title)).toBeTruthy();
     }
+  });
+
+  it("lists the sections alphabetically", async () => {
+    await render(<Component />);
+
+    const shown = screen
+      .getAllByRole("button", { expanded: false })
+      .map((header) =>
+        SECTION_TITLES.find((title) => within(header).queryByText(title)),
+      )
+      .filter((title) => title !== undefined);
+    const collator = new Intl.Collator("en");
+    expect(shown).toEqual([...shown].sort(collator.compare));
+    expect(shown).toHaveLength(SECTION_TITLES.length);
   });
 
   it("gives every section a collapsed, expandable header", async () => {
