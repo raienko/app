@@ -7,7 +7,6 @@
 export { default } from "./tab-bar";
 export { default as NavigationTabBar } from "./navigation";
 export { default as useTabBarSpace } from "./space";
-export { default as TabBarSpace } from "./tab-bar-space";
 export type { NavigationTabBarProps } from "./navigation";
 export type {
   TabBarIconState,

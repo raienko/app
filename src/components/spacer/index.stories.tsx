@@ -1,4 +1,8 @@
-import { View } from "react-native";
+import { useState } from "react";
+import { ScrollView, View } from "react-native";
+
+import Button from "@/components/button";
+import Input from "@/components/input";
 
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
@@ -80,6 +84,52 @@ export const Scale = () => {
         </View>
       ))}
     </View>
+  );
+};
+
+/**
+ * A size can name room something else takes up, measured live. Each tinted
+ * band is one spacer; on web and in Storybook's default viewport the safe
+ * areas are usually 0.
+ */
+export const Edges = () => (
+  <View>
+    <Block label="safe-area-top" />
+    <Component size="safe-area-top" />
+    <Block label="tab-bar" />
+    <Component size="tab-bar" />
+    <Block label={'["x8", "safe-area-bottom"] — the tallest'} />
+    <Component size={["x8", "safe-area-bottom"]} />
+    <Block label="end" />
+  </View>
+);
+
+/**
+ * A form tall enough for the keyboard to cover its button. Focus the last
+ * field on a phone: the spacer at the bottom grows with the keyboard, so
+ * the content scrolls clear of it. (On web it stays at its 16pt floor.)
+ */
+export const Keyboard = () => {
+  const [values, setValues] = useState(["", "", "", ""]);
+
+  return (
+    <ScrollView keyboardShouldPersistTaps="handled">
+      {values.map((value, index) => (
+        <Input
+          key={index}
+          label={`Field ${index + 1}`}
+          value={value}
+          onChange={(next) =>
+            setValues((current) =>
+              current.map((item, at) => (at === index ? next : item)),
+            )
+          }
+        />
+      ))}
+      <Component size="x16" />
+      <Button value="Send" type="primary" onPress={() => {}} />
+      <Component size={["x16", "keyboard"]} />
+    </ScrollView>
   );
 };
 

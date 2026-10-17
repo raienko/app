@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View } from "react-native";
 
 import Button from "@/components/button";
+import Input from "@/components/input";
 import Spacer, { type SpacerDirection } from "@/components/spacer";
 import Text from "@/components/text";
 import {
@@ -10,6 +11,7 @@ import {
   type SpacingToken,
 } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { useKeyboard } from "@/utils";
 
 import Readout from "./readout";
 
@@ -49,6 +51,8 @@ export default function SpacerSection() {
   const { spacing } = useSizes();
   const [direction, setDirection] = useState<SpacerDirection>("vertical");
   const [size, setSize] = useState<SpacingToken>("x16");
+  const [note, setNote] = useState("");
+  const keyboard = useKeyboard();
 
   return (
     <View style={styles.container}>
@@ -99,6 +103,22 @@ export default function SpacerSection() {
       <Readout
         label="announced by a screen reader"
         value="nothing — aria-hidden"
+      />
+
+      <Text value={'size={["x8", "keyboard"]}'} type="headline" />
+      <Text
+        value="A size can name room something else takes up, and a list takes the tallest. This one is 8pt, and grows with the keyboard frame by frame when it opens. Tinted to show it; focus the field on a phone. On web the keyboard part stays at zero — the browser resizes the page itself."
+        type="footnote"
+        style={{ color: theme.colors.textSecondary }}
+      />
+      <Input label="Type something" value={note} onChange={setNote} />
+      <Spacer
+        size={["x8", "keyboard"]}
+        style={{ backgroundColor: theme.colors.backgroundElementSelected }}
+      />
+      <Readout
+        label="keyboard"
+        value={keyboard.isVisible ? `${keyboard.height}pt` : "closed"}
       />
     </View>
   );

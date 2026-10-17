@@ -30,7 +30,7 @@ const FLOATING_INSET = 12;
  * the two can't disagree.
  *
  * @example
- * // Inside a `Screen`, prefer `<TabBarSpace />`. Outside one:
+ * // Inside a `Screen`, prefer `<Spacer size="tab-bar" />`. Outside one:
  * const tabBarSpace = useTabBarSpace();
  * <ScrollView contentContainerStyle={{ paddingBottom: tabBarSpace }} />
  * @example

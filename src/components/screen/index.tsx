@@ -31,7 +31,7 @@ export type {
  *
  * **Only the content scrolls**, when `scrollable` is set. Header, footer and aside stay put, and the
  * footer rises with the keyboard on iOS so a form's actions stay reachable.
- * A tab screen ends its content with `<TabBarSpace />` to clear the bar.
+ * A tab screen ends its content with `<Spacer size="tab-bar" />` to clear the bar.
  *
  * @example
  * <Screen scrollable header={<Header title="Orders" />}>…</Screen>

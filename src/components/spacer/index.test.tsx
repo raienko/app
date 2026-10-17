@@ -1,7 +1,23 @@
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+import { useTabBarSpace } from "@/components/tab-bar";
 import { useSizes, useUnits } from "@/features/responsive";
 import { render, renderHook, screen } from "@/root/testing";
 
-import Component from "./index";
+import Component, { points } from "./index";
+
+// Reanimated's own Jest mock reports the keyboard height as a plain `0`;
+// this hands the spacer a shared-value-like object the tests can move.
+const mockKeyboardHeight = { value: 0 };
+jest.mock("react-native-reanimated", () => ({
+  ...jest.requireActual("react-native-reanimated/mock"),
+  useAnimatedKeyboard: () => ({
+    height: mockKeyboardHeight,
+    state: { value: 0 },
+  }),
+}));
+
+const INSETS = { top: 40, bottom: 30, left: 10, right: 20 };
 
 function flattenStyle(style: unknown): Record<string, unknown> {
   if (Array.isArray(style))
@@ -99,5 +115,102 @@ describe(`${Component.name} smoke test`, () => {
     );
 
     expect(spacerStyle().backgroundColor).toBe("red");
+  });
+
+  describe("sizes measured live", () => {
+    // The safe-area mock is a jest.fn that reads its context; keep that to
+    // put back, since every provider in the tree reads it too.
+    const readInsets = jest.mocked(useSafeAreaInsets).getMockImplementation();
+
+    beforeEach(() => {
+      jest.mocked(useSafeAreaInsets).mockImplementation(() => INSETS);
+    });
+    afterEach(() => {
+      jest.mocked(useSafeAreaInsets).mockImplementation(readInsets!);
+      mockKeyboardHeight.value = 0;
+    });
+
+    it("takes a safe-area inset by name", async () => {
+      await render(<Component testID="spacer" size="safe-area-top" />);
+      expect(spacerStyle().height).toBe(40);
+    });
+
+    it("reads start and end by direction", async () => {
+      await render(
+        <Component
+          testID="spacer"
+          direction="horizontal"
+          size="safe-area-start"
+        />,
+      );
+      expect(spacerStyle().width).toBe(INSETS.left);
+    });
+
+    it("takes the tallest of a list", async () => {
+      const { result } = await renderHook(() => useSizes());
+      await render(
+        <Component testID="spacer" size={["x8", "safe-area-bottom", 2]} />,
+      );
+      expect(spacerStyle().height).toBe(
+        Math.max(result.current.spacing.x8, INSETS.bottom),
+      );
+    });
+
+    it("measures the tab bar above the bottom inset", async () => {
+      const { result } = await renderHook(() =>
+        useTabBarSpace({ avoidChin: false }),
+      );
+      await render(<Component testID="spacer" size="tab-bar" />);
+      expect(spacerStyle().height).toBe(result.current);
+    });
+
+    it("measures the tab bar from the screen's edge with the inset listed", async () => {
+      const { result } = await renderHook(() =>
+        useTabBarSpace({ avoidChin: true }),
+      );
+      await render(
+        <Component testID="spacer" size={["tab-bar", "safe-area-bottom"]} />,
+      );
+      expect(spacerStyle().height).toBe(result.current);
+    });
+
+    it("doesn't scale a value marked as points", async () => {
+      await render(<Component testID="spacer" size={points(55)} />);
+      expect(spacerStyle().height).toBe(55);
+    });
+
+    it("takes no space while the keyboard is closed", async () => {
+      await render(<Component testID="spacer" size="keyboard" />);
+      expect(spacerStyle().height).toBe(0);
+    });
+
+    it("grows with the keyboard, above the bottom inset", async () => {
+      mockKeyboardHeight.value = 300;
+      await render(<Component testID="spacer" size="keyboard" />);
+      expect(spacerStyle().height).toBe(300 - INSETS.bottom);
+    });
+
+    it("never drops below the rest of the list while the keyboard is closed", async () => {
+      const { result } = await renderHook(() =>
+        useTabBarSpace({ avoidChin: false }),
+      );
+      await render(
+        <Component testID="spacer" size={["tab-bar", "keyboard"]} />,
+      );
+      expect(spacerStyle().height).toBe(result.current);
+    });
+
+    it("measures the keyboard from the screen's edge with the inset listed", async () => {
+      mockKeyboardHeight.value = 300;
+      await render(
+        <Component testID="spacer" size={["safe-area-bottom", "keyboard"]} />,
+      );
+      expect(spacerStyle().height).toBe(300);
+    });
+
+    it("keeps a keyboard spacer hidden from assistive technology", async () => {
+      await render(<Component testID="spacer" size="keyboard" />);
+      expect(screen.queryByTestId("spacer")).toBeNull();
+    });
   });
 });

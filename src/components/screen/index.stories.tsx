@@ -7,7 +7,8 @@ import Header from "@/components/header";
 import Icon from "@/components/icon";
 import Input from "@/components/input";
 import List, { type ListItemData } from "@/components/list";
-import TabBar, { TabBarSpace } from "@/components/tab-bar";
+import Spacer from "@/components/spacer";
+import TabBar from "@/components/tab-bar";
 import Text from "@/components/text";
 import { createStyles } from "@/features/responsive";
 
@@ -88,7 +89,7 @@ export const TabScreen = () => {
     <Stage>
       <Component scrollable header={<Header title="Home" />}>
         <Paragraphs />
-        <TabBarSpace />
+        <Spacer size="tab-bar" />
       </Component>
       <View style={styles.bar}>
         <TabBar
