@@ -1,6 +1,8 @@
-import type { ReactNode } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
 
+import { DevMenu } from "@/features/dev-menu";
 import { WebApp } from "@/features/web-app";
+import { isWeb } from "@/utils";
 
 import Providers from "./providers";
 import withObserve from "./with-observe";
@@ -30,11 +32,34 @@ type Props = {
  *   Ones that Storybook and Jest should get too go in providers.tsx
  *   instead, next to `Permissions` and `DeepLinks`.
  */
+const subscribeNothing = () => () => {};
+
+/**
+ * `false` on the server and during hydration, `true` once in the browser —
+ * and always `true` on iOS and Android, which have no server render.
+ */
+function useIsClient(): boolean {
+  return useSyncExternalStore(
+    subscribeNothing,
+    () => true,
+    () => !isWeb,
+  );
+}
+
 function Root({ children, config }: Props) {
+  // The web build has server output so src/app can hold API routes, which
+  // means every page is also rendered in Node first. The app reads
+  // localStorage, window and the like while rendering, so the server and
+  // the first browser render both draw an empty page, and the app mounts
+  // right after — the same empty shell a single-page build served.
+  const isClient = useIsClient();
+  if (!isClient) return null;
+
   return (
     <Providers config={config}>
       {children}
       <WebApp />
+      <DevMenu />
 
       {/* Global overlay UI the real app alone needs goes here. */}
     </Providers>

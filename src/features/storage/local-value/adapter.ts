@@ -18,11 +18,22 @@ import type { StorageAdapter } from "../types";
  */
 const mmkv = createMMKV({ id: "local-storage" });
 
+/**
+ * The web build is also rendered in Node (server output, for API routes),
+ * where there is no `localStorage` and MMKV throws on any access. A value
+ * read while modules load — a permission's stored snapshot, say — then
+ * reads as unset and a write is dropped; the browser has the real data.
+ * iOS, Android and Jest all have a `window`.
+ */
+const onServer = typeof window === "undefined";
+
 const localStorageAdapter: StorageAdapter = {
-  getItem: (key) => mmkv.getString(key),
-  setItem: (key, value) => mmkv.set(key, value),
+  getItem: (key) => (onServer ? undefined : mmkv.getString(key)),
+  setItem: (key, value) => {
+    if (!onServer) mmkv.set(key, value);
+  },
   removeItem: (key) => {
-    mmkv.remove(key);
+    if (!onServer) mmkv.remove(key);
   },
   // useMMKVString subscribes to just this key, instead of a generic
   // "any key changed" listener re-checked in JS on every change.

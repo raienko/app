@@ -43,7 +43,10 @@ export const queryClient = createQueryClient();
 
 // Queries pause while offline and refetch on reconnect — TanStack Query's
 // own listener only knows the browser's online events, so on a phone it
-// would think it's always online.
-onlineManager.setEventListener((setOnline) =>
-  onNetworkChange(({ isOnline }) => setOnline(isOnline)),
-);
+// would think it's always online. Not on the server render of the web
+// build (there's no network to watch there, and no `window`).
+if (typeof window !== "undefined") {
+  onlineManager.setEventListener((setOnline) =>
+    onNetworkChange(({ isOnline }) => setOnline(isOnline)),
+  );
+}

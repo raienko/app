@@ -5,7 +5,8 @@
  * Metro's live ones.
  *
  * Three rules, all for same-origin GET requests (an API on another host, map
- * tiles and the like always go straight to the network):
+ * tiles and the like always go straight to the network, and so do the app's
+ * own API routes under /api/ — a cached answer there would be a wrong one):
  * - Pages: network first, so a deploy shows up on the next launch; the last
  *   page seen when offline. The build is a single-page app, so any cached
  *   page is the whole app shell.
@@ -51,6 +52,7 @@ self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = new URL(request.url);
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
+  if (url.pathname.startsWith("/api/")) return;
 
   if (request.mode === "navigate") {
     event.respondWith(networkFirst(request));

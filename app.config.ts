@@ -113,7 +113,7 @@ export default ({ config, projectRoot }: ConfigContext): ExpoConfig => ({
     ...androidAppLinks,
   },
   web: {
-    output: "single",
+    output: "server",
     favicon: brandAsset("favicon.png"),
   },
   extra: {
