@@ -4,7 +4,7 @@
 
 > Swipeable slides with accessible pagination.
 
-<sub>`src/components/carousel` · [Stories](index.stories.tsx) · [Tests](index.test.tsx)</sub>
+<sub>`src/components/carousel` · [Stories](index.stories.tsx) · [Tests](index.test.tsx), [autoplay](autoplay.test.tsx)</sub>
 
 ```tsx
 import Carousel from "@/components/carousel";
@@ -24,6 +24,8 @@ import Carousel from "@/components/carousel";
 A wrapper over [`react-native-reanimated-carousel`](https://rn-carousel.dev/) (v5, whose peer deps — Reanimated 4, Worklets, Gesture Handler — this project already had). `loop`, `autoplay`, `itemSize`, `layout`, `animation`, `snapMode`, `orientation` and the render callbacks are the library's own API, passed straight through; the wrapper adds pagination and accessibility.
 
 - **`hasPagination`** (default `true`) shows one dot per slide. On by default because a carousel's remaining content is off-screen by definition — without dots nothing says it exists or how much of it there is. The dots are this app's own `Pagination` in its `"dots"` variant — the private `pagination.tsx` that used to live here is gone, and with it the `progress` shared value it interpolated each dot from. They follow the settled slide instead, which is what made them reliably pressable on iOS; see `Pagination` above for what that cost. The active dot is **recoloured**, and the carousel passes `slideLabel` through so a dot announces what it goes to rather than a number.
+- **Autoplay holds still for people who need it to.** While Reduce Motion or a screen reader is on, the carousel doesn't advance by itself. For a screen-reader user, a slide changing under the cursor is content disappearing mid-sentence.
+- **Changing `loop` remounts the library carousel** on the slide it was showing. The library reads its position once, at mount, so wrapping backwards past the first slide and then turning `loop` off used to leave it blank (an offset a bounded carousel has nothing to draw at). The caller's `ref` follows to the new instance.
 - **`style` has to give the carousel a height.** Its slides are absolutely positioned — that's how the library animates them — so they can't stretch their container the way ordinary children would, and an unsized carousel renders as an empty box. The dots share that same box.
 - **A carousel is driven by a pan gesture, which no screen reader can perform.** Left alone it's a region whose content silently changes and that a VoiceOver or TalkBack user can never move through. Two things fix that, both on by default:
   - The region is `accessibilityRole="adjustable"` with increment/decrement actions wired to the carousel's own `next()`/`prev()`, so the native swipe-up/swipe-down gesture changes slides. Its `accessibilityValue` carries the position, which both platforms re-announce as it changes. A one-slide carousel gets neither — offering gestures that can't do anything is worse than offering none.

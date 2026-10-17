@@ -218,4 +218,32 @@ describe(`${Component.name} smoke test`, () => {
     expect(typeof ref.current?.scrollTo).toBe("function");
     expect(ref.current?.getCurrentIndex()).toBe(0);
   });
+
+  // The library reads its position once, at mount, and doesn't re-fit it
+  // when `loop` changes — so a carousel wrapped backwards past its first
+  // slide went blank when loop was turned off. Switching mode remounts it,
+  // and the caller's handle has to follow to the new one.
+  it("remounts when loop changes, and the ref follows", async () => {
+    const ref = createRef<CarouselRef>();
+    const view = (loop: boolean) => (
+      <Component
+        ref={ref}
+        data={SLIDES}
+        label="Trip photos"
+        loop={loop}
+        renderItem={({ item }) => <RNText>{item}</RNText>}
+      />
+    );
+
+    await render(view(true));
+    const before = ref.current;
+    await screen.rerender(view(false));
+
+    expect(ref.current).not.toBeNull();
+    expect(ref.current).not.toBe(before);
+    expect(typeof ref.current?.next).toBe("function");
+    expect(
+      screen.getByText("one", { includeHiddenElements: true }),
+    ).toBeTruthy();
+  });
 });

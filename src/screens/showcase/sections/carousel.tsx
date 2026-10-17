@@ -26,6 +26,7 @@ export default function CarouselSection() {
   const styles = useStyles();
   const [hasPagination, setHasPagination] = useState(true);
   const [loop, setLoop] = useState(true);
+  const [autoplay, setAutoplay] = useState(false);
   const [index, setIndex] = useState(0);
 
   return (
@@ -49,6 +50,12 @@ export default function CarouselSection() {
           selected={loop}
           onPress={() => setLoop((current) => !current)}
         />
+        <Button
+          value={autoplay ? "autoplay: on" : "autoplay: off"}
+          size="small"
+          selected={autoplay}
+          onPress={() => setAutoplay((current) => !current)}
+        />
       </View>
 
       <Carousel
@@ -60,6 +67,8 @@ export default function CarouselSection() {
         keyExtractor={(photo) => photo.id}
         hasPagination={hasPagination}
         loop={loop}
+        autoplay={autoplay}
+        autoplayInterval={2500}
         onChange={setIndex}
         renderItem={({ item }) => (
           <Image

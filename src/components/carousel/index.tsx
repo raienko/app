@@ -6,6 +6,7 @@ import type {
   CarouselRef,
 } from "react-native-reanimated-carousel";
 
+import { useAccessibility } from "@/features/accessibility";
 import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 
@@ -96,6 +97,11 @@ type Props<Item> = DistributiveOmit<
  *   pagination off is a visual decision worth making deliberately rather
  *   than a default.
  *
+ * **`autoplay` holds still for people who need it to.** It doesn't advance
+ * while Reduce Motion or a screen reader is on: one asked for less
+ * movement, and for the other a slide changing under the cursor is content
+ * disappearing mid-sentence.
+ *
  * On web the container is additionally `role="group"` with
  * `aria-roledescription="carousel"` — the ARIA authoring-practices spelling
  * for exactly this widget, and one native has no equivalent of. Same
@@ -126,16 +132,21 @@ export default function Carousel<Item>({
 }: Props<Item>) {
   const { t } = useLocale();
   const styles = useStyles();
+  const { isReduceMotionEnabled, isScreenReaderEnabled } = useAccessibility();
   const carousel = useRef<CarouselRef>(null);
   const [index, setIndex] = useState(props.defaultIndex ?? 0);
 
   const count = data.length;
+  const autoplay =
+    Boolean(props.autoplay) && !isReduceMotionEnabled && !isScreenReaderEnabled;
 
   // The caller's ref reaches the library's own handle untouched — `next`,
   // `prev`, `scrollTo` and `getCurrentIndex` are exactly what a call site
   // driving the carousel from outside needs, and re-wrapping them would
   // only add a layer to keep in sync.
-  useImperativeHandle(ref, () => carousel.current as CarouselRef, []);
+  // No dependency list: switching `loop` remounts the library carousel
+  // (below), and a handle created once would keep driving the old one.
+  useImperativeHandle(ref, () => carousel.current as CarouselRef);
 
   const handleSnap = useCallback(
     (snapped: number) => {
@@ -199,6 +210,9 @@ export default function Carousel<Item>({
     >
       <ReanimatedCarousel
         {...props}
+        key={props.loop ? "loop" : "bounded"}
+        defaultIndex={index}
+        autoplay={autoplay}
         ref={carousel}
         data={data}
         orientation={orientation}
