@@ -35,7 +35,7 @@ yarn web          # or: yarn ios · yarn android
 | -------------------------------------------- | --------------------------------- |
 | `yarn web` · `yarn ios` · `yarn android`     | Run the app                       |
 | `yarn storybook:web`                         | Web Storybook at `localhost:6006` |
-| `yarn storybook`                             | On-device Storybook               |
+| `yarn storybook:native`                      | On-device Storybook               |
 | `yarn lint` · `yarn typecheck` · `yarn test` | The checks the pre-push hook runs |
 | `yarn format`                                | Prettier over the whole project   |
 

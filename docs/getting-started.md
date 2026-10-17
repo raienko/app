@@ -53,14 +53,17 @@
 | --------------------------------- | ----------------------------------------------------------------------- |
 | `yarn start`                      | Metro, choose platform interactively (opens Expo Go)                    |
 | `yarn web` / `ios` / `android`    | Run on a given platform (ios/android build a real dev client)           |
-| `yarn web:build`                  | Build the installable web app into `dist/`, for any static host         |
+| `yarn web:build`                  | Export the web app and API routes into `dist/` (server output)          |
+| `yarn native:bundle`              | Build the iOS and Android JS bundles — catches Metro errors on native   |
+| `yarn doctor`                     | Expo Doctor: SDK versions, peer dependencies, project setup             |
 | `yarn lint`                       | ESLint (`expo lint`)                                                    |
 | `yarn typecheck`                  | `tsc --noEmit`                                                          |
 | `yarn test`                       | Jest                                                                    |
+| `yarn test:coverage`              | Jest with a coverage summary (`coverage/`)                              |
 | `yarn format` / `format:check`    | Prettier write / check                                                  |
-| `yarn secretlint`                 | Scan the repo for committed secrets                                     |
-| `yarn verify`                     | Every gate in one go: format check, lint, typecheck, secretlint, tests  |
-| `yarn storybook`                  | On-device Storybook (Metro, opens on whatever device/emulator you pick) |
+| `yarn secrets:check`              | Scan the repo for committed secrets                                     |
+| `yarn verify`                     | The fast gates in one go: format, lint, types, secrets, tests           |
+| `yarn storybook:native`           | On-device Storybook (Metro, opens on whatever device/emulator you pick) |
 | `yarn storybook:ios` / `:android` | On-device Storybook, direct to one platform                             |
 | `yarn storybook:web`              | Web Storybook (Vite) at `localhost:6006`                                |
 | `yarn storybook:web:build`        | Build the web Storybook for static hosting                              |
@@ -71,7 +74,7 @@
 
 Two separate setups, both driven by the same `*.stories.tsx` files under `src/`:
 
-- **On-device** (`.rnstorybook/`): `yarn storybook[:ios|:android]` sets `STORYBOOK_ENABLED=true`, which makes `metro.config.js` swap the app's entry point for the Storybook UI — the regular `yarn ios`/`yarn android`/`yarn web` builds are unaffected when the flag isn't set.
+- **On-device** (`.rnstorybook/`): `yarn storybook:native` / `:ios` / `:android` sets `STORYBOOK_ENABLED=true`, which makes `metro.config.js` swap the app's entry point for the Storybook UI — the regular `yarn ios`/`yarn android`/`yarn web` builds are unaffected when the flag isn't set.
 - **Web** (`.storybook/`): a separate Vite-based build (`@storybook/react-native-web-vite`), since MMKV doesn't exist on web. `.env` is loaded manually here (Vite doesn't do Expo's env inlining) — see the `viteFinal` hook in `.storybook/main.ts`.
 
 ---
@@ -81,7 +84,27 @@ Two separate setups, both driven by the same `*.stories.tsx` files under `src/`:
 Set up via [husky](https://typicode.github.io/husky) + [lint-staged](https://github.com/lint-staged/lint-staged), with the hooks in `.husky/` (installed by the `prepare` script).
 
 - **pre-commit**: formats and lints staged files, and scans staged files for secrets ([secretlint](https://github.com/secretlint/secretlint)).
-- **pre-push**: full `lint` + `typecheck` + `test`.
+- **pre-push**: `yarn verify` — format, lint, types, secret scan and tests.
+
+---
+
+## CI
+
+GitHub Actions, in `.github/`. **Every workflow is manual for now** (Actions tab → Run workflow); each file's header says which trigger to add to make it automatic.
+
+| Workflow         | File                         | Jobs                                                                                                                                                                |
+| ---------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Checks**       | `workflows/checks.yml`       | Formatting · Lint · Types · Unit tests (coverage in the job summary) · Secret scan · Expo Doctor · Web build · Native bundles · Storybook build · Dependency review |
+| **Storybook**    | `workflows/storybook.yml`    | Checks → Build → Publish to GitHub Pages                                                                                                                            |
+| **Pull request** | `workflows/pull-request.yml` | Title format — `type: 'Message'`, the house commit style, since a squash merge makes the title the commit                                                           |
+| Dependabot       | `dependabot.yml`             | Weekly grouped updates for actions and npm, Expo SDK packages excluded. Paused (`open-pull-requests-limit: 0`)                                                      |
+
+- **Checks run as separate jobs** so a pull request lists each by name ("Checks / Lint", "Checks / Web build") and branch protection can require the ones that matter.
+- **The same commands run locally.** Every job is one `yarn` script from the table above, set up by `.github/actions/setup` (Node from `.nvmrc`, frozen-lockfile install).
+- **Hardened by default.** Read-only token unless a job needs more, a timeout on every job, superseded runs cancelled, and third-party actions pinned to commit SHAs (the version in a comment beside each).
+- **Dependency review** needs the repository's dependency graph turned on (Settings → Code security).
+
+The workflows still to come — native builds, PR previews, releases, web deploy — are planned in [CI and EAS](plans/ci-and-eas.md).
 
 ---
 

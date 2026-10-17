@@ -1,0 +1,59 @@
+name: Storybook
+
+# Publishes the web Storybook to GitHub Pages, once every check passes.
+#
+# Manual for now: run it from the Actions tab. To publish on every push to
+# main again, add:
+#
+#   push:
+#     branches: [main]
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One publish at a time, and a running one is never cut off halfway.
+concurrency:
+  group: storybook
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    name: Checks
+    uses: ./.github/workflows/checks.yml
+
+  build:
+    name: Build
+    needs: checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Set up project
+        uses: ./.github/actions/setup
+      - name: Build web Storybook
+        run: yarn storybook:web:build
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+      - name: Upload the site
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
+        with:
+          path: storybook-static
+
+  publish:
+    name: Publish to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

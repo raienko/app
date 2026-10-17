@@ -7,3 +7,5 @@ android
 .rnstorybook/storybook.requires.ts
 storybook-static
 templates
+coverage
+.jest-cache

@@ -66,3 +66,7 @@ expo-env.d.ts
 # Also written by `yarn brand`: the web app's manifest and icons
 /public/manifest.json
 /public/icon-web-*.png
+
+# test coverage (yarn test:coverage)
+coverage/
+.jest-cache/
