@@ -40,6 +40,65 @@ const INTERNAL_COMPONENTS = Object.entries(COMPONENTS)
     message: `'${name}' is an internal building block for other components (src/components/manifest.json), not part of the public UI kit.`,
   }));
 
+/**
+ * Design-system boundaries (see the block that uses it below): raw Text and
+ * Image primitives, raw colours and ad-hoc type styles.
+ */
+const DESIGN_SYSTEM_SYNTAX = [
+  {
+    selector:
+      "ImportDeclaration[source.value='react-native'] ImportSpecifier[imported.name='Text']",
+    message:
+      "Use '@/components/text' so app typography, color and direction are applied.",
+  },
+  {
+    selector: "ImportDeclaration[source.value='expo-image']",
+    message:
+      "Use '@/components/image' so fallback and accessibility behavior are applied.",
+  },
+  {
+    selector:
+      "ImportDeclaration[source.value=/^@expo\\/ui(?:\\/(?:jetpack-compose|swift-ui))?$/] ImportSpecifier[imported.name='Host']",
+    message:
+      "Use '@/components/expo-ui-host' so Expo controls receive the app color scheme, seed color and layout direction.",
+  },
+  {
+    selector: "Literal[value=/^(#[0-9A-Fa-f]{3,8}|rgba?\\(|hsla?\\()/]",
+    message: "Use a semantic color from useTheme() instead of a raw UI color.",
+  },
+  {
+    selector: "Literal[value=/^(black|white|red|blue|green|gray|grey)$/]",
+    message:
+      "Use a semantic color from useTheme() instead of a named UI color.",
+  },
+  {
+    selector:
+      "Property[key.name=/^(fontFamily|fontSize|fontWeight|lineHeight|letterSpacing)$/]",
+    message:
+      "Use a typography token from Text or createStyles() instead of defining an ad-hoc type style.",
+  },
+];
+
+/**
+ * Test ids follow one format — `testId()` from @/utils, or a named constant
+ * for something the app renders once (the toasts overlay) — so they can't
+ * drift or collide. A string written into `testID` inside a component would
+ * be the same id on every instance of it.
+ */
+const TEST_ID_SYNTAX = [
+  {
+    selector: "JSXAttribute[name.name='testID'] > Literal",
+    message:
+      "Derive the id with testId() from @/utils (or a named constant for an app-wide singleton) instead of writing it out.",
+  },
+  {
+    selector:
+      "JSXAttribute[name.name='testID'] > JSXExpressionContainer > TemplateLiteral",
+    message:
+      "Build the id with testId(owner, ...parts) from @/utils instead of a template string.",
+  },
+];
+
 module.exports = defineConfig([
   expoConfig,
   {
@@ -139,42 +198,37 @@ module.exports = defineConfig([
       "src/components/expo-ui-host/index.tsx",
     ],
     rules: {
+      "no-restricted-syntax": ["error", ...DESIGN_SYSTEM_SYNTAX],
+    },
+  },
+  // Components also hold to the test-id format. Same rule as the block
+  // above, so it carries the design-system selectors along — a later block
+  // replaces an earlier one's options rather than adding to them.
+  {
+    files: ["src/components/**/*.{ts,tsx}"],
+    ignores: [
+      "**/*.test.{ts,tsx}",
+      "**/*.stories.tsx",
+      "src/components/image/index.tsx",
+      "src/components/text/index.tsx",
+      "src/components/expo-ui-host/index.tsx",
+    ],
+    rules: {
       "no-restricted-syntax": [
         "error",
-        {
-          selector:
-            "ImportDeclaration[source.value='react-native'] ImportSpecifier[imported.name='Text']",
-          message:
-            "Use '@/components/text' so app typography, color and direction are applied.",
-        },
-        {
-          selector: "ImportDeclaration[source.value='expo-image']",
-          message:
-            "Use '@/components/image' so fallback and accessibility behavior are applied.",
-        },
-        {
-          selector:
-            "ImportDeclaration[source.value=/^@expo\\/ui(?:\\/(?:jetpack-compose|swift-ui))?$/] ImportSpecifier[imported.name='Host']",
-          message:
-            "Use '@/components/expo-ui-host' so Expo controls receive the app color scheme, seed color and layout direction.",
-        },
-        {
-          selector: "Literal[value=/^(#[0-9A-Fa-f]{3,8}|rgba?\\(|hsla?\\()/]",
-          message:
-            "Use a semantic color from useTheme() instead of a raw UI color.",
-        },
-        {
-          selector: "Literal[value=/^(black|white|red|blue|green|gray|grey)$/]",
-          message:
-            "Use a semantic color from useTheme() instead of a named UI color.",
-        },
-        {
-          selector:
-            "Property[key.name=/^(fontFamily|fontSize|fontWeight|lineHeight|letterSpacing)$/]",
-          message:
-            "Use a typography token from Text or createStyles() instead of defining an ad-hoc type style.",
-        },
+        ...DESIGN_SYSTEM_SYNTAX,
+        ...TEST_ID_SYNTAX,
       ],
+    },
+  },
+  {
+    files: [
+      "src/components/image/index.tsx",
+      "src/components/text/index.tsx",
+      "src/components/expo-ui-host/index.tsx",
+    ],
+    rules: {
+      "no-restricted-syntax": ["error", ...TEST_ID_SYNTAX],
     },
   },
 ]);

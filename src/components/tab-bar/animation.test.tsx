@@ -1,7 +1,16 @@
 import { AccessibilityInfo } from "react-native";
 import { withTiming } from "react-native-reanimated";
 
-import { act, fireEvent, render, screen, waitFor } from "@/root/testing";
+import {
+  act,
+  ANY,
+  fireEvent,
+  render,
+  screen,
+  testId,
+  testIdPattern,
+  waitFor,
+} from "@/root/testing";
 
 import Component from "./index";
 import { SLIDE_DURATION } from "./indicator";
@@ -45,7 +54,7 @@ function flat(style: unknown): Record<string, unknown> {
 }
 
 function indicator() {
-  return screen.getByTestId("tab-bar-indicator", {
+  return screen.getByTestId(testId("tab-bar", "indicator"), {
     includeHiddenElements: true,
   });
 }
@@ -70,7 +79,7 @@ function bar(value: string) {
 }
 
 function scaleOf(index: number) {
-  const content = screen.getAllByTestId("tab-bar-tab-content")[index];
+  const content = screen.getAllByTestId(testIdPattern(ANY, "content"))[index];
   const [{ scale }] = flat(content.props.style).transform as {
     scale: number;
   }[];
@@ -109,7 +118,7 @@ describe("TabBar animation", () => {
   it("moves in a left-to-right layer whatever the locale", async () => {
     await render(bar("home"));
 
-    const layer = screen.getByTestId("tab-bar-indicator-layer", {
+    const layer = screen.getByTestId(testId("tab-bar", "indicator-layer"), {
       includeHiddenElements: true,
     });
     expect(flat(layer.props.style).direction).toBe("ltr");
@@ -187,7 +196,7 @@ describe("TabBar animation", () => {
   it("hides the crossfade's second copy from assistive technology", async () => {
     await render(bar("home"));
 
-    const [copy] = screen.getAllByTestId("tab-bar-tab-current", {
+    const [copy] = screen.getAllByTestId(testIdPattern(ANY, "current"), {
       includeHiddenElements: true,
     });
     expect(copy.props.accessibilityElementsHidden).toBe(true);

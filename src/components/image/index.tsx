@@ -9,6 +9,7 @@ import {
 
 import { disabledA11yProps, imageA11yProps } from "@/features/accessibility";
 import logger from "@/features/logger";
+import { testId } from "@/utils";
 
 import ImageFallback from "./fallback";
 
@@ -155,6 +156,7 @@ function ImageComponent({
   // off is also what makes web behave the way the other platforms already
   // do. Pass `draggable` to opt back in.
   draggable = false,
+  testID = "image",
   ...props
 }: Props) {
   const key = sourceKey(source);
@@ -185,13 +187,17 @@ function ImageComponent({
     // the image would have — so the same styled, empty View, just without
     // the placeholder frame ImageFallback draws.
     return fallback === null ? null : (
-      <ImageFallback style={style} a11yProps={a11yProps} />
+      <ImageFallback
+        style={style}
+        a11yProps={a11yProps}
+        testID={testId(testID, "fallback")}
+      />
     );
   }
 
   return (
     <ExpoImage
-      testID="image"
+      testID={testID}
       {...props}
       {...a11yProps}
       // expo-image's own prop, separate from accessibilityLabel: this is

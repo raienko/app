@@ -11,6 +11,7 @@ type Props = {
   /** Where the next character will land, with the field focused. */
   active: boolean;
   invalid: boolean;
+  testID?: string;
 };
 
 /**
@@ -19,13 +20,19 @@ type Props = {
  * whole code into the first box; the real input is the invisible one in
  * ./index and these only draw what it holds.
  */
-export default function CodeCell({ index, character, active, invalid }: Props) {
+export default function CodeCell({
+  index,
+  character,
+  active,
+  invalid,
+  testID,
+}: Props) {
   const theme = useTheme();
   const styles = useStyles();
 
   return (
     <View
-      testID={`code-cell-${index}`}
+      testID={testID}
       // Otherwise a screen reader gets six unlabelled single-character stops
       // competing with the field that carries the actual announcement.
       accessibilityElementsHidden

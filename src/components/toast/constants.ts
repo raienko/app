@@ -17,3 +17,6 @@ export const MAX_VISIBLE = 3;
 
 /** How far a toast travels while fading in and out, in Figma px. */
 export const TRAVEL_DISTANCE = 16;
+
+/** The overlay every toast is drawn in — one per app, so a fixed id. */
+export const TOASTS_TEST_ID = "toasts";

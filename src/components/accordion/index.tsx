@@ -15,6 +15,7 @@ import {
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 import { easeOutClamped } from "@/utils/easing";
+import { testId } from "@/utils/test-id";
 
 import Collapsible from "./collapsible";
 
@@ -23,6 +24,11 @@ const ANIMATION_DURATION = 220;
 
 type Props = {
   title: string;
+  /**
+   * The header — the part a test taps — gets this id; the content inside
+   * gets `<testID>.content` while it's open.
+   */
+  testID?: string;
   defaultOpen?: boolean;
   children: ReactNode;
 };
@@ -42,6 +48,7 @@ type Props = {
  */
 export default function Accordion({
   title,
+  testID,
   defaultOpen = false,
   children,
 }: Props) {
@@ -79,6 +86,7 @@ export default function Accordion({
           pressed ? { backgroundColor: theme.colors.pressed } : null,
         ]}
         onPress={toggle}
+        testID={testID}
         {...controlA11yProps({ expanded: open })}
       >
         <Text value={title} style={styles.title} />
@@ -90,7 +98,12 @@ export default function Accordion({
           />
         </Animated.View>
       </Pressable>
-      <Collapsible open={open} duration={ms} contentStyle={styles.content}>
+      <Collapsible
+        open={open}
+        duration={ms}
+        contentStyle={styles.content}
+        contentTestID={testId(testID, "content")}
+      >
         {children}
       </Collapsible>
     </View>

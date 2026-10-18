@@ -11,6 +11,7 @@ import type {
 
 import logger from "@/features/logger";
 import { useLocale } from "@/features/localization";
+import { testId } from "@/utils";
 import { mapStyle, mapTiles, toLngLat, type Coordinate } from "@/features/maps";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
@@ -51,7 +52,7 @@ export default function Map({
   onSelectMarker,
   height,
   style,
-  testID,
+  testID = "map",
 }: MapProps) {
   const theme = useTheme();
   const { locale, t } = useLocale();
@@ -175,10 +176,15 @@ export default function Map({
       selected={selected}
       onCalloutHeight={setCardHeight}
     >
-      <View ref={containerRef} testID="map-engine" style={styles.engine} />
+      <View
+        ref={containerRef}
+        testID={testId(testID, "engine")}
+        style={styles.engine}
+      />
       {markers.map((marker) => (
         <InElement key={marker.id} element={elements.get(marker.id)}>
           <MapPin
+            testID={testId(testID, "pin", marker.id)}
             title={marker.title}
             selected={marker.id === selectedId}
             onPress={() => onSelectMarker?.(marker.id)}
@@ -186,7 +192,10 @@ export default function Map({
         </InElement>
       ))}
       <InElement element={elements.get(USER_ID)}>
-        <UserDot label={t("map.yourLocation")} />
+        <UserDot
+          label={t("map.yourLocation")}
+          testID={testId(testID, "user-location")}
+        />
       </InElement>
     </MapFrame>
   );

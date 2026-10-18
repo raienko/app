@@ -1,5 +1,6 @@
 import type { SliderImplementationProps } from "./types";
 import { normalizeSliderValue, normalizeSliderValues } from "./utils";
+import { testId } from "@/utils";
 
 export type SliderKeyEvent = {
   key?: string;
@@ -45,7 +46,7 @@ export function getThumbTestID(
   count: number,
 ): string | undefined {
   if (testID === undefined) return undefined;
-  return count === 1 ? testID : `${testID}-thumb-${index}`;
+  return count === 1 ? testID : testId(testID, "thumb", index);
 }
 
 export function changeSliderThumb(

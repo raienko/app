@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import If from "@/components/if";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { isIOS } from "@/utils";
+import { testId, isIOS } from "@/utils";
 
 import type { ScreenProps } from "./types";
 
@@ -43,7 +43,14 @@ export type {
  * <Screen layout="centered" footer={<Button value="Resend link" type="tertiary" />}>…</Screen>
  */
 export default function Screen(props: ScreenProps) {
-  const { header, footer, children, style, testID, layout = "default" } = props;
+  const {
+    header,
+    footer,
+    children,
+    style,
+    testID = "screen",
+    layout = "default",
+  } = props;
   const theme = useTheme();
   const styles = useStyles();
   const insets = useSafeAreaInsets();
@@ -67,7 +74,7 @@ export default function Screen(props: ScreenProps) {
     <>
       <If condition={scrollable}>
         <ScrollView
-          testID="screen-scroll"
+          testID={testId(testID, "scroll")}
           style={styles.fill}
           contentContainerStyle={[
             styles.scrollContent,
@@ -76,14 +83,14 @@ export default function Screen(props: ScreenProps) {
           ]}
           keyboardShouldPersistTaps="handled"
         >
-          <View testID="screen-content" style={contentStyle}>
+          <View testID={testId(testID, "content")} style={contentStyle}>
             {children}
           </View>
         </ScrollView>
       </If>
       <If condition={!scrollable}>
         <View
-          testID="screen-content"
+          testID={testId(testID, "content")}
           style={[styles.fill, contentInsets, contentStyle]}
         >
           {children}
@@ -106,7 +113,7 @@ export default function Screen(props: ScreenProps) {
     >
       <If condition={aside}>
         <View
-          testID="screen-aside"
+          testID={testId(testID, "aside")}
           style={[
             styles.aside,
             {
@@ -125,14 +132,17 @@ export default function Screen(props: ScreenProps) {
         behavior={isIOS ? "padding" : undefined}
       >
         <If condition={header}>
-          <View testID="screen-header" style={{ paddingTop: insets.top }}>
+          <View
+            testID={testId(testID, "header")}
+            style={{ paddingTop: insets.top }}
+          >
             {header}
           </View>
         </If>
         {content}
         <If condition={footer}>
           <View
-            testID="screen-footer"
+            testID={testId(testID, "footer")}
             style={[
               styles.footer,
               {

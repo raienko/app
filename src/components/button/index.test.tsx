@@ -1,7 +1,7 @@
 import { StyleSheet, type TextStyle, type ViewStyle } from "react-native";
 
 import { colors } from "@/features/theme/colors";
-import { fireEvent, render, screen } from "@/root/testing";
+import { fireEvent, render, screen, testId } from "@/root/testing";
 
 import Component, { type ButtonSize, type ButtonType } from "./index";
 
@@ -72,7 +72,7 @@ describe(`${Component.name} smoke test`, () => {
 
     expect(button).toBeBusy();
     expect(button).toBeDisabled();
-    expect(screen.getByTestId("button-loading")).toBeOnTheScreen();
+    expect(screen.getByTestId(testId("button", "loading"))).toBeOnTheScreen();
 
     await fireEvent.press(button);
     expect(onPress).not.toHaveBeenCalled();
@@ -89,7 +89,9 @@ describe(`${Component.name} smoke test`, () => {
     const button = screen.getByRole("button", { name: "save" });
     expect(button).not.toBeBusy();
     expect(button).toBeEnabled();
-    expect(screen.queryByTestId("button-loading")).not.toBeOnTheScreen();
+    expect(
+      screen.queryByTestId(testId("button", "loading")),
+    ).not.toBeOnTheScreen();
 
     await fireEvent.press(button);
     expect(onPress).toHaveBeenCalledTimes(1);
@@ -182,7 +184,9 @@ describe("Button pressed state", () => {
     );
 
     expect(boxOf("go").backgroundColor).toBe(palette.primaryPressed);
-    expect(screen.queryByTestId("button-pressed")).not.toBeOnTheScreen();
+    expect(
+      screen.queryByTestId(testId("button", "pressed")),
+    ).not.toBeOnTheScreen();
   });
 
   it.each(["secondary", "tertiary"] as const)(
@@ -197,7 +201,7 @@ describe("Button pressed state", () => {
         />,
       );
 
-      const overlay = screen.getByTestId("button-pressed");
+      const overlay = screen.getByTestId(testId("button", "pressed"));
       expect(StyleSheet.flatten(overlay.props.style).backgroundColor).toBe(
         palette.pressed,
       );
@@ -209,7 +213,9 @@ describe("Button pressed state", () => {
   it("shows no press feedback at rest", async () => {
     await render(<Component value="idle" onPress={() => {}} />);
 
-    expect(screen.queryByTestId("button-pressed")).not.toBeOnTheScreen();
+    expect(
+      screen.queryByTestId(testId("button", "pressed")),
+    ).not.toBeOnTheScreen();
   });
 });
 

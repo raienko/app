@@ -19,6 +19,8 @@ export type ImageViewerItem = {
 export type ImageViewerProps = {
   /** Identifies this viewer for `ImageViewer.show(id, index)` / `ImageViewer.hide(id)`. */
   id: string;
+  /** Default `image-viewer.<id>`; parts: `.stage`, `.close`, `.share`, `.caption`, `.thumbnail.<n>`. */
+  testID?: string;
   images: readonly ImageViewerItem[];
   /** Fires as the visible image changes — by swipe, thumbnail, key or screen reader. */
   onIndexChange?: (index: number) => void;

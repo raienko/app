@@ -11,6 +11,7 @@ import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 
 import If from "@/components/if";
+import { isE2E, testId } from "@/utils";
 import Pagination from "@/components/pagination";
 
 export type { CarouselRef } from "react-native-reanimated-carousel";
@@ -58,6 +59,12 @@ type Props<Item> = DistributiveOmit<
    * number it is. Without it both fall back to the position alone.
    */
   slideLabel?: (item: Item, index: number) => string;
+  /**
+   * The region's id (default `"carousel"`); its dots get
+   * `<testID>.dot.1`, `.dot.2`, …. The library's own `testID` isn't
+   * exposed — it names an inner layer nothing needs to reach.
+   */
+  testID?: string;
   /** Fires with the settled slide's index whenever the carousel comes to rest. */
   onChange?: (index: number) => void;
   /**
@@ -125,6 +132,7 @@ export default function Carousel<Item>({
   hasPagination = true,
   slideLabel,
   onChange,
+  testID = "carousel",
   orientation = "horizontal",
   style,
   ref,
@@ -137,8 +145,14 @@ export default function Carousel<Item>({
   const [index, setIndex] = useState(props.defaultIndex ?? 0);
 
   const count = data.length;
+  // Holds still for people who asked for less motion or are listening, and
+  // in an end-to-end run, where a slide moving on its own makes every
+  // assertion a race.
   const autoplay =
-    Boolean(props.autoplay) && !isReduceMotionEnabled && !isScreenReaderEnabled;
+    Boolean(props.autoplay) &&
+    !isReduceMotionEnabled &&
+    !isScreenReaderEnabled &&
+    !isE2E;
 
   // The caller's ref reaches the library's own handle untouched — `next`,
   // `prev`, `scrollTo` and `getCurrentIndex` are exactly what a call site
@@ -175,7 +189,7 @@ export default function Carousel<Item>({
 
   return (
     <View
-      testID="carousel"
+      testID={testID}
       accessibilityRole="adjustable"
       accessibilityLabel={label}
       // Only meaningful with somewhere to go. A one-slide carousel that
@@ -232,6 +246,9 @@ export default function Carousel<Item>({
           // something a call site has to remember to pass.
           onChange={(value) => carousel.current?.scrollTo({ index: value - 1 })}
           getItemLabel={(value) => describe(value - 1)}
+          // `<testID>.dot.1`, `.dot.2`, … — what a test taps to change slide
+          // on any platform, since a web test can't drive the pan gesture.
+          testID={testId(testID, "dot")}
           style={
             orientation === "vertical"
               ? styles.paginationVertical

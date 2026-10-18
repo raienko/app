@@ -1,7 +1,7 @@
 import { Text as RNText, View } from "react-native";
 import { SafeAreaInsetsContext } from "react-native-safe-area-context";
 
-import { act, fireEvent, render, screen } from "@/root/testing";
+import { act, fireEvent, render, screen, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -110,10 +110,10 @@ describe(`${Component.name} smoke test`, () => {
       );
 
       await act(() => {
-        fireEvent(screen.getByTestId("header-left"), "layout", {
+        fireEvent(screen.getByTestId(testId("header", "left")), "layout", {
           nativeEvent: { layout: { width: 40, height: 44 } },
         });
-        fireEvent(screen.getByTestId("header-right"), "layout", {
+        fireEvent(screen.getByTestId(testId("header", "right")), "layout", {
           nativeEvent: { layout: { width: 100, height: 44 } },
         });
       });
@@ -130,7 +130,10 @@ describe(`${Component.name} smoke test`, () => {
       await render(<Component testID="header" title="Orders" />);
 
       await act(() => {
-        for (const side of ["header-left", "header-right"]) {
+        for (const side of [
+          testId("header", "left"),
+          testId("header", "right"),
+        ]) {
           fireEvent(screen.getByTestId(side), "layout", {
             nativeEvent: { layout: { width: 44, height: 44 } },
           });
@@ -149,8 +152,8 @@ describe(`${Component.name} smoke test`, () => {
     it("shrinks the title before it shrinks a control", async () => {
       await render(<Component testID="header" title="Orders" />);
 
-      expect(styleOf("header-left").flexShrink).toBe(0);
-      expect(styleOf("header-right").flexShrink).toBe(0);
+      expect(styleOf(testId("header", "left")).flexShrink).toBe(0);
+      expect(styleOf(testId("header", "right")).flexShrink).toBe(0);
     });
 
     // A flex item's default minimum size is its content, so without an

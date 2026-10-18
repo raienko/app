@@ -1,4 +1,12 @@
-import { act, fireEvent, render, screen, waitFor } from "@/root/testing";
+import {
+  act,
+  ANY,
+  fireEvent,
+  render,
+  screen,
+  testIdPattern,
+  waitFor,
+} from "@/root/testing";
 
 import Component, { type ImageViewerItem } from "./index";
 
@@ -29,12 +37,14 @@ async function open(
     void Component.show("viewer", index);
   });
   await waitFor(() =>
-    expect(screen.getByTestId("image-viewer-stage")).toBeTruthy(),
+    expect(
+      screen.getByTestId(testIdPattern("image-viewer", ANY, "stage")),
+    ).toBeTruthy(),
   );
 }
 
 function stage() {
-  return screen.getByTestId("image-viewer-stage");
+  return screen.getByTestId(testIdPattern("image-viewer", ANY, "stage"));
 }
 
 describe(`${Component.name}`, () => {
@@ -51,16 +61,19 @@ describe(`${Component.name}`, () => {
 
   it("shows the caption of the current picture only", async () => {
     await open(0);
-    expect(screen.getByTestId("image-viewer-caption").props.children).toBe(
-      "Lisbon, 6:10",
-    );
+    expect(
+      screen.getByTestId(testIdPattern("image-viewer", ANY, "caption")).props
+        .children,
+    ).toBe("Lisbon, 6:10");
 
     await act(async () => {
       fireEvent(stage(), "accessibilityAction", {
         nativeEvent: { actionName: "increment" },
       });
     });
-    expect(screen.queryByTestId("image-viewer-caption")).toBeNull();
+    expect(
+      screen.queryByTestId(testIdPattern("image-viewer", ANY, "caption")),
+    ).toBeNull();
   });
 
   it("pages with a screen reader's adjust actions, and reports it", async () => {
@@ -99,21 +112,27 @@ describe(`${Component.name}`, () => {
     await open(0);
 
     await act(async () => {
-      fireEvent.press(screen.getByTestId("image-viewer-thumbnail-2"));
+      fireEvent.press(
+        screen.getByTestId(testIdPattern("image-viewer", ANY, "thumbnail", 2)),
+      );
     });
     expect(stage().props.accessibilityLabel).toMatch(/^Photo 3 of 3/);
     expect(
-      screen.getByTestId("image-viewer-thumbnail-2").props.accessibilityState
-        .selected,
+      screen.getByTestId(testIdPattern("image-viewer", ANY, "thumbnail", 2))
+        .props.accessibilityState.selected,
     ).toBe(true);
   });
 
   it("offers share only for a picture another app can open", async () => {
     await open(0);
-    expect(screen.getByTestId("image-viewer-share")).toBeTruthy();
+    expect(
+      screen.getByTestId(testIdPattern("image-viewer", ANY, "share")),
+    ).toBeTruthy();
 
     await act(async () => {
-      fireEvent.press(screen.getByTestId("image-viewer-share"));
+      fireEvent.press(
+        screen.getByTestId(testIdPattern("image-viewer", ANY, "share")),
+      );
     });
     expect(mockShare).toHaveBeenCalledWith({
       url: "https://example.com/a.jpg",
@@ -121,9 +140,13 @@ describe(`${Component.name}`, () => {
     });
 
     await act(async () => {
-      fireEvent.press(screen.getByTestId("image-viewer-thumbnail-2"));
+      fireEvent.press(
+        screen.getByTestId(testIdPattern("image-viewer", ANY, "thumbnail", 2)),
+      );
     });
-    expect(screen.queryByTestId("image-viewer-share")).toBeNull();
+    expect(
+      screen.queryByTestId(testIdPattern("image-viewer", ANY, "share")),
+    ).toBeNull();
   });
 
   it("hides the thumbnails and the counter for a single picture", async () => {
@@ -132,17 +155,23 @@ describe(`${Component.name}`, () => {
       void Component.show("single");
     });
     await waitFor(() =>
-      expect(screen.getByTestId("image-viewer-stage")).toBeTruthy(),
+      expect(
+        screen.getByTestId(testIdPattern("image-viewer", ANY, "stage")),
+      ).toBeTruthy(),
     );
 
-    expect(screen.queryByTestId("image-viewer-thumbnail-0")).toBeNull();
+    expect(
+      screen.queryByTestId(testIdPattern("image-viewer", ANY, "thumbnail", 0)),
+    ).toBeNull();
     // Nor a "1 / 1" counter, and the picture is announced by its alt alone.
     expect(screen.queryByText("1 / 1", hidden)).toBeNull();
     expect(
-      screen.getByTestId("image-viewer-stage").props.accessibilityLabel,
+      screen.getByTestId(testIdPattern("image-viewer", ANY, "stage")).props
+        .accessibilityLabel,
     ).toBe("Harbour at dawn");
     expect(
-      screen.getByTestId("image-viewer-stage").props.accessibilityRole,
+      screen.getByTestId(testIdPattern("image-viewer", ANY, "stage")).props
+        .accessibilityRole,
     ).toBe("image");
   });
 
@@ -151,7 +180,9 @@ describe(`${Component.name}`, () => {
     await open(0, { onClose });
 
     await act(async () => {
-      fireEvent.press(screen.getByTestId("image-viewer-close"));
+      fireEvent.press(
+        screen.getByTestId(testIdPattern("image-viewer", ANY, "close")),
+      );
     });
     await waitFor(() => expect(onClose).toHaveBeenCalled());
   });

@@ -2,7 +2,7 @@ import { Text as RNText } from "react-native";
 import { SafeAreaInsetsContext } from "react-native-safe-area-context";
 
 import { LocalValue } from "@/features/storage";
-import { render, screen, within } from "@/root/testing";
+import { render, screen, testId, within } from "@/root/testing";
 
 import Component from "./index";
 
@@ -41,7 +41,7 @@ describe(`${Component.name} default layout`, () => {
       </Component>,
     );
 
-    expect(screen.queryByTestId("screen-scroll")).toBeNull();
+    expect(screen.queryByTestId(testId("screen", "scroll"))).toBeNull();
     expect(screen.getByText("list")).toBeTruthy();
   });
 
@@ -52,16 +52,16 @@ describe(`${Component.name} default layout`, () => {
       </Component>,
     );
 
-    expect(screen.getByTestId("screen-scroll")).toBeTruthy();
+    expect(screen.getByTestId(testId("screen", "scroll"))).toBeTruthy();
     expect(screen.getByText("hello")).toBeTruthy();
   });
 
   it("pads the content unless told not to", async () => {
     await render(<Component />);
-    expect(styleOf("screen-content").padding).toBeGreaterThan(0);
+    expect(styleOf(testId("screen", "content")).padding).toBeGreaterThan(0);
 
     await render(<Component padded={false} />);
-    expect(styleOf("screen-content").padding).toBeUndefined();
+    expect(styleOf(testId("screen", "content")).padding).toBeUndefined();
   });
 
   it("pins the header and footer outside the scrolling content", async () => {
@@ -75,19 +75,19 @@ describe(`${Component.name} default layout`, () => {
       </Component>,
     );
 
-    const scroll = screen.getByTestId("screen-scroll");
-    expect(screen.getByTestId("screen-header")).toBeTruthy();
-    expect(screen.getByTestId("screen-footer")).toBeTruthy();
-    expect(within(scroll).queryByTestId("screen-header")).toBeNull();
+    const scroll = screen.getByTestId(testId("screen", "scroll"));
+    expect(screen.getByTestId(testId("screen", "header"))).toBeTruthy();
+    expect(screen.getByTestId(testId("screen", "footer"))).toBeTruthy();
+    expect(within(scroll).queryByTestId(testId("screen", "header"))).toBeNull();
     expect(within(scroll).getByText("Body")).toBeTruthy();
   });
 
   it("draws an aside only when one is passed", async () => {
     await render(<Component />);
-    expect(screen.queryByTestId("screen-aside")).toBeNull();
+    expect(screen.queryByTestId(testId("screen", "aside"))).toBeNull();
 
     await render(<Component aside={<Text value="Sections" />} />);
-    expect(screen.getByTestId("screen-aside")).toBeTruthy();
+    expect(screen.getByTestId(testId("screen", "aside"))).toBeTruthy();
     expect(screen.getByText("Sections")).toBeTruthy();
   });
 
@@ -103,10 +103,15 @@ describe(`${Component.name} default layout`, () => {
         ),
       );
 
-      expect(styleOf("screen-header").paddingTop).toBe(NOTCH.top);
-      expect(styleOf("screen-footer").paddingBottom).toBe(NOTCH.bottom);
+      expect(styleOf(testId("screen", "header")).paddingTop).toBe(NOTCH.top);
+      expect(styleOf(testId("screen", "footer")).paddingBottom).toBe(
+        NOTCH.bottom,
+      );
       // …so the content doesn't clear them a second time.
-      const content = styleOf("screen-scroll", "contentContainerStyle");
+      const content = styleOf(
+        testId("screen", "scroll"),
+        "contentContainerStyle",
+      );
       expect(content.paddingTop).toBe(0);
       expect(content.paddingBottom).toBe(0);
     });
@@ -114,7 +119,10 @@ describe(`${Component.name} default layout`, () => {
     it("moves the insets onto the content when there are no bars", async () => {
       await render(withNotch(<Component scrollable />));
 
-      const content = styleOf("screen-scroll", "contentContainerStyle");
+      const content = styleOf(
+        testId("screen", "scroll"),
+        "contentContainerStyle",
+      );
       expect(content.paddingTop).toBe(NOTCH.top);
       expect(content.paddingBottom).toBe(NOTCH.bottom);
     });
@@ -129,8 +137,10 @@ describe(`${Component.name} default layout`, () => {
         ),
       );
 
-      expect(styleOf("screen-aside").paddingTop).toBe(NOTCH.top);
-      expect(styleOf("screen-aside").paddingBottom).toBe(NOTCH.bottom);
+      expect(styleOf(testId("screen", "aside")).paddingTop).toBe(NOTCH.top);
+      expect(styleOf(testId("screen", "aside")).paddingBottom).toBe(
+        NOTCH.bottom,
+      );
     });
   });
 
@@ -161,7 +171,8 @@ describe(`${Component.name} centered layout`, () => {
 
     expect(screen.getByText("Check your email")).toBeTruthy();
     expect(
-      styleOf("screen-scroll", "contentContainerStyle").justifyContent,
+      styleOf(testId("screen", "scroll"), "contentContainerStyle")
+        .justifyContent,
     ).toBe("center");
   });
 
@@ -180,7 +191,7 @@ describe(`${Component.name} centered layout`, () => {
 
     expect(screen.getByText("Back")).toBeTruthy();
     expect(screen.getByText("Resend link")).toBeTruthy();
-    expect(styleOf("screen-header").paddingTop).toBe(NOTCH.top);
+    expect(styleOf(testId("screen", "header")).paddingTop).toBe(NOTCH.top);
   });
 
   it("has no aside, scrollable or padded props", () => {

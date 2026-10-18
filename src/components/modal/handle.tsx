@@ -14,6 +14,7 @@ const DRAG_DISMISS_VELOCITY = 800;
 type Props = {
   dragY: SharedValue<number>;
   onDismiss: () => void;
+  testID?: string;
 };
 
 /**
@@ -26,7 +27,7 @@ type Props = {
  * by ModalContent's animated style, so the content visually follows the
  * finger) — index.tsx doesn't otherwise need to know about the gesture.
  */
-export default function ModalHandle({ dragY, onDismiss }: Props) {
+export default function ModalHandle({ dragY, onDismiss, testID }: Props) {
   const styles = useStyles();
   const theme = useTheme();
   const duration = useAnimationDuration();
@@ -55,7 +56,7 @@ export default function ModalHandle({ dragY, onDismiss }: Props) {
 
   return (
     <GestureDetector gesture={dragGesture}>
-      <View testID="modal-drag-handle" style={styles.grabberHandle}>
+      <View testID={testID} style={styles.grabberHandle}>
         <View
           style={[styles.grabber, { backgroundColor: theme.colors.grabber }]}
         />

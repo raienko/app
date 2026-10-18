@@ -54,6 +54,7 @@ type Props = {
   /** The swipe-to-close offset, shared with the viewer so its backdrop and controls can fade. */
   dismissY: SharedValue<number>;
   isRTL: boolean;
+  testID?: string;
   /** Accessibility: label, value and actions for the one element a screen reader lands on. */
   accessibility: {
     label: string;
@@ -84,6 +85,7 @@ type Mode = "none" | "page" | "dismiss" | "pan";
  * React catches up afterwards without a flash.
  */
 export default function ViewerStage({
+  testID,
   images,
   index,
   onIndexChange,
@@ -340,7 +342,7 @@ export default function ViewerStage({
   return (
     <GestureDetector gesture={gesture}>
       <View
-        testID="image-viewer-stage"
+        testID={testID}
         onLayout={onLayout}
         accessible
         // One picture is just an image; several are adjustable, so a

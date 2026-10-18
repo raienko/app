@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@/root/testing";
+import { fireEvent, render, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -23,10 +23,12 @@ describe("Pagination bounds and semantics", () => {
         />,
       );
       expect(
-        first.getByTestId("pages-previous").props.accessibilityState.disabled,
+        first.getByTestId(testId("pages", "previous")).props.accessibilityState
+          .disabled,
       ).toBe(true);
       expect(
-        first.getByTestId("pages-next").props.accessibilityState.disabled,
+        first.getByTestId(testId("pages", "next")).props.accessibilityState
+          .disabled,
       ).toBe(false);
 
       const last = await render(
@@ -39,7 +41,8 @@ describe("Pagination bounds and semantics", () => {
         />,
       );
       expect(
-        last.getByTestId("pages-next").props.accessibilityState.disabled,
+        last.getByTestId(testId("pages", "next")).props.accessibilityState
+          .disabled,
       ).toBe(true);
     });
 
@@ -54,12 +57,12 @@ describe("Pagination bounds and semantics", () => {
         />,
       );
 
-      expect(view.getByTestId("pages-previous").props.accessibilityLabel).toBe(
-        "Previous page",
-      );
-      expect(view.getByTestId("pages-next").props.accessibilityLabel).toBe(
-        "Next page",
-      );
+      expect(
+        view.getByTestId(testId("pages", "previous")).props.accessibilityLabel,
+      ).toBe("Previous page");
+      expect(
+        view.getByTestId(testId("pages", "next")).props.accessibilityLabel,
+      ).toBe("Next page");
     });
   });
 
@@ -77,9 +80,9 @@ describe("Pagination bounds and semantics", () => {
         />,
       );
 
-      expect(view.getByTestId("pages-3").props.accessibilityLabel).toBe(
-        "Page 3 of 5",
-      );
+      expect(
+        view.getByTestId(testId("pages", 3)).props.accessibilityLabel,
+      ).toBe("Page 3 of 5");
     });
 
     it("marks the current page selected", async () => {
@@ -94,10 +97,10 @@ describe("Pagination bounds and semantics", () => {
       );
 
       expect(
-        view.getByTestId("pages-3").props.accessibilityState.selected,
+        view.getByTestId(testId("pages", 3)).props.accessibilityState.selected,
       ).toBe(true);
       expect(
-        view.getByTestId("pages-2").props.accessibilityState.selected,
+        view.getByTestId(testId("pages", 2)).props.accessibilityState.selected,
       ).toBe(false);
     });
 
@@ -133,7 +136,7 @@ describe("Pagination bounds and semantics", () => {
       expect(
         view.getByTestId("pages", hidden).props.accessible,
       ).toBeUndefined();
-      expect(view.getByTestId("pages-3")).toBeTruthy();
+      expect(view.getByTestId(testId("pages", 3))).toBeTruthy();
     });
   });
 
@@ -151,7 +154,7 @@ describe("Pagination bounds and semantics", () => {
       );
 
       expect(view.getByText("Page 3 of 20", hidden)).toBeTruthy();
-      expect(view.queryByTestId("pages-4", hidden)).toBeNull();
+      expect(view.queryByTestId(testId("pages", 4), hidden)).toBeNull();
     });
 
     it("keeps the arrows", async () => {
@@ -166,8 +169,8 @@ describe("Pagination bounds and semantics", () => {
         />,
       );
 
-      fireEvent.press(view.getByTestId("pages-next"));
-      expect(view.getByTestId("pages-previous")).toBeTruthy();
+      fireEvent.press(view.getByTestId(testId("pages", "next")));
+      expect(view.getByTestId(testId("pages", "previous"))).toBeTruthy();
     });
   });
 
@@ -182,11 +185,12 @@ describe("Pagination bounds and semantics", () => {
       />,
     );
 
-    expect(view.getByTestId("pages-5").props.accessibilityState.selected).toBe(
-      true,
-    );
     expect(
-      view.getByTestId("pages-next").props.accessibilityState.disabled,
+      view.getByTestId(testId("pages", 5)).props.accessibilityState.selected,
+    ).toBe(true);
+    expect(
+      view.getByTestId(testId("pages", "next")).props.accessibilityState
+        .disabled,
     ).toBe(true);
   });
 });

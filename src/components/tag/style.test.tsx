@@ -1,7 +1,7 @@
 import Icon from "@/components/icon";
 import { useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { render, renderHook } from "@/root/testing";
+import { render, renderHook, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -40,7 +40,7 @@ describe("Tag sizing and theming", () => {
         <Component testID="tag" value="Design" onClose={jest.fn()} />,
       );
 
-      expect(styleOf(view, "tag-close").minHeight).toBe(
+      expect(styleOf(view, testId("tag", "close")).minHeight).toBe(
         result.current.sizes.elementHeightMd,
       );
     });
@@ -56,7 +56,7 @@ describe("Tag sizing and theming", () => {
         />,
       );
 
-      expect(styleOf(view, "tag-close").minHeight).toBe(
+      expect(styleOf(view, testId("tag", "close")).minHeight).toBe(
         result.current.sizes.elementHeightSm,
       );
     });

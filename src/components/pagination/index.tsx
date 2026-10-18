@@ -19,6 +19,7 @@ import { disabledA11yProps } from "@/features/accessibility";
 import { useIsRtl, useLocale } from "@/features/localization";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import PaginationDot from "./dot";
 import PageIndicator from "./indicator";
@@ -142,7 +143,7 @@ export default function Pagination({
   type = "tertiary",
   size = "medium",
   style,
-  testID,
+  testID = "pagination",
 }: Props) {
   const theme = useTheme();
   const styles = useStyles();
@@ -181,11 +182,7 @@ export default function Pagination({
 
   const step = (direction: -1 | 1) => (
     <IconButton
-      testID={
-        testID === undefined
-          ? undefined
-          : `${testID}-${direction === -1 ? "previous" : "next"}`
-      }
+      testID={testId(testID, direction === -1 ? "previous" : "next")}
       label={t(direction === -1 ? "pagination.previous" : "pagination.next")}
       type={type}
       size={size === "auto" ? "medium" : size}
@@ -216,7 +213,7 @@ export default function Pagination({
         {Array.from({ length: count }, (_, index) => (
           <PaginationDot
             key={index}
-            testID={testID === undefined ? undefined : `${testID}-${index + 1}`}
+            testID={testId(testID, index + 1)}
             active={index + 1 === current}
             label={describe(index + 1)}
             orientation={orientation}
@@ -241,7 +238,7 @@ export default function Pagination({
 
       <View style={styles.pages}>
         <If condition={!compact}>
-          <PageIndicator target={layouts[current]} />
+          <PageIndicator target={layouts[current]} testID={testID} />
         </If>
         <If condition={compact}>
           <Text
@@ -268,9 +265,7 @@ export default function Pagination({
               ) : (
                 <Button
                   key={item}
-                  testID={
-                    testID === undefined ? undefined : `${testID}-${item}`
-                  }
+                  testID={testId(testID, item)}
                   value={String(item)}
                   // "Page 3 of 20", not "3": there is no visible row of numbers
                   // for a screen reader user to read it among.

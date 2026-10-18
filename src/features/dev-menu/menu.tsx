@@ -19,6 +19,7 @@ import { haptics } from "@/features/haptics";
 import { useNetworkStatus } from "@/features/network";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { isDebug } from "@/utils";
 
 import { DEV_MENU_ID, devMenu } from "./control";
 import { registerTrigger, reload } from "./platform";
@@ -124,9 +125,9 @@ function Menu() {
  * builds only — in production it renders nothing and registers nothing.
  */
 export default function DevMenu() {
-  useEffect(() => (__DEV__ ? registerTrigger(devMenu.open) : undefined), []);
+  useEffect(() => (isDebug ? registerTrigger(devMenu.open) : undefined), []);
 
-  if (!__DEV__) return null;
+  if (!isDebug) return null;
   return (
     <Modal id={DEV_MENU_ID} type="bottomSheet">
       <Menu />

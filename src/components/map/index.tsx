@@ -7,6 +7,7 @@ import {
 } from "@maplibre/maplibre-react-native";
 
 import { useLocale } from "@/features/localization";
+import { testId } from "@/utils";
 import { mapStyle, mapTiles, toLngLat } from "@/features/maps";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
@@ -59,7 +60,7 @@ export default function Map({
   onSelectMarker,
   height,
   style,
-  testID,
+  testID = "map",
 }: MapProps) {
   const theme = useTheme();
   const { locale, t } = useLocale();
@@ -95,7 +96,7 @@ export default function Map({
       onCalloutHeight={setCardHeight}
     >
       <MapLibreMap
-        testID="map-engine"
+        testID={testId(testID, "engine")}
         style={styles.engine}
         mapStyle={styleSpec}
         logo={false}
@@ -115,13 +116,18 @@ export default function Map({
             lngLat={toLngLat(marker.coordinate)}
           >
             <MapPin
+              testID={testId(testID, "pin", marker.id)}
               title={marker.title}
               selected={marker.id === selectedId}
               onPress={() => onSelectMarker?.(marker.id)}
             />
           </Marker>
         ))}
-        <UserMarker coordinate={userLocation} label={t("map.yourLocation")} />
+        <UserMarker
+          coordinate={userLocation}
+          label={t("map.yourLocation")}
+          testID={testId(testID, "user-location")}
+        />
       </MapLibreMap>
     </MapFrame>
   );
@@ -134,15 +140,17 @@ export default function Map({
 function UserMarker({
   coordinate,
   label,
+  testID,
 }: {
   coordinate?: MapProps["userLocation"];
   label: string;
+  testID?: string;
 }) {
   if (coordinate === undefined) return null;
 
   return (
     <Marker id="user-location" lngLat={toLngLat(coordinate)}>
-      <UserDot label={label} />
+      <UserDot label={label} testID={testID} />
     </Marker>
   );
 }

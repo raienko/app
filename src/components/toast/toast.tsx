@@ -16,7 +16,7 @@ import { deepLinks } from "@/features/deep-links";
 import { useLocale } from "@/features/localization";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { isIOS, wait } from "@/utils";
+import { isIOS, wait, testId } from "@/utils";
 
 import { TOAST_TYPE_CONFIG } from "./config";
 import { ANIMATION_DURATION } from "./constants";
@@ -32,6 +32,8 @@ export type ToastProps = ToastContent & {
    */
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
+  /** Default `"toast"`; its controls are `<testID>.action` and `<testID>.close`. */
+  testID?: string;
 };
 
 /**
@@ -75,6 +77,7 @@ function ToastComponent({
   onDismiss,
   onPress,
   style,
+  testID = "toast",
 }: ToastProps) {
   const theme = useTheme();
   const { spacing } = useSizes();
@@ -139,6 +142,7 @@ function ToastComponent({
 
   return (
     <View
+      testID={testID}
       // Announced when it appears rather than only when someone navigates
       // to it — a toast the user has to go and find has failed at its one
       // job. The label carries the whole message, since the container
@@ -158,7 +162,7 @@ function ToastComponent({
         <View style={styles.body}>{body}</View>
       ) : (
         <Pressable
-          testID="toast-action"
+          testID={testId(testID, "action")}
           style={styles.body}
           onPress={press}
           // The message is the button's name, and the hint says what
@@ -179,7 +183,7 @@ function ToastComponent({
           exactly the users whose toasts don't expire on their own. */}
       <If condition={dismissible}>
         <IconButton
-          testID="toast-close"
+          testID={testId(testID, "close")}
           label={t("common.close")}
           size="small"
           onPress={onDismiss}

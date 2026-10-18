@@ -12,7 +12,7 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { easeOutClamped } from "@/utils";
+import { easeOutClamped, testId } from "@/utils";
 
 /** How long the indicator takes to slide to a new segment, in ms (0 under Reduce Motion). Matches TabBar's. */
 export const SLIDE_DURATION = 240;
@@ -20,6 +20,8 @@ export const SLIDE_DURATION = 240;
 type Props = {
   /** Where the selected segment sits inside the track, once measured. */
   target?: LayoutRectangle;
+  /** The owner's id; this part derives its own from it. */
+  testID?: string;
 };
 
 /**
@@ -41,7 +43,7 @@ type Props = {
  * The first position is placed without animating, so it doesn't slide in
  * from the corner on mount. Under Reduce Motion it moves instantly.
  */
-export default function SegmentIndicator({ target }: Props) {
+export default function SegmentIndicator({ target, testID }: Props) {
   const theme = useTheme();
   const styles = useStyles();
   const { spacing } = useSizes();
@@ -81,12 +83,12 @@ export default function SegmentIndicator({ target }: Props) {
 
   return (
     <View
-      testID="segmented-control-indicator-layer"
+      testID={testId(testID, "indicator-layer")}
       pointerEvents="none"
       style={styles.layer}
     >
       <Animated.View
-        testID="segmented-control-indicator"
+        testID={testId(testID, "indicator")}
         {...disabledA11yProps()}
         style={[
           styles.indicator,

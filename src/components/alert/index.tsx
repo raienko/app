@@ -8,6 +8,7 @@ import { statusA11yProps } from "@/features/accessibility";
 import { useLocale, type TranslationKey } from "@/features/localization";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme, type ThemeColors } from "@/features/theme";
+import { testId } from "@/utils";
 
 export type AlertType = "info" | "success" | "warning" | "error";
 
@@ -104,7 +105,7 @@ export default function Alert({
   action,
   onDismiss,
   style,
-  testID,
+  testID = "alert",
 }: Props) {
   const theme = useTheme();
   const { spacing } = useSizes();
@@ -154,7 +155,7 @@ export default function Alert({
           />
           <If condition={action}>
             <Button
-              testID="alert-action"
+              testID={testId(testID, "action")}
               value={action?.label ?? ""}
               type="tertiary"
               size="small"
@@ -169,7 +170,7 @@ export default function Alert({
 
       <If condition={onDismiss}>
         <IconButton
-          testID="alert-dismiss"
+          testID={testId(testID, "dismiss")}
           label={t("common.close")}
           size="small"
           onPress={onDismiss}

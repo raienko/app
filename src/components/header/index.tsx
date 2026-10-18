@@ -11,6 +11,7 @@ import Text from "@/components/text";
 import { headingA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 /**
  * What sits in the middle. Three shapes rather than three optional props,
@@ -102,7 +103,7 @@ export default function Header({
   right,
   avoidNotch = false,
   style,
-  testID,
+  testID = "header",
 }: Props) {
   const theme = useTheme();
   const styles = useStyles();
@@ -141,7 +142,7 @@ export default function Header({
     >
       <View style={styles.bar}>
         <View
-          testID="header-left"
+          testID={testId(testID, "left")}
           onLayout={measure("left")}
           style={[styles.slot, styles.slotStart]}
         >
@@ -172,7 +173,7 @@ export default function Header({
         </View>
 
         <View
-          testID="header-right"
+          testID={testId(testID, "right")}
           onLayout={measure("right")}
           style={[styles.slot, styles.slotEnd]}
         >

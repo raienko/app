@@ -21,8 +21,10 @@ import type { MapMarker } from "./types";
 export default function MapCallout({
   marker,
   onHeight,
+  testID,
 }: {
   marker?: MapMarker;
+  testID?: string;
   /** How much of the map the card covers, including its offset from the bottom. */
   onHeight?: (height: number) => void;
 }) {
@@ -35,7 +37,7 @@ export default function MapCallout({
 
   return (
     <View
-      testID="map-callout"
+      testID={testID}
       onLayout={(event) =>
         onHeight?.(event.nativeEvent.layout.height + spacing.x12)
       }

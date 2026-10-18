@@ -7,8 +7,14 @@ import Animated, {
 
 import { useAnimationDuration } from "@/features/accessibility";
 import { useUnits } from "@/features/responsive";
+import { testId } from "@/utils";
 
-import { ANIMATION_DURATION, TRAVEL_DISTANCE } from "./constants";
+import {
+  TOASTS_TEST_ID,
+  ANIMATION_DURATION,
+  TRAVEL_DISTANCE,
+} from "./constants";
+
 import toasts from "./store";
 import Toast from "./toast";
 import type { ToastEntry } from "./types";
@@ -61,6 +67,8 @@ export default function ToastItem({ entry, position }: Props) {
     >
       <Toast
         {...entry}
+        // Each toast on screen by its own id: `toasts.<id>.close`.
+        testID={testId(TOASTS_TEST_ID, entry.id)}
         onDismiss={() => toasts.hide(entry.id)}
         onPress={() => toasts.hide(entry.id)}
       />

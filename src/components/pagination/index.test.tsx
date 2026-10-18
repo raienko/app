@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@/root/testing";
+import { fireEvent, render, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -48,7 +48,7 @@ describe(`${Component.name} smoke test`, () => {
       />,
     );
 
-    fireEvent.press(view.getByTestId("pages-3"));
+    fireEvent.press(view.getByTestId(testId("pages", 3)));
 
     expect(onChange).toHaveBeenCalledWith(3);
   });
@@ -65,7 +65,7 @@ describe(`${Component.name} smoke test`, () => {
       />,
     );
 
-    fireEvent.press(view.getByTestId("pages-3"));
+    fireEvent.press(view.getByTestId(testId("pages", 3)));
 
     expect(onChange).not.toHaveBeenCalled();
   });
@@ -83,10 +83,10 @@ describe(`${Component.name} smoke test`, () => {
         />,
       );
 
-      fireEvent.press(view.getByTestId("pages-previous"));
+      fireEvent.press(view.getByTestId(testId("pages", "previous")));
       expect(onChange).toHaveBeenLastCalledWith(2);
 
-      fireEvent.press(view.getByTestId("pages-next"));
+      fireEvent.press(view.getByTestId(testId("pages", "next")));
       expect(onChange).toHaveBeenLastCalledWith(4);
     });
   });

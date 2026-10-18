@@ -23,6 +23,7 @@ type Props = {
   hsv: Hsv;
   onChange: (hsv: Hsv) => void;
   disabled?: boolean;
+  testID?: string;
 };
 
 type KeyEvent = {
@@ -38,7 +39,7 @@ type KeyEvent = {
  *
  * Left-to-right whatever the locale, like the square above it.
  */
-export default function ColorHue({ hsv, onChange, disabled }: Props) {
+export default function ColorHue({ hsv, onChange, disabled, testID }: Props) {
   const styles = useStyles();
   const { t } = useLocale();
   const id = `hue-${useId().replace(/:/g, "")}`;
@@ -91,7 +92,7 @@ export default function ColorHue({ hsv, onChange, disabled }: Props) {
           if (nativeEvent.actionName === "decrement") turn(-STEP);
         }}
         onLayout={drag.onLayout}
-        testID="color-picker-hue"
+        testID={testID}
         style={styles.bar}
       >
         {/* Sized in pixels from the measured box rather than "100%":

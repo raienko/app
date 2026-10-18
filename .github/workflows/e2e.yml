@@ -1,0 +1,148 @@
+name: E2E
+
+# End-to-end flows (Maestro, .maestro/) against a Release build made with
+# EXPO_PUBLIC_E2E=1: English, no autoplay, no dev menu or LogBox — see
+# `isE2E` in @/utils. One job per platform, so a pull request lists
+# "E2E / iOS", "E2E / Android" and "E2E / Web" separately. All three run
+# the same flows; web runs them in headless Chromium, which Maestro
+# downloads itself.
+#
+# Manual for now: run it from the Actions tab and pick a platform. To run it
+# on pull requests later, add `pull_request:` (it's slow — ~20 min a
+# platform — so a label or path filter is worth having).
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: Platform to run on
+        type: choice
+        options: [all, ios, android, web]
+        default: all
+      tags:
+        description: Only flows with these tags (comma-separated, empty = all)
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  MAESTRO_VERSION: 2.11.0
+  # Maestro's own analytics prompt and upload, off for CI.
+  MAESTRO_CLI_NO_ANALYTICS: "1"
+  MAESTRO_CLI_ANALYSIS_NOTIFICATION_DISABLED: "true"
+
+jobs:
+  ios:
+    name: iOS
+    if: inputs.platform == 'all' || inputs.platform == 'ios'
+    runs-on: macos-15
+    timeout-minutes: 60
+    steps:
+      - name: Check out
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Set up project
+        uses: ./.github/actions/setup
+      - name: Install Maestro
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+      - name: Build and install the E2E app on a simulator
+        run: yarn e2e:ios
+      - name: Run flows
+        run: yarn e2e:test ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }} --format junit --output maestro-report.xml
+      - name: Upload Maestro report and screenshots
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: e2e-ios
+          path: |
+            maestro-report.xml
+            ~/.maestro/tests/
+          retention-days: 7
+
+  android:
+    name: Android
+    if: inputs.platform == 'all' || inputs.platform == 'android'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Set up project
+        uses: ./.github/actions/setup
+      - name: Set up Java
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4.9.1
+        with:
+          distribution: temurin
+          java-version: "17"
+      # Hardware acceleration for the emulator on a Linux runner.
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Install Maestro
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+      - name: Build, install and run flows on an emulator
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: 35
+          arch: x86_64
+          target: google_apis
+          disable-animations: true
+          script: |
+            yarn e2e:android
+            yarn e2e:test ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }} --format junit --output maestro-report.xml
+      - name: Upload Maestro report and screenshots
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: e2e-android
+          path: |
+            maestro-report.xml
+            ~/.maestro/tests/
+          retention-days: 7
+
+  web:
+    name: Web
+    if: inputs.platform == 'all' || inputs.platform == 'web'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - name: Set up project
+        uses: ./.github/actions/setup
+      - name: Install Maestro
+        run: |
+          curl -fsSL "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+      - name: Export the E2E web app
+        run: yarn web:build
+        env:
+          EXPO_PUBLIC_E2E: "1"
+      - name: Serve it
+        run: |
+          npx expo serve --port 8081 > serve.log 2>&1 &
+          for _ in $(seq 1 60); do curl -fs http://localhost:8081 > /dev/null && exit 0; sleep 1; done
+          cat serve.log; exit 1
+      - name: Run flows
+        run: yarn e2e:test:web ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }} --format junit --output maestro-report.xml
+        env:
+          WEB_URL: http://localhost:8081
+      - name: Upload Maestro report and screenshots
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: e2e-web
+          path: |
+            maestro-report.xml
+            ~/.maestro/tests/
+          retention-days: 7

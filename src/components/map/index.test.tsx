@@ -1,6 +1,6 @@
 import { openURL } from "expo-linking";
 
-import { fireEvent, render, screen } from "@/root/testing";
+import { fireEvent, render, screen, testId } from "@/root/testing";
 
 import Component, { type MapMarker } from "./index";
 
@@ -78,7 +78,7 @@ describe(`${Component.name}`, () => {
   it("has no callout when nothing is selected", async () => {
     await render(<Component label="Places" markers={MARKERS} />);
 
-    expect(screen.queryByTestId("map-callout")).toBeNull();
+    expect(screen.queryByTestId(testId("map", "callout"))).toBeNull();
   });
 
   it("frames the markers and the user together", async () => {
@@ -91,13 +91,13 @@ describe(`${Component.name}`, () => {
     );
 
     expect(camera().bounds).toEqual([-9.15, 38.7105, -9.1373, 38.72]);
-    expect(screen.getByTestId("map-user-location")).toBeTruthy();
+    expect(screen.getByTestId(testId("map", "user-location"))).toBeTruthy();
   });
 
   it("leaves the user's dot out when there's no position", async () => {
     await render(<Component label="Places" markers={MARKERS} />);
 
-    expect(screen.queryByTestId("map-user-location")).toBeNull();
+    expect(screen.queryByTestId(testId("map", "user-location"))).toBeNull();
   });
 
   it("goes to an explicit center when given one", async () => {
@@ -117,7 +117,7 @@ describe(`${Component.name}`, () => {
     await render(<Component label="Places" markers={[]} />);
 
     const background = JSON.parse(
-      screen.getByTestId("map-engine").props.accessibilityValue.text,
+      screen.getByTestId(testId("map", "engine")).props.accessibilityValue.text,
     );
     expect(background.paint["background-color"]).toMatch(/^#/);
   });
@@ -128,7 +128,7 @@ describe(`${Component.name}`, () => {
     );
     const before = camera().padding as { bottom: number; top: number };
 
-    await fireEvent(screen.getByTestId("map-callout"), "layout", {
+    await fireEvent(screen.getByTestId(testId("map", "callout")), "layout", {
       nativeEvent: { layout: { height: 80, width: 300, x: 0, y: 0 } },
     });
 

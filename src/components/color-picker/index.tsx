@@ -7,6 +7,7 @@ import { controlA11yProps } from "@/features/accessibility";
 import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import ColorArea from "./area";
 import { BLACK, hexToHsv, hsvToHex, normalizeHex, type Hsv } from "./color";
@@ -56,7 +57,7 @@ export default function ColorPicker({
   preview = true,
   disabled = false,
   style,
-  testID,
+  testID = "color-picker",
 }: Props) {
   const theme = useTheme();
   const styles = useStyles();
@@ -100,7 +101,7 @@ export default function ColorPicker({
                   selected,
                   disabled,
                 })}
-                testID={`color-picker-preset-${presetHex}`}
+                testID={testId(testID, "preset", presetHex)}
                 disabled={disabled}
                 onPress={() => change(hexToHsv(presetHex))}
                 style={[
@@ -119,8 +120,18 @@ export default function ColorPicker({
         </View>
       </If>
 
-      <ColorArea hsv={hsv} onChange={change} disabled={disabled} />
-      <ColorHue hsv={hsv} onChange={change} disabled={disabled} />
+      <ColorArea
+        testID={testId(testID, "area")}
+        hsv={hsv}
+        onChange={change}
+        disabled={disabled}
+      />
+      <ColorHue
+        testID={testId(testID, "hue")}
+        hsv={hsv}
+        onChange={change}
+        disabled={disabled}
+      />
 
       <If condition={preview}>
         <View style={styles.preview}>
@@ -130,7 +141,7 @@ export default function ColorPicker({
               { backgroundColor: hex, borderColor: theme.colors.divider },
             ]}
           />
-          <Text value={hex} selectable testID="color-picker-hex" />
+          <Text value={hex} selectable testID={testId(testID, "hex")} />
         </View>
       </If>
     </View>

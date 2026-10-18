@@ -10,6 +10,7 @@ import { fieldA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 
 import FormField from "@/components/form-field";
+import { testId } from "@/utils";
 import type {
   CodeCharset,
   CodeInputTypeProps,
@@ -70,6 +71,7 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
     style,
     onFocus,
     onBlur,
+    testID = "code",
   },
   ref,
 ) {
@@ -114,7 +116,7 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
       {/* The invisible input would mostly catch the tap itself, but that
           leaves focus depending on hit-testing a zero-opacity view. */}
       <Pressable
-        testID="code-row"
+        testID={testId(testID, "row")}
         onPress={() => inputRef.current?.focus()}
         disabled={disabled}
         // Left accessible, a Pressable wrapping a TextInput gives a screen
@@ -125,6 +127,7 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
         {characters.map((character, index) => (
           <CodeCell
             key={index}
+            testID={testId(testID, "cell", index)}
             index={index}
             character={character}
             active={focused && !disabled && index === cursor}

@@ -8,7 +8,15 @@ import {
 import { Text } from "react-native";
 
 import { permissions } from "@/features/permissions";
-import { act, fireEvent, render, screen, waitFor } from "@/root/testing";
+import {
+  act,
+  ANY,
+  fireEvent,
+  render,
+  screen,
+  testIdPattern,
+  waitFor,
+} from "@/root/testing";
 
 import Component from "./index";
 
@@ -83,7 +91,9 @@ describe("ImagePicker", () => {
     expect(
       await screen.findByRole("button", { name: "Gallery" }),
     ).toBeOnTheScreen();
-    expect(screen.getByTestId("modal-drag-handle")).toBeOnTheScreen();
+    expect(
+      screen.getByTestId(testIdPattern("modal", ANY, "drag-handle")),
+    ).toBeOnTheScreen();
 
     await act(() => Component.hide(ID));
     expect(screen.queryByRole("button", { name: "Gallery" })).toBeNull();

@@ -1,7 +1,7 @@
 import { AccessibilityInfo, View } from "react-native";
 
 import Text from "@/components/text";
-import { render, waitFor } from "@/root/testing";
+import { render, testId, waitFor } from "@/root/testing";
 
 import Component from "./index";
 
@@ -43,7 +43,7 @@ describe(`${Component.name} smoke test`, () => {
         <Component testID="skeleton" source={ARTWORK} />,
       );
 
-      const highlight = view.getByTestId("skeleton-shimmer", hidden);
+      const highlight = view.getByTestId(testId("skeleton", "shimmer"), hidden);
       const [base, copy] = view.getAllByTestId("image", hidden);
       expect(highlight).toBeTruthy();
       expect(copy.props.tintColor).not.toBe(base.props.tintColor);
@@ -54,7 +54,9 @@ describe(`${Component.name} smoke test`, () => {
         <Component testID="skeleton" source={ARTWORK} animated={false} />,
       );
 
-      expect(view.queryByTestId("skeleton-shimmer", hidden)).toBeNull();
+      expect(
+        view.queryByTestId(testId("skeleton", "shimmer"), hidden),
+      ).toBeNull();
       expect(view.getAllByTestId("image", hidden)).toHaveLength(1);
     });
 
@@ -67,7 +69,9 @@ describe(`${Component.name} smoke test`, () => {
         </Component>,
       );
 
-      expect(view.queryByTestId("skeleton-shimmer", hidden)).toBeNull();
+      expect(
+        view.queryByTestId(testId("skeleton", "shimmer"), hidden),
+      ).toBeNull();
     });
   });
 
@@ -94,7 +98,9 @@ describe(`${Component.name} smoke test`, () => {
       );
 
       await waitFor(() => {
-        expect(view.queryByTestId("skeleton-shimmer", hidden)).toBeNull();
+        expect(
+          view.queryByTestId(testId("skeleton", "shimmer"), hidden),
+        ).toBeNull();
       });
     });
 

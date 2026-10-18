@@ -3,7 +3,7 @@ import { StyleSheet, Text as RNText, type ViewStyle } from "react-native";
 import Icon from "@/components/icon";
 import Button from "..";
 import { useTheme } from "@/features/theme";
-import { fireEvent, render, screen } from "@/root/testing";
+import { fireEvent, render, screen, testId } from "@/root/testing";
 
 import Component from ".";
 
@@ -104,7 +104,7 @@ describe(`${Component.name} smoke test`, () => {
     const button = screen.getByRole("button", { name: "Saving" });
     expect(button).toBeBusy();
     expect(button).toBeDisabled();
-    expect(screen.getByTestId("button-loading")).toBeOnTheScreen();
+    expect(screen.getByTestId(testId("button", "loading"))).toBeOnTheScreen();
 
     await fireEvent.press(button);
     expect(onPress).not.toHaveBeenCalled();

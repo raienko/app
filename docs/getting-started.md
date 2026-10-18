@@ -49,24 +49,27 @@
 
 ## Scripts
 
-| Script                            | What it does                                                            |
-| --------------------------------- | ----------------------------------------------------------------------- |
-| `yarn start`                      | Metro, choose platform interactively (opens Expo Go)                    |
-| `yarn web` / `ios` / `android`    | Run on a given platform (ios/android build a real dev client)           |
-| `yarn web:build`                  | Export the web app and API routes into `dist/` (server output)          |
-| `yarn native:bundle`              | Build the iOS and Android JS bundles — catches Metro errors on native   |
-| `yarn doctor`                     | Expo Doctor: SDK versions, peer dependencies, project setup             |
-| `yarn lint`                       | ESLint (`expo lint`)                                                    |
-| `yarn typecheck`                  | `tsc --noEmit`                                                          |
-| `yarn test`                       | Jest                                                                    |
-| `yarn test:coverage`              | Jest with a coverage summary (`coverage/`)                              |
-| `yarn format` / `format:check`    | Prettier write / check                                                  |
-| `yarn secrets:check`              | Scan the repo for committed secrets                                     |
-| `yarn verify`                     | The fast gates in one go: format, lint, types, secrets, tests           |
-| `yarn storybook:native`           | On-device Storybook (Metro, opens on whatever device/emulator you pick) |
-| `yarn storybook:ios` / `:android` | On-device Storybook, direct to one platform                             |
-| `yarn storybook:web`              | Web Storybook (Vite) at `localhost:6006`                                |
-| `yarn storybook:web:build`        | Build the web Storybook for static hosting                              |
+| Script                            | What it does                                                               |
+| --------------------------------- | -------------------------------------------------------------------------- |
+| `yarn start`                      | Metro, choose platform interactively (opens Expo Go)                       |
+| `yarn web` / `ios` / `android`    | Run on a given platform (ios/android build a real dev client)              |
+| `yarn e2e:ios` / `e2e:android`    | Build and install a Release app for end-to-end tests (`EXPO_PUBLIC_E2E=1`) |
+| `yarn e2e:test` / `e2e:test:web`  | Run the Maestro flows against the installed app / the web build            |
+| `yarn e2e:start` / `e2e:web`      | Dev server with `EXPO_PUBLIC_E2E=1`, to look at what a test run sees       |
+| `yarn web:build`                  | Export the web app and API routes into `dist/` (server output)             |
+| `yarn native:bundle`              | Build the iOS and Android JS bundles — catches Metro errors on native      |
+| `yarn doctor`                     | Expo Doctor: SDK versions, peer dependencies, project setup                |
+| `yarn lint`                       | ESLint (`expo lint`)                                                       |
+| `yarn typecheck`                  | `tsc --noEmit`                                                             |
+| `yarn test`                       | Jest                                                                       |
+| `yarn test:coverage`              | Jest with a coverage summary (`coverage/`)                                 |
+| `yarn format` / `format:check`    | Prettier write / check                                                     |
+| `yarn secrets:check`              | Scan the repo for committed secrets                                        |
+| `yarn verify`                     | The fast gates in one go: format, lint, types, secrets, tests              |
+| `yarn storybook:native`           | On-device Storybook (Metro, opens on whatever device/emulator you pick)    |
+| `yarn storybook:ios` / `:android` | On-device Storybook, direct to one platform                                |
+| `yarn storybook:web`              | Web Storybook (Vite) at `localhost:6006`                                   |
+| `yarn storybook:web:build`        | Build the web Storybook for static hosting                                 |
 
 ---
 
@@ -88,6 +91,33 @@ Set up via [husky](https://typicode.github.io/husky) + [lint-staged](https://git
 
 ---
 
+## End-to-end tests
+
+[Maestro](https://docs.maestro.dev) flows, run against an app built with `EXPO_PUBLIC_E2E=1`. That build holds the app still: English whatever the device language, no Carousel autoplay, no dev menu or LogBox — see `isE2E` in [Utilities](../src/utils/index.md).
+
+**One flow per journey, for every platform.** `.maestro/flows/` holds the flows; `.maestro/subflows/` holds steps they share through `runFlow`. The same file runs on iOS, Android and web:
+
+- **Selectors are unified.** Select by `id:` — a component's `testID` — and by English text for what the user reads. Every component has a **default id** (`screen`, `carousel`, `toast`, …) and builds its parts from it with `testId()` from `@/utils` (`screen.header`, `carousel.dot.2`, `toasts.<id>.close`); passing `testID` only renames the prefix, so it's never required. Two un-named instances of a component share their default id — give one a `testID` when a flow needs to tell them apart. Lint keeps it that way: a string or template literal in a component's `testID` is an error.
+- **Web is made to behave like the phones.** An E2E web build (`src/root/e2e-page`) copies each `data-testid` into the element's `id` — Maestro's web driver reads `id`, then `aria-label`, and `data-testid` last — and lets the page itself scroll, since Maestro scrolls the browser window rather than the app's ScrollView.
+- **Prefer actions every platform has.** Maestro can't drive a pan gesture in the browser, so a flow moves a Carousel with its dots, which are the buttons a keyboard or screen-reader user has too. A step that only makes sense on touch (a swipe) goes in a subflow called under `when: platform: iOS` / `Android`.
+- **One header, swapped for web.** Flows start with `appId: ${APP_ID}`; Maestro only drives a browser for `url:`, so `yarn e2e:test:web` writes a copy of each flow with that one line swapped into the gitignored `.maestro/.web/`.
+
+```bash
+# iOS / Android: build + install a Release E2E app on the running simulator/emulator, then run
+yarn e2e:ios          # or: yarn e2e:android
+yarn e2e:test         # extra args go to Maestro, e.g. --include-tags smoke
+
+# Web: E2E dev server, then the same flows in headless Chromium
+yarn e2e:web
+yarn e2e:test:web     # WEB_URL=… to point it elsewhere (CI uses the production export)
+```
+
+- **Release on mobile:** no dev-client launcher to get past, nothing reloads mid-run, and the flag is baked in at build time. Rebuild after changing JS. `yarn e2e:android` compiles native code only for the device's CPU architecture (pass `--device <AVD>` when several are running).
+- **`yarn e2e:test` picks the device** when exactly one is running (one booted simulator, no Android device); otherwise pass `--device <id>`.
+- **CI:** the **E2E** workflow (manual for now) runs the flows on iOS, Android and web, one job each.
+
+---
+
 ## CI
 
 GitHub Actions, in `.github/`. **Every workflow is manual for now** (Actions tab → Run workflow); each file's header says which trigger to add to make it automatic.
@@ -97,6 +127,7 @@ GitHub Actions, in `.github/`. **Every workflow is manual for now** (Actions tab
 | **Checks**       | `workflows/checks.yml`       | Formatting · Lint · Types · Unit tests (coverage in the job summary) · Secret scan · Expo Doctor · Web build · Native bundles · Storybook build · Dependency review |
 | **Storybook**    | `workflows/storybook.yml`    | Checks → Build → Publish to GitHub Pages                                                                                                                            |
 | **Pull request** | `workflows/pull-request.yml` | Title format — `type: 'Message'`, the house commit style, since a squash merge makes the title the commit                                                           |
+| **E2E**          | `workflows/e2e.yml`          | iOS · Android · Web — builds the E2E app, runs the Maestro flows; report and screenshots uploaded on failure. Pick the platform and tags when you run it            |
 | Dependabot       | `dependabot.yml`             | Weekly grouped updates for actions and npm, Expo SDK packages excluded. Paused (`open-pull-requests-limit: 0`)                                                      |
 
 - **Checks run as separate jobs** so a pull request lists each by name ("Checks / Lint", "Checks / Web build") and branch protection can require the ones that matter.

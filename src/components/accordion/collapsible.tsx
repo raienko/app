@@ -23,6 +23,7 @@ type Props = {
   /** Already through `useAnimationDuration()`, so 0 under Reduce Motion. */
   duration: number;
   contentStyle?: StyleProp<ViewStyle>;
+  contentTestID?: string;
   children: ReactNode;
 };
 
@@ -51,6 +52,7 @@ export default function Collapsible({
   open,
   duration,
   contentStyle,
+  contentTestID,
   children,
 }: Props) {
   // Stays true through the collapse so the content can animate out.
@@ -137,7 +139,7 @@ export default function Collapsible({
         <Animated.View style={[fill, contentLayout]}>
           {/* Measured on a plain View: on the web, Animated.View doesn't
               forward onLayout. */}
-          <View style={contentStyle} onLayout={measure}>
+          <View testID={contentTestID} style={contentStyle} onLayout={measure}>
             {children}
           </View>
         </Animated.View>

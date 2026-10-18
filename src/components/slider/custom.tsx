@@ -9,6 +9,7 @@ import {
 import { useIsRtl } from "@/features/localization";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import {
   changeSliderThumb,
@@ -72,13 +73,13 @@ export default function CustomSlider(props: SliderImplementationProps) {
   return (
     <View
       accessible={false}
-      testID={props.testID ? `${props.testID}-control` : undefined}
+      testID={testId(props.testID, "control")}
       onLayout={handleLayout}
       style={[styles.control, props.disabled ? styles.disabled : null]}
     >
       <View
         accessible={false}
-        testID={props.testID ? `${props.testID}-track` : undefined}
+        testID={testId(props.testID, "track")}
         onStartShouldSetResponder={() => !props.disabled}
         onResponderGrant={handleTrackResponderGrant}
         style={[styles.trackPressable, { paddingHorizontal: thumbSize / 2 }]}

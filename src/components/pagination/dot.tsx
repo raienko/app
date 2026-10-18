@@ -13,7 +13,7 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { easeOutClamped } from "@/utils";
+import { easeOutClamped, testId } from "@/utils";
 
 type Props = {
   active: boolean;
@@ -100,7 +100,7 @@ export default function PaginationDot({
       ]}
     >
       <Animated.View
-        testID="pagination-dot-shape"
+        testID={testId(testID, "shape")}
         style={[styles.dot, shape]}
       />
     </Pressable>

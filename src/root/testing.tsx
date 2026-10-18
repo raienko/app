@@ -28,3 +28,8 @@ export function renderHook<Result, Props>(
 }
 
 export * from "@testing-library/react-native";
+
+// Ids in tests come from the same helper the components use, so a change
+// to the format never touches a test.
+export { ANY, testIdPattern } from "@/utils/test-id";
+export { testId } from "@/utils";

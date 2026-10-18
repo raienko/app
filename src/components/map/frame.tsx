@@ -3,6 +3,7 @@ import { View } from "react-native";
 
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import MapCallout from "./callout";
 import type { MapMarker, MapProps } from "./types";
@@ -47,7 +48,11 @@ export default function MapFrame({
       ]}
     >
       {children}
-      <MapCallout marker={selected} onHeight={onCalloutHeight} />
+      <MapCallout
+        marker={selected}
+        onHeight={onCalloutHeight}
+        testID={testId(testID, "callout")}
+      />
     </View>
   );
 }

@@ -8,6 +8,7 @@ type Props = {
   style?: StyleProp<ViewStyle>;
   /** Kept identical to the image's own — see the note in ./index.tsx. */
   a11yProps: object;
+  testID?: string;
 };
 
 /**
@@ -25,14 +26,14 @@ type Props = {
  * branded product placeholder — passes it as `Image`'s `fallback` and never
  * reaches this.
  */
-export default function ImageFallback({ style, a11yProps }: Props) {
+export default function ImageFallback({ style, a11yProps, testID }: Props) {
   const theme = useTheme();
   const { spacing } = useSizes();
   const styles = useStyles();
 
   return (
     <View
-      testID="image-fallback"
+      testID={testID}
       {...a11yProps}
       style={[
         styles.fallback,

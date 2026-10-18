@@ -7,7 +7,7 @@ import { disabledA11yProps, sliderA11yProps } from "@/features/accessibility";
 import { formatNumber, useLocale } from "@/features/localization";
 import { createStyles, type TypographyToken } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { isWeb } from "@/utils";
+import { isWeb, testId } from "@/utils";
 
 import { canStep, clamp, nextValue } from "./step";
 
@@ -190,7 +190,7 @@ export default function Stepper({
           {...disabledA11yProps()}
           focusable={false}
           {...(isWeb ? { tabIndex: -1 } : null)}
-          testID={testID === undefined ? undefined : `${testID}-decrease`}
+          testID={testId(testID, "decrease")}
           label={t("stepper.decrease", { label })}
           size={size}
           disabled={!canDecrease}
@@ -211,7 +211,7 @@ export default function Stepper({
           {...disabledA11yProps()}
           focusable={false}
           {...(isWeb ? { tabIndex: -1 } : null)}
-          testID={testID === undefined ? undefined : `${testID}-increase`}
+          testID={testId(testID, "increase")}
           label={t("stepper.increase", { label })}
           size={size}
           disabled={!canIncrease}

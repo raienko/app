@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@/root/testing";
+import { fireEvent, render, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -43,7 +43,7 @@ describe(`${Component.name} smoke test`, () => {
         />,
       );
 
-      fireEvent.press(view.getByTestId("stepper-increase", hidden));
+      fireEvent.press(view.getByTestId(testId("stepper", "increase"), hidden));
 
       expect(onChange).toHaveBeenCalledWith(4);
     });
@@ -59,7 +59,7 @@ describe(`${Component.name} smoke test`, () => {
         />,
       );
 
-      fireEvent.press(view.getByTestId("stepper-decrease", hidden));
+      fireEvent.press(view.getByTestId(testId("stepper", "decrease"), hidden));
 
       expect(onChange).toHaveBeenCalledWith(2);
     });
@@ -77,7 +77,7 @@ describe(`${Component.name} smoke test`, () => {
         />,
       );
 
-      fireEvent.press(view.getByTestId("stepper-increase", hidden));
+      fireEvent.press(view.getByTestId(testId("stepper", "increase"), hidden));
 
       expect(onChange).toHaveBeenCalledWith(1.5);
     });
@@ -99,12 +99,12 @@ describe(`${Component.name} smoke test`, () => {
       );
 
       expect(
-        view.getByTestId("stepper-decrease", hidden).props.accessibilityState
-          .disabled,
+        view.getByTestId(testId("stepper", "decrease"), hidden).props
+          .accessibilityState.disabled,
       ).toBe(true);
       expect(
-        view.getByTestId("stepper-increase", hidden).props.accessibilityState
-          .disabled,
+        view.getByTestId(testId("stepper", "increase"), hidden).props
+          .accessibilityState.disabled,
       ).toBe(false);
     });
 
@@ -121,7 +121,7 @@ describe(`${Component.name} smoke test`, () => {
         />,
       );
 
-      fireEvent.press(view.getByTestId("stepper-increase", hidden));
+      fireEvent.press(view.getByTestId(testId("stepper", "increase"), hidden));
 
       expect(onChange).not.toHaveBeenCalled();
     });
@@ -154,12 +154,12 @@ describe(`${Component.name} smoke test`, () => {
       );
 
       expect(
-        view.getByTestId("stepper-decrease", hidden).props.accessibilityState
-          .disabled,
+        view.getByTestId(testId("stepper", "decrease"), hidden).props
+          .accessibilityState.disabled,
       ).toBe(true);
       expect(
-        view.getByTestId("stepper-increase", hidden).props.accessibilityState
-          .disabled,
+        view.getByTestId(testId("stepper", "increase"), hidden).props
+          .accessibilityState.disabled,
       ).toBe(true);
     });
 
@@ -175,7 +175,7 @@ describe(`${Component.name} smoke test`, () => {
         />,
       );
 
-      fireEvent.press(view.getByTestId("stepper-increase", hidden));
+      fireEvent.press(view.getByTestId(testId("stepper", "increase"), hidden));
 
       expect(onChange).not.toHaveBeenCalled();
     });

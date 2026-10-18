@@ -16,6 +16,7 @@ type Props = {
   onPress: () => void;
   /** Reports this segment's box, which the sliding indicator moves to. */
   onLayout: (layout: LayoutRectangle) => void;
+  testID?: string;
 };
 
 /**
@@ -29,6 +30,7 @@ type Props = {
  * "button, selected" would lose the fact that picking one unpicks the rest.
  */
 export default function Segment({
+  testID,
   option,
   separated,
   selected,
@@ -42,7 +44,7 @@ export default function Segment({
   return (
     <Pressable
       {...radioA11yProps({ label: option.label, checked: selected, disabled })}
-      testID={option.testID}
+      testID={testID}
       disabled={disabled}
       onLayout={(event) => onLayout(event.nativeEvent.layout)}
       // A press on the current segment is not a change — reporting it would

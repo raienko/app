@@ -22,12 +22,12 @@
 
 ## Also in the code
 
-| Guide                                                    | What it covers                                                                                           |
-| -------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
-| [**Root & Providers**](../src/root/index.md)             | The provider tree around every screen, shared with tests and Storybook                                   |
-| [**API routes**](../src/app/api/index.md)                | Server endpoints in `src/app/api` (`GET /api/health`), and what server output means for the web build    |
-| [**The showcase app**](../src/screens/showcase/index.md) | What each section of the running app demonstrates                                                        |
-| [**Utilities**](../src/utils/index.md)                   | `isWeb`/`isIOS`/`isAndroid`, `seconds(17)`/`days(30)` time spans, `wait`, common hooks, `easeOutClamped` |
+| Guide                                                    | What it covers                                                                                                    |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| [**Root & Providers**](../src/root/index.md)             | The provider tree around every screen, shared with tests and Storybook                                            |
+| [**API routes**](../src/app/api/index.md)                | Server endpoints in `src/app/api` (`GET /api/health`), and what server output means for the web build             |
+| [**The showcase app**](../src/screens/showcase/index.md) | What each section of the running app demonstrates                                                                 |
+| [**Utilities**](../src/utils/index.md)                   | `isWeb`/`isIOS`/`isAndroid`, `isE2E`, `seconds(17)`/`days(30)` time spans, `wait`, common hooks, `easeOutClamped` |
 
 ## Conventions
 

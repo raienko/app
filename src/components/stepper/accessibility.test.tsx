@@ -1,4 +1,4 @@
-import { render } from "@/root/testing";
+import { render, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -111,7 +111,7 @@ describe("Stepper accessibility", () => {
           onChange={jest.fn()}
         />,
       );
-      const { props } = view.getByTestId(`stepper-${which}`, hidden);
+      const { props } = view.getByTestId(testId("stepper", which), hidden);
 
       expect(props.accessible).toBe(false);
       expect(props.accessibilityElementsHidden).toBe(true);
@@ -131,7 +131,7 @@ describe("Stepper accessibility", () => {
     );
 
     expect(view.queryByRole("button")).toBeNull();
-    expect(view.queryByTestId("stepper-increase")).toBeNull();
+    expect(view.queryByTestId(testId("stepper", "increase"))).toBeNull();
     expect(view.getByTestId("stepper")).toBeTruthy();
   });
 

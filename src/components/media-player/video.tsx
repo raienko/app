@@ -5,6 +5,7 @@ import { View } from "react-native";
 
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import MediaControls from "./controls";
 import type { MediaImplementationProps, MediaTransport } from "./types";
@@ -110,7 +111,7 @@ export default function VideoMediaPlayer({
           transport={transport}
           // Derived, not the same id: the player region already carries
           // `testID`, and two elements answering to one is ambiguous.
-          testID={testID === undefined ? undefined : `${testID}-controls`}
+          testID={testId(testID, "controls")}
         />
       )}
     </View>

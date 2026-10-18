@@ -15,6 +15,7 @@ import { useAnimationDuration } from "@/features/accessibility";
 import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import ViewerThumbnails from "./thumbnails";
 import type { ImageViewerItem } from "./types";
@@ -32,6 +33,7 @@ type Props = {
   onClose: () => void;
   onShare?: () => void;
   onSelect: (index: number) => void;
+  testID?: string;
 };
 
 /**
@@ -45,6 +47,7 @@ type Props = {
  * picture under it.
  */
 export default function ViewerControls({
+  testID,
   images,
   index,
   visible,
@@ -83,7 +86,7 @@ export default function ViewerControls({
         <View style={[styles.scrim, scrim]} />
         <View style={styles.bar}>
           <IconButton
-            testID="image-viewer-close"
+            testID={testId(testID, "close")}
             label={t("imageViewer.close")}
             onPress={onClose}
           >
@@ -109,7 +112,7 @@ export default function ViewerControls({
           <View style={styles.trailing}>
             <If condition={onShare}>
               <IconButton
-                testID="image-viewer-share"
+                testID={testId(testID, "share")}
                 label={t("imageViewer.share")}
                 onPress={onShare}
               >
@@ -127,7 +130,7 @@ export default function ViewerControls({
         <View style={[styles.scrim, scrim]} />
         <If condition={item?.caption}>
           <Text
-            testID="image-viewer-caption"
+            testID={testId(testID, "caption")}
             value={item?.caption ?? ""}
             type="callout"
             numberOfLines={3}
@@ -136,6 +139,7 @@ export default function ViewerControls({
         </If>
         <If condition={images.length > 1}>
           <ViewerThumbnails
+            testID={testID}
             images={images}
             index={index}
             describe={describe}

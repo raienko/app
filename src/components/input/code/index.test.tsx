@@ -1,7 +1,7 @@
 import { createRef } from "react";
 import type { TextInput } from "react-native";
 
-import { fireEvent, render, screen, waitFor } from "@/root/testing";
+import { fireEvent, render, screen, testId, waitFor } from "@/root/testing";
 
 import Component from "./index";
 
@@ -19,7 +19,7 @@ const field = () => screen.getByLabelText("Code");
  */
 function drawn(length = 6): string[] {
   return Array.from({ length }, (_, index) => {
-    const cell = screen.getByTestId(`code-cell-${index}`, {
+    const cell = screen.getByTestId(testId("code", "cell", index), {
       includeHiddenElements: true,
     });
     const [text] = cell.children;
@@ -43,7 +43,9 @@ describe(`${Component.displayName} smoke test`, () => {
 
     expect(drawn(4)).toEqual(["", "", "", ""]);
     expect(
-      screen.queryByTestId("code-cell-4", { includeHiddenElements: true }),
+      screen.queryByTestId(testId("code", "cell", 4), {
+        includeHiddenElements: true,
+      }),
     ).toBeNull();
   });
 
@@ -173,7 +175,7 @@ describe(`${Component.displayName} smoke test`, () => {
       });
       const focus = jest.spyOn(ref.current as TextInput, "focus");
 
-      await fireEvent.press(screen.getByTestId("code-row"));
+      await fireEvent.press(screen.getByTestId(testId("code", "row")));
 
       expect(focus).toHaveBeenCalled();
     });

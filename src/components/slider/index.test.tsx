@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@/root/testing";
+import { fireEvent, render, screen, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -70,11 +70,15 @@ describe(`${Component.name} smoke test`, () => {
       />,
     );
 
-    await fireEvent(screen.getByTestId("custom-slider-control"), "layout", {
-      nativeEvent: { layout: { width: 244, height: 44, x: 0, y: 0 } },
-    });
     await fireEvent(
-      screen.getByTestId("custom-slider-track"),
+      screen.getByTestId(testId("custom-slider", "control")),
+      "layout",
+      {
+        nativeEvent: { layout: { width: 244, height: 44, x: 0, y: 0 } },
+      },
+    );
+    await fireEvent(
+      screen.getByTestId(testId("custom-slider", "track")),
       "responderGrant",
       {
         nativeEvent: { locationX: 142 },
@@ -98,9 +102,13 @@ describe(`${Component.name} smoke test`, () => {
       />,
     );
 
-    await fireEvent(screen.getByTestId("custom-slider-control"), "layout", {
-      nativeEvent: { layout: { width: 244, height: 44, x: 0, y: 0 } },
-    });
+    await fireEvent(
+      screen.getByTestId(testId("custom-slider", "control")),
+      "layout",
+      {
+        nativeEvent: { layout: { width: 244, height: 44, x: 0, y: 0 } },
+      },
+    );
     const thumb = screen.getByTestId("custom-slider");
     await fireEvent(thumb, "responderGrant", {
       nativeEvent: { pageX: 100 },

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import { colors } from "@/features/theme/colors";
-import { fireEvent, render, screen } from "@/root/testing";
+import { fireEvent, render, screen, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -43,18 +43,18 @@ describe(`${Component.name} smoke test`, () => {
       <Component message="Offline" action={{ label: "Retry", onPress }} />,
     );
 
-    await fireEvent.press(screen.getByTestId("alert-action"));
+    await fireEvent.press(screen.getByTestId(testId("alert", "action")));
 
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
   it("shows a close control only when it can be dismissed", async () => {
     const { rerender } = await render(<Component message="Stays" />);
-    expect(screen.queryByTestId("alert-dismiss")).toBeNull();
+    expect(screen.queryByTestId(testId("alert", "dismiss"))).toBeNull();
 
     const onDismiss = jest.fn();
     await rerender(<Component message="Goes" onDismiss={onDismiss} />);
-    await fireEvent.press(screen.getByTestId("alert-dismiss"));
+    await fireEvent.press(screen.getByTestId(testId("alert", "dismiss")));
 
     expect(onDismiss).toHaveBeenCalledTimes(1);
   });

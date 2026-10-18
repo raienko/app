@@ -31,4 +31,6 @@ export type CommonInputProps = {
   required?: boolean;
   onFocus?: () => void;
   onBlur?: () => void;
+  /** The field's id; variations with parts of their own derive theirs from it. */
+  testID?: string;
 };

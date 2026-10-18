@@ -10,6 +10,7 @@ import Text from "@/components/text";
 import { useLocale } from "@/features/localization";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import BaseInput from "../base";
 import TextInput from "../text";
@@ -45,6 +46,7 @@ const ColorInput = forwardRef<RNTextInputInstance, Props>(function ColorInput(
     placeholder,
     leftSlot,
     rightSlot,
+    testID = "color-input",
     ...props
   },
   ref,
@@ -93,6 +95,7 @@ const ColorInput = forwardRef<RNTextInputInstance, Props>(function ColorInput(
       <BaseInput
         ref={ref}
         {...props}
+        testID={testID}
         label={label}
         placeholder={placeholder}
         value={current ?? ""}
@@ -102,7 +105,7 @@ const ColorInput = forwardRef<RNTextInputInstance, Props>(function ColorInput(
           leftSlot ?? (
             <If condition={current !== null}>
               <View
-                testID="color-input-swatch"
+                testID={testId(testID, "swatch")}
                 style={[
                   styles.swatch,
                   {
@@ -139,6 +142,7 @@ const ColorInput = forwardRef<RNTextInputInstance, Props>(function ColorInput(
               with the swatch in its slot, and every row counts on a short
               screen, where the sheet's buttons have to stay in view. */}
           <ColorPicker
+            testID={testId(testID, "picker")}
             value={draft}
             onChange={pick}
             presets={presets}
@@ -173,7 +177,7 @@ const ColorInput = forwardRef<RNTextInputInstance, Props>(function ColorInput(
               type="primary"
               onPress={confirm}
               style={styles.action}
-              testID="color-input-done"
+              testID={testId(testID, "done")}
             />
           </View>
         </View>

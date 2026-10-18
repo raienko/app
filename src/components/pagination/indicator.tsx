@@ -12,7 +12,7 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { easeOutClamped } from "@/utils";
+import { easeOutClamped, testId } from "@/utils";
 
 /** How long the highlight takes to slide to a new page, in ms (0 under Reduce Motion). */
 const SLIDE_DURATION = 240;
@@ -20,6 +20,8 @@ const SLIDE_DURATION = 240;
 type Props = {
   /** Where the current page's button sits inside the row, once measured. */
   target?: LayoutRectangle;
+  /** The owner's id; this part derives its own from it. */
+  testID?: string;
 };
 
 /**
@@ -35,7 +37,7 @@ type Props = {
  * The first position is placed without animating, so the bar doesn't fly
  * in from the corner on mount. Under Reduce Motion it moves instantly.
  */
-export default function PageIndicator({ target }: Props) {
+export default function PageIndicator({ target, testID }: Props) {
   const theme = useTheme();
   const styles = useStyles();
   const { spacing } = useSizes();
@@ -75,7 +77,7 @@ export default function PageIndicator({ target }: Props) {
 
   return (
     <Animated.View
-      testID="pagination-indicator"
+      testID={testId(testID, "indicator")}
       pointerEvents="none"
       {...disabledA11yProps()}
       style={[

@@ -5,6 +5,7 @@ import Image from "@/components/image";
 import { controlA11yProps } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import type { ImageViewerItem } from "./types";
 
@@ -13,6 +14,7 @@ type Props = {
   index: number;
   describe: (index: number) => string;
   onSelect: (index: number) => void;
+  testID?: string;
 };
 
 /**
@@ -22,6 +24,7 @@ type Props = {
  * as the viewer pages.
  */
 export default function ViewerThumbnails({
+  testID,
   images,
   index,
   describe,
@@ -62,7 +65,7 @@ export default function ViewerThumbnails({
         return (
           <Pressable
             key={position}
-            testID={`image-viewer-thumbnail-${position}`}
+            testID={testId(testID, "thumbnail", position)}
             {...controlA11yProps({
               label: describe(position),
               selected: current,

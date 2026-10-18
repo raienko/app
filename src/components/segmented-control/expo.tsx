@@ -38,7 +38,7 @@ export default function ExpoUISegmentedControl({
   label,
   disabled = false,
   style,
-  testID,
+  testID = "segmented-control",
 }: SegmentedControlImplementationProps) {
   const theme = useTheme();
   const styles = useStyles();

@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from "@/root/testing";
+import { act, fireEvent, render, screen, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -104,7 +104,7 @@ describe(`${Component.name} smoke test`, () => {
       await renderPlayer();
 
       expect(screen.getByTestId("player")).toBeTruthy();
-      expect(screen.getByTestId("player-controls")).toBeTruthy();
+      expect(screen.getByTestId(testId("player", "controls"))).toBeTruthy();
     });
 
     it("shows the clock", async () => {

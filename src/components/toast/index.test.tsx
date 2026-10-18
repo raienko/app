@@ -1,5 +1,14 @@
 import { deepLinks } from "@/features/deep-links";
-import { act, fireEvent, render, screen, waitFor } from "@/root/testing";
+import {
+  act,
+  ANY,
+  fireEvent,
+  render,
+  screen,
+  testId,
+  testIdPattern,
+  waitFor,
+} from "@/root/testing";
 
 import Component from "./index";
 import toasts from "./store";
@@ -77,7 +86,7 @@ describe("Toast", () => {
     await act(() =>
       Component.show({ message: "hello", link: "/orders/12", duration: null }),
     );
-    fireEvent.press(screen.getByTestId("toast-action"));
+    fireEvent.press(screen.getByTestId(testIdPattern("toasts", ANY, "action")));
 
     expect(open).toHaveBeenCalledWith("/orders/12");
 
@@ -92,14 +101,16 @@ describe("Toast", () => {
   it("is not pressable without a link", async () => {
     await render(<Component message="hello" />);
 
-    expect(screen.queryByTestId("toast-action")).toBeNull();
+    expect(
+      screen.queryByTestId(testIdPattern("toasts", ANY, "action")),
+    ).toBeNull();
   });
 
   it("hides when the close control is pressed", async () => {
     await mountHost();
     await act(() => Component.show({ message: "hello", duration: null }));
 
-    fireEvent.press(screen.getByTestId("toast-close"));
+    fireEvent.press(screen.getByTestId(testIdPattern("toasts", ANY, "close")));
 
     await waitFor(() => {
       expect(screen.queryByText("hello")).toBeNull();
@@ -109,7 +120,9 @@ describe("Toast", () => {
   it("omits the close control when the toast isn't dismissible", async () => {
     await render(<Component message="hello" dismissible={false} />);
 
-    expect(screen.queryByTestId("toast-close")).toBeNull();
+    expect(
+      screen.queryByTestId(testIdPattern("toasts", ANY, "close")),
+    ).toBeNull();
   });
 
   it("announces itself, with the type spelled out for a screen reader", async () => {
@@ -137,7 +150,7 @@ describe("Toast", () => {
     // element and leave the only way to dismiss a toast unreachable.
     await render(<Component message="hello" link="/orders/12" />);
 
-    expect(screen.getByTestId("toast-action")).toBeTruthy();
-    expect(screen.getByTestId("toast-close")).toBeTruthy();
+    expect(screen.getByTestId(testId("toast", "action"))).toBeTruthy();
+    expect(screen.getByTestId(testId("toast", "close"))).toBeTruthy();
   });
 });

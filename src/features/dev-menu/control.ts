@@ -1,18 +1,19 @@
 import Modal from "@/components/modal";
+import { isDebug } from "@/utils";
 
 export const DEV_MENU_ID = "dev-menu";
 
 /**
- * Opens and closes the in-app dev menu from anywhere. Development builds
- * only: in production `isEnabled` is `false`, nothing is mounted and these
- * do nothing.
+ * Opens and closes the in-app dev menu from anywhere. Debug builds only
+ * (`isDebug`): in production and in an end-to-end run `isEnabled` is
+ * `false`, nothing is mounted and these do nothing.
  */
 export const devMenu = {
-  isEnabled: __DEV__,
+  isEnabled: isDebug,
   open: () => {
-    if (__DEV__) Modal.show(DEV_MENU_ID);
+    if (isDebug) Modal.show(DEV_MENU_ID);
   },
   close: () => {
-    if (__DEV__) Modal.hide(DEV_MENU_ID);
+    if (isDebug) Modal.hide(DEV_MENU_ID);
   },
 };

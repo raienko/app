@@ -17,6 +17,8 @@ declare const env: {
   readonly mapTilesUrl: string | undefined;
   /** Label-font URL template with `{fontstack}` and `{range}`; unset uses the default provider. */
   readonly mapGlyphsUrl: string | undefined;
+  /** A build made for end-to-end tests (`EXPO_PUBLIC_E2E=1`). Use `isE2E` from @/utils. */
+  readonly e2e: boolean;
 };
 
 export type Env = typeof env;

@@ -1,6 +1,7 @@
 import { useCallback, useMemo, type ReactNode } from "react";
 
 import { LocalValue } from "@/features/storage";
+import { isE2E } from "@/utils";
 
 import LocaleContext from "./context";
 import useOsLocale from "./os-locale";
@@ -41,7 +42,11 @@ type Props = {
 export default function LocaleProvider({ children, config }: Props) {
   const preference = localePreference.useValue() ?? "system";
   const osLocale = useOsLocale();
-  const locale = preference === "system" ? osLocale : preference;
+  // An end-to-end run reads "system" as English, so flows can match on
+  // visible text whatever language the simulator is set to. Picking a
+  // language explicitly still works — that's something a flow may test.
+  const locale =
+    preference === "system" ? (isE2E ? "en" : osLocale) : preference;
   const info = LOCALES.find((entry) => entry.code === locale);
   const isRTL = info?.rtl ?? false;
   const weekStartsOn = info?.weekStartsOn ?? 1;

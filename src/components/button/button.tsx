@@ -14,6 +14,7 @@ import Text from "@/components/text";
 import { controlA11yProps } from "@/features/accessibility";
 import { createStyles, type TypographyToken } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import { TYPE_COLORS, type ButtonSize, type ButtonType } from "./palette";
 
@@ -86,6 +87,7 @@ export default function Button({
   loading = false,
   disabled,
   style,
+  testID = "button",
   ...props
 }: Props) {
   const theme = useTheme();
@@ -135,6 +137,7 @@ export default function Button({
       ]}
       disabled={isDisabled}
       {...props}
+      testID={testID}
     >
       {({ pressed }) => (
         <>
@@ -143,7 +146,7 @@ export default function Button({
               instead of replacing it. */}
           <If condition={pressed && palette.backgroundPressed === null}>
             <View
-              testID="button-pressed"
+              testID={testId(testID, "pressed")}
               pointerEvents="none"
               style={[
                 styles.pressedOverlay,
@@ -160,7 +163,7 @@ export default function Button({
             </View>
             <If condition={loading}>
               <Spinner
-                testID="button-loading"
+                testID={testId(testID, "loading")}
                 label={null}
                 color={theme.colors[foreground]}
                 style={styles.loadingIndicator}

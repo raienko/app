@@ -16,6 +16,7 @@ import { progressA11yProps, useAccessibility } from "@/features/accessibility";
 import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 /** How long the fill takes to travel to a newly reported value. */
 const FILL_DURATION = 250;
@@ -193,7 +194,7 @@ export default function ProgressBar({
       ]}
     >
       <Animated.View
-        testID={testID === undefined ? undefined : `${testID}-fill`}
+        testID={testId(testID, "fill")}
         style={[
           styles.fill,
           { backgroundColor: theme.colors.primary },

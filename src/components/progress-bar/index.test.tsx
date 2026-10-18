@@ -1,7 +1,7 @@
 import { AccessibilityInfo } from "react-native";
 
 import { progressA11yProps } from "@/features/accessibility";
-import { act, render, screen, waitFor } from "@/root/testing";
+import { act, render, screen, testId, waitFor } from "@/root/testing";
 
 import Component from "./index";
 
@@ -10,7 +10,9 @@ function bar() {
 }
 
 function fill() {
-  return screen.getByTestId("bar-fill", { includeHiddenElements: true });
+  return screen.getByTestId(testId("bar", "fill"), {
+    includeHiddenElements: true,
+  });
 }
 
 function flatten(style: unknown): Record<string, unknown>[] {

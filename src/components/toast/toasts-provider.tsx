@@ -6,6 +6,7 @@ import { useIsScreenReaderEnabled } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { isWeb } from "@/utils";
 
+import { TOASTS_TEST_ID } from "./constants";
 import ToastItem from "./item";
 import toasts, { useToasts } from "./store";
 
@@ -55,7 +56,7 @@ export default function ToastsProvider({ children, position = "top" }: Props) {
       {children}
 
       <View
-        testID="toasts"
+        testID={TOASTS_TEST_ID}
         // Lets every touch through except the ones landing on a toast — the
         // overlay spans the screen, so anything else would make the app
         // untouchable for as long as a toast is up.

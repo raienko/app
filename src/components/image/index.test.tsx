@@ -1,6 +1,6 @@
 import { Image as ExpoImage } from "expo-image";
 
-import { act, render, screen } from "@/root/testing";
+import { act, render, screen, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -44,7 +44,7 @@ describe(`${Component.displayName} smoke test`, () => {
     await render(<Component source={REMOTE} alt="A photo" />);
 
     expectSource(REMOTE);
-    expect(screen.queryByTestId("image-fallback")).toBeNull();
+    expect(screen.queryByTestId(testId("image", "fallback"))).toBeNull();
   });
 
   it("names the image for a screen reader, on every platform and in the DOM", async () => {
@@ -104,7 +104,7 @@ describe(`${Component.displayName} smoke test`, () => {
       async (_label, source) => {
         await render(<Component source={source} alt="A photo" />);
 
-        expect(screen.getByTestId("image-fallback")).toBeTruthy();
+        expect(screen.getByTestId(testId("image", "fallback"))).toBeTruthy();
       },
     );
 
@@ -112,14 +112,15 @@ describe(`${Component.displayName} smoke test`, () => {
       await render(<Component source={REMOTE} alt="A photo" />);
       await fireError();
 
-      expect(screen.getByTestId("image-fallback")).toBeTruthy();
+      expect(screen.getByTestId(testId("image", "fallback"))).toBeTruthy();
     });
 
     it("keeps the description on the placeholder", async () => {
       await render(<Component source="" alt="A photo" />);
 
       expect(
-        screen.getByTestId("image-fallback").props.accessibilityLabel,
+        screen.getByTestId(testId("image", "fallback")).props
+          .accessibilityLabel,
       ).toBe("A photo");
     });
 
@@ -131,7 +132,7 @@ describe(`${Component.displayName} smoke test`, () => {
       await fireError();
 
       expectSource(branded);
-      expect(screen.queryByTestId("image-fallback")).toBeNull();
+      expect(screen.queryByTestId(testId("image", "fallback"))).toBeNull();
     });
 
     // Our own error handling comes off once the fallback is showing —
@@ -165,7 +166,7 @@ describe(`${Component.displayName} smoke test`, () => {
     it("renders nothing at all when the fallback is null", async () => {
       await render(<Component source="" fallback={null} alt="A photo" />);
 
-      expect(screen.queryByTestId("image-fallback")).toBeNull();
+      expect(screen.queryByTestId(testId("image", "fallback"))).toBeNull();
       expect(screen.queryByTestId("image")).toBeNull();
     });
 
@@ -174,13 +175,13 @@ describe(`${Component.displayName} smoke test`, () => {
     it("recovers when the source changes after a failure", async () => {
       const view = await render(<Component source={REMOTE} alt="A photo" />);
       await fireError();
-      expect(screen.getByTestId("image-fallback")).toBeTruthy();
+      expect(screen.getByTestId(testId("image", "fallback"))).toBeTruthy();
 
       await view.rerender(
         <Component source="https://example.com/other.png" alt="A photo" />,
       );
 
-      expect(screen.queryByTestId("image-fallback")).toBeNull();
+      expect(screen.queryByTestId(testId("image", "fallback"))).toBeNull();
       expectSource("https://example.com/other.png");
     });
 
@@ -195,7 +196,7 @@ describe(`${Component.displayName} smoke test`, () => {
 
       await view.rerender(<Component source={{ uri: REMOTE }} alt="A photo" />);
 
-      expect(screen.getByTestId("image-fallback")).toBeTruthy();
+      expect(screen.getByTestId(testId("image", "fallback"))).toBeTruthy();
     });
 
     it("still calls a caller's own onError", async () => {

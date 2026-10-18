@@ -3,11 +3,13 @@ import { Pressable, View } from "react-native";
 import { controlA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 type PinProps = {
   title: string;
   selected: boolean;
   onPress?: () => void;
+  testID?: string;
 };
 
 /**
@@ -24,13 +26,13 @@ type PinProps = {
  * It's a real button: a map is otherwise opaque to a screen reader, and
  * the pins are the only things on it worth reaching.
  */
-export function MapPin({ title, selected, onPress }: PinProps) {
+export function MapPin({ title, selected, onPress, testID }: PinProps) {
   const theme = useTheme();
   const styles = useStyles();
 
   return (
     <Pressable
-      testID="map-pin"
+      testID={testID}
       {...controlA11yProps({ label: title, selected, disabled: false })}
       onPress={onPress}
       hitSlop={8}
@@ -45,7 +47,7 @@ export function MapPin({ title, selected, onPress }: PinProps) {
       ]}
     >
       <View
-        testID="map-pin-mark"
+        testID={testId(testID, "mark")}
         style={[
           styles.pin,
           selected ? styles.selected : null,
@@ -60,13 +62,13 @@ export function MapPin({ title, selected, onPress }: PinProps) {
 }
 
 /** The user's position: the one round shape on the map, by convention. */
-export function UserDot({ label }: { label: string }) {
+export function UserDot({ label, testID }: { label: string; testID?: string }) {
   const theme = useTheme();
   const styles = useStyles();
 
   return (
     <View
-      testID="map-user-location"
+      testID={testID}
       accessible
       accessibilityLabel={label}
       style={[

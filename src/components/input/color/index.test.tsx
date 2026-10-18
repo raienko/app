@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from "@/root/testing";
+import { fireEvent, render, screen, testId, waitFor } from "@/root/testing";
 
 import Component from "./index";
 
@@ -6,7 +6,9 @@ import Component from "./index";
 async function openPicker(label = "Accent") {
   await fireEvent.press(screen.getByLabelText(label));
   await waitFor(() => {
-    expect(screen.getByTestId("color-picker-area")).toBeTruthy();
+    expect(
+      screen.getByTestId(testId("color-input", "picker", "area")),
+    ).toBeTruthy();
   });
 }
 
@@ -22,7 +24,7 @@ describe("ColorInput", () => {
     );
 
     expect(screen.getByText("#3F5BD9")).toBeTruthy();
-    expect(screen.getByTestId("color-input-swatch")).toBeTruthy();
+    expect(screen.getByTestId(testId("color-input", "swatch"))).toBeTruthy();
   });
 
   it("shows the placeholder and no swatch while empty", async () => {
@@ -36,7 +38,7 @@ describe("ColorInput", () => {
     );
 
     expect(screen.getByText("Pick a colour")).toBeTruthy();
-    expect(screen.queryByTestId("color-input-swatch")).toBeNull();
+    expect(screen.queryByTestId(testId("color-input", "swatch"))).toBeNull();
   });
 
   // A typed value only moves the draft once it's a whole colour; Done is
@@ -54,7 +56,7 @@ describe("ColorInput", () => {
     await waitFor(() => {
       expect(screen.getByDisplayValue("00a86b")).toBeTruthy();
     });
-    await fireEvent.press(screen.getByTestId("color-input-done"));
+    await fireEvent.press(screen.getByTestId(testId("color-input", "done")));
 
     expect(onChange).toHaveBeenCalledWith("#00A86B");
   });
@@ -71,11 +73,13 @@ describe("ColorInput", () => {
     );
     await openPicker();
 
-    await fireEvent.press(screen.getByTestId("color-picker-preset-#3F5BD9"));
+    await fireEvent.press(
+      screen.getByTestId(testId("color-input", "picker", "preset", "#3F5BD9")),
+    );
     await waitFor(() => {
       expect(screen.getByDisplayValue("#3F5BD9")).toBeTruthy();
     });
-    await fireEvent.press(screen.getByTestId("color-input-done"));
+    await fireEvent.press(screen.getByTestId(testId("color-input", "done")));
 
     expect(onChange).toHaveBeenCalledWith("#3F5BD9");
   });

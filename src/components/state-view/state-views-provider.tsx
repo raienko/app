@@ -10,6 +10,9 @@ import { useTheme } from "@/features/theme";
 import StateView from "./state-view";
 import stateViews, { useStateViewPresentation } from "./store";
 
+/** The blocking overlay — one per app, so a fixed id. */
+export const STATE_VIEW_OVERLAY_TEST_ID = "state-view-overlay";
+
 type Props = {
   children: ReactNode;
 };
@@ -84,7 +87,7 @@ export default function StateViewsProvider({ children }: Props) {
         style={styles.modal}
       >
         <View
-          testID="state-view-overlay"
+          testID={STATE_VIEW_OVERLAY_TEST_ID}
           accessibilityViewIsModal
           importantForAccessibility="yes"
           style={[

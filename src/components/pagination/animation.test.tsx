@@ -1,4 +1,12 @@
-import { act, fireEvent, render, screen } from "@/root/testing";
+import {
+  act,
+  ANY,
+  fireEvent,
+  render,
+  screen,
+  testId,
+  testIdPattern,
+} from "@/root/testing";
 
 import Component from "./index";
 
@@ -29,16 +37,16 @@ describe("Pagination animation", () => {
       />,
     );
 
-    const indicator = screen.getByTestId("pagination-indicator", {
+    const indicator = screen.getByTestId(testId("pages", "indicator"), {
       includeHiddenElements: true,
     });
     expect(flat(indicator.props.style).opacity).toBe(0);
 
-    await layout("pages-2", 48);
+    await layout(testId("pages", 2), 48);
 
     expect(
       flat(
-        screen.getByTestId("pagination-indicator", {
+        screen.getByTestId(testId("pages", "indicator"), {
           includeHiddenElements: true,
         }).props.style,
       ).opacity,
@@ -50,7 +58,7 @@ describe("Pagination animation", () => {
       <Component label="Results" value={1} total={3} onChange={jest.fn()} />,
     );
 
-    const indicator = screen.getByTestId("pagination-indicator", {
+    const indicator = screen.getByTestId(testId("pagination", "indicator"), {
       includeHiddenElements: true,
     });
     expect(indicator.props.pointerEvents).toBe("none");
@@ -68,7 +76,7 @@ describe("Pagination animation", () => {
       />,
     );
 
-    const current = screen.getByTestId("pages-3");
+    const current = screen.getByTestId(testId("pages", 3));
     expect(current.props.accessibilityState.selected).toBe(true);
     expect(flat(current.props.style).backgroundColor).toBe("transparent");
   });
@@ -85,7 +93,7 @@ describe("Pagination animation", () => {
     );
 
     expect(
-      screen.queryByTestId("pagination-indicator", {
+      screen.queryByTestId(testId("pages", "indicator"), {
         includeHiddenElements: true,
       }),
     ).toBeNull();
@@ -102,7 +110,7 @@ describe("Pagination animation", () => {
         onChange={jest.fn()}
       />,
     );
-    const before = flat(screen.getByTestId("dots-1").props.style);
+    const before = flat(screen.getByTestId(testId("dots", 1)).props.style);
 
     await act(async () => {
       await rerender(
@@ -117,11 +125,11 @@ describe("Pagination animation", () => {
       );
     });
 
-    const after = flat(screen.getByTestId("dots-1").props.style);
+    const after = flat(screen.getByTestId(testId("dots", 1)).props.style);
     expect(after.width).toBe(before.width);
     expect(after.height).toBe(before.height);
     expect(
-      screen.getAllByTestId("pagination-dot-shape", {
+      screen.getAllByTestId(testIdPattern("dots", ANY, "shape"), {
         includeHiddenElements: true,
       }),
     ).toHaveLength(3);

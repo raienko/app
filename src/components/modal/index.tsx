@@ -17,7 +17,7 @@ import Animated, {
 import If from "@/components/if";
 import { useAnimationDuration } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
-import { wait } from "@/utils";
+import { wait, testId } from "@/utils";
 
 import ModalBackdrop from "./backdrop";
 import { MODAL_TYPE_CONFIG } from "./config";
@@ -77,11 +77,12 @@ import type { ModalHandle as ModalHandleType, ModalProps } from "./types";
  * <Modal id="processing" type="popup" onDismiss={() => {}}>...</Modal>
  */
 const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
-  { id, type = "popup", children, style, onDismiss, onShow, onClose },
+  { id, type = "popup", children, style, onDismiss, onShow, onClose, testID },
   ref,
 ) {
   const config = MODAL_TYPE_CONFIG[type];
   const styles = useStyles();
+  const owner = testID ?? testId("modal", id);
   const duration = useAnimationDuration();
 
   const [nativeVisible, setNativeVisible] = useState(false);
@@ -169,9 +170,14 @@ const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
             window. react-native-gesture-handler requires it for gestures
             inside a native Modal on Android. */}
         <GestureHandlerRootView style={styles.gestureRoot}>
-          <Animated.View style={containerStyle} accessibilityViewIsModal>
+          <Animated.View
+            testID={owner}
+            style={containerStyle}
+            accessibilityViewIsModal
+          >
             <If condition={config.backdrop}>
               <ModalBackdrop
+                testID={testId(owner, "backdrop")}
                 progress={progress}
                 maxOpacity={config.backdropOpacity}
                 onDismiss={dismiss}
@@ -184,7 +190,11 @@ const ModalComponent = forwardRef<ModalHandleType, ModalProps>(function Modal(
               style={style}
             >
               <If condition={config.position === "bottom"}>
-                <ModalHandle dragY={dragY} onDismiss={dismiss} />
+                <ModalHandle
+                  testID={testId(owner, "drag-handle")}
+                  dragY={dragY}
+                  onDismiss={dismiss}
+                />
               </If>
               <If condition={config.scroll}>
                 <ModalScrollArea position={config.position}>

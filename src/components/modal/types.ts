@@ -12,6 +12,8 @@ export type ModalType =
 export type ModalProps = {
   /** Identifies this modal instance for `Modal.show(id)`/`Modal.hide(id)`. */
   id: string;
+  /** Default `modal.<id>`; its parts are `<testID>.backdrop` and `.drag-handle`. */
+  testID?: string;
   /** Changes appearance and animation — see ./config.ts. Defaults to "popup". */
   type?: ModalType;
   children: ReactNode;

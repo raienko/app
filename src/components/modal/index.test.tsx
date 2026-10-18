@@ -1,7 +1,15 @@
 import { createRef } from "react";
 import { Text as RNText } from "react-native";
 
-import { act, fireEvent, render, screen, waitFor } from "@/root/testing";
+import {
+  act,
+  ANY,
+  fireEvent,
+  render,
+  screen,
+  testIdPattern,
+  waitFor,
+} from "@/root/testing";
 
 import { ANIMATION_DURATION } from "./constants";
 import Component from "./index";
@@ -97,7 +105,9 @@ describe(`${Component.displayName} smoke test`, () => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
 
-    await fireEvent.press(screen.getByTestId("modal-backdrop"));
+    await fireEvent.press(
+      screen.getByTestId(testIdPattern("modal", ANY, "backdrop")),
+    );
     await waitFor(() => {
       expect(screen.queryByText("content")).toBeNull();
     });
@@ -117,7 +127,9 @@ describe(`${Component.displayName} smoke test`, () => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
 
-    await fireEvent.press(screen.getByTestId("modal-backdrop"));
+    await fireEvent.press(
+      screen.getByTestId(testIdPattern("modal", ANY, "backdrop")),
+    );
 
     expect(onDismiss).toHaveBeenCalledTimes(1);
     // onDismiss doesn't hide on its own — the modal is still up until the
@@ -138,7 +150,9 @@ describe(`${Component.displayName} smoke test`, () => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
 
-    expect(screen.getByTestId("modal-backdrop")).toBeTruthy();
+    expect(
+      screen.getByTestId(testIdPattern("modal", ANY, "backdrop")),
+    ).toBeTruthy();
     const contentStyles = flattenStyle(
       screen.getByText("content").parent?.props.style,
     );
@@ -158,7 +172,9 @@ describe(`${Component.displayName} smoke test`, () => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
 
-    expect(screen.queryByTestId("modal-backdrop")).toBeNull();
+    expect(
+      screen.queryByTestId(testIdPattern("modal", ANY, "backdrop")),
+    ).toBeNull();
   });
 
   it("warns when a second instance mounts with an id already in use", async () => {
@@ -196,7 +212,9 @@ describe(`${Component.displayName} smoke test`, () => {
       expect(screen.queryByText("content")).toBeTruthy();
     });
 
-    const backdrop = screen.getByTestId("modal-backdrop");
+    const backdrop = screen.getByTestId(
+      testIdPattern("modal", ANY, "backdrop"),
+    );
     expect(backdrop.props.accessibilityRole).toBe("button");
     expect(backdrop.props.accessibilityLabel).toBe("Dismiss");
   });
@@ -223,9 +241,13 @@ describe(`${Component.displayName} smoke test`, () => {
       });
 
       if (hasHandle) {
-        expect(screen.getByTestId("modal-drag-handle")).toBeTruthy();
+        expect(
+          screen.getByTestId(testIdPattern("modal", ANY, "drag-handle")),
+        ).toBeTruthy();
       } else {
-        expect(screen.queryByTestId("modal-drag-handle")).toBeNull();
+        expect(
+          screen.queryByTestId(testIdPattern("modal", ANY, "drag-handle")),
+        ).toBeNull();
       }
     },
   );

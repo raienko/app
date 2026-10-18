@@ -9,7 +9,7 @@ import { shareContent } from "@/components/share";
 import { useIsRtl, useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { isWeb } from "@/utils";
+import { isWeb, testId } from "@/utils";
 
 import ViewerControls from "./controls";
 import { imageViewerEventBus } from "./event-bus";
@@ -72,6 +72,7 @@ function ImageViewerComponent({
   images,
   onIndexChange,
   onClose,
+  testID,
 }: ImageViewerProps) {
   const theme = useTheme();
   const styles = useStyles();
@@ -128,6 +129,8 @@ function ImageViewerComponent({
   const describe = (position: number) =>
     t("imageViewer.label", { index: position + 1, total: count });
 
+  const owner = testID ?? testId("image-viewer", id);
+
   return (
     <Modal
       id={modalId(id)}
@@ -149,6 +152,7 @@ function ImageViewerComponent({
         ]}
       />
       <ViewerStage
+        testID={testId(owner, "stage")}
         images={images}
         index={current}
         onIndexChange={go}
@@ -173,6 +177,7 @@ function ImageViewerComponent({
         }}
       />
       <ViewerControls
+        testID={owner}
         images={images}
         index={current}
         visible={controlsVisible}

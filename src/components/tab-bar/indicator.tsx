@@ -12,7 +12,7 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { easeOutClamped } from "@/utils";
+import { easeOutClamped, testId } from "@/utils";
 
 import sameRect from "./same-rect";
 
@@ -22,6 +22,8 @@ export const SLIDE_DURATION = 240;
 type Props = {
   /** Where the selected tab sits inside the row, once measured. */
   target?: LayoutRectangle;
+  /** The owner's id; this part derives its own from it. */
+  testID?: string;
 };
 
 /**
@@ -45,7 +47,7 @@ type Props = {
  * The first position is placed without animating, so the indicator doesn't
  * fly in from the corner on mount. Under Reduce Motion it moves instantly.
  */
-export default function TabIndicator({ target }: Props) {
+export default function TabIndicator({ target, testID }: Props) {
   const theme = useTheme();
   const styles = useStyles();
   const { spacing } = useSizes();
@@ -86,12 +88,12 @@ export default function TabIndicator({ target }: Props) {
 
   return (
     <View
-      testID="tab-bar-indicator-layer"
+      testID={testId(testID, "indicator-layer")}
       pointerEvents="none"
       style={styles.layer}
     >
       <Animated.View
-        testID="tab-bar-indicator"
+        testID={testId(testID, "indicator")}
         {...disabledA11yProps()}
         style={[
           styles.indicator,

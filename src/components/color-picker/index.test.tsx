@@ -6,7 +6,7 @@ import {
   getByGestureTestId,
 } from "react-native-gesture-handler/jest-utils";
 
-import { act, fireEvent, render, screen } from "@/root/testing";
+import { act, fireEvent, render, screen, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -15,7 +15,7 @@ const PRESETS = ["#3F5BD9", "#E4002B"];
 /** Lays the field out at a known size, then drags to (x, y) inside it. */
 async function dragTo(field: "area" | "hue", x: number, y: number) {
   await act(async () => {
-    screen.getByTestId(`color-picker-${field}`).props.onLayout({
+    screen.getByTestId(testId("color-picker", field)).props.onLayout({
       nativeEvent: { layout: { x: 0, y: 0, width: 200, height: 100 } },
     });
   });
@@ -38,7 +38,9 @@ describe(`${Component.name}`, () => {
       <Component value="#00A86B" onChange={onChange} presets={PRESETS} />,
     );
 
-    await fireEvent.press(screen.getByTestId("color-picker-preset-#E4002B"));
+    await fireEvent.press(
+      screen.getByTestId(testId("color-picker", "preset", "#E4002B")),
+    );
 
     expect(onChange).toHaveBeenCalledWith("#E4002B");
   });
@@ -49,7 +51,7 @@ describe(`${Component.name}`, () => {
     );
 
     expect(
-      screen.getByTestId("color-picker-preset-#3F5BD9").props
+      screen.getByTestId(testId("color-picker", "preset", "#3F5BD9")).props
         .accessibilityState,
     ).toMatchObject({ selected: true });
   });
@@ -79,9 +81,11 @@ describe(`${Component.name}`, () => {
     await render(<Component value="#FF0000" onChange={onChange} />);
 
     await act(async () => {
-      screen.getByTestId("color-picker-hue").props.onAccessibilityAction({
-        nativeEvent: { actionName: "increment" },
-      });
+      screen
+        .getByTestId(testId("color-picker", "hue"))
+        .props.onAccessibilityAction({
+          nativeEvent: { actionName: "increment" },
+        });
     });
 
     expect(onChange).toHaveBeenCalledWith("#FF1500");

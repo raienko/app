@@ -91,6 +91,15 @@ function apiUrl(value) {
   return normalized.replace(/\/+$/, "");
 }
 
+/**
+ * An on/off var: `1` or `true` (any case) is on, anything else — unset
+ * included — is off. Strict on purpose, so `EXPO_PUBLIC_E2E=0` or `=false`
+ * can't switch something on by being non-empty.
+ */
+function flag(value) {
+  return /^(1|true)$/i.test(value?.trim() ?? "");
+}
+
 /** A comma-separated var as a list, with blanks and stray spaces dropped. */
 function list(value) {
   return (value ?? "")
@@ -160,6 +169,10 @@ const env = {
     process.env.EXPO_PUBLIC_MAP_GLYPHS_URL,
     ["{fontstack}", "{range}"],
   ),
+  // A build made for end-to-end tests (`yarn e2e:start`). Not a brand
+  // setting: it's switched on per run, never in a store build. Read through
+  // `isE2E` / `ifE2E` in @/utils rather than from here.
+  e2e: flag(process.env.EXPO_PUBLIC_E2E),
 };
 
 module.exports = env;

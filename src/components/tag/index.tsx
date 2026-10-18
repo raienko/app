@@ -11,6 +11,7 @@ import {
   type TypographyToken,
 } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 /** `auto` is deliberately absent — a tag is already sized by its own text. */
 export type TagSize = "small" | "medium";
@@ -179,7 +180,7 @@ export default function Tag({
 
       {onClose === undefined ? null : (
         <Pressable
-          testID={testID === undefined ? undefined : `${testID}-close`}
+          testID={testId(testID, "close")}
           {...controlA11yProps({
             label: closeLabel ?? t("tag.remove", { value }),
             disabled,

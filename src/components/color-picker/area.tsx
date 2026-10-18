@@ -27,6 +27,7 @@ type Props = {
   hsv: Hsv;
   onChange: (hsv: Hsv) => void;
   disabled?: boolean;
+  testID?: string;
 };
 
 type KeyEvent = {
@@ -50,7 +51,7 @@ type KeyEvent = {
  * saturation, up/down brightness). The hex field beside it is the precise
  * way in for anyone who can't drag.
  */
-export default function ColorArea({ hsv, onChange, disabled }: Props) {
+export default function ColorArea({ hsv, onChange, disabled, testID }: Props) {
   const theme = useTheme();
   const styles = useStyles();
   // 3:2 until that would take more than a quarter of the window's height,
@@ -120,7 +121,7 @@ export default function ColorArea({ hsv, onChange, disabled }: Props) {
           if (nativeEvent.actionName === "decrement") step(0, -STEP);
         }}
         onLayout={drag.onLayout}
-        testID="color-picker-area"
+        testID={testID}
         style={[styles.area, { height: areaHeight }]}
       >
         {/* Sized in pixels from the measured box rather than "100%":

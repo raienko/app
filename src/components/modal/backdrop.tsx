@@ -12,6 +12,7 @@ type Props = {
   /** How dark it gets once fully shown — the type's `backdropOpacity`. */
   maxOpacity: number;
   onDismiss: () => void;
+  testID?: string;
 };
 
 /**
@@ -22,6 +23,7 @@ type Props = {
  * that types without a backdrop (`fullscreen`) simply don't render.
  */
 export default function ModalBackdrop({
+  testID,
   progress,
   maxOpacity,
   onDismiss,
@@ -34,7 +36,7 @@ export default function ModalBackdrop({
 
   return (
     <Pressable
-      testID="modal-backdrop"
+      testID={testID}
       style={StyleSheet.absoluteFill}
       onPress={onDismiss}
       // It has no text of its own, so unlike Button it needs an explicit

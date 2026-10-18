@@ -1,9 +1,11 @@
-import { useSyncExternalStore, type ReactNode } from "react";
+import { useEffect, useSyncExternalStore, type ReactNode } from "react";
+import { LogBox } from "react-native";
 
 import { DevMenu } from "@/features/dev-menu";
 import { WebApp } from "@/features/web-app";
-import { isWeb } from "@/utils";
+import { isE2E, isWeb } from "@/utils";
 
+import prepareE2EPage from "./e2e-page";
 import Providers from "./providers";
 import withObserve from "./with-observe";
 import type { ProvidersConfig } from "./providers";
@@ -32,6 +34,10 @@ type Props = {
  *   Ones that Storybook and Jest should get too go in providers.tsx
  *   instead, next to `Permissions` and `DeepLinks`.
  */
+// Development warnings stack up as toasts over the bottom of the screen,
+// right where a flow taps; an end-to-end run reads its logs elsewhere.
+if (isE2E) LogBox.ignoreAllLogs();
+
 const subscribeNothing = () => () => {};
 
 /**
@@ -53,6 +59,9 @@ function Root({ children, config }: Props) {
   // the first browser render both draw an empty page, and the app mounts
   // right after — the same empty shell a single-page build served.
   const isClient = useIsClient();
+  // An end-to-end run drives every platform the same way; on web that needs
+  // testIDs as element ids and a page that scrolls (./e2e-page).
+  useEffect(() => (isE2E ? prepareE2EPage() : undefined), []);
   if (!isClient) return null;
 
   return (

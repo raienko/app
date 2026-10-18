@@ -1,4 +1,4 @@
-import { fireEvent, render } from "@/root/testing";
+import { fireEvent, render, testId } from "@/root/testing";
 
 import Component from "./index";
 
@@ -31,7 +31,7 @@ describe("Pagination dots", () => {
    */
   it("gives each dot a real target, and marks only the current one", async () => {
     const view = await dots(3);
-    const { props } = view.getByTestId("dots-1");
+    const { props } = view.getByTestId(testId("dots", 1));
     const style = Object.assign({}, ...[props.style].flat(3).filter(Boolean));
 
     expect(props.hitSlop).toBeUndefined();
@@ -40,7 +40,8 @@ describe("Pagination dots", () => {
 
     expect(
       [1, 2, 3, 4].map(
-        (n) => view.getByTestId(`dots-${n}`).props.accessibilityState.selected,
+        (n) =>
+          view.getByTestId(testId("dots", n)).props.accessibilityState.selected,
       ),
     ).toEqual([false, false, true, false]);
   });
@@ -49,13 +50,13 @@ describe("Pagination dots", () => {
     const onChange = jest.fn();
     const view = await dots(1, onChange);
 
-    fireEvent.press(view.getByTestId("dots-2"));
+    fireEvent.press(view.getByTestId(testId("dots", 2)));
     expect(onChange).toHaveBeenLastCalledWith(2);
 
-    fireEvent.press(view.getByTestId("dots-4"));
+    fireEvent.press(view.getByTestId(testId("dots", 4)));
     expect(onChange).toHaveBeenLastCalledWith(4);
 
-    fireEvent.press(view.getByTestId("dots-3"));
+    fireEvent.press(view.getByTestId(testId("dots", 3)));
     expect(onChange).toHaveBeenLastCalledWith(3);
   });
 });

@@ -4,6 +4,7 @@ import { View, type LayoutRectangle } from "react-native";
 import { radioGroupA11yProps } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import SegmentIndicator from "./indicator";
 import Segment from "./segment";
@@ -32,7 +33,7 @@ export default function CustomSegmentedControl({
   label,
   disabled = false,
   style,
-  testID,
+  testID = "segmented-control",
 }: SegmentedControlImplementationProps) {
   const theme = useTheme();
   const styles = useStyles();
@@ -51,11 +52,12 @@ export default function CustomSegmentedControl({
       ]}
     >
       {/* First, so it paints behind the segments and their hairlines. */}
-      <SegmentIndicator target={layouts[value]} />
+      <SegmentIndicator target={layouts[value]} testID={testID} />
       {options.map((option, index) => (
         <Segment
           key={option.value}
           option={option}
+          testID={option.testID ?? testId(testID, "option", option.value)}
           separated={index > 0}
           selected={option.value === value}
           disabled={disabled || (option.disabled ?? false)}

@@ -10,6 +10,7 @@ import {
 } from "@/features/accessibility";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import { SKELETON_COLORS } from "./colors";
 import { SkeletonHighlight, useDimStyle } from "./pulse";
@@ -189,7 +190,7 @@ export default function Skeleton({
           active={shimmering}
           source={artwork.source}
           contentFit={artwork.contentFit}
-          testID={testID === undefined ? undefined : `${testID}-shimmer`}
+          testID={testId(testID, "shimmer")}
         />
       )}
     </Animated.View>

@@ -167,7 +167,9 @@ export default function Showcase() {
       style={styles.container}
     >
       {sections.map(({ title, label, Component }) => (
-        <Accordion key={title} title={label}>
+        // The translation key ("showcase.carousel") is the section's id: it
+        // stays put whatever language the titles are in.
+        <Accordion key={title} title={label} testID={title}>
           <Component />
         </Accordion>
       ))}

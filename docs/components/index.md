@@ -127,11 +127,11 @@ Video, audio, carousels, charts, maps, scannable codes and embedded web pages.
 
 Declarative conditionals and platform constants.
 
-| Component                                        | What it's for                                                                                                                                        |
-| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [**If**](../../src/components/if/index.md)       | Render children only when a condition is true.                                                                                                       |
-| [**Match**](../../src/components/match/index.md) | `switch`/`case` as JSX, for more than two outcomes.                                                                                                  |
-| [**Utilities**](../../src/utils/index.md)        | `isWeb`/`isIOS`/`isAndroid`, time spans (`seconds(17)`, `days(30)`), `wait`, common hooks (`useDebouncedValue`, `useInterval`, …), `easeOutClamped`. |
+| Component                                        | What it's for                                                                                                                                                 |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [**If**](../../src/components/if/index.md)       | Render children only when a condition is true.                                                                                                                |
+| [**Match**](../../src/components/match/index.md) | `switch`/`case` as JSX, for more than two outcomes.                                                                                                           |
+| [**Utilities**](../../src/utils/index.md)        | `isWeb`/`isIOS`/`isAndroid`, `isE2E`, time spans (`seconds(17)`, `days(30)`), `wait`, common hooks (`useDebouncedValue`, `useInterval`, …), `easeOutClamped`. |
 
 ## Internal
 

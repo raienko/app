@@ -15,7 +15,7 @@ import {
 } from "@/features/accessibility";
 import { createStyles, useSizes } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
-import { easeOutClamped } from "@/utils";
+import { easeOutClamped, testId } from "@/utils";
 
 import type { TabBarIconState, TabBarItem } from "./types";
 
@@ -30,6 +30,7 @@ type Props = {
   selected: boolean;
   onPress: () => void;
   onLayout?: (event: LayoutChangeEvent) => void;
+  testID?: string;
 };
 
 /**
@@ -53,7 +54,13 @@ type Props = {
  * the substitution Apple's own guidance names for movement, and it isn't
  * movement itself.
  */
-export default function Tab({ item, selected, onPress, onLayout }: Props) {
+export default function Tab({
+  item,
+  selected,
+  onPress,
+  onLayout,
+  testID,
+}: Props) {
   const theme = useTheme();
   const { spacing } = useSizes();
   const styles = useStyles();
@@ -93,18 +100,21 @@ export default function Tab({ item, selected, onPress, onLayout }: Props) {
   return (
     <Pressable
       {...tabA11yProps({ label: item.label, selected })}
-      testID={item.testID}
+      testID={testID}
       onPress={onPress}
       onLayout={onLayout}
       style={({ pressed }) => [styles.tab, pressed ? styles.pressed : null]}
     >
-      <Animated.View testID="tab-bar-tab-content" style={[styles.stack, stack]}>
+      <Animated.View
+        testID={testId(testID, "content")}
+        style={[styles.stack, stack]}
+      >
         <View style={styles.content}>
           {content(theme.colors.textSecondary, false)}
         </View>
         <Animated.View
           {...disabledA11yProps()}
-          testID="tab-bar-tab-current"
+          testID={testId(testID, "current")}
           style={[styles.content, styles.overlay, current]}
         >
           {content(theme.colors.text, true)}

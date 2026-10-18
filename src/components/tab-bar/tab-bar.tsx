@@ -6,6 +6,7 @@ import { tabListA11yProps } from "@/features/accessibility";
 import { useIsRtl } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 import { useElevationStyle, useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import TabIndicator from "./indicator";
 import sameRect from "./same-rect";
@@ -46,7 +47,7 @@ export default function TabBar({
   variant = "sticky",
   avoidChin = true,
   style,
-  testID,
+  testID = "tab-bar",
 }: TabBarProps) {
   const theme = useTheme();
   const elevationStyle = useElevationStyle("floating");
@@ -108,10 +109,14 @@ export default function TabBar({
           move. Keying the measurements by direction too keeps the
           indicator off the old side until the new ones arrive. */}
       <View key={direction} style={styles.row}>
-        <TabIndicator target={layouts[`${direction}/${value}`]} />
+        <TabIndicator
+          target={layouts[`${direction}/${value}`]}
+          testID={testID}
+        />
         {items.map((item) => (
           <Tab
             key={item.key}
+            testID={item.testID ?? testId(testID, "tab", item.key)}
             item={item}
             selected={item.key === value}
             onPress={() => onChange(item.key)}

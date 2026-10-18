@@ -7,6 +7,7 @@ import Text from "@/components/text";
 import { useLocale } from "@/features/localization";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
+import { testId } from "@/utils";
 
 import { formatTime } from "./time";
 import type { MediaTransport } from "./types";
@@ -48,7 +49,7 @@ export default function MediaControls({ transport, testID }: Props) {
     <View style={styles.controls} testID={testID}>
       <IconButton
         label={playing ? t("mediaPlayer.pause") : t("mediaPlayer.play")}
-        testID={testID === undefined ? undefined : `${testID}-play`}
+        testID={testId(testID, "play")}
         type="primary"
         onPress={() => (playing ? transport.pause() : transport.play())}
       >
@@ -61,7 +62,7 @@ export default function MediaControls({ transport, testID }: Props) {
           // The clock below already says what this is; the name is kept
           // for the screen reader, which has nothing else to go on.
           hideLabel
-          testID={testID === undefined ? undefined : `${testID}-scrubber`}
+          testID={testId(testID, "scrubber")}
           value={position}
           min={0}
           max={ready ? duration : 1}
@@ -80,7 +81,7 @@ export default function MediaControls({ transport, testID }: Props) {
 
       <IconButton
         label={muted ? t("mediaPlayer.unmute") : t("mediaPlayer.mute")}
-        testID={testID === undefined ? undefined : `${testID}-mute`}
+        testID={testId(testID, "mute")}
         onPress={() => transport.setMuted(!muted)}
       >
         <Icon name={muted ? "volume-x" : "volume-2"} />

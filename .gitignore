@@ -70,3 +70,6 @@ expo-env.d.ts
 # test coverage (yarn test:coverage)
 coverage/
 .jest-cache/
+
+# e2e: web copies of the Maestro flows (yarn e2e:test:web)
+.maestro/.web/
