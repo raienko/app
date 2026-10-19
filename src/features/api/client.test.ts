@@ -89,6 +89,32 @@ describe("api", () => {
       expect(lastHeaders().get("Authorization")).toBe("Bearer jwt-1");
     });
 
+    // `//host` reads as a path but axios sends it to that host.
+    it("refuses ambiguous URLs instead of guessing where they go", async () => {
+      configureApi.setTokenProvider(() => "jwt-1");
+
+      for (const url of [
+        "//evil.example/steal",
+        "\\\\evil.example/steal",
+        "/\\evil.example",
+        " //evil.example",
+        "users/1\n",
+      ]) {
+        sent = [];
+        await expect(api.get(url)).rejects.toThrow(/ambiguous request URL/);
+        expect(sent).toHaveLength(0);
+      }
+    });
+
+    it("judges the origin by the configured API, not a baseURL the caller passes", async () => {
+      configureApi.setTokenProvider(() => "jwt-1");
+
+      await api.get("me", { baseURL: "https://evil.example" });
+
+      expect(lastUrl()).toBe("https://evil.example/me");
+      expect(lastHeaders().get("Authorization")).toBeUndefined();
+    });
+
     it("doesn't force a logout for another origin's 401", async () => {
       const listener = jest.fn();
       restore.push(apiEvents.on("forceLogout", listener));
@@ -230,6 +256,24 @@ describe("api", () => {
       expect(Number(outB)).toBe(Number(outA) + 1);
       expect(number(back.find((m) => m.includes("GET /a"))!)).toBe(outA);
       expect(number(back.find((m) => m.includes("GET /b"))!)).toBe(outB);
+    });
+
+    it("redacts credentials from logged bodies, params and responses", async () => {
+      reply = { status: 200, data: { token: "abc", user: { name: "Ada" } } };
+      await api.post(
+        "/sign-in",
+        { email: "ada@example.com", password: "hunter2" },
+        { params: { otp: "123456" } },
+      );
+
+      expect(logger.out).toHaveBeenCalledWith(expect.any(String), {
+        params: { otp: "[redacted]" },
+        body: { email: "ada@example.com", password: "[redacted]" },
+      });
+      expect(logger.in).toHaveBeenCalledWith(expect.any(String), {
+        token: "[redacted]",
+        user: { name: "Ada" },
+      });
     });
 
     it("logs failures, and nothing for a request that opts out", async () => {

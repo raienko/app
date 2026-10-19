@@ -194,6 +194,8 @@ jest.mock("@maplibre/maplibre-react-native", () => {
 jest.mock("expo-secure-store", () => {
   const store = new Map();
   return {
+    WHEN_UNLOCKED_THIS_DEVICE_ONLY: 6,
+    AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY: 1,
     getItem: (key) => (store.has(key) ? store.get(key) : null),
     setItem: (key, value) => {
       store.set(key, value);
@@ -204,6 +206,12 @@ jest.mock("expo-secure-store", () => {
     __store: store,
   };
 });
+
+// expo-crypto's random bytes come from a native module; Node's CSPRNG
+// stands in, so keys generated under Jest are as random as on a device.
+jest.mock("expo-crypto", () => ({
+  getRandomValues: (array) => require("crypto").getRandomValues(array),
+}));
 
 // expo-network's native module is stubbed by jest-expo without a working
 // listener, and TanStack Query subscribes to it in every rendered tree

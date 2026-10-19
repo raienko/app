@@ -13,6 +13,7 @@
 | [**Architecture**](architecture.md)       | Repository layout, the one-folder-per-unit rule, custom vs `@expo/ui` implementations, and where documentation lives                                                                            |
 | [**Decisions**](adr/README.md)            | Architecture decision records: reuse before new components, deferred work, the component manifest and import boundaries, the web chart renderer                                                 |
 | [**Plans**](plans)                        | Reference plans behind the roadmap: [security](plans/security.md), [CI and EAS](plans/ci-and-eas.md), [agents](plans/agents.md), [tooling](plans/tooling.md), [references](plans/references.md) |
+| [**Security**](security)                  | [Data inventory](security/data-inventory.md), [threat model](security/threat-model.md), [severity policy and exceptions](security/exceptions.md); reporting in [SECURITY.md](../SECURITY.md)    |
 
 ## Catalogues
 

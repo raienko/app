@@ -1,4 +1,4 @@
-import logger, { createLogger, type Logger } from "./index";
+import logger, { createLogger, redact, redactUrl, type Logger } from "./index";
 
 const METHODS: (keyof Logger)[] = [
   "log",
@@ -92,5 +92,61 @@ describe("logger", () => {
     expect(
       styles.every((style) => /background: #[0-9a-f]{6}/i.test(style)),
     ).toBe(true);
+  });
+});
+
+describe("redact", () => {
+  const jwt =
+    "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjMifQ.c2lnbmF0dXJlLXNpZ25hdHVyZQ";
+
+  it("hides sensitive fields at any depth and leaves the rest", () => {
+    const body = {
+      email: "ada@example.com",
+      password: "hunter2",
+      profile: { accessToken: "t", refresh_token: "r", name: "Ada" },
+      payment: [{ cardNumber: "4242", cvv: "123", amount: 5 }],
+      otp: "123456",
+    };
+
+    expect(redact(body)).toEqual({
+      email: "ada@example.com",
+      password: "[redacted]",
+      profile: {
+        accessToken: "[redacted]",
+        refresh_token: "[redacted]",
+        name: "Ada",
+      },
+      payment: [{ cardNumber: "[redacted]", cvv: "[redacted]", amount: 5 }],
+      otp: "[redacted]",
+    });
+    expect(body.password).toBe("hunter2");
+  });
+
+  it("masks a JWT wherever it appears in a string", () => {
+    expect(redact({ note: `Bearer ${jwt}` })).toEqual({
+      note: "Bearer [redacted]",
+    });
+  });
+
+  it("names non-plain objects instead of printing them", () => {
+    class Upload {}
+    expect(redact({ file: new Upload(), when: null, count: 1 })).toEqual({
+      file: "[Upload]",
+      when: null,
+      count: 1,
+    });
+  });
+
+  it("stops at a cycle instead of recursing forever", () => {
+    const loop: Record<string, unknown> = { name: "loop" };
+    loop.self = loop;
+    expect(() => redact(loop)).not.toThrow();
+  });
+
+  it("masks sensitive query values in a URL", () => {
+    expect(redactUrl("/verify?email=a@b.c&code=9911&next=/home")).toBe(
+      "/verify?email=a@b.c&code=[redacted]&next=/home",
+    );
+    expect(redactUrl(`/links/${jwt}`)).toBe("/links/[redacted]");
   });
 });

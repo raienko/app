@@ -5,7 +5,7 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { View } from "react-native";
+import { Linking, View } from "react-native";
 import RNWebView, {
   type WebViewMessageEvent,
   type WebViewNavigation,
@@ -16,7 +16,7 @@ import logger from "@/features/logger";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
-import { OPAQUE_ORIGIN, originOf } from "./bridge";
+import { navigationDecision, OPAQUE_ORIGIN, originOf } from "./bridge";
 import { deliverInjection, htmlWithBridge, nativeInjection } from "./injection";
 import type { WebViewHandle, WebViewProps } from "./types";
 import { useBridge } from "./use-bridge";
@@ -63,6 +63,11 @@ export { buildThemeCss } from "./theme-css";
  * never named. Everything arriving is untrusted data — it is JSON-parsed
  * behind a length cap and never evaluated.
  *
+ * **It only navigates where it listens.** The same origins decide where
+ * the view may go: a link to another http(s) site opens in the system
+ * browser, and any other scheme (`javascript:`, `file:`, `intent:`, an
+ * app's custom scheme) is refused. File access and new windows are off.
+ *
  * **`post` is safe to call before the page is up.** Messages sent before
  * the shim announces itself are queued and flushed in order, so a caller
  * with data already in hand doesn't have to wait for `onReady`.
@@ -84,6 +89,8 @@ export { buildThemeCss } from "./theme-css";
  */
 /** Stable, so it can be a dependency without re-resolving every render. */
 const NATIVE_LOCAL_ORIGINS = [OPAQUE_ORIGIN];
+/** Hands every navigation to `handleShouldStartLoad`; see the prop. */
+const ALL_ORIGINS = ["*"];
 
 const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
   {
@@ -164,6 +171,24 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
     bridge.receive(event.nativeEvent.data, origin);
   }
 
+  function handleShouldStartLoad(
+    // The library's own type for this isn't exported from its entry point.
+    request: WebViewNavigation & { isTopFrame?: boolean },
+  ): boolean {
+    // iOS asks for every frame. An iframe inside an allowed page — a video,
+    // a payment step — is that page's business, and it can't reach the
+    // bridge: messages are checked against the top document's URL.
+    if (request.isTopFrame === false) return true;
+
+    const decision = navigationDecision(request.url, bridge.origins);
+    if (decision === "external") {
+      Linking.openURL(request.url).catch((error: unknown) =>
+        logger.failed(`WebView couldn't open "${request.url}"`, error),
+      );
+    }
+    return decision === "allow";
+  }
+
   function handleNavigation(event: WebViewNavigation) {
     // A new document means a new shim, which has not announced itself yet.
     // Without this, `post` would keep injecting into a page that has gone.
@@ -182,6 +207,20 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
         ref={view}
         {...disabledA11yProps()}
         source={nativeSource}
+        // Every URL goes to `handleShouldStartLoad`, which checks exact
+        // origins. The library's own list is a prefix match
+        // (`https://example.com` passes `https://example.com.evil.net`) and
+        // hands anything off-list to `Linking`, custom schemes included.
+        originWhitelist={ALL_ORIGINS}
+        onShouldStartLoadWithRequest={handleShouldStartLoad}
+        // Android: no file:// pages, no file:// reaching other origins, and
+        // `target="_blank"` stays in this view, where the check above runs.
+        allowFileAccess={false}
+        allowFileAccessFromFileURLs={false}
+        allowUniversalAccessFromFileURLs={false}
+        setSupportMultipleWindows={false}
+        // iOS: `window.open` without a tap isn't honoured.
+        javaScriptCanOpenWindowsAutomatically={false}
         // Before the page's own scripts, so `AppBridge` is already there
         // when they look for it — and so the stylesheet lands with the
         // first paint rather than after a flash of the page's own.

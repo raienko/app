@@ -9,7 +9,7 @@ import {
 import env from "@/constants/env";
 import { deviceHeaders } from "@/features/device";
 import { createEventBus } from "@/features/event-bus";
-import logger from "@/features/logger";
+import logger, { redact, redactUrl } from "@/features/logger";
 
 import { ApiError, toApiError } from "./errors";
 
@@ -102,7 +102,7 @@ headerProviders.add(deviceHeaders);
 let lastRequestId = 0;
 
 function describe(config: AxiosRequestConfig): string {
-  return `${(config.method ?? "get").toUpperCase()} ${config.url ?? ""}`;
+  return `${(config.method ?? "get").toUpperCase()} ${redactUrl(config.url ?? "")}`;
 }
 
 /** `#3` for a numbered request; empty for one that failed before it got a number. */
@@ -118,14 +118,37 @@ function originOf(url: string | undefined): string | undefined {
 }
 
 /**
- * Whether a request goes to our own API. A path (`users/1`, `/users/1`) is
- * joined to `baseURL`, so it does; an absolute URL is used as it is, so it
- * only does when it names the same origin. Anything else is a third party,
- * which must never see the user's token.
+ * A URL whose destination depends on who parses it. `//host/path` is a path
+ * to us and an absolute URL to axios and the browser; a backslash is a slash
+ * to the WHATWG parser and a character to everything else; leading spaces
+ * and control characters are stripped by some parsers and not others.
+ * None of these has a legitimate use in a call site, so they're refused
+ * rather than guessed at.
+ */
+function isAmbiguousUrl(url: string | undefined): boolean {
+  return (
+    url !== undefined &&
+    (url.startsWith("//") ||
+      url.includes("\\") ||
+      /[\u0000-\u001f\u007f]/.test(url) ||
+      url.trim() !== url)
+  );
+}
+
+/**
+ * Whether a request goes to our own API, judged on where it will actually
+ * go: the URL fully resolved the way axios will send it, against the API
+ * origin the instance was configured with — not a `baseURL` the call site
+ * passed, which would let any caller name its own "API". Anything else is a
+ * third party, which must never see the user's token.
  */
 function isOwnApi(config: InternalAxiosRequestConfig): boolean {
-  const target = originOf(config.url);
-  return target === undefined || target === originOf(config.baseURL);
+  const apiOrigin = originOf(http.defaults.baseURL);
+  const target = originOf(http.getUri(config));
+  // No origin at all: a relative URL with no API configured, which the
+  // browser sends to the page's own origin.
+  if (target === undefined) return apiOrigin === undefined;
+  return target === apiOrigin;
 }
 
 /** The axios instance itself, for the rare call the helpers below don't cover. */
@@ -146,6 +169,11 @@ http.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   for (const [name, value] of Object.entries(extra)) {
     if (!config.headers.has(name)) config.headers.set(name, value);
   }
+  if (isAmbiguousUrl(config.url)) {
+    throw new Error(
+      `Refusing ambiguous request URL ${JSON.stringify(redactUrl(config.url ?? ""))}: use a path or a full https:// URL.`,
+    );
+  }
   config.toOwnApi = isOwnApi(config);
   if (!config.skipAuth && config.toOwnApi) {
     const token = await tokenProvider();
@@ -156,8 +184,8 @@ http.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   config.requestId = ++lastRequestId;
   if (!config.skipLog) {
     logger.out(`${tag(config)}${describe(config)}`, {
-      ...(config.params ? { params: config.params } : null),
-      ...(config.data !== undefined ? { body: config.data } : null),
+      ...(config.params ? { params: redact(config.params) } : null),
+      ...(config.data !== undefined ? { body: redact(config.data) } : null),
     });
   }
   return config;
@@ -170,7 +198,7 @@ http.interceptors.response.use(
       const took = config.startedAt ? Date.now() - config.startedAt : 0;
       logger.in(
         `${tag(config)}${response.status} ${describe(config)} (${took}ms)`,
-        response.data,
+        redact(response.data),
       );
     }
     return response;
@@ -183,7 +211,7 @@ http.interceptors.response.use(
       const took = config?.startedAt ? Date.now() - config.startedAt : 0;
       logger.failed(
         `${tag(config)}${apiError.status ?? "—"} ${config ? describe(config) : "request"} (${took}ms): ${apiError.message}`,
-        apiError.data,
+        redact(apiError.data),
       );
     }
     // Only a request that carried the session can have it rejected: not one

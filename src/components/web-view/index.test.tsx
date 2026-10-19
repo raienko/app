@@ -1,4 +1,5 @@
 import { createRef } from "react";
+import { Linking } from "react-native";
 
 import { act, render } from "@/root/testing";
 
@@ -251,6 +252,66 @@ describe("WebView smoke test", () => {
       await pageSends(view, { type: "steal" }, "https://evil.com/page");
 
       expect(onMessage).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("navigating", () => {
+    const navigate = (view: View, url: string, isTopFrame = true) =>
+      web(view).onShouldStartLoadWithRequest({ url, isTopFrame });
+
+    it("is locked down: no file access, no new windows", async () => {
+      const view = await render(
+        <Component label="Page" source={{ uri: URI }} />,
+      );
+
+      expect(web(view)).toMatchObject({
+        allowFileAccess: false,
+        allowFileAccessFromFileURLs: false,
+        allowUniversalAccessFromFileURLs: false,
+        setSupportMultipleWindows: false,
+        javaScriptCanOpenWindowsAutomatically: false,
+      });
+    });
+
+    it("follows links within the page's own origin", async () => {
+      const view = await render(
+        <Component label="Page" source={{ uri: URI }} />,
+      );
+
+      expect(navigate(view, "https://example.com/receipt")).toBe(true);
+    });
+
+    it("opens another site in the system browser instead", async () => {
+      const openURL = jest
+        .spyOn(Linking, "openURL")
+        .mockResolvedValue(undefined);
+      const view = await render(
+        <Component label="Page" source={{ uri: URI }} />,
+      );
+
+      expect(navigate(view, "https://phish.example/login")).toBe(false);
+      expect(openURL).toHaveBeenCalledWith("https://phish.example/login");
+      openURL.mockRestore();
+    });
+
+    it("refuses other schemes without opening anything", async () => {
+      const openURL = jest.spyOn(Linking, "openURL");
+      const view = await render(
+        <Component label="Page" source={{ uri: URI }} />,
+      );
+
+      expect(navigate(view, "otherapp://transfer?to=me")).toBe(false);
+      expect(navigate(view, "javascript:alert(1)")).toBe(false);
+      expect(openURL).not.toHaveBeenCalled();
+      openURL.mockRestore();
+    });
+
+    it("leaves frames inside an allowed page alone", async () => {
+      const view = await render(
+        <Component label="Page" source={{ uri: URI }} />,
+      );
+
+      expect(navigate(view, "https://video.example/embed", false)).toBe(true);
     });
   });
 

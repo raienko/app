@@ -70,6 +70,22 @@ describe("SecureValue", () => {
     expect(result.current).toBeUndefined();
   });
 
+  it("stores device-only, readable while unlocked, by default", () => {
+    const setItem = jest.spyOn(SecureStore, "setItem");
+
+    new SecureValue<string>("token-e").setValue("jwt");
+    new SecureValue<string>("token-f", { access: "afterFirstUnlock" }).setValue(
+      "jwt",
+    );
+
+    expect(setItem).toHaveBeenNthCalledWith(1, "token-e", '"jwt"', {
+      keychainAccessible: SecureStore.WHEN_UNLOCKED_THIS_DEVICE_ONLY,
+    });
+    expect(setItem).toHaveBeenNthCalledWith(2, "token-f", '"jwt"', {
+      keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK_THIS_DEVICE_ONLY,
+    });
+  });
+
   it("rejects invalid keys instead of aliasing another secret", () => {
     expect(() => new SecureValue("user@example.com/token")).toThrow(
       /Invalid SecureValue key/,

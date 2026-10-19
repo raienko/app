@@ -146,3 +146,56 @@ export function isAllowedOrigin(
     return normalized === candidate || originOf(normalized) === candidate;
   });
 }
+
+/** What to do with a page trying to load a new top-level document. */
+export type NavigationDecision = "allow" | "external" | "block";
+
+/**
+ * Whether the view may follow a navigation to `url`.
+ *
+ * - `allow`: the blank document behind an `html` source, or an origin on
+ *   the list — the same list the bridge listens to, so the view never ends
+ *   up showing a page whose messages it would drop.
+ * - `external`: any other http(s) page. It opens in the system browser,
+ *   where the user sees its address bar, instead of inside the app's frame
+ *   where a look-alike login page would be indistinguishable from ours.
+ * - `block`: every other scheme — `javascript:`, `file:`, `data:`,
+ *   `intent:`, another app's custom scheme. A page we don't control
+ *   doesn't get to launch apps or read files through us.
+ */
+export function navigationDecision(
+  url: string,
+  allowed: readonly string[],
+): NavigationDecision {
+  const candidate = url.trim().toLowerCase();
+  if (candidate === "about:blank" || candidate === "about:srcdoc") {
+    return "allow";
+  }
+
+  const origin = originOf(candidate);
+  if (origin === null || !/^https?:\/\//.test(origin)) return "block";
+
+  return isAllowedOrigin(origin, allowed) ? "allow" : "external";
+}
+
+/**
+ * The origins to address a message to, so it's delivered only while the
+ * frame still shows one of them.
+ *
+ * `postMessage` with `"*"` delivers to whatever document the frame holds
+ * *now* — and an iframe can be navigated (a link, a redirect, a script)
+ * without the app hearing about it, since a cross-origin frame's location
+ * can't be read. Naming the target origin hands that check to the browser:
+ * a message for `https://example.com` is dropped if the frame has moved on.
+ *
+ * Each allowed origin gets its own copy, since the app can't tell which
+ * one is loaded; the browser delivers only the one that matches. The
+ * opaque origin can't be addressed at all and is left out — on the web an
+ * `html` source inherits the app's own origin, which is on the list.
+ */
+export function postTargets(allowed: readonly string[]): string[] {
+  const targets = allowed
+    .map((entry) => originOf(entry))
+    .filter((origin): origin is string => origin !== null);
+  return [...new Set(targets)];
+}

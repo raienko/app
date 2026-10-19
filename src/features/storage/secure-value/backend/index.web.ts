@@ -1,3 +1,5 @@
+import type { SecureAccess } from "../../types";
+
 /**
  * Web: nothing. A browser has no store a page's own scripts can't read, so
  * rather than pretend, secrets live only in the adapter's in-memory mirror
@@ -7,7 +9,7 @@
  */
 const secureBackend = {
   get: (_key: string): string | undefined => undefined,
-  set: (_key: string, _value: string): void => {},
+  set: (_key: string, _value: string, _access: SecureAccess): void => {},
   remove: async (_key: string): Promise<void> => {},
 };
 

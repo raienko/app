@@ -54,9 +54,9 @@ jobs:
       - name: Set up project
         uses: ./.github/actions/setup
       - name: Install Maestro
-        run: |
-          curl -fsSL "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+        uses: ./.github/actions/maestro
+        with:
+          version: ${{ env.MAESTRO_VERSION }}
       - name: Select Xcode 26
         run: |
           if ! xcodebuild -version | grep -q "^Xcode 26"; then
@@ -114,9 +114,9 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Install Maestro
-        run: |
-          curl -fsSL "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+        uses: ./.github/actions/maestro
+        with:
+          version: ${{ env.MAESTRO_VERSION }}
       - name: Restore the native app (or full-build caches)
         uses: ./.github/actions/native-app
         with:
@@ -153,9 +153,9 @@ jobs:
       - name: Set up project
         uses: ./.github/actions/setup
       - name: Install Maestro
-        run: |
-          curl -fsSL "https://get.maestro.mobile.dev" | bash
-          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+        uses: ./.github/actions/maestro
+        with:
+          version: ${{ env.MAESTRO_VERSION }}
       - name: Export the E2E web app
         run: yarn web:build
         env:

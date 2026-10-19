@@ -28,30 +28,31 @@ Audited 2026-10-19 against OWASP MASVS v2 (the apps), OWASP ASVS (web and API ro
 
 **In place**
 
-| Area             | What exists                                                                                                                                                         | Where                                             |
-| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
-| Transport        | HTTPS required for `EXPO_PUBLIC_API_URL` (plain http only to localhost / the Android emulator host); iOS App Transport Security on (`NSAllowsArbitraryLoads` false) | `src/constants/env`, generated `ios/*/Info.plist` |
-| Credentials      | `SecureValue` in Keychain / Keystore, memory-only on web, session-scoped values wiped on sign-out                                                                   | `src/features/storage`                            |
-| Logging          | The logger is compiled out of release builds (`createLogger(__DEV__)`)                                                                                              | `src/features/logger`                             |
-| Deep links       | Incoming links checked against `appLinkDomains`, then parsed and routed through one pipeline                                                                        | `src/features/deep-links`                         |
-| Input            | zod schemas for forms, with translated errors                                                                                                                       | `src/features/validation`, `src/features/forms`   |
-| Supply chain     | Exact-pinned dependencies, Secretlint (hook + CI), dependency review with a copyleft denylist, SHA-pinned actions, read-only CI tokens, Expo Doctor                 | `package.json`, `.github/`                        |
-| Privacy manifest | iOS `PrivacyInfo.xcprivacy` generated at prebuild                                                                                                                   | `ios/` (generated)                                |
+| Area             | What exists                                                                                                                                                         | Where                                                       |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| Transport        | HTTPS required for `EXPO_PUBLIC_API_URL` (plain http only to localhost / the Android emulator host); iOS App Transport Security on (`NSAllowsArbitraryLoads` false) | `src/constants/env`, generated `ios/*/Info.plist`           |
+| Credentials      | `SecureValue` in Keychain / Keystore, memory-only on web, session-scoped values wiped on sign-out                                                                   | `src/features/storage`                                      |
+| Logging          | The logger is compiled out of release builds (`createLogger(__DEV__)`)                                                                                              | `src/features/logger`                                       |
+| Deep links       | Incoming links checked against `appLinkDomains`, then parsed and routed through one pipeline                                                                        | `src/features/deep-links`                                   |
+| Input            | zod schemas for forms, with translated errors                                                                                                                       | `src/features/validation`, `src/features/forms`             |
+| Supply chain     | Exact-pinned dependencies, Secretlint (hook + CI), dependency review with a copyleft denylist, SHA-pinned actions, read-only CI tokens, Expo Doctor                 | `package.json`, `.github/`                                  |
+| Privacy manifest | iOS `PrivacyInfo.xcprivacy` generated at prebuild                                                                                                                   | `ios/` (generated)                                          |
+| Data at rest     | Android backup off; every MMKV store AES-256 encrypted with a per-install key in device-only secure storage; query cache persisted by opt-in only                   | `app.config.ts`, `src/features/storage`, `src/features/api` |
+| Web headers      | HSTS, nosniff, `X-Frame-Options: DENY`, Referrer- and Permissions-Policy on every server response; CSP in report-only                                               | `src/app/+middleware.ts`, `src/features/security-headers`   |
+| WebView          | Exact-origin navigation allowlist (off-list http(s) opens in the system browser, other schemes refused); file access and new windows off                            | `src/components/web-view`                                   |
+| Policy           | `SECURITY.md`, `CODEOWNERS`, severity policy and exception register, data inventory, threat model; weekly OSV scan; Maestro installed by checksum                   | `docs/security`, `.github/`                                 |
 
 **Gaps** — each one is a work package below.
 
-| Gap                                                                                                                            | Risk                                                                                  | Package         |
-| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------- | --------------- |
-| Android `allowBackup="true"`: MMKV data (preferences, session values, the query cache) goes to Google backups and `adb backup` | Data leaves the device unencrypted                                                    | SEC-01          |
-| MMKV and the persisted TanStack Query cache are plaintext on disk                                                              | API responses with personal data readable on a rooted / jailbroken / backed-up device | SEC-02, SEC-03  |
-| SecureStore uses the default accessibility                                                                                     | Tokens can restore onto another device via iCloud Keychain or an encrypted backup     | SEC-04          |
-| The web build sends no security headers                                                                                        | No CSP, clickjacking or MIME-sniffing protection                                      | SEC-05          |
-| API-client logging prints request bodies in development                                                                        | A staging build with logging on would print passwords and tokens                      | SEC-06          |
-| WebView loads and navigates anywhere; bridge origin not pinned                                                                 | Phishing or script injection through embedded content                                 | SEC-07          |
-| `/api/health` reports the app version; no auth, rate limit or validation pattern for future routes                             | Fingerprinting now; abuse once real routes exist                                      | SEC-08          |
-| No CodeQL / SAST, scheduled vulnerability scan, SBOM or provenance                                                             | Findings and releases aren't traceable for an audit                                   | SEC-11 – SEC-14 |
-| Maestro installed with `curl \| bash` in CI                                                                                    | Supply-chain injection into a CI job                                                  | SEC-15          |
-| No `SECURITY.md`, threat model, data inventory or incident runbook                                                             | Audit failure; no disclosure path                                                     | SEC-16 – SEC-18 |
+| Gap                                                                                                                   | Risk                                                | Package        |
+| --------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------- | -------------- |
+| CSP is report-only; the production page reports one inline script and an `eval` (likely zod 4's JIT probe)            | No script-injection protection until enforced       | SEC-05         |
+| Static files served by `expo serve` skip middleware, so they carry no security headers                                | nosniff / HSTS missing on assets                    | SEC-05         |
+| Device checks for backup, restore and encrypted MMKV not yet recorded                                                 | Phase 1 "done when" evidence incomplete             | SEC-01, 02, 04 |
+| No rate limiting for API routes                                                                                       | Abuse once real routes exist                        | SEC-08         |
+| CodeQL default setup / schedule, SBOM, provenance                                                                     | Findings and releases aren't traceable for an audit | SEC-11, 13, 14 |
+| GitHub settings: private reporting, secret scanning + push protection, branch protection, Dependabot security updates | Controls documented but not switched on             | SEC-12, SEC-16 |
+| No incident runbook                                                                                                   | No rehearsed response                               | SEC-18         |
 
 ## Work plan
 
@@ -61,45 +62,45 @@ Ordered so each phase can ship on its own. **Effort** is for one person who know
 
 Small, mostly config, and the first things a pen test or store review flags.
 
-**SEC-01 · Turn off Android backup of app data** — roadmap 07 · ½ day
+**SEC-01 · Turn off Android backup of app data** — roadmap 07 · ½ day — **Done 2026-10-19** in code: `allowBackup: false`, and `expo config --type introspect` shows `android:allowBackup="false"` in the manifest. **Still open:** the device check below.
 
 - `app.config.ts`: `android.allowBackup: false`. If backup of non-sensitive preferences is wanted later, use backup rules (`dataExtractionRules` / `fullBackupContent`) that exclude the MMKV directory and SecureStore instead.
 - Done when: the generated manifest has `allowBackup="false"`; `adb backup` / a device-to-device restore yields no app data (checked once on a device and recorded here).
 
-**SEC-02 · Encrypt MMKV at rest** — roadmap 07 · 1–2 days
+**SEC-02 · Encrypt MMKV at rest** — roadmap 07 · 1–2 days — **Done 2026-10-19** in code: `createEncryptedStore` (`src/features/storage/encrypted-store`) opens both stores with AES-256 under a per-install `expo-crypto` key in a `SecureValue` (`afterFirstUnlock`); migrates and deletes the plaintext store; a missing key starts empty, an unreadable one uses a throwaway store. Tests cover migration, missing, malformed and unreadable keys. **Still open:** checking the files on a device aren't readable as text, and an upgrade install keeping preferences. `expo-crypto` is a new native module, so dev clients need a rebuild.
 
 - `src/features/storage/local-value/adapter.ts` (and the session-value and query-cache MMKV instances): create MMKV with `encryptionKey`. The key is generated once per install (cryptographically random, 16+ bytes), stored with `SecureValue`, never in source.
 - Migration: on first run after the change, read the old unencrypted instance, write into the encrypted one, delete the old one. Corrupt or missing key → start empty, don't crash (same rule as today's corrupt-JSON handling).
 - Web: MMKV's web build is `localStorage`, which can't be meaningfully encrypted client-side; document that web keeps only non-sensitive values there (already the rule for `LocalValue`).
 - Done when: the MMKV files on a device aren't readable as text; upgrade from an unencrypted build keeps preferences; tests cover migration and a missing key.
 
-**SEC-03 · Persist the query cache by opt-in** — roadmap 07/14 · ½ day
+**SEC-03 · Persist the query cache by opt-in** — roadmap 07/14 · ½ day — **Done 2026-10-19:** `meta: { persist: true }`; `persister.test.ts` covers marked, unmarked and failed queries across a relaunch.
 
 - `src/features/api/provider.tsx`: flip `shouldPersist` from opt-out (`meta.persist === false`) to opt-in (`meta.persist === true`), so personal data never reaches disk unless a query is marked safe to keep. Document per-query in `src/features/api/index.md`.
 - Done when: an unmarked query isn't in the persisted cache; a marked one survives a relaunch (test).
 
-**SEC-04 · Device-only Keychain for credentials** — roadmap 07 · ½ day
+**SEC-04 · Device-only Keychain for credentials** — roadmap 07 · ½ day — **Done 2026-10-19** in code: every `SecureValue` is `*_THIS_DEVICE_ONLY`, with `access: "whenUnlocked"` (default) or `"afterFirstUnlock"`. **Still open:** the restore-onto-another-device check.
 
 - `src/features/storage/secure-value/backend/index.ts`: pass `keychainAccessible: WHEN_UNLOCKED_THIS_DEVICE_ONLY` (iOS). Android Keystore keys are already device-bound.
 - Decide per value whether it should survive a restore (an install id may; tokens must not) — expose it as an option on `SecureValue` if both are needed.
 - Done when: a token isn't present after restoring an encrypted backup onto another device (device check, recorded).
 
-**SEC-05 · Web security headers** — roadmap 09 · 1 day
+**SEC-05 · Web security headers** — roadmap 09 · 1 day — **Partly done 2026-10-19:** server middleware sends every header on pages and API routes (checked with `npx expo serve`); CSP in report-only. **Still open:** clear the two CSP reports (an inline script; an `eval`) and set `ENFORCE_CSP`; headers for static files at the host; a check in the E2E web job.
 
 - `src/app/+middleware.ts` (Expo Router server middleware, with `expo-server`'s `setResponseHeaders`) or the hosting config, whichever deploys: `Content-Security-Policy` (start in report-only, then enforce; allow the API origin, map tile/glyph hosts, image hosts), `Strict-Transport-Security`, `X-Content-Type-Options: nosniff`, `frame-ancestors 'none'` (or `X-Frame-Options: DENY`), `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` limited to what the app uses (geolocation, camera for the image picker).
 - Done when: the production export served with `npx expo serve` returns every header (checked in the E2E web job), and the app still loads maps, images and the API under the enforced CSP.
 
-**SEC-06 · Redact request logging** — roadmap 09 · ½ day
+**SEC-06 · Redact request logging** — roadmap 09 · ½ day — **Done 2026-10-19.** Also fixed with it: the token check now resolves the full URL as axios sends it and compares it to the configured API origin (a `//host` path or a per-call `baseURL` previously got the token), and refuses ambiguous URLs (`//`, backslashes, control characters, surrounding spaces). Redaction: `redact` / `redactUrl` in `src/features/logger`, applied to params, bodies, responses, failures and URLs in the API client; tests cover a sign-in body.
 
 - `src/features/logger` + `src/features/api/client.ts`: an allowlist-first redactor applied to logged params and bodies — keys matching `password|token|secret|otp|code|authorization|cookie|card|cvv` become `"[redacted]"`; strings that look like JWTs are masked. Never log headers.
 - Done when: unit tests show a sign-in body logged with `password` and `token` redacted.
 
-**SEC-07 · Harden the WebView** — roadmap 09 · 1 day
+**SEC-07 · Harden the WebView** — roadmap 09 · 1 day — **Done 2026-10-19:** `navigationDecision` (exact origins; off-list http(s) to the system browser; other schemes refused), file access and multiple windows off. `originWhitelist` is deliberately `*`: the library's matching is a prefix match and opens off-list schemes itself. On the web, outgoing bridge messages are addressed to each trusted origin (`postTargets`), never `"*"`, so a frame that navigated away receives nothing.
 
 - `src/components/web-view`: `originWhitelist` from an allowlist prop (default: the page's own origin), `onShouldStartLoadWithRequest` that opens off-list links in the system browser, `allowFileAccess`/`allowUniversalAccessFromFileURLs` off, `setSupportMultipleWindows` off, and the bridge rejects messages whose origin isn't on the list.
 - Done when: tests cover a blocked navigation and a bridge message from a foreign origin.
 
-**SEC-08 · API route baseline** — roadmap 14 · ½ day now, more per route
+**SEC-08 · API route baseline** — roadmap 14 · ½ day now, more per route — **Done 2026-10-19:** `/api/health` returns `{ status }`; route rules in `src/app/api/index.md`. **Still open:** rate limiting with the first real route.
 
 - `/api/health`: return `{ status }` only. Add `src/app/api/index.md` rules for every new route: authenticate (bearer token checked server-side), validate input with zod, rate-limit (hosting or middleware), return generic errors, never log bodies.
 - Done when: the health route leaks no version; the route guide states the rules.
@@ -127,21 +128,21 @@ What SOC 2 / ISO 27001 auditors ask to see. Mostly roadmap 05, 18 and 20.
 
 **SEC-11 · Static analysis** — ½ day — **Partly done 2026-10-19:** CodeQL (JavaScript/TypeScript and the workflows, `security-extended` queries) runs as jobs in the Code quality workflow. **Still open:** turn GitHub's CodeQL default setup off, enable the pull-request trigger and a weekly schedule, and triage findings under the severity policy (SEC-16).
 
-**SEC-12 · Scheduled vulnerability scan** — ½ day — weekly OSV-Scanner (or `npm audit --omit=dev`) workflow over `yarn.lock`, failing on high/critical with an exception register (owner + expiry). Turn on Dependabot security updates (the version-update config exists, paused).
+**SEC-12 · Scheduled vulnerability scan** — ½ day — **Done 2026-10-19:** weekly `Vulnerability scan` workflow (OSV-Scanner, checksum-pinned) fails on CVSS 7.0+ outside `osv-scanner.toml`; three build-only highs registered until 2026-11-19 and need an owner. **Still open:** turn on Dependabot security updates (GitHub setting). Original: weekly OSV-Scanner (or `npm audit --omit=dev`) workflow over `yarn.lock`, failing on high/critical with an exception register (owner + expiry). Turn on Dependabot security updates (the version-update config exists, paused).
 
 **SEC-13 · SBOM** — ½ day — CycloneDX SBOM generated for each release build and attached to the release; licence report from the same data.
 
 **SEC-14 · Build provenance** — 1 day, with roadmap 18 — GitHub artifact attestations (SLSA build provenance) for the web export and the EAS build metadata; release notes record commit, version, build ids.
 
-**SEC-15 · Pin the Maestro installer** — ½ day — download the release archive for `MAESTRO_VERSION` and verify its SHA-256 instead of `curl | bash`.
+**SEC-15 · Pin the Maestro installer** — ½ day — **Done 2026-10-19:** `.github/actions/maestro` downloads the release and checks its SHA-256 (matches GitHub's digest). Original: download the release archive for `MAESTRO_VERSION` and verify its SHA-256 instead of `curl | bash`.
 
-**SEC-16 · Repository controls and policy** — 1 day
+**SEC-16 · Repository controls and policy** — 1 day — **Partly done 2026-10-19:** `SECURITY.md`, severity policy and register (`docs/security/exceptions.md`), `.github/CODEOWNERS`. **Still open:** the GitHub settings below, which need a human.
 
 - `SECURITY.md`: supported versions, private reporting (GitHub private vulnerability reporting), response times.
 - Severity policy (critical/high/medium/low → fix-by times) and an exception register (`docs/security/exceptions.md`: owner, reason, expiry).
 - GitHub settings (human, recorded here): secret scanning + push protection, branch protection on `main` (required reviews and the `Code quality / *` jobs), `CODEOWNERS` for `src/features/{api,storage,deep-links}`, `.github/`, `app.config.ts`.
 
-**SEC-17 · Data inventory and threat model** — 2 days
+**SEC-17 · Data inventory and threat model** — 2 days — **Done 2026-10-19:** [data inventory](../security/data-inventory.md) and [threat model](../security/threat-model.md); review with each trigger they list.
 
 - `docs/security/data-inventory.md`: every persisted or transmitted field — owner, purpose, storage (`LocalValue` / `SessionValue` / `SecureValue` / query cache / server), retention, deletion, telemetry exposure. The classification column drives SEC-02/03/10.
 - `docs/security/threat-model.md`: STRIDE over the app, web build, API routes, CI and release; each threat mapped to a control above or an accepted risk.

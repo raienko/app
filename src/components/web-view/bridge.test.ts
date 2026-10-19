@@ -1,10 +1,12 @@
 import {
   BRIDGE_CHANNEL,
-  MAX_MESSAGE_LENGTH,
   decodeMessage,
   encodeMessage,
   isAllowedOrigin,
+  MAX_MESSAGE_LENGTH,
+  navigationDecision,
   originOf,
+  postTargets,
 } from "./bridge";
 
 describe("encodeMessage", () => {
@@ -184,5 +186,64 @@ describe("isAllowedOrigin", () => {
   it("accepts an opaque origin only when it is named", () => {
     expect(isAllowedOrigin("null", ["null"])).toBe(true);
     expect(isAllowedOrigin("null", allowed)).toBe(false);
+  });
+});
+
+describe("navigationDecision", () => {
+  const allowed = ["https://example.com"];
+
+  it("follows a navigation within an allowed origin", () => {
+    expect(navigationDecision("https://example.com/next?x=1", allowed)).toBe(
+      "allow",
+    );
+    expect(navigationDecision("HTTPS://EXAMPLE.COM/", allowed)).toBe("allow");
+  });
+
+  it("allows the blank document behind an html source", () => {
+    expect(navigationDecision("about:blank", allowed)).toBe("allow");
+  });
+
+  it("sends any other web page to the system browser", () => {
+    expect(navigationDecision("https://evil.example.com/login", allowed)).toBe(
+      "external",
+    );
+    // The prefix match react-native-webview's own list would let through.
+    expect(navigationDecision("https://example.com.evil.net/", allowed)).toBe(
+      "external",
+    );
+    expect(navigationDecision("http://example.com/", allowed)).toBe("external");
+  });
+
+  it("refuses every non-web scheme outright", () => {
+    for (const url of [
+      "javascript:alert(1)",
+      "file:///etc/passwd",
+      "data:text/html,<script>1</script>",
+      "intent://scan/#Intent;scheme=zxing;end",
+      "otherapp://pay?amount=100",
+      "about:config",
+    ]) {
+      expect(navigationDecision(url, allowed)).toBe("block");
+    }
+  });
+});
+
+describe("postTargets", () => {
+  it("names each trusted origin, so a navigated frame gets nothing", () => {
+    expect(
+      postTargets([
+        "https://example.com",
+        "https://pay.example.com/session/12",
+        "HTTPS://EXAMPLE.COM/other",
+      ]),
+    ).toEqual(["https://example.com", "https://pay.example.com"]);
+  });
+
+  it("never falls back to the wildcard", () => {
+    expect(postTargets(["null"])).toEqual([]);
+    expect(postTargets([])).toEqual([]);
+    expect(postTargets(["null", "http://localhost:8081"])).toEqual([
+      "http://localhost:8081",
+    ]);
   });
 });

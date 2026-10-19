@@ -116,6 +116,7 @@ export default ({ config, projectRoot }: ConfigContext): ExpoConfig => ({
       monochromeImage: brandAsset("icon-android-monochrome.png"),
     },
     predictiveBackGestureEnabled: false,
+    allowBackup: false,
     ...androidAppLinks,
   },
   web: {
@@ -131,7 +132,9 @@ export default ({ config, projectRoot }: ConfigContext): ExpoConfig => ({
       : {}),
   },
   plugins: [
-    "expo-router",
+    // Server middleware (src/app/+middleware.ts) adds the web build's
+    // security headers to every response.
+    ["expo-router", { unstable_useServerMiddleware: true }],
     "expo-localization",
     "expo-notifications",
     [

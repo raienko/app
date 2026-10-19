@@ -12,7 +12,7 @@ import logger from "@/features/logger";
 import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
-import { OPAQUE_ORIGIN } from "./bridge";
+import { OPAQUE_ORIGIN, postTargets } from "./bridge";
 import { bridgeScript, htmlWithBridge } from "./injection";
 import type { WebViewHandle, WebViewProps } from "./types";
 import { useBridge } from "./use-bridge";
@@ -65,12 +65,16 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
   const styles = useStyles();
   const frame = useRef<HTMLIFrameElement | null>(null);
 
+  // Where outgoing messages may go — the trusted origins, read through a
+  // ref because `send` is handed to the bridge that works them out.
+  const targets = useRef<string[]>([]);
+
   const send = useCallback((encoded: string) => {
-    // "*" rather than a named target: an `html` source renders from
-    // `srcdoc`, whose origin is opaque and cannot be named. The direction
-    // that matters for trust is the other one — what we *accept* — and
-    // that is checked against `allowedOrigins` on the way in.
-    frame.current?.contentWindow?.postMessage(encoded, "*");
+    // Never "*": the frame may have navigated somewhere else since it was
+    // trusted, and only a named target origin makes the browser check.
+    const target = frame.current?.contentWindow;
+    if (!target) return;
+    for (const origin of targets.current) target.postMessage(encoded, origin);
   }, []);
 
   const bridge = useBridge({
@@ -83,6 +87,10 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
     onReady,
     send,
   });
+
+  useEffect(() => {
+    targets.current = postTargets(bridge.origins);
+  }, [bridge.origins]);
 
   useImperativeHandle(
     ref,
