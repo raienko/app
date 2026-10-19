@@ -17,7 +17,8 @@ on:
       platform:
         description: Platform to run on
         type: choice
-        options: [all, ios, android, web]
+        # native = iOS and Android, without web.
+        options: [all, native, ios, android, web]
         default: all
       flows:
         description: Which flows, by tag — e.g. smoke, or smoke,carousel (empty = all)
@@ -40,7 +41,7 @@ env:
 jobs:
   ios:
     name: iOS
-    if: inputs.platform == 'all' || inputs.platform == 'ios'
+    if: contains(fromJSON('["all","native","ios"]'), inputs.platform)
     # macOS 26 ships Xcode 26 as its default — the app's iOS 26 icon
     # (assets/brand icon-ios.icon, an Icon Composer bundle) only compiles
     # with Xcode 26, and it's what the project is built with locally.
@@ -93,7 +94,7 @@ jobs:
 
   android:
     name: Android
-    if: inputs.platform == 'all' || inputs.platform == 'android'
+    if: contains(fromJSON('["all","native","android"]'), inputs.platform)
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
