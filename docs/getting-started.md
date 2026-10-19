@@ -127,6 +127,7 @@ GitHub Actions, in `.github/`. **Every workflow is manual for now** (Actions tab
 | **Code quality**      | `workflows/code-quality.yml`      | Formatting · Lint · Types · Unit tests (coverage in the job summary) · Secret scan · Expo Doctor · Web build · Native bundles · Storybook build · Dependency review · CodeQL (JavaScript/TypeScript, workflows)                                                             |
 | **Regression**        | `workflows/regression.yml`        | iOS · Android · Web — the user flows in `.maestro/flows`, end to end on Release builds; screenshots, logs and report uploaded on failure. Pick the platform (`all`, `native` = iOS + Android, or one of `ios` / `android` / `web`), and which flows by tag, when you run it |
 | **Component library** | `workflows/component-library.yml` | Code quality → Build → Publish the web Storybook to GitHub Pages                                                                                                                                                                                                            |
+| **Release**           | `workflows/release.yml`           | Plan → Code quality → iOS · Android · Web → Summary. **Placeholder**: the steps print the EAS commands they will run. See [Releasing](#releasing)                                                                                                                           |
 | **Pull request**      | `workflows/pull-request.yml`      | Title format — `type: 'Message'`, the house commit style, since a squash merge makes the title the commit                                                                                                                                                                   |
 | Dependabot            | `dependabot.yml`                  | Weekly grouped updates for actions and npm, Expo SDK packages excluded. Paused (`open-pull-requests-limit: 0`)                                                                                                                                                              |
 
@@ -136,7 +137,27 @@ GitHub Actions, in `.github/`. **Every workflow is manual for now** (Actions tab
 - **Hardened by default.** Read-only token unless a job needs more, a timeout on every job, superseded runs cancelled, and third-party actions pinned to commit SHAs (the version in a comment beside each).
 - **Dependency review** needs the repository's dependency graph turned on (Settings → Code security).
 
-The workflows still to come — native builds, PR previews, releases, web deploy — are planned in [CI and EAS](plans/ci-and-eas.md).
+The workflows still to come — PR previews, and Release's real build and deploy steps — are planned in [CI and EAS](plans/ci-and-eas.md).
+
+### Releasing
+
+**Release** (Actions → Release → Run workflow) is one form for every way the app ships, from a QA build to a store submission:
+
+| Input          | Options (default **bold**)             | Meaning                                                                                                     |
+| -------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `kind`         | **build** · update                     | A new binary, or an over-the-air JS update to the builds already installed                                  |
+| `platform`     | **all** · native · ios · android · web | `native` = iOS + Android. Updates skip web                                                                  |
+| `environment`  | development · **staging** · production | Backend, config and secrets. Each job runs in the GitHub Environment of that name                           |
+| `distribution` | **internal** · testing · store         | Internal = an install link / preview URL · testing = TestFlight, Play internal · store = review / live site |
+| `version`      | empty = the app config's               | Semver, e.g. `1.4.0` or `1.4.0-rc.1`                                                                        |
+| `notes`        |                                        | Release notes / what to test                                                                                |
+| `checks`       | **on**                                 | Run Code quality first                                                                                      |
+
+- **Plan fails fast** on a combination that can't ship — a store release from anything but production, an update to web, testing on web, a version that isn't semver — before anything builds. Its summary says what will go where.
+- **The run's name is the release**: "Release 1.4.0 · production · store · all", "Update · staging · native", so the Actions list reads as a release history.
+- **One release per environment at a time**, never cancelled halfway.
+- **Production approvals**: give the `production` environment required reviewers (Settings → Environments) and every production job waits for a click. `EXPO_TOKEN` and store keys go in each environment's secrets, not the repository's.
+- **Still a placeholder**: Build, Distribute and Publish update print the `eas build` / `eas submit` / `eas update` / `eas deploy` command they will run. Making them real needs the EAS project, `eas.json` profiles named `<environment>-<distribution>` and the credentials in the [product guide](product-guide.md#step-9--ci-and-release).
 
 ---
 

@@ -143,7 +143,7 @@ Result: the installable web app at your domain, with its API routes.
 
 1. GitHub: add `EXPO_TOKEN` (an Expo **robot** token, not a personal one) as a secret in a protected `production` environment; preview gets its own environment and token.
 2. Turn on the workflow triggers when ready (each workflow's header says how) and make `Code quality / *` required on `main`.
-3. Release flow (roadmap 18): tag → `release.yml` builds and submits → TestFlight and Play internal → testers → promote to production with a phased rollout.
+3. Release flow: the **Release** workflow (`.github/workflows/release.yml`, [how it works](getting-started.md#releasing)) already has the form, checks and jobs — a placeholder until its steps call EAS. Wire them up with `eas.json` profiles named `<environment>-<distribution>` (e.g. `production-store`), then: internal builds for the team → testing (TestFlight and Play internal) → store, with a phased rollout.
 4. Over-the-air JS updates (EAS Update) only with a runtime-version policy, so an update never reaches a binary that can't run it.
 
 ### Step 10 · Store listings
