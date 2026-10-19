@@ -13,7 +13,7 @@ const env = require("./src/constants/env");
 const { existsSync } = require("fs") as {
   existsSync: (path: string) => boolean;
 };
- 
+
 const { version: packageVersion } = require("./package.json") as {
   version: string;
 };
