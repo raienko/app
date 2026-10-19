@@ -73,6 +73,7 @@
     "zod": "4.6.7"
   },
   "devDependencies": {
+    "@expo/repack-app": "0.10.4",
     "@gorhom/bottom-sheet": "5.2.14",
     "@react-native-community/datetimepicker": "9.1.0",
     "@react-native-community/slider": "5.2.0",
@@ -124,8 +125,8 @@
     "web": "expo start --web",
     "e2e:start": "EXPO_PUBLIC_E2E=1 expo start --clear",
     "e2e:web": "EXPO_PUBLIC_E2E=1 expo start --web --clear",
-    "e2e:ios": "EXPO_PUBLIC_E2E=1 expo run:ios --configuration Release --no-bundler",
-    "e2e:android": "node scripts/e2e/android.mjs",
+    "e2e:ios": "node scripts/native/build.mjs ios --profile e2e --install",
+    "e2e:android": "node scripts/native/build.mjs android --profile e2e --install",
     "e2e:test": "node scripts/e2e/test.mjs",
     "e2e:test:web": "node scripts/e2e/test.mjs --web",
     "web:build": "node --env-file=.env node_modules/expo/bin/cli export -p web",

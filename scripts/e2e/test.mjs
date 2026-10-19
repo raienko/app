@@ -6,6 +6,10 @@
  *
  *   yarn e2e:test --include-tags smoke
  *
+ * Every run writes e2e-output/ — a junit report, and per flow the
+ * screenshots, view hierarchy and log up to where it stopped (what CI
+ * uploads when a run fails). It's cleared at the start of each run.
+ *
  * `--web` (`yarn e2e:test:web`) runs the same flows in headless Chromium
  * against WEB_URL — the dev server from `yarn e2e:web`
  * (http://localhost:8081) unless set. Maestro only drives a browser for a
@@ -102,11 +106,23 @@ const target = web
     ? ["--device", device]
     : [];
 
+const OUTPUT = "e2e-output";
+rmSync(OUTPUT, { recursive: true, force: true });
+
 const result = spawnSync(
   maestro,
   [
     "test",
     ...target,
+    "--format",
+    "junit",
+    "--output",
+    join(OUTPUT, "report.xml"),
+    "--debug-output",
+    OUTPUT,
+    // Straight into e2e-output/, not a hidden .maestro/tests/<timestamp>/
+    // that artifact uploads skip.
+    "--flatten-debug-output",
     "-e",
     `APP_ID=${appId}`,
     ...args,

@@ -10,3 +10,5 @@ templates
 coverage
 .jest-cache
 .maestro/.web
+e2e-output
+.native-cache

@@ -112,9 +112,9 @@ yarn e2e:web
 yarn e2e:test:web     # WEB_URL=… to point it elsewhere (CI uses the production export)
 ```
 
-- **Release on mobile:** no dev-client launcher to get past, nothing reloads mid-run, and the flag is baked in at build time. Rebuild after changing JS. `yarn e2e:android` compiles native code only for the device's CPU architecture (pass `--device <AVD>` when several are running).
+- **Release on mobile, rebuilt only when native code changes.** `yarn e2e:ios` / `yarn e2e:android` build the `e2e` profile through [scripts/native](../scripts/native/README.md): a binary is cached per native fingerprint, and while the fingerprint is unchanged the current JS is repacked into it (about 40s) instead of building. `--rebuild` forces a full build; `--device <name>` picks the simulator / emulator when several are running. There's no dev-client launcher to get past and nothing reloads mid-run.
 - **`yarn e2e:test` picks the device** when exactly one is running (one booted simulator, no Android device); otherwise pass `--device <id>`.
-- **CI:** the **E2E** workflow (manual for now) runs the flows on iOS, Android and web, one job each.
+- **CI:** the **E2E** workflow (manual for now) runs the flows on iOS, Android and web, one job each. Each job restores its binary through the `native-app` action (`.github/actions/native-app`), so most runs repack instead of building; a full iOS build (about 55 minutes cold) gets ccache and CocoaPods caches, a full Android build Gradle's. When a flow fails, the job uploads `e2e-output/`: a screenshot of each step up to the failure, the view hierarchy, Maestro's log and a junit report — the same folder every local run writes.
 
 ---
 

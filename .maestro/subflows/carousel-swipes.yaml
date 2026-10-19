@@ -9,9 +9,13 @@ name: Carousel swipes
     from:
       id: "carousel"
     direction: RIGHT
-- assertVisible: "A river running through a canyon, Slide 1 of 4"
+- extendedWaitUntil:
+    visible: "A river running through a canyon, Slide 1 of 4"
+    timeout: 15000
 - swipe:
     from:
       id: "carousel"
     direction: RIGHT
-- assertVisible: ".*Slide 4 of 4"
+- extendedWaitUntil:
+    visible: ".*Slide 4 of 4"
+    timeout: 15000

@@ -18,11 +18,15 @@ tags:
 - scrollUntilVisible:
     element: "current slide"
     centerElement: true
-- assertVisible: "A river running through a canyon, Slide 1 of 4"
+- extendedWaitUntil:
+    visible: "A river running through a canyon, Slide 1 of 4"
+    timeout: 15000
 
 - tapOn:
     id: "carousel.dot.2"
-- assertVisible: "A pug wrapped in a blanket, Slide 2 of 4"
+- extendedWaitUntil:
+    visible: "A pug wrapped in a blanket, Slide 2 of 4"
+    timeout: 15000
 
 # Swiping, and wrapping back past the first slide with loop on — touch
 # platforms only (`when: platform` takes one platform, hence two calls).
@@ -37,15 +41,21 @@ tags:
 
 - tapOn:
     id: "carousel.dot.4"
-- assertVisible: ".*Slide 4 of 4"
+- extendedWaitUntil:
+    visible: ".*Slide 4 of 4"
+    timeout: 15000
 
 # Loop off on the last slide: it stays on screen instead of going blank.
 - scrollUntilVisible:
     element: "loop: on"
     direction: UP
 - tapOn: "loop: on"
-- assertVisible: "loop: off"
-- assertVisible:
-    id: "carousel"
+- extendedWaitUntil:
+    visible: "loop: off"
+    timeout: 15000
+- extendedWaitUntil:
+    visible:
+      id: "carousel"
+    timeout: 15000
 - scrollUntilVisible:
     element: ".*Slide 4 of 4"

@@ -73,3 +73,9 @@ coverage/
 
 # e2e: web copies of the Maestro flows (yarn e2e:test:web)
 .maestro/.web/
+
+# e2e: Maestro screenshots, logs and report (yarn e2e:test --debug-output e2e-output)
+e2e-output/
+
+# native app binaries by fingerprint and build profile (scripts/native)
+.native-cache/

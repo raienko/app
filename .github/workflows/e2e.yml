@@ -44,7 +44,8 @@ jobs:
     # (assets/brand icon-ios.icon, an Icon Composer bundle) only compiles
     # with Xcode 26, and it's what the project is built with locally.
     runs-on: macos-26
-    timeout-minutes: 60
+    # A cold Release build is ~55 min on a hosted macOS runner.
+    timeout-minutes: 90
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -61,18 +62,32 @@ jobs:
             sudo xcode-select -s "$latest/Contents/Developer"
           fi
           xcodebuild -version
-      - name: Build and install the E2E app on a simulator
+      # The native app is rebuilt only when its fingerprint changes (native
+      # packages, app config); otherwise the cached app gets this commit's
+      # JS repacked into it — minutes instead of a ~55 min Release build.
+      - name: Restore the native app (or full-build caches)
+        uses: ./.github/actions/native-app
+        with:
+          platform: ios
+          profile: e2e
+      - name: Boot a simulator
+        run: |
+          udid=$(xcrun simctl list devices available -j \
+            | jq -r '[.devices[][] | select(.name | startswith("iPhone"))] | last | .udid')
+          xcrun simctl boot "$udid"
+          xcrun simctl bootstatus "$udid" -b
+      - name: Build (or repack) and install the E2E app
         run: yarn e2e:ios
       - name: Run flows
-        run: yarn e2e:test ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }} --format junit --output maestro-report.xml
+        run: yarn e2e:test ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }}
       - name: Upload Maestro report and screenshots
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: e2e-ios
-          path: |
-            maestro-report.xml
-            ~/.maestro/tests/
+          # Screenshots of each step up to the failure, the view
+          # hierarchy at that point, Maestro's log and the junit report.
+          path: e2e-output/
           retention-days: 7
 
   android:
@@ -100,7 +115,12 @@ jobs:
         run: |
           curl -fsSL "https://get.maestro.mobile.dev" | bash
           echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
-      - name: Build, install and run flows on an emulator
+      - name: Restore the native app (or full-build caches)
+        uses: ./.github/actions/native-app
+        with:
+          platform: android
+          profile: e2e
+      - name: Build (or repack), install and run flows on an emulator
         uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
         with:
           api-level: 35
@@ -109,15 +129,15 @@ jobs:
           disable-animations: true
           script: |
             yarn e2e:android
-            yarn e2e:test ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }} --format junit --output maestro-report.xml
+            yarn e2e:test ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }}
       - name: Upload Maestro report and screenshots
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: e2e-android
-          path: |
-            maestro-report.xml
-            ~/.maestro/tests/
+          # Screenshots of each step up to the failure, the view
+          # hierarchy at that point, Maestro's log and the junit report.
+          path: e2e-output/
           retention-days: 7
 
   web:
@@ -144,7 +164,7 @@ jobs:
           for _ in $(seq 1 60); do curl -fs http://localhost:8081 > /dev/null && exit 0; sleep 1; done
           cat serve.log; exit 1
       - name: Run flows
-        run: yarn e2e:test:web ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }} --format junit --output maestro-report.xml
+        run: yarn e2e:test:web ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }}
         env:
           WEB_URL: http://localhost:8081
       - name: Upload Maestro report and screenshots
@@ -152,7 +172,7 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: e2e-web
-          path: |
-            maestro-report.xml
-            ~/.maestro/tests/
+          # Screenshots of each step up to the failure, the view
+          # hierarchy at that point, Maestro's log and the junit report.
+          path: e2e-output/
           retention-days: 7
