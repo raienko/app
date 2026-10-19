@@ -190,6 +190,7 @@
     "offline": "Vous êtes hors ligne"
   },
   "theme": {
+    "label": "Apparence",
     "light": "Clair",
     "dark": "Sombre",
     "system": "Système"

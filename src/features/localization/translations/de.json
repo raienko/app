@@ -190,6 +190,7 @@
     "offline": "Du bist offline"
   },
   "theme": {
+    "label": "Erscheinungsbild",
     "light": "Hell",
     "dark": "Dunkel",
     "system": "System"

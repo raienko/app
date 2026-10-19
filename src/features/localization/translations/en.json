@@ -190,6 +190,7 @@
     "offline": "You're offline"
   },
   "theme": {
+    "label": "Appearance",
     "light": "Light",
     "dark": "Dark",
     "system": "System"

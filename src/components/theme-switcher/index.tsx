@@ -1,9 +1,7 @@
-import { View } from "react-native";
-
-import Button from "@/components/button";
+import SegmentedControl from "@/components/segmented-control";
 import { useLocale } from "@/features/localization";
-import { createStyles } from "@/features/responsive";
 import { THEME_PREFERENCES, useTheme } from "@/features/theme";
+import type { ThemePreference } from "@/features/theme";
 
 const LABEL_KEY = {
   light: "theme.light",
@@ -14,25 +12,17 @@ const LABEL_KEY = {
 export default function ThemeSwitcher() {
   const theme = useTheme();
   const { t } = useLocale();
-  const styles = useStyles();
 
   return (
-    <View style={styles.container}>
-      {THEME_PREFERENCES.map((option) => (
-        <Button
-          key={option}
-          value={t(LABEL_KEY[option])}
-          selected={theme.preference === option}
-          onPress={() => theme.setPreference(option)}
-        />
-      ))}
-    </View>
+    <SegmentedControl
+      label={t("theme.label")}
+      value={theme.preference}
+      // Only ever an option's value — one of THEME_PREFERENCES.
+      onChange={(value) => theme.setPreference(value as ThemePreference)}
+      options={THEME_PREFERENCES.map((option) => ({
+        value: option,
+        label: t(LABEL_KEY[option]),
+      }))}
+    />
   );
 }
-
-const useStyles = createStyles(({ spacing }) => ({
-  container: {
-    flexDirection: "row",
-    gap: spacing.x8,
-  },
-}));
