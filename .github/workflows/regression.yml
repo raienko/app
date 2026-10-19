@@ -1,11 +1,12 @@
-name: E2E
+name: Regression
 
-# End-to-end flows (Maestro, .maestro/) against a Release build made with
-# EXPO_PUBLIC_E2E=1: English, no autoplay, no dev menu or LogBox — see
-# `isE2E` in @/utils. One job per platform, so a pull request lists
-# "E2E / iOS", "E2E / Android" and "E2E / Web" separately. All three run
-# the same flows; web runs them in headless Chromium, which Maestro
-# downloads itself.
+# Runs the app's user flows (Maestro, .maestro/flows) end to end, to catch
+# regressions a unit test can't: real builds on a simulator, an emulator and
+# a browser. The app is a Release build with EXPO_PUBLIC_E2E=1 — English,
+# no autoplay, no dev menu or LogBox (`isE2E` in @/utils). One job per
+# platform, so a pull request lists "Regression / iOS", "Regression /
+# Android" and "Regression / Web" separately. All three run the same flows;
+# web runs them in headless Chromium, which Maestro downloads itself.
 #
 # Manual for now: run it from the Actions tab and pick a platform. To run it
 # on pull requests later, add `pull_request:` (it's slow — ~20 min a
@@ -18,8 +19,8 @@ on:
         type: choice
         options: [all, ios, android, web]
         default: all
-      tags:
-        description: Only flows with these tags (comma-separated, empty = all)
+      flows:
+        description: Which flows, by tag — e.g. smoke, or smoke,carousel (empty = all)
         type: string
         default: ""
 
@@ -27,7 +28,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: e2e-${{ github.ref }}
+  group: regression-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -79,12 +80,12 @@ jobs:
       - name: Build (or repack) and install the E2E app
         run: yarn e2e:ios
       - name: Run flows
-        run: yarn e2e:test ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }}
+        run: yarn e2e:test ${{ inputs.flows && format('--include-tags {0}', inputs.flows) || '' }}
       - name: Upload Maestro report and screenshots
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: e2e-ios
+          name: regression-ios
           # Screenshots of each step up to the failure, the view
           # hierarchy at that point, Maestro's log and the junit report.
           path: e2e-output/
@@ -129,12 +130,12 @@ jobs:
           disable-animations: true
           script: |
             yarn e2e:android
-            yarn e2e:test ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }}
+            yarn e2e:test ${{ inputs.flows && format('--include-tags {0}', inputs.flows) || '' }}
       - name: Upload Maestro report and screenshots
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: e2e-android
+          name: regression-android
           # Screenshots of each step up to the failure, the view
           # hierarchy at that point, Maestro's log and the junit report.
           path: e2e-output/
@@ -164,14 +165,14 @@ jobs:
           for _ in $(seq 1 60); do curl -fs http://localhost:8081 > /dev/null && exit 0; sleep 1; done
           cat serve.log; exit 1
       - name: Run flows
-        run: yarn e2e:test:web ${{ inputs.tags && format('--include-tags {0}', inputs.tags) || '' }}
+        run: yarn e2e:test:web ${{ inputs.flows && format('--include-tags {0}', inputs.flows) || '' }}
         env:
           WEB_URL: http://localhost:8081
       - name: Upload Maestro report and screenshots
         if: failure()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: e2e-web
+          name: regression-web
           # Screenshots of each step up to the failure, the view
           # hierarchy at that point, Maestro's log and the junit report.
           path: e2e-output/

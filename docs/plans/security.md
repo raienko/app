@@ -125,7 +125,7 @@ Designed together with the auth feature (roadmap 14).
 
 What SOC 2 / ISO 27001 auditors ask to see. Mostly roadmap 05, 18 and 20.
 
-**SEC-11 · Static analysis** — ½ day — CodeQL (JavaScript/TypeScript) workflow on pull requests and weekly; findings triaged under the severity policy (SEC-16).
+**SEC-11 · Static analysis** — ½ day — **Partly done 2026-10-19:** CodeQL (JavaScript/TypeScript and the workflows, `security-extended` queries) runs as jobs in the Code quality workflow. **Still open:** turn GitHub's CodeQL default setup off, enable the pull-request trigger and a weekly schedule, and triage findings under the severity policy (SEC-16).
 
 **SEC-12 · Scheduled vulnerability scan** — ½ day — weekly OSV-Scanner (or `npm audit --omit=dev`) workflow over `yarn.lock`, failing on high/critical with an exception register (owner + expiry). Turn on Dependabot security updates (the version-update config exists, paused).
 
@@ -139,7 +139,7 @@ What SOC 2 / ISO 27001 auditors ask to see. Mostly roadmap 05, 18 and 20.
 
 - `SECURITY.md`: supported versions, private reporting (GitHub private vulnerability reporting), response times.
 - Severity policy (critical/high/medium/low → fix-by times) and an exception register (`docs/security/exceptions.md`: owner, reason, expiry).
-- GitHub settings (human, recorded here): secret scanning + push protection, branch protection on `main` (required reviews and the `Checks / *` jobs), `CODEOWNERS` for `src/features/{api,storage,deep-links}`, `.github/`, `app.config.ts`.
+- GitHub settings (human, recorded here): secret scanning + push protection, branch protection on `main` (required reviews and the `Code quality / *` jobs), `CODEOWNERS` for `src/features/{api,storage,deep-links}`, `.github/`, `app.config.ts`.
 
 **SEC-17 · Data inventory and threat model** — 2 days
 

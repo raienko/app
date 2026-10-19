@@ -114,7 +114,7 @@ yarn e2e:test:web     # WEB_URL=… to point it elsewhere (CI uses the productio
 
 - **Release on mobile, rebuilt only when native code changes.** `yarn e2e:ios` / `yarn e2e:android` build the `e2e` profile through [scripts/native](../scripts/native/README.md): a binary is cached per native fingerprint, and while the fingerprint is unchanged the current JS is repacked into it (about 40s) instead of building. `--rebuild` forces a full build; `--device <name>` picks the simulator / emulator when several are running. There's no dev-client launcher to get past and nothing reloads mid-run.
 - **`yarn e2e:test` picks the device** when exactly one is running (one booted simulator, no Android device); otherwise pass `--device <id>`.
-- **CI:** the **E2E** workflow (manual for now) runs the flows on iOS, Android and web, one job each. Each job restores its binary through the `native-app` action (`.github/actions/native-app`), so most runs repack instead of building; a full iOS build (about 55 minutes cold) gets ccache and CocoaPods caches, a full Android build Gradle's. When a flow fails, the job uploads `e2e-output/`: a screenshot of each step up to the failure, the view hierarchy, Maestro's log and a junit report — the same folder every local run writes.
+- **CI:** the **Regression** workflow (manual for now) runs the flows on iOS, Android and web, one job each. Each job restores its binary through the `native-app` action (`.github/actions/native-app`), so most runs repack instead of building; a full iOS build (about 55 minutes cold) gets ccache and CocoaPods caches, a full Android build Gradle's. When a flow fails, the job uploads `e2e-output/`: a screenshot of each step up to the failure, the view hierarchy, Maestro's log and a junit report — the same folder every local run writes.
 
 ---
 
@@ -122,15 +122,16 @@ yarn e2e:test:web     # WEB_URL=… to point it elsewhere (CI uses the productio
 
 GitHub Actions, in `.github/`. **Every workflow is manual for now** (Actions tab → Run workflow); each file's header says which trigger to add to make it automatic.
 
-| Workflow         | File                         | Jobs                                                                                                                                                                |
-| ---------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Checks**       | `workflows/checks.yml`       | Formatting · Lint · Types · Unit tests (coverage in the job summary) · Secret scan · Expo Doctor · Web build · Native bundles · Storybook build · Dependency review |
-| **Storybook**    | `workflows/storybook.yml`    | Checks → Build → Publish to GitHub Pages                                                                                                                            |
-| **Pull request** | `workflows/pull-request.yml` | Title format — `type: 'Message'`, the house commit style, since a squash merge makes the title the commit                                                           |
-| **E2E**          | `workflows/e2e.yml`          | iOS · Android · Web — builds the E2E app, runs the Maestro flows; report and screenshots uploaded on failure. Pick the platform and tags when you run it            |
-| Dependabot       | `dependabot.yml`             | Weekly grouped updates for actions and npm, Expo SDK packages excluded. Paused (`open-pull-requests-limit: 0`)                                                      |
+| Workflow              | File                              | Jobs                                                                                                                                                                                                            |
+| --------------------- | --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Code quality**      | `workflows/code-quality.yml`      | Formatting · Lint · Types · Unit tests (coverage in the job summary) · Secret scan · Expo Doctor · Web build · Native bundles · Storybook build · Dependency review · CodeQL (JavaScript/TypeScript, workflows) |
+| **Regression**        | `workflows/regression.yml`        | iOS · Android · Web — the user flows in `.maestro/flows`, end to end on Release builds; screenshots, logs and report uploaded on failure. Pick the platform, and which flows by tag, when you run it            |
+| **Component library** | `workflows/component-library.yml` | Code quality → Build → Publish the web Storybook to GitHub Pages                                                                                                                                                |
+| **Pull request**      | `workflows/pull-request.yml`      | Title format — `type: 'Message'`, the house commit style, since a squash merge makes the title the commit                                                                                                       |
+| Dependabot            | `dependabot.yml`                  | Weekly grouped updates for actions and npm, Expo SDK packages excluded. Paused (`open-pull-requests-limit: 0`)                                                                                                  |
 
-- **Checks run as separate jobs** so a pull request lists each by name ("Checks / Lint", "Checks / Web build") and branch protection can require the ones that matter.
+- **Checks run as separate jobs** so a pull request lists each by name ("Code quality / Lint", "Regression / iOS") and branch protection can require the ones that matter.
+- **CodeQL runs inside Code quality**, so security findings come with the rest. GitHub's CodeQL _default setup_ has to be off (Settings → Code security → CodeQL analysis) — it refuses results from both; findings show in the Security tab.
 - **The same commands run locally.** Every job is one `yarn` script from the table above, set up by `.github/actions/setup` (Node from `.nvmrc`, frozen-lockfile install).
 - **Hardened by default.** Read-only token unless a job needs more, a timeout on every job, superseded runs cancelled, and third-party actions pinned to commit SHAs (the version in a comment beside each).
 - **Dependency review** needs the repository's dependency graph turned on (Settings → Code security).

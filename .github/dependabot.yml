@@ -20,7 +20,7 @@ updates:
 
   # npm packages, grouped weekly. Expo SDK packages are left out on purpose:
   # their versions are set by the SDK, so they move only with
-  # `npx expo install --fix` (Checks / Expo Doctor flags when they drift).
+  # `npx expo install --fix` (Code quality / Expo Doctor flags when they drift).
   - package-ecosystem: npm
     directory: /
     schedule:

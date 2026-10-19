@@ -57,7 +57,7 @@ The [`native-app`](../../.github/actions/native-app/action.yml) composite action
 - run: node scripts/native/build.mjs ios --profile preview --output dist/preview.app
 ```
 
-The binary is saved to the cache when the job ends, so the next run with the same native code repacks. The E2E workflow (`.github/workflows/e2e.yml`) is the working example.
+The binary is saved to the cache when the job ends, so the next run with the same native code repacks. The Regression workflow (`.github/workflows/regression.yml`) is the working example.
 
 ## Limits
 

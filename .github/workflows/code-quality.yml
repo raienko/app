@@ -1,12 +1,13 @@
-name: Checks
+name: Code quality
 
 # Every quality gate, one job each, so a pull request lists them by name
-# ("Checks / Lint", "Checks / Web build", …) and branch protection can
-# require exactly the ones that matter. The same gates as `yarn verify`
-# (and .husky/pre-push), plus the builds that are too slow for a push hook.
+# ("Code quality / Lint", "Code quality / Web build", …) and branch
+# protection can require exactly the ones that matter. The same gates as
+# `yarn verify` (and .husky/pre-push), plus the builds that are too slow for
+# a push hook, and CodeQL's security analysis.
 #
 # Manual for now: run it from the Actions tab, or call it from another
-# workflow with `uses: ./.github/workflows/checks.yml`. To run it on every
+# workflow with `uses: ./.github/workflows/code-quality.yml`. To run it on every
 # pull request and on main again, add:
 #
 #   push:
@@ -20,7 +21,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: checks-${{ github.ref }}
+  group: code-quality-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -162,3 +163,36 @@ jobs:
           head-ref: ${{ github.event.pull_request.head.sha || github.sha }}
           fail-on-severity: moderate
           deny-licenses: GPL-2.0, GPL-3.0, AGPL-3.0, LGPL-2.1, LGPL-3.0
+
+  # GitHub's static security analysis, here rather than in GitHub's
+  # "default setup" so it runs and reports with everything else. Default
+  # setup has to be off (Settings → Code security → CodeQL) — GitHub
+  # refuses results from both. Findings land in the Security tab.
+  codeql:
+    name: CodeQL (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
+    strategy:
+      fail-fast: false
+      matrix:
+        # The app's code, and the workflows themselves (untrusted input,
+        # over-broad permissions).
+        language: [javascript-typescript, actions]
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Set up CodeQL
+        uses: github/codeql-action/init@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        with:
+          languages: ${{ matrix.language }}
+          # Nothing to compile: both are analysed from source.
+          build-mode: none
+          queries: security-extended
+      - name: Analyse
+        uses: github/codeql-action/analyze@6f2ac81f5cd81fe351a197ba0b00d91d03cd2aee # v4.39.0
+        with:
+          category: /language:${{ matrix.language }}

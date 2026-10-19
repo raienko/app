@@ -142,7 +142,7 @@ Result: the installable web app at your domain, with its API routes.
 ### Step 9 · CI and release
 
 1. GitHub: add `EXPO_TOKEN` (an Expo **robot** token, not a personal one) as a secret in a protected `production` environment; preview gets its own environment and token.
-2. Turn on the workflow triggers when ready (each workflow's header says how) and make `Checks / *` required on `main`.
+2. Turn on the workflow triggers when ready (each workflow's header says how) and make `Code quality / *` required on `main`.
 3. Release flow (roadmap 18): tag → `release.yml` builds and submits → TestFlight and Play internal → testers → promote to production with a phased rollout.
 4. Over-the-air JS updates (EAS Update) only with a runtime-version policy, so an update never reaches a binary that can't run it.
 
