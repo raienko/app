@@ -27,7 +27,7 @@ cp .env.example .env
 yarn web          # or: yarn ios · yarn android
 ```
 
-`yarn ios` / `yarn android` build a real development client, which native modules such as MMKV need. See [Getting started](docs/getting-started.md) for the environment variables, platform caveats and every script.
+`yarn ios` / `yarn android` build a real development client, which native modules such as MMKV need. See [Getting started](docs/getting-started.md) for the environment variables, platform caveats and every script. Turning it into your own product — accounts, signing, stores — is in the [Product guide](docs/product-guide.md).
 
 ## Everyday commands
 
