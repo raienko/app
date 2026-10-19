@@ -13,6 +13,10 @@ const env = require("./src/constants/env");
 const { existsSync } = require("fs") as {
   existsSync: (path: string) => boolean;
 };
+ 
+const { version: packageVersion } = require("./package.json") as {
+  version: string;
+};
 const storybookEnabled = process.env.STORYBOOK_ENABLED === "true";
 
 /**
@@ -84,7 +88,9 @@ export default ({ config, projectRoot }: ConfigContext): ExpoConfig => ({
   name: env.appName,
   slug: env.appSlug,
   scheme: env.appScheme,
-  version: "0.0.1",
+  // One version for the app: package.json's, which the Release workflow
+  // reads and a release bumps.
+  version: packageVersion,
   orientation: "portrait",
   icon: brandAsset("icon.png"),
   userInterfaceStyle: "automatic",
@@ -118,10 +124,11 @@ export default ({ config, projectRoot }: ConfigContext): ExpoConfig => ({
   },
   extra: {
     ...config.extra,
-    eas: {
-      ...config.extra?.eas,
-      projectId: env.projectId || 0,
-    },
+    // Only with a real EAS project id: a placeholder (an empty string, 0)
+    // is read by EAS as a project to link to and fails every eas command.
+    ...(env.projectId
+      ? { eas: { ...config.extra?.eas, projectId: env.projectId } }
+      : {}),
   },
   plugins: [
     "expo-router",

@@ -75,15 +75,16 @@ Content that sits above the screen — popups, bottom sheets, action sheets and 
 
 Screens, grouping and spacing primitives.
 
-| Component                                                | What it's for                                                                                                                             |
-| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| [**Screen**](../../src/components/screen/index.md)       | The page container: `default` (header, footer, aside around the content, optionally scrolling) or `centered`, and it owns the safe areas. |
-| [**Section**](../../src/components/section/index.md)     | A titled group — settings, a fieldset, a list with a “See all” action.                                                                    |
-| [**Card**](../../src/components/card/index.md)           | A raised, outlined or filled surface for grouping content.                                                                                |
-| [**Accordion**](../../src/components/accordion/index.md) | A titled section that collapses and expands.                                                                                              |
-| [**Grid**](../../src/components/grid/index.md)           | 12-column rows and cells, with spans that change per breakpoint.                                                                          |
-| [**Divider**](../../src/components/divider/index.md)     | A hairline between rows, form sections or columns, optionally labelled.                                                                   |
-| [**Spacer**](../../src/components/spacer/index.md)       | An explicit gap from the spacing scale, or room kept clear of the keyboard, tab bar or safe area — a list takes the tallest.              |
+| Component                                                 | What it's for                                                                                                                             |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| [**Screen**](../../src/components/screen/index.md)        | The page container: `default` (header, footer, aside around the content, optionally scrolling) or `centered`, and it owns the safe areas. |
+| [**Section**](../../src/components/section/index.md)      | A titled group — settings, a fieldset, a list with a “See all” action.                                                                    |
+| [**Card**](../../src/components/card/index.md)            | A raised, outlined or filled surface for grouping content.                                                                                |
+| [**Accordion**](../../src/components/accordion/index.md)  | A titled section that collapses and expands.                                                                                              |
+| [**Grid**](../../src/components/grid/index.md)            | 12-column rows and cells, with spans that change per breakpoint.                                                                          |
+| [**Divider**](../../src/components/divider/index.md)      | A hairline between rows, form sections or columns, optionally labelled.                                                                   |
+| [**Spacer**](../../src/components/spacer/index.md)        | An explicit gap from the spacing scale, or room kept clear of the keyboard, tab bar or safe area — a list takes the tallest.              |
+| [**StatusBar**](../../src/components/status-bar/index.md) | The status bar's colour and visibility — follows the app theme, overridable per screen.                                                   |
 
 ## Lists
 

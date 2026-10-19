@@ -1108,7 +1108,7 @@
   resolved "https://registry.yarnpkg.com/@expo/dom-webview/-/dom-webview-57.0.1.tgz#e41e9ab9b691046c944ef2d0cd874cf316894097"
   integrity sha512-lAKsME4SAq+8sf56oN0DX5TBYyruupoRxbWbD2xf9RnKY8y6x8eb9LCE5pxSN0qyWdqnp+0wmyWzDkKboThKAw==
 
-"@expo/env@^2.4.3", "@expo/env@~2.4.3":
+"@expo/env@2.4.3", "@expo/env@^2.4.3", "@expo/env@~2.4.3":
   version "2.4.3"
   resolved "https://registry.yarnpkg.com/@expo/env/-/env-2.4.3.tgz#cba412d1cf19374bedd83106b32166a12862667c"
   integrity sha512-M1NXeZCA1mkMkYOyIe7PlyRX0/jqFtMoJgyblnlq/vpCRfmueFT7RnGSQG8uEFDF5WHOFGijAQ3fogPh3/n5Ng==
@@ -1122,7 +1122,7 @@
   resolved "https://registry.yarnpkg.com/@expo/expo-modules-macros-plugin/-/expo-modules-macros-plugin-0.6.1.tgz#5581bbe09e0aedb39ea787a9960eb0a9ee07d2ff"
   integrity sha512-cpsLZE4rqkc1Y3eZTkxB98jrqY1YXgetmtxFt8q89jBRmk3quRuk1BZo+VcnCSObZardjg99r1k5xijEMONFGA==
 
-"@expo/fingerprint@^0.20.14":
+"@expo/fingerprint@0.20.14", "@expo/fingerprint@^0.20.14":
   version "0.20.14"
   resolved "https://registry.yarnpkg.com/@expo/fingerprint/-/fingerprint-0.20.14.tgz#8a7f13510e49807d2006591eef0b2e671c161995"
   integrity sha512-7sihStGX1ZepJBNbYgeQY7cU2GQ+PSkSROe3g7JOQqnT6OOuX0rXKY0ZNoVnlB2Y/H5FWnnJ6QrPlK3fNg9+bQ==
@@ -6111,7 +6111,7 @@ expo-splash-screen@57.0.10:
     "@expo/image-utils" "^0.11.6"
     xml2js "0.6.0"
 
-expo-status-bar@57.0.1:
+expo-status-bar@~57.0.1:
   version "57.0.1"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-57.0.1.tgz#0a8ec1657fcd0987f9612ca411a0c3d002f0eaf0"
   integrity sha512-Xwaq1gAoVRWx5dPG5VhT5RSbnI9OilhZnO5qoPBnUaBAa5VzRzfdS8q0/bsPt0jR2DKLtGuP0bQ6efMJ4RIMDg==
@@ -6141,11 +6141,6 @@ expo-video@57.0.5:
   version "57.0.5"
   resolved "https://registry.yarnpkg.com/expo-video/-/expo-video-57.0.5.tgz#d992ac58d2ad765c9b32234327e0037efe4fb11e"
   integrity sha512-VK2o+d6rb+tVeL2DI6d0F58pRV8d8bctLpOrMJEHRYtMIK5iwvjjrRx2mciYN8/d04SgWC8TkI+wuZ8Sbp/yuA==
-
-expo-web-browser@57.0.3:
-  version "57.0.3"
-  resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-57.0.3.tgz#adc332852ef29546de2fa47ba33ce4df9137f98e"
-  integrity sha512-+ecvhyS/PdWkpv4ai6FF1Trd6Y/4kn/eQ3O86mie2ecU3w+I8bKZh13kppY/jw1uSL7yikt03L5W/iiHojrFwQ==
 
 expo@57.0.30:
   version "57.0.30"

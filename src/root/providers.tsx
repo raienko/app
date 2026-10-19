@@ -5,6 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ToastsProvider } from "@/components/toast";
 import { StateViewsProvider } from "@/components/state-view";
+import StatusBar from "@/components/status-bar";
 import { AccessibilityProvider } from "@/features/accessibility";
 import { ApiProvider } from "@/features/api";
 import { DeepLinks } from "@/features/deep-links";
@@ -31,8 +32,8 @@ type Props = {
  * provider is added in exactly one place and every screen, test, and story
  * picks it up automatically — see src/root/index.tsx and src/root/testing.tsx.
  *
- * Not every entry is a context provider: `Permissions`, `DeepLinks` and
- * `ToastsProvider` own app-lifetime lifecycle or overlay UI rather than a
+ * Not every entry is a context provider: `Permissions`, `DeepLinks`,
+ * `StatusBar` and `ToastsProvider` own app-lifetime lifecycle or overlay UI rather than a
  * value — keeping the OS permission snapshots fresh, subscribing to
  * incoming links, and rendering whatever toasts are currently up. They live
  * here so they're mounted exactly once, wrapping everything, on the same
@@ -65,6 +66,8 @@ export default function Providers({ children, config }: Props) {
               <DeepLinks>
                 <ThemeProvider config={config?.theme}>
                   <LocaleProvider config={config?.locale}>
+                    {/* Follows the app theme; a screen mounts its own to differ. */}
+                    <StatusBar />
                     <ToastsProvider>
                       <StateViewsProvider>{children}</StateViewsProvider>
                     </ToastsProvider>

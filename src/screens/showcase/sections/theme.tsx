@@ -3,6 +3,7 @@ import { View } from "react-native";
 
 import Button from "@/components/button";
 import SegmentedControl from "@/components/segmented-control";
+import StatusBar, { type StatusBarStyle } from "@/components/status-bar";
 import Text from "@/components/text";
 import ThemeSwitcher from "@/components/theme-switcher";
 import { createStyles } from "@/features/responsive";
@@ -28,6 +29,17 @@ const PALETTE_OPTIONS = [
   { value: "violet", label: "Violet", testID: "palette-violet" },
   { value: "amber", label: "Amber", testID: "palette-amber" },
 ] as const;
+
+const STATUS_BAR_OPTIONS = [
+  { value: "auto", label: "Theme" },
+  { value: "inverted", label: "Inverted" },
+  { value: "light", label: "Light" },
+  { value: "dark", label: "Dark" },
+] as const satisfies { value: StatusBarStyle; label: string }[];
+
+function isStatusBarStyle(value: string): value is StatusBarStyle {
+  return STATUS_BAR_OPTIONS.some((option) => option.value === value);
+}
 
 function isPaletteName(value: string): value is PaletteName {
   return value in PALETTE_CONFIGS;
@@ -89,6 +101,7 @@ export default function ThemeSection() {
   const theme = useTheme();
   const styles = useStyles();
   const [palette, setPalette] = useState<PaletteName>("core");
+  const [statusBar, setStatusBar] = useState<StatusBarStyle>("auto");
 
   return (
     <View style={styles.container}>
@@ -96,6 +109,17 @@ export default function ThemeSection() {
 
       <Readout label="scheme" value={theme.scheme} />
       <Readout label="preference" value={theme.preference} />
+
+      {/* Overrides the root one while this screen is up (iOS / Android). */}
+      <StatusBar style={statusBar} />
+      <SegmentedControl
+        label="Status bar"
+        value={statusBar}
+        onChange={(value) => {
+          if (isStatusBarStyle(value)) setStatusBar(value);
+        }}
+        options={[...STATUS_BAR_OPTIONS]}
+      />
 
       <View style={styles.swatches}>
         {Object.entries(theme.colors).map(([name, value]) => (

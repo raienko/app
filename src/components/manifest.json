@@ -48,6 +48,7 @@
     "spacer": "public",
     "spinner": "public",
     "state-view": "public",
+    "status-bar": "public",
     "stepper": "public",
     "switch": "public",
     "tab-bar": "public",
