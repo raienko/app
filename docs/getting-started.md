@@ -143,18 +143,20 @@ The workflows still to come — PR previews, and Release's real build and deploy
 
 **Release** (Actions → Release → Run workflow) is one form for every way the app ships, from a QA build to a store submission:
 
-| Input          | Options (default **bold**)             | Meaning                                                                                                     |
-| -------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `kind`         | **build** · update                     | A new binary, or an over-the-air JS update to the builds already installed                                  |
-| `platform`     | **all** · native · ios · android · web | `native` = iOS + Android. Updates skip web                                                                  |
-| `environment`  | development · **staging** · production | Backend, config and secrets. Each job runs in the GitHub Environment of that name                           |
-| `distribution` | **internal** · testing · store         | Internal = an install link / preview URL · testing = TestFlight, Play internal · store = review / live site |
-| `version`      | empty = the app config's               | Semver, e.g. `1.4.0` or `1.4.0-rc.1`                                                                        |
-| `notes`        |                                        | Release notes / what to test                                                                                |
-| `checks`       | **on**                                 | Run Code quality first                                                                                      |
+| Field              | Options (default **bold**)                                       | Meaning                                                                                                                                                                                                                        |
+| ------------------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Release type       | **Build** · Update                                               | **Build** produces a new app binary — required whenever native code, config or permissions change. **Update** ships JavaScript and assets over the air to builds already installed: minutes, no store review, same native code |
+| Platform           | **All platforms** · Native (iOS + Android) · iOS · Android · Web | Updates skip web — a web release is always a build                                                                                                                                                                             |
+| Environment        | development · **staging** · production                           | Backend, config and secrets. Each job runs in the GitHub Environment of that name                                                                                                                                              |
+| Distribution       | **Internal** · Testing · Store                                   | Internal = install link for the team / web preview · Testing = TestFlight, Google Play internal testing · Store = App Store and Google Play review / live website. Builds only                                                 |
+| Version            | empty = the current app version                                  | Semantic version, e.g. `1.4.0` or `1.4.0-rc.1`. Builds only                                                                                                                                                                    |
+| Release notes      |                                                                  | Shown to testers and in the run summary                                                                                                                                                                                        |
+| Run quality checks | **on**                                                           | Code quality first                                                                                                                                                                                                             |
+
+GitHub shows only the input id under a field, so each option carries its own explanation ("Build — new app binary, required for native changes"); the Plan job reads the first word.
 
 - **Plan fails fast** on a combination that can't ship — a store release from anything but production, an update to web, testing on web, a version that isn't semver — before anything builds. Its summary says what will go where.
-- **The run's name is the release**: "Release 1.4.0 · production · store · all", "Update · staging · native", so the Actions list reads as a release history.
+- **The run's name is the release**: "Release 1.4.0 · production · store", "Update · staging", so the Actions list reads as a release history.
 - **One release per environment at a time**, never cancelled halfway.
 - **Production approvals**: give the `production` environment required reviewers (Settings → Environments) and every production job waits for a click. `EXPO_TOKEN` and store keys go in each environment's secrets, not the repository's.
 - **Still a placeholder**: Build, Distribute and Publish update print the `eas build` / `eas submit` / `eas update` / `eas deploy` command they will run. Making them real needs the EAS project, `eas.json` profiles named `<environment>-<distribution>` and the credentials in the [product guide](product-guide.md#step-9--ci-and-release).

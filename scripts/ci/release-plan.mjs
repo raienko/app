@@ -3,21 +3,33 @@
  * the version and which platforms run, and writes "what will happen" to the
  * job summary — so a wrong choice fails in seconds, before anything builds.
  *
- * Reads the inputs from env (KIND, PLATFORM, ENVIRONMENT, DISTRIBUTION,
+ * Reads the inputs from env (TYPE, PLATFORM, ENVIRONMENT, DISTRIBUTION,
  * VERSION, NOTES); writes `key=value` outputs to $GITHUB_OUTPUT and Markdown
  * to $GITHUB_STEP_SUMMARY, or both to stdout locally:
  *
- *   KIND=build PLATFORM=native ENVIRONMENT=staging DISTRIBUTION=internal \
+ *   TYPE=build PLATFORM=native ENVIRONMENT=staging DISTRIBUTION=internal \
  *     node scripts/ci/release-plan.mjs
+ *
+ * The form's options carry their own explanation ("Build — new app
+ * binary…"), since GitHub shows nothing but the input id under a field.
+ * The first word is the value, so the full label and the bare value
+ * ("build") both work; later jobs use the plain values from the outputs.
  */
 import { execFileSync } from "node:child_process";
 import { appendFileSync } from "node:fs";
 
+/** "Native — iOS and Android" → "native". */
+const choice = (value, fallback) =>
+  (value || fallback)
+    .trim()
+    .split(/[\s—(]/)[0]
+    .toLowerCase();
+
 const input = {
-  kind: process.env.KIND || "build",
-  platform: process.env.PLATFORM || "all",
-  environment: process.env.ENVIRONMENT || "staging",
-  distribution: process.env.DISTRIBUTION || "internal",
+  type: choice(process.env.TYPE, "build"),
+  platform: choice(process.env.PLATFORM, "all"),
+  environment: choice(process.env.ENVIRONMENT, "staging"),
+  distribution: choice(process.env.DISTRIBUTION, "internal"),
   version: (process.env.VERSION || "").trim(),
   notes: (process.env.NOTES || "").trim(),
 };
@@ -37,35 +49,35 @@ const warnings = [];
 
 // Web has no over-the-air updates: an update to "all" is iOS + Android.
 const platforms = PLATFORMS[input.platform]?.filter(
-  (p) => input.kind !== "update" || p !== "web",
+  (p) => input.type !== "update" || p !== "web",
 );
-if (!platforms) errors.push(`Unknown platform "${input.platform}".`);
+if (!platforms) errors.push(`Unsupported platform "${input.platform}".`);
 
-if (input.kind === "update") {
+if (input.type === "update") {
   if (input.platform === "web") {
     errors.push(
-      "Web has no over-the-air updates — release it with kind: build.",
+      "Over-the-air updates are not available for web. Choose Build to publish a new web release.",
     );
   }
   if (input.distribution !== "internal" || input.version) {
     warnings.push(
-      "An update goes to the builds already installed, on their own version and channel — distribution and version are ignored.",
+      "Updates are delivered to installed builds on their existing version and channel. Distribution and Version apply to builds only and were ignored.",
     );
   }
 } else {
   if (input.distribution === "store" && input.environment !== "production") {
     errors.push(
-      `Store releases are production builds — pick environment: production, or distribution: internal / testing for ${input.environment}.`,
+      `Store releases require the production environment. Choose Production, or use Internal or Testing distribution for ${input.environment}.`,
     );
   }
   if (input.distribution === "testing" && input.platform === "web") {
     errors.push(
-      "Web has no testing track — use internal (a preview URL) or store (live).",
+      "Web has no testing track. Choose Internal for a preview deployment or Store to go live.",
     );
   }
   if (input.version && !SEMVER.test(input.version)) {
     errors.push(
-      `Version "${input.version}" isn't semver — e.g. 1.4.0 or 1.4.0-rc.1.`,
+      `Version "${input.version}" is not a valid semantic version. Use the format 1.4.0 or 1.4.0-rc.1.`,
     );
   }
 }
@@ -85,7 +97,7 @@ function appVersion() {
   return JSON.parse(config).version;
 }
 const version =
-  input.kind === "update"
+  input.type === "update"
     ? ""
     : input.version || (errors.length ? "" : appVersion());
 
@@ -94,18 +106,18 @@ const version =
 const DESTINATION = {
   build: {
     internal: {
-      ios: "Install link for the team (ad hoc)",
-      android: "Install link for the team (APK)",
-      web: "Preview URL",
+      ios: "Internal install link (ad hoc)",
+      android: "Internal install link (APK)",
+      web: "Preview deployment",
     },
     testing: {
       ios: "TestFlight",
-      android: "Play Console internal testing",
+      android: "Google Play internal testing",
     },
     store: {
       ios: "App Store review",
       android: "Google Play review",
-      web: "Live site",
+      web: "Production website",
     },
   },
   update: {
@@ -116,33 +128,35 @@ const DESTINATION = {
   },
 };
 const destinations =
-  DESTINATION[input.kind]?.[
-    input.kind === "update" ? "internal" : input.distribution
+  DESTINATION[input.type]?.[
+    input.type === "update" ? "internal" : input.distribution
   ];
 
 const summary = [
-  `### ${input.kind === "update" ? "Update" : `Release ${version || "—"}`} · ${input.environment}`,
+  `### ${input.type === "update" ? "Update" : `Release ${version || "—"}`} · ${input.environment}`,
   "",
   "| | |",
   "| --- | --- |",
-  `| Kind | ${input.kind === "update" ? "Over-the-air update" : "New build"} |`,
+  `| Type | ${input.type === "update" ? "Over-the-air update" : "New build"} |`,
   `| Environment | ${input.environment} |`,
-  ...(input.kind === "build"
+  ...(input.type === "build"
     ? [
         `| Distribution | ${input.distribution} |`,
         `| Version | ${version || "—"} |`,
       ]
     : []),
   `| Platforms | ${(platforms ?? []).map((p) => `${NAMES[p]} → ${destinations?.[p] ?? "—"}`).join("<br>")} |`,
-  `| Notes | ${input.notes ? input.notes.replace(/\r?\n/g, "<br>") : "—"} |`,
+  `| Release notes | ${input.notes ? input.notes.replace(/\r?\n/g, "<br>") : "—"} |`,
   "",
   ...(errors.length
-    ? ["**Stopped:**", "", ...errors.map((e) => `- ${e}`), ""]
+    ? ["**Release stopped:**", "", ...errors.map((e) => `- ${e}`), ""]
     : []),
   ...(warnings.length ? warnings.map((w) => `> ${w}`) : []),
 ];
 
 const outputs = {
+  type: input.type,
+  distribution: input.distribution,
   version,
   ios: String(Boolean(platforms?.includes("ios"))),
   android: String(Boolean(platforms?.includes("android"))),
