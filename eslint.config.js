@@ -14,6 +14,38 @@ const MODULE_BOUNDARY = [
   },
 ];
 
+/**
+ * Which layer may import which (ADR 0005), checked on the file an import
+ * resolves to — so `@/screens/x` and `../../screens/x` are the same import.
+ * `src/app` composes the root and screens; the root and screens compose
+ * shared code; shared code reaches none of them.
+ */
+const LAYER_ZONES = [
+  {
+    target: [
+      "./src/components",
+      "./src/features",
+      "./src/utils",
+      "./src/constants",
+    ],
+    from: ["./src/app", "./src/screens", "./src/root"],
+    message:
+      "Shared modules cannot import routes, screens or the app root. Move shared behavior into a feature or component instead (ADR 0005).",
+  },
+  {
+    target: "./src/screens",
+    from: ["./src/app", "./src/root"],
+    message:
+      "Screens compose features and components; route registration and app providers belong in src/app and src/root (ADR 0005).",
+  },
+  {
+    target: "./src/root",
+    from: ["./src/app", "./src/screens"],
+    message:
+      "The app root cannot depend on routes or screens; src/app composes the root and a screen (ADR 0005).",
+  },
+];
+
 const UNITS_SNAPSHOT = {
   paths: [
     {
@@ -148,7 +180,24 @@ module.exports = defineConfig([
     },
   },
   {
-    files: ["src/screens/**/*.{ts,tsx}", "src/root/**/*.{ts,tsx}"],
+    files: ["src/screens/**/*.{ts,tsx}"],
+    ignores: ["**/*.test.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          paths: UNITS_SNAPSHOT.paths,
+          patterns: [
+            ...MODULE_BOUNDARY,
+            ...INTERNAL_COMPONENTS,
+            ...UNITS_SNAPSHOT.patterns,
+          ],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/root/**/*.{ts,tsx}"],
     ignores: ["**/*.test.{ts,tsx}"],
     rules: {
       "no-restricted-imports": [
@@ -166,7 +215,6 @@ module.exports = defineConfig([
   },
   {
     files: [
-      "src/app/**/*.{ts,tsx}",
       "src/features/**/*.{ts,tsx}",
       "src/utils/**/*.{ts,tsx}",
       "src/constants/**/*.{ts,tsx}",
@@ -175,7 +223,39 @@ module.exports = defineConfig([
     rules: {
       "no-restricted-imports": [
         "error",
+        {
+          patterns: [...MODULE_BOUNDARY, ...INTERNAL_COMPONENTS],
+        },
+      ],
+    },
+  },
+  {
+    files: ["src/app/**/*.{ts,tsx}"],
+    ignores: ["**/*.test.{ts,tsx}"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
         { patterns: [...MODULE_BOUNDARY, ...INTERNAL_COMPONENTS] },
+      ],
+    },
+  },
+  // Layer boundaries (LAYER_ZONES above). The TypeScript resolver follows
+  // the `@/` alias from tsconfig.json; with only the Node resolver an alias
+  // import resolves to nothing and the rule silently skips it.
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    ignores: ["**/*.test.{ts,tsx}"],
+    settings: {
+      "import/resolver": {
+        // Merged with eslint-config-expo's own `node` resolver, which keeps
+        // the platform extensions (.web.ts, .ios.tsx, …).
+        typescript: { project: "./tsconfig.json" },
+      },
+    },
+    rules: {
+      "import/no-restricted-paths": [
+        "error",
+        { basePath: __dirname, zones: LAYER_ZONES },
       ],
     },
   },

@@ -11,7 +11,7 @@
 | [**Getting started**](getting-started.md) | Install, `.env` setup, running on web / iOS / Android, every script, Storybook and git hooks                                                                                                    |
 | [**Product guide**](product-guide.md)     | From this boilerplate to a shipped product: decisions, accounts, hardware, credentials, and the steps to the App Store, Google Play and the web                                                 |
 | [**Architecture**](architecture.md)       | Repository layout, the one-folder-per-unit rule, custom vs `@expo/ui` implementations, and where documentation lives                                                                            |
-| [**Decisions**](adr/README.md)            | Architecture decision records: reuse before new components, deferred work, the component manifest and import boundaries, the web chart renderer                                                 |
+| [**Decisions**](adr/README.md)            | Architecture decision records: application boilerplate role, component reuse and contracts, deferred work, and the web chart renderer                                                           |
 | [**Plans**](plans)                        | Reference plans behind the roadmap: [security](plans/security.md), [CI and EAS](plans/ci-and-eas.md), [agents](plans/agents.md), [tooling](plans/tooling.md), [references](plans/references.md) |
 | [**Security**](security)                  | [Data inventory](security/data-inventory.md), [threat model](security/threat-model.md), [severity policy and exceptions](security/exceptions.md); reporting in [SECURITY.md](../SECURITY.md)    |
 

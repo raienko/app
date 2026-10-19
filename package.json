@@ -105,6 +105,7 @@
     "@types/react-dom": "19.2.4",
     "eslint": "9.39.5",
     "eslint-config-expo": "57.0.2",
+    "eslint-import-resolver-typescript": "3.10.1",
     "expo-atlas": "0.4.3",
     "expo-doctor": "1.21.5",
     "globals": "16.5.0",

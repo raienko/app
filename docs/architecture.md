@@ -4,6 +4,8 @@
 
 > How the repository is laid out, the one-folder-per-unit rule, custom vs `@expo/ui` implementations, and where each kind of documentation lives.
 
+This is an **application boilerplate**: fork or copy it for one product. Components and features are app-owned, and their folder entry points are internal import surfaces, not a published package API. [ADR 0005](adr/0005-application-boilerplate.md) records ownership, dependency direction, routes and versioning.
+
 ---
 
 ## Project structure
@@ -29,7 +31,11 @@ assets/
 
 **`assets/brand` and `assets/images` are split by who reads them, not by file type.** Everything under `brand/` is read by Expo at config time and baked into the native projects; nothing there is imported by the app at runtime. Everything under `images/` goes through Metro and is `require()`d by a component. The practical payoff is that a rebrand is replacing `assets/brand` — a `brand.json` and a logo — and running `yarn brand`, which generates every icon and the splash into the gitignored `assets/brand/generated/` without ever touching a file a screen draws. `app.config.ts` reaches them through a `brandAsset()` helper, so the directory name appears once — and a typo in a path Expo only reads at prebuild time otherwise surfaces as a missing icon on a build machine.
 
-Every screen/component/feature-value lives in its own folder with a single `index` entry point; all imports go through that folder path (e.g. `@/components/text`), not into its internals. Components ship with a co-located Storybook story and a Jest smoke test that follows the same pattern:
+Every screen/component/feature-value lives in its own folder with a single `index` entry point; all imports go through that folder path (e.g. `@/components/text`), not into its internals.
+
+`src/app` composes `src/root` and `src/screens`; the root and screens consume shared `src/components` and `src/features`. Shared modules never import routes, screens or the app root. ESLint enforces the boundary on the file each import resolves to, so `@/screens/x` and `../../screens/x` are caught alike. `src/components/manifest.json` marks which components screens may use, and its test checks the public component contract. Product-specific UI stays in its screen or feature until it has a shared contract.
+
+Components ship with a co-located Storybook story and a Jest smoke test that follows the same pattern:
 
 ```ts
 import Component from "./index";

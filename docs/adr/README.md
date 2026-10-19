@@ -10,6 +10,7 @@
 | [0002](0002-deferred-until-evidence.md)         | Deferred until evidence requires it                          | Accepted | 2026-09-06 |
 | [0003](0003-component-contract-and-manifest.md) | Component definition of done, manifest and import boundaries | Accepted | 2026-09-26 |
 | [0004](0004-web-chart-renders-svg.md)           | The web chart renders SVG, not Skia                          | Accepted | 2026-09-26 |
+| [0005](0005-application-boilerplate.md)         | This repository is an application boilerplate                | Accepted | 2026-10-20 |
 
 ## Adding one
 

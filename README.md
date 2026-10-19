@@ -1,6 +1,6 @@
 # app
 
-A cross-platform app foundation for **iOS, Android and the web**, built on Expo, with its own design system, accessibility and localization in place from the first screen.
+An application boilerplate for **iOS, Android and the web**, built on Expo, with its own design system, accessibility and localization in place from the first screen. Fork it for one product; its components are app-owned source code rather than a separately published package.
 
 ![Expo SDK 57](https://img.shields.io/badge/Expo_SDK-57-000020?logo=expo&logoColor=white)
 ![React Native 0.86](https://img.shields.io/badge/React_Native-0.86-61DAFB?logo=react&logoColor=black)
