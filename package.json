@@ -54,7 +54,7 @@
     "expo-video": "57.0.5",
     "jsbarcode": "3.12.3",
     "libphonenumber-js": "1.13.12",
-    "maplibre-gl": "5.24.0",
+    "maplibre-gl": "6.15.0",
     "qrcode-generator": "2.0.4",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -114,14 +114,15 @@
     "plop": "4.0.5",
     "prettier": "3.9.6",
     "secretlint": "13.0.4",
-    "sharp": "0.34.4",
+    "sharp": "0.35.5",
     "storybook": "10.6.0",
     "test-renderer": "1.2.0",
     "typescript": "6.0.3",
     "vite": "8.2.2"
   },
   "resolutions": {
-    "react-native-screens": "4.26.2"
+    "react-native-screens": "4.26.2",
+    "qs": "6.16.1"
   },
   "scripts": {
     "start": "expo start",
@@ -149,7 +150,7 @@
     "format:check": "prettier --check .",
     "secrets:check": "secretlint \"**/*\"",
     "verify": "yarn format:check && yarn lint && yarn typecheck && yarn secrets:check && yarn test",
-    "postinstall": "patch-package && node scripts/brand/index.ts",
+    "postinstall": "patch-package && node scripts/brand/index.ts && node scripts/map-worker.mjs",
     "prepare": "husky",
     "storybook:native": "STORYBOOK_ENABLED=true expo start",
     "storybook:ios": "STORYBOOK_ENABLED=true expo start --ios",

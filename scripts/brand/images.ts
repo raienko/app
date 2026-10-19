@@ -8,7 +8,7 @@ import {
 } from "node:fs";
 import { extname, join } from "node:path";
 
-import sharp from "sharp";
+import sharp, { type Sharp } from "sharp";
 
 import { parseHex } from "./color.ts";
 import type { Brand } from "./resolve.ts";
@@ -44,11 +44,11 @@ type Output = {
   web?: true;
   /** Pixel size the file must be, when a brand supplies it by hand. */
   size?: [number, number];
-  generate: (logo: sharp.Sharp, brand: Brand) => Promise<sharp.Sharp | null>;
+  generate: (logo: Sharp, brand: Brand) => Promise<Sharp | null>;
 };
 
 /** The logo scaled to fit `side × side` (aspect kept), centred on a transparent square of `canvas`. */
-async function placed(logo: sharp.Sharp, canvas: number, side: number) {
+async function placed(logo: Sharp, canvas: number, side: number) {
   const fitted = await logo
     .clone()
     .resize(Math.round(side), Math.round(side), {
@@ -154,7 +154,7 @@ const OUTPUTS: Output[] = [
 
 /** The logo at `share` of a `size` square, on `iconBackground`, with no transparency. */
 async function opaqueIcon(
-  logo: sharp.Sharp,
+  logo: Sharp,
   brand: Brand,
   size: number,
   share: number,
@@ -169,7 +169,7 @@ async function opaqueIcon(
  * effort, and an 8-bit palette when the image has few enough colours that
  * quantising it is lossless to the eye (icons and logos almost always do).
  */
-function optimised(image: sharp.Sharp) {
+function optimised(image: Sharp) {
   return image.png({
     compressionLevel: 9,
     effort: 10,

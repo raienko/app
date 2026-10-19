@@ -62,6 +62,8 @@ The factory receives the same reactive `units`/`breakpoint` as the hooks, plus `
 
 `isRTL` here is deliberately the locale-derived flag, not `I18nManager.isRTL` — see the Localization section's RTL note for why `I18nManager.isRTL` can't be used for this at all (it's a snapshot that never updates without a reload). Because `useIsRtl()` flips the instant the locale does, a style built directly off it (e.g. `flexDirection: isRTL ? "row-reverse" : "row"`) can mirror manually without waiting on the reload that native RTL otherwise requires.
 
+The factory also gets **`direction`** (`"ltr"` / `"rtl"`, the same flag as a style value), and a style's `direction` key works on every platform: react-native-web has no `direction` style, so `createStyles` passes it on as `writingDirection`, which is what becomes CSS `direction` there. A layer that positions its content by physical offsets — a switch thumb, a sliding indicator — pins itself with `direction: "ltr"` so neither Yoga nor the browser mirrors those offsets a second time.
+
 - `createUnits(width)` / `getBreakpoint(width)` are the underlying pure functions (what the hooks call after reading `useWindowDimensions()`) — used directly in `units.test.ts`/`breakpoint.test.ts`, no component rendering needed.
 
 **Sizes styleguide — `spacing`/`radius`/`sizes`** (`sizes.ts`, via `useSizes()`). Two different things that both answer "don't hardcode the same size in two places" — and both come out already scaled, no `units()` wrapping needed at the call site:

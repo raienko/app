@@ -60,6 +60,8 @@ const config: StorybookConfig = {
   },
 
   stories: ["../src/**/*.stories.?(ts|tsx|js)"],
+  // The web app's static files — the map's worker among them.
+  staticDirs: ["../public"],
 
   async viteFinal(viteConfig) {
     // Metro inlines EXPO_PUBLIC_* vars from .env automatically; Vite doesn't,
@@ -95,6 +97,9 @@ const config: StorybookConfig = {
       },
       define: {
         ...viteConfig.define,
+        // Metro inlines the app's base path; here static files sit beside
+        // the story pages (src/components/map/index.web.tsx).
+        "process.env.EXPO_BASE_URL": JSON.stringify("."),
         ...Object.fromEntries(
           Object.entries(env).map(([key, value]) => [
             `process.env.${key}`,

@@ -30,6 +30,15 @@ export type { MapMarker, MapProps } from "./types";
 
 type GlModule = typeof import("maplibre-gl");
 
+/**
+ * maplibre-gl's worker, copied into public/ on install
+ * (scripts/map-worker.mjs). Since v6 maplibre looks for it beside its own
+ * file, which no bundle keeps. `EXPO_BASE_URL` is the app's base path under
+ * Metro ("" at the root) and "." in the web Storybook, whose pages sit next
+ * to its static files.
+ */
+const WORKER_URL = `${process.env.EXPO_BASE_URL ?? ""}/maplibre-gl-worker.mjs`;
+
 const CAMERA_DURATION = 500;
 const USER_ID = "user-location";
 
@@ -83,9 +92,10 @@ export default function Map({
     import("maplibre-gl")
       .then((module) => {
         if (cancelled) return;
-        // The UMD build arrives as the module itself or as its default.
+        // Interop can hand over the module itself or wrap it in `default`.
         const lib = ((module as { default?: GlModule }).default ??
           module) as GlModule;
+        lib.setWorkerUrl(WORKER_URL);
         map = new lib.Map({
           container: containerRef.current as unknown as HTMLElement,
           style: appliedStyle.current as never,
