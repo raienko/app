@@ -80,3 +80,7 @@ e2e-output/
 
 # native app binaries by fingerprint and build profile (scripts/native)
 .native-cache/
+
+# Local EAS submission/signing credentials
+/credentials.json
+/google-service-account*.json

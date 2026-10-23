@@ -69,7 +69,7 @@ describe("usePhoneText", () => {
     });
 
     expect(result.current.country).toBe("UA");
-    expect(result.current.text).toBe("044 123 4567");
+    expect(result.current.text).toBe("44 123 4567");
     expect(onCountryChange).toHaveBeenLastCalledWith("UA");
   });
 
@@ -87,8 +87,88 @@ describe("usePhoneText", () => {
     });
 
     expect(result.current.country).toBe("GB");
-    expect(result.current.text).toBe("020 7946 0018");
+    expect(result.current.text).toBe("20 7946 0018");
     expect(onChange).toHaveBeenLastCalledWith("+442079460018");
+  });
+
+  /**
+   * The picker already shows `+380`, so a trunk `0` in the field reads as
+   * `+380 066…` — not a number. Typed without it, the digits are grouped as
+   * they follow the calling code and never gain one; typed with it, the
+   * finished number drops it. Either way the value is the same E.164.
+   */
+  describe("trunk prefix", () => {
+    it("never adds one to digits typed without it", async () => {
+      const onChange = jest.fn();
+      const { result } = await renderHook(() =>
+        usePhoneText(null, onChange, "UA"),
+      );
+
+      for (const digit of "665889189") {
+        await act(() => {
+          result.current.onChangeText(`${result.current.text}${digit}`);
+        });
+        expect(result.current.text.startsWith("0")).toBe(false);
+      }
+
+      expect(result.current.text).toBe("66 588 9189");
+      expect(onChange).toHaveBeenLastCalledWith("+380665889189");
+    });
+
+    it("drops one that was typed once the number is complete", async () => {
+      const onChange = jest.fn();
+      const { result } = await renderHook(() =>
+        usePhoneText(null, onChange, "UA"),
+      );
+
+      await act(() => {
+        result.current.onChangeText("0665889189");
+      });
+
+      expect(result.current.text).toBe("66 588 9189");
+      expect(onChange).toHaveBeenLastCalledWith("+380665889189");
+    });
+
+    it("shows a stored value without one", async () => {
+      const { result } = await renderHook(() =>
+        usePhoneText("+380665889189", () => {}, "UA"),
+      );
+
+      expect(result.current.text).toBe("66 588 9189");
+    });
+
+    it("keeps the value when a digit is deleted and retyped", async () => {
+      const onChange = jest.fn();
+      const { result } = await renderHook(() =>
+        usePhoneText(null, onChange, "UA"),
+      );
+
+      await act(() => {
+        result.current.onChangeText("665889189");
+      });
+      await act(() => {
+        result.current.onChangeText(result.current.text.slice(0, -1));
+      });
+      expect(onChange).toHaveBeenLastCalledWith(null);
+
+      await act(() => {
+        result.current.onChangeText(`${result.current.text}9`);
+      });
+      expect(result.current.text).toBe("66 588 9189");
+      expect(onChange).toHaveBeenLastCalledWith("+380665889189");
+    });
+
+    it("leaves a plan without one grouped the local way", async () => {
+      const { result } = await renderHook(() =>
+        usePhoneText(null, () => {}, "US"),
+      );
+
+      await act(() => {
+        result.current.onChangeText("2133734253");
+      });
+
+      expect(result.current.text).toBe("(213) 373-4253");
+    });
   });
 
   it("keeps international mode when deleting formatter punctuation", async () => {

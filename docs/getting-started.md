@@ -23,15 +23,15 @@
 
 2. Environment variables and brand
 
-   `yarn install` already created `.env` from `.env.example` and applied the brand in `assets/brand` (its postinstall runs `yarn brand`). After changing anything in `assets/brand`, run it again:
+   `yarn install` already created `.env` from `.env.example` (placeholders that run as-is) and applied the brand in `assets/brand` (its postinstall runs `yarn brand`). Pull an EAS environment's identity and backend into `.env.local` as described in [App builds](development-builds.md). After changing anything in `assets/brand`, run the brand again:
 
    ```bash
    yarn brand
    ```
 
-   See [Brand](../assets/brand/README.md). `.env` is read by Expo CLI (via `@expo/env`) and used both by `app.config.ts` (app name/slug/scheme/bundle id) and by the app itself through [`src/constants/env`](../src/constants/env/index.js). Only `EXPO_PUBLIC_*`-prefixed vars are available at runtime — Metro inlines them into the bundle at build time, so they must be referenced as a static `process.env.EXPO_PUBLIC_X`, never a dynamic key. See the comment in `src/constants/env/index.js` before adding new ones.
+   See [Brand](../assets/brand/README.md) for colours, palette and maps. The env files — the shell or CI over `.env.local` over `.env` — are read by `app.config.ts` itself (name, slug, scheme, bundle id, link domains, `EXPO_PUBLIC_EAS_PROJECT_ID`, `EXPO_OWNER`) and by the app through [`src/constants/env`](../src/constants/env/index.js). Only `EXPO_PUBLIC_*`-prefixed vars are available at runtime — Metro inlines them into the bundle at build time, so they must be referenced as a static `process.env.EXPO_PUBLIC_X`, never a dynamic key. See the comment in `src/constants/env/index.js` before adding new ones.
 
-   **The brand keys are rewritten on every `yarn brand`** — change `assets/brand/brand.json` instead. Other keys (map tiles) are left alone. If you ever set a hex colour by hand, quote it: an unquoted `#` starts a comment in a `.env` file, so `KEY=#208AEF` reads as empty.
+   `.env` is yours and never rewritten; `.env.local` is replaced on every `yarn env:pull`. Quote any value with a `#`: an unquoted `#` starts a comment in a `.env` file.
 
 3. Start the app
 
@@ -127,17 +127,16 @@ GitHub Actions, in `.github/`. **Every workflow is manual for now** (Actions tab
 | **Code quality**      | `workflows/code-quality.yml`      | Formatting · Lint · Types · Unit tests (coverage in the job summary) · Secret scan · Expo Doctor · Web build · Native bundles · Storybook build · Dependency review · CodeQL (JavaScript/TypeScript, workflows)                                                             |
 | **Regression**        | `workflows/regression.yml`        | iOS · Android · Web — the user flows in `.maestro/flows`, end to end on Release builds; screenshots, logs and report uploaded on failure. Pick the platform (`all`, `native` = iOS + Android, or one of `ios` / `android` / `web`), and which flows by tag, when you run it |
 | **Component library** | `workflows/component-library.yml` | Code quality → Build → Publish the web Storybook to GitHub Pages                                                                                                                                                                                                            |
-| **Release**           | `workflows/release.yml`           | Plan → Code quality → iOS · Android · Web → Summary. **Placeholder**: the steps print the EAS commands they will run. See [Releasing](#releasing)                                                                                                                           |
+| **App build**         | `workflows/release.yml`           | Verify → Build iOS · Build Android, each build job starting its EAS build (and auto-submit) and linking it in the summary. See [App builds](development-builds.md)                                                                                                          |
 | **Pull request**      | `workflows/pull-request.yml`      | Title format — `type: 'Message'`, the house commit style, since a squash merge makes the title the commit                                                                                                                                                                   |
 | Dependabot            | `dependabot.yml`                  | Weekly grouped updates for actions and npm, Expo SDK packages excluded. Paused (`open-pull-requests-limit: 0`)                                                                                                                                                              |
 
 - **Checks run as separate jobs** so a pull request lists each by name ("Code quality / Lint", "Regression / iOS") and branch protection can require the ones that matter.
 - **CodeQL runs inside Code quality**, so security findings come with the rest. GitHub's CodeQL _default setup_ has to be off (Settings → Code security → CodeQL analysis) — it refuses results from both; findings show in the Security tab.
 - **The same commands run locally.** Every job is one `yarn` script from the table above, set up by `.github/actions/setup` (Node from `.nvmrc`, frozen-lockfile install).
+- **One summary shape.** Jobs write their run-page summary through `.github/actions/summary` (title, status, a table of fields, notes); scripts in `scripts/ci` only compute the values, so test coverage, the App build plan and each build link read the same.
 - **Hardened by default.** Read-only token unless a job needs more, a timeout on every job, superseded runs cancelled, and third-party actions pinned to commit SHAs (the version in a comment beside each).
 - **Dependency review** needs the repository's dependency graph turned on (Settings → Code security).
-
-The workflows still to come — PR previews, and Release's real build and deploy steps — are planned in [CI and EAS](plans/ci-and-eas.md).
 
 ### Releasing
 
@@ -159,7 +158,7 @@ GitHub shows only the input id under a field, so each option carries its own exp
 - **The run's name is the release**: "Release 1.4.0 · production · store", "Update · staging", so the Actions list reads as a release history.
 - **One release per environment at a time**, never cancelled halfway.
 - **Production approvals**: give the `production` environment required reviewers (Settings → Environments) and every production job waits for a click. `EXPO_TOKEN` and store keys go in each environment's secrets, not the repository's.
-- **Still a placeholder**: Build, Distribute and Publish update print the `eas build` / `eas submit` / `eas update` / `eas deploy` command they will run. Making them real needs the EAS project, `eas.json` profiles named `<environment>-<distribution>` and the credentials in the [product guide](product-guide.md#step-9--ci-and-release).
+- **Still a placeholder**: Build, Distribute and Publish update print the `eas build` / `eas submit` / `eas update` / `eas deploy` command they will run. Making them real needs the EAS project, the `eas.json` profiles (one per environment) and the credentials in the [product guide](product-guide.md#step-9--ci-and-release).
 
 ---
 

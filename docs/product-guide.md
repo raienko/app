@@ -17,15 +17,15 @@
 
 ## 1. Decide the identity first
 
-| Decision                                        | Where it goes                          | Can it change later?                                                                        |
-| ----------------------------------------------- | -------------------------------------- | ------------------------------------------------------------------------------------------- |
-| **Bundle / package id** (`com.company.product`) | `assets/brand/brand.json` › `bundleId` | **No** — after the first store upload it identifies the app forever. A new id is a new app. |
-| App name (store and home screen)                | `brand.json` › `name`                  | Yes, with a store review                                                                    |
-| Slug (Expo project, user agent)                 | `brand.json` › `slug`                  | Painful — it names the EAS project                                                          |
-| URL scheme (`product://`)                       | `brand.json` › `scheme`                | Breaks existing links                                                                       |
-| Publisher: **individual or organization**       | Apple / Google accounts                | Hard — transferring an app to another account is a support process                          |
-| Domain (`product.com`)                          | DNS, `brand.json` › `appLinkDomains`   | Yes, but links and the web app move with it                                                 |
-| Platforms at launch (iOS, Android, web)         | —                                      | Yes                                                                                         |
+| Decision                                        | Where it goes                       | Can it change later?                                                                        |
+| ----------------------------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Bundle / package id** (`com.company.product`) | `EXPO_PUBLIC_APP_BUNDLE_ID`         | **No** — after the first store upload it identifies the app forever. A new id is a new app. |
+| App name (store and home screen)                | `EXPO_PUBLIC_APP_NAME`              | Yes, with a store review                                                                    |
+| Slug (Expo project, user agent)                 | `EXPO_PUBLIC_APP_SLUG`              | Painful — it names the EAS project                                                          |
+| URL scheme (`product://`)                       | `EXPO_PUBLIC_APP_SCHEME`            | Breaks existing links                                                                       |
+| Publisher: **individual or organization**       | Apple / Google accounts             | Hard — transferring an app to another account is a support process                          |
+| Domain (`product.com`)                          | DNS, `EXPO_PUBLIC_APP_LINK_DOMAINS` | Yes, but links and the web app move with it                                                 |
+| Platforms at launch (iOS, Android, web)         | —                                   | Yes                                                                                         |
 
 Publish as an **organization** for a commercial product: the store shows the company as seller, several people can hold roles, and the account survives staff changes. It needs a legal entity and (for Apple) a D-U-N-S number.
 
@@ -40,7 +40,7 @@ Create these with a **shared company identity** (a group mailbox such as `apps@c
 | [Google Play Console](https://play.google.com/console)           | 25 USD one-time                              | Internal / closed / production tracks, store listing                | Identity verification for organizations. **New personal accounts** must run a closed test (currently 12+ testers for 14 days) before production access.            |
 | [Google Cloud / Firebase](https://console.firebase.google.com)   | free tier                                    | Android push (FCM), Play service account for automated submit       | One project per environment is cleanest.                                                                                                                           |
 | [Expo (EAS)](https://expo.dev)                                   | free tier; paid plans for more/faster builds | Cloud builds, store submission, updates, web hosting (EAS Hosting)  | Create an **organization** and add the team.                                                                                                                       |
-| [GitHub](https://github.com) organization                        | free / Team plan                             | Code, CI (Actions), security features                               | Branch protection and private vulnerability reporting — see the [security plan](plans/security.md) SEC-16.                                                         |
+| [GitHub](https://github.com) organization                        | free / Team plan                             | Code, CI (Actions), security features                               | Branch protection and private vulnerability reporting — see the [security plan](security/plan.md) SEC-16.                                                          |
 | Domain registrar + DNS                                           | ~10–50 USD / year                            | Website, universal / app links, email                               | Lock the domain and turn on auto-renew.                                                                                                                            |
 | Email for the domain                                             | varies                                       | Support address, store contact, Apple/Google account owner          | Stores show the support email publicly.                                                                                                                            |
 | Map tiles provider (optional)                                    | free tier                                    | Only if you replace the default OpenFreeMap tiles                   | Restrict the key to the bundle id and web domain.                                                                                                                  |
@@ -66,24 +66,24 @@ Each step says what to do, where in the repo, and what you end up with. Steps 5 
 ### Step 1 · Fork and brand
 
 1. Fork or copy the repository into the company GitHub organization; protect `main` straight away.
-2. Edit `assets/brand/brand.json` — `name`, `slug`, `scheme`, `bundleId`, `colors`, `palette` — and replace `assets/brand/logo.svg`. See the [brand guide](../assets/brand/README.md).
-3. Run `yarn brand` (also runs on every `yarn install`): it writes `.env`, every icon and splash, the palette and the web manifest.
+2. Set the identity — `EXPO_PUBLIC_APP_NAME`, `_SLUG`, `_SCHEME`, `_BUNDLE_ID` — per environment on EAS, or in `.env` until there is an EAS project (see [App builds](development-builds.md)).
+3. Edit `assets/brand/brand.json` — `colors`, `palette`, `maps` — and replace `assets/brand/logo.svg`. See the [brand guide](../assets/brand/README.md). Run `yarn brand` (also runs on every `yarn install`): it writes every icon and splash, the palette and the web manifest.
 4. Remove or hide the showcase from production startup when the first real screens arrive (roadmap step 14). **Don't run `yarn reset-project`** — it's Expo's template script and moves `src/` away.
 
 Result: the app builds and runs under the new name, colours and icons.
 
 ### Step 2 · Expo project and build profiles
 
-1. `npx eas login`, then `npx eas init` in the repo: it creates the EAS project. Put its id in `brand.json` › `easProjectId` and run `yarn brand`.
-2. Add `eas.json` with `development`, `preview` and `production` profiles — channels, distribution (`internal` for preview), and environment variables per profile (roadmap step 15; the [CI and EAS plan](plans/ci-and-eas.md) lists the rules).
+1. `npx eas login`, then `npx eas init` in the repo: it creates the EAS project. Put its id in `.env` › `EXPO_PUBLIC_EAS_PROJECT_ID`.
+2. Give each EAS environment — `development`, `preview`, `production` — its identity and backend; the committed `eas.json` has one build and submit profile per environment, named after it, and no values of its own. See [App builds](development-builds.md).
 3. Set the version policy: `version` in `app.config.ts` for what users see, and let EAS manage build numbers (`appVersionSource: "remote"`, `autoIncrement` on production).
 
-Result: `eas build --profile development` produces a dev client you can install on the test devices.
+Result: `yarn eas build --profile development --platform all --auto-submit` puts the DEV app in TestFlight and Play internal testing.
 
 ### Step 3 · Backend and configuration
 
-1. `brand.json` › `apiUrl` (→ `EXPO_PUBLIC_API_URL`): https only — the app refuses plain http except to a local dev server.
-2. Map tiles (optional): `EXPO_PUBLIC_MAP_TILES_URL` / `EXPO_PUBLIC_MAP_GLYPHS_URL` in `.env` — see `.env.example`.
+1. `EXPO_PUBLIC_API_URL`, per EAS environment: https only — the app refuses plain http except to a local dev server.
+2. Map tiles (optional): `maps.tilesUrl` / `maps.glyphsUrl` in `assets/brand/brand.json` — see the brand guide.
 3. Remember: **every `EXPO_PUBLIC_*` value ships inside the app and is public.** Server secrets live on the server or in EAS / GitHub secrets, never in `.env` values the app reads.
 4. Per environment, use different values in each EAS profile (preview vs production API, keys).
 
@@ -92,7 +92,7 @@ Result: the app talks to your backend in each environment.
 ### Step 4 · Domain, deep links and email
 
 1. Register the domain; set up DNS and the support mailbox.
-2. Add the domain to `brand.json` › `appLinkDomains` and run `yarn brand`; `app.config.ts` turns it into iOS associated domains and Android intent filters.
+2. Add the domain to `EXPO_PUBLIC_APP_LINK_DOMAINS` (comma-separated); `app.config.ts` turns it into iOS associated domains and Android intent filters.
 3. Publish, on `https://<domain>/.well-known/`:
    - `apple-app-site-association` — your **Team ID** + bundle id (from Apple, step 5), served as JSON with no redirect.
    - `assetlinks.json` — the package name + the **SHA-256 fingerprint of the app signing key** (from Play Console › App signing, step 6; add the upload key's too for internal builds).
@@ -109,7 +109,7 @@ Result: `https://<domain>/…` links open the app; others stay in the browser (t
 5. Automated submit: create an **App Store Connect API key** (Users and Access › Integrations) with the App Manager role and add it to EAS for `eas submit`.
 6. Fill in, in App Store Connect: privacy policy URL, App Privacy labels (from the data inventory, security SEC-10/17), age rating, export compliance (the app uses only standard HTTPS — declare it, or set `ITSAppUsesNonExemptEncryption` in `app.config.ts`).
 
-Result: `eas build -p ios --profile production` + `eas submit -p ios` lands a build in TestFlight.
+Result: `yarn eas build -p ios --profile production --auto-submit` lands a build in TestFlight.
 
 ### Step 6 · Android: account, signing, push
 
@@ -121,7 +121,7 @@ Result: `eas build -p ios --profile production` + `eas submit -p ios` lands a bu
 6. Fill in: Data safety form, content rating questionnaire, target audience, ads declaration, privacy policy URL. New personal accounts: run the closed test before production.
 7. Copy the app signing key's SHA-256 (Play Console › App signing) into `assetlinks.json` (step 4).
 
-Result: `eas build -p android --profile production` + `eas submit -p android` lands a build in the internal track.
+Result: `yarn eas build -p android --profile production --auto-submit` lands a build in the internal track.
 
 ### Step 7 · Web
 
@@ -134,7 +134,7 @@ Result: the installable web app at your domain, with its API routes.
 
 ### Step 8 · Security and privacy
 
-1. Do **Phase 1** of the [security plan](plans/security.md#work-plan) before the first public build; Phase 2 before real accounts.
+1. Do **Phase 1** of the [security plan](security/plan.md#work-plan) before the first public build; Phase 2 before real accounts.
 2. Write and host: **privacy policy**, **terms of service**, and a support page — both stores require the privacy policy URL.
 3. If users can create accounts, **in-app account deletion** is required by Apple and expected by Google (with a web deletion page for Play).
 4. Fill in the data inventory and threat model (SEC-17) — the store privacy answers come from it.
@@ -169,7 +169,7 @@ Run the E2E flows (`yarn e2e:*`) and the signed-device checklist (roadmap 19) on
 
 ## Credentials and where they live
 
-The single list of secrets the product depends on. Nothing here goes in the repository or in an `EXPO_PUBLIC_*` variable.
+The single list of secrets the product depends on. Nothing here goes in the repository or in an `EXPO_PUBLIC_*` variable. How to create the store ones, step by step: [Store credentials](store-credentials.md).
 
 | Credential                                             | Created in                       | Stored in                                                                                | Used by                   | Expires / rotate                           | Owner |
 | ------------------------------------------------------ | -------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------- | ------------------------------------------ | ----- |

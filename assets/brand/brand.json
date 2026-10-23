@@ -1,10 +1,4 @@
 {
-  "name": "app",
-  "slug": "app",
-  "scheme": "app",
-  "bundleId": "com.example.app",
-  "easProjectId": "",
-  "appLinkDomains": [],
   "colors": {
     "primary": "#3F5BD9",
     "iconBackground": "#208AEF",
@@ -27,5 +21,6 @@
       "selected": "#2A3150",
       "focus": "#8A9CF2"
     }
-  }
+  },
+  "maps": {}
 }

@@ -1,4 +1,4 @@
-[Docs](../index.md) › [Security plan](../plans/security.md) › Threat model
+[Docs](../index.md) › [Security plan](plan.md) › Threat model
 
 # Threat model
 
@@ -51,4 +51,4 @@ Last reviewed 2026-10-19. Review again when a trigger below happens, and at leas
 
 ---
 
-[Security plan](../plans/security.md) · [Data inventory](data-inventory.md) · [Docs index](../index.md)
+[Security plan](plan.md) · [Data inventory](data-inventory.md) · [Docs index](../index.md)

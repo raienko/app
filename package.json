@@ -101,6 +101,7 @@
     "@testing-library/react-native": "14.0.1",
     "@types/geojson": "7946.0.16",
     "@types/jest": "29.5.14",
+    "@types/node": "26.2.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
     "eslint": "9.39.5",
@@ -139,8 +140,8 @@
     "e2e:android": "node scripts/native/build.mjs android --profile e2e --install",
     "e2e:test": "node scripts/e2e/test.mjs",
     "e2e:test:web": "node scripts/e2e/test.mjs --web",
-    "web:build": "node --env-file=.env node_modules/expo/bin/cli export -p web",
-    "native:bundle": "node --env-file=.env node_modules/expo/bin/cli export -p ios -p android --output-dir .expo/native-bundles",
+    "web:build": "expo export -p web",
+    "native:bundle": "expo export -p ios -p android --output-dir .expo/native-bundles",
     "doctor": "expo-doctor",
     "atlas": "EXPO_ATLAS=true expo start",
     "atlas:export": "EXPO_ATLAS=true expo export",
@@ -161,7 +162,11 @@
     "storybook:web": "storybook dev -p 6006 -c .storybook",
     "storybook:web:build": "storybook build -c .storybook",
     "brand": "node scripts/brand/index.ts",
-    "new": "plop"
+    "new": "plop",
+    "dev": "expo start --dev-client",
+    "eas": "npx --yes eas-cli@18.4.0",
+    "env:pull": "node scripts/expo-env.mjs",
+    "test:build-config": "node --test scripts/expo-env.test.mjs scripts/ci/build-result.test.mjs .github/actions/summary/summary.test.mjs"
   },
   "private": true,
   "jest": {

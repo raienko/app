@@ -35,6 +35,7 @@ Capabilities the app uses behind the UI.
 | [**Network**](../../src/features/network/index.md)                   | Online/offline and connection type, live; keeps TanStack Query's online state in sync.                                                                  |
 | [**Security headers**](../../src/features/security-headers/index.md) | The web build's HTTP security headers (CSP, HSTS, frame and MIME protection), sent by server middleware.                                                |
 | [**Haptics**](../../src/features/haptics/index.md)                   | One-call haptic feedback (tap, selection, success, warning, error) that respects a user setting and is silent on web.                                   |
+| [**Splash screen**](../../src/features/splash-screen/index.md)       | Keeps the native splash screen up until the app is ready (at least 2.5 s, at most 10 s), then fades it out.                                             |
 
 ## Not documented yet
 

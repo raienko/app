@@ -6,7 +6,7 @@ Everything that identifies the app lives in this folder. In the minimal case tha
 
 ```
 assets/brand/
-  brand.json   name, ids, colours
+  brand.json   colours, palette overrides, map provider
   logo.svg     the logo (or logo.png: square, ≥1024px, transparent)
 ```
 
@@ -16,14 +16,13 @@ Running the script turns them into everything the app needs:
 yarn brand
 ```
 
-It also runs on every `yarn install`, so a fresh clone or a CI runner always has a complete brand. To rebrand, replace this folder's contents and run it again.
+It also runs on every `yarn install`, so a fresh clone or a CI runner always has a complete brand. After changing this folder's contents, run it again.
 
-| Output                                                            | From                                                                              |
-| ----------------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| `generated/`: every icon, the splash and the favicon (gitignored) | `logo.*`, or a hand-made override below                                           |
-| `src/features/theme/palette.json` (gitignored)                    | `palette.base.json` + colours derived from `colors.primary` + `palette` overrides |
-| The brand keys in `.env`; every other key is left alone           | `brand.json`                                                                      |
-| `public/manifest.json` and the web icons (gitignored)             | `brand.json`, `logo.*` — what a browser needs to install the web build            |
+| Output                                                            | From                                                                                           |
+| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `generated/`: every icon, the splash and the favicon (gitignored) | `logo.*`, or a hand-made override below                                                        |
+| `src/features/theme/palette.json` (gitignored)                    | `palette.base.json` + colours derived from `colors.primary` + `palette` overrides              |
+| `public/manifest.json` and the web icons (gitignored)             | `brand.json`, `logo.*`, `EXPO_PUBLIC_APP_NAME` — what a browser needs to install the web build |
 
 Icons and the splash are baked into `ios/` and `android/` at prebuild. After a rebrand, run `npx expo prebuild --clean`; the script reminds you when those folders exist.
 
@@ -50,12 +49,11 @@ The logo is used as drawn, in its own colours. So a white logo wants a coloured 
 
 ```jsonc
 {
-  "name": "Acme", // home-screen name, permission prompts
-  "slug": "acme", // Expo slug: lowercase, digits, dashes
-  "scheme": "acme", // deep-link scheme, acme://…
-  "bundleId": "com.acme.app", // iOS bundle id and Android package
-  "easProjectId": "",
-  "appLinkDomains": [], // universal / app links
+  "maps": {
+    // Optional: omit either URL to use its OpenFreeMap default.
+    "tilesUrl": "https://tiles.example.com/tiles.json",
+    "glyphsUrl": "https://fonts.example.com/{fontstack}/{range}.pbf",
+  },
   "colors": {
     "primary": "#3F5BD9", // the brand hue; the palette is derived from it
     "iconBackground": "#208AEF", // background behind the logo
@@ -77,3 +75,24 @@ Only the brand family is derived: `primary`, `onPrimary`, `primaryPressed`, `acc
 Each colour keeps the brand's hue and only moves lighter or darker, in OKLCH, as far as the contrast rules in `src/features/theme/colors.test.ts` require. A primary that already passes is used exactly as given. A pale brand colour like a bright yellow is darkened until a white label reads on it.
 
 If no lightness works, or an override breaks a rule, the script stops and names the pair and its ratio. The current `brand.json` pins its hand-tuned values in `palette`, which is also how to keep a designer's exact choices.
+
+The brand is only how the app looks. Who the app is — `EXPO_PUBLIC_APP_NAME`,
+`EXPO_PUBLIC_APP_SLUG`, `EXPO_PUBLIC_APP_SCHEME`, `EXPO_PUBLIC_APP_BUNDLE_ID`,
+`EXPO_PUBLIC_APP_LINK_DOMAINS`, `EXPO_OWNER` and `EXPO_PUBLIC_EAS_PROJECT_ID` — comes from
+the env files and `yarn env:pull`; see [App builds](../../docs/development-builds.md).
+The script only creates a missing `.env` from `.env.example`, and reads
+`EXPO_PUBLIC_APP_NAME` for the web manifest.
+
+### Map provider
+
+Set `maps.tilesUrl` and `maps.glyphsUrl` in `brand.json` to use a custom
+OpenMapTiles-compatible provider. An empty `maps` object uses OpenFreeMap.
+Both URLs must use HTTPS; the glyphs template must contain `{fontstack}` and
+`{range}` and serve `Noto Sans Regular`. Native maps and web security headers
+read these settings directly. No Expo, GitHub or local environment variables
+are needed. Provider URLs and any included public keys ship in the app.
+
+Native icon and splash backgrounds are read directly from `colors.iconBackground`,
+`colors.splashBackground` and optional `colors.splashBackgroundDark` in `brand.json`.
+No corresponding environment variables are needed. Colors must be 3- or 6-digit
+hex; omit the dark color to reuse the light splash background.

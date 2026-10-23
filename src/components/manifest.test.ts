@@ -1,20 +1,7 @@
-import { COMPONENTS } from "./manifest.json";
+import { readdirSync, readFileSync, type Dirent } from "node:fs";
+import { join } from "node:path";
 
-// tsconfig keeps @types/node's globals out of this RN codebase on purpose,
-// so the two Node modules this test reads the tree with are typed here to
-// exactly what it uses. Jest runs it under Node, where both exist.
-type Dirent = { name: string; isDirectory(): boolean };
-// eslint-disable-next-line @typescript-eslint/no-require-imports -- see above
-const { readdirSync, readFileSync } = require("fs") as {
-  readdirSync(
-    path: string,
-    options: { withFileTypes: true } | { recursive: true },
-  ): Dirent[] & string[];
-  readFileSync(path: string, encoding: "utf8"): string;
-};
-// eslint-disable-next-line @typescript-eslint/no-require-imports -- see above
-const { join } = require("path") as { join(...parts: string[]): string };
-declare const __dirname: string;
+import { COMPONENTS } from "./manifest.json";
 
 /**
  * The manifest is only useful while it matches the folders, and the
@@ -35,7 +22,7 @@ const folders = readdirSync(ROOT, { withFileTypes: true })
 
 /** Every file under a component folder, as a path relative to it. */
 function filesOf(name: string): string[] {
-  return readdirSync(join(ROOT, name), { recursive: true });
+  return readdirSync(join(ROOT, name), { recursive: true, encoding: "utf8" });
 }
 
 const entries = Object.entries(COMPONENTS) as [string, "public" | "internal"][];

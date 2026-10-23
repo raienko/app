@@ -1,4 +1,4 @@
-[Docs](../index.md) › [Roadmap](../../Roadmap.md) › Plans
+[Docs](../index.md) › [Roadmap](../../Roadmap.md) › Security plan
 
 # Security and encryption controls
 

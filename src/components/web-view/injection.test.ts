@@ -4,7 +4,9 @@ import {
   STYLE_MESSAGE,
   bridgeScript,
   deliverInjection,
+  htmlWithBridge,
   nativeInjection,
+  zoomLockScript,
 } from "./injection";
 
 /**
@@ -144,5 +146,86 @@ describe("deliverInjection", () => {
     });
 
     expect(() => new Function(deliverInjection(encoded))).not.toThrow();
+  });
+});
+
+describe("zoomLockScript", () => {
+  type Element = {
+    id?: string;
+    textContent?: string;
+    attributes: Record<string, string>;
+    setAttribute: (name: string, value: string) => void;
+    getAttribute: (name: string) => string | null;
+  };
+
+  function element(attributes: Record<string, string> = {}): Element {
+    return {
+      attributes,
+      setAttribute(name, value) {
+        this.attributes[name] = value;
+      },
+      getAttribute(name) {
+        return this.attributes[name] ?? null;
+      },
+    };
+  }
+
+  /**
+   * Runs the script against just enough of a document to watch what it
+   * does to the viewport — `document` is a parameter of the wrapping
+   * function, so the script's global reference resolves to this.
+   */
+  function run(viewport?: string) {
+    const head: Element[] = [];
+    if (viewport !== undefined)
+      head.push(element({ name: "viewport", content: viewport }));
+    const document = {
+      readyState: "complete",
+      head: { appendChild: (child: Element) => head.push(child) },
+      documentElement: {},
+      createElement: () => element(),
+      querySelectorAll: () =>
+        head.filter((child) => child.attributes.name === "viewport"),
+      getElementById: (id: string) =>
+        head.find((child) => child.id === id) ?? null,
+      addEventListener: () => {},
+    };
+    new Function("document", zoomLockScript())(document);
+
+    return {
+      viewports: head
+        .filter((child) => child.attributes.name === "viewport")
+        .map((child) => child.attributes.content),
+      css: head.map((child) => child.textContent ?? "").join(""),
+    };
+  }
+
+  it("adds a viewport that can't scale to a page without one", () => {
+    expect(run().viewports).toEqual([
+      "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+    ]);
+  });
+
+  it("keeps the page's own width but replaces its scale limits", () => {
+    expect(
+      run("width=600, initial-scale=2, user-scalable=yes").viewports,
+    ).toEqual([
+      "width=600, initial-scale=1, maximum-scale=1, user-scalable=no",
+    ]);
+  });
+
+  // Covers the double tap where the viewport alone doesn't.
+  it("leaves the touch only panning", () => {
+    expect(run().css).toContain("touch-action: pan-x pan-y");
+  });
+
+  it("goes ahead of the bridge only when asked", () => {
+    expect(nativeInjection()).not.toContain("user-scalable=no");
+    expect(nativeInjection(undefined, { lockZoom: true })).toContain(
+      "user-scalable=no",
+    );
+    expect(htmlWithBridge("<p>hi</p>", "", { lockZoom: true })).toContain(
+      "user-scalable=no",
+    );
   });
 });

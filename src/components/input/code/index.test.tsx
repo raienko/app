@@ -1,9 +1,9 @@
-import { createRef } from "react";
+import { createRef, useState } from "react";
 import type { TextInput } from "react-native";
 
 import { fireEvent, render, screen, testId, waitFor } from "@/root/testing";
 
-import Component from "./index";
+import Component, { caretAfter } from "./index";
 
 /** The one real input behind the boxes. */
 const field = () => screen.getByLabelText("Code");
@@ -191,6 +191,70 @@ describe(`${Component.displayName} smoke test`, () => {
       expect(field().props.selection).toEqual({ start: 2, end: 2 });
     });
 
+    describe("correcting one character", () => {
+      /** A controlled field, so each edit lands in the next render. */
+      function Harness({ initial }: { initial: string }) {
+        const [code, setCode] = useState(initial);
+        return <Component label="Code" value={code} onChange={setCode} />;
+      }
+
+      const box = (index: number) =>
+        screen.getByTestId(testId("code", "cell", index), {
+          includeHiddenElements: true,
+        });
+
+      it("selects a filled box when it's tapped", async () => {
+        await render(<Harness initial="123456" />);
+
+        await fireEvent.press(box(2));
+
+        expect(field().props.selection).toEqual({ start: 2, end: 3 });
+      });
+
+      it("replaces that character and moves to the next", async () => {
+        await render(<Harness initial="123456" />);
+
+        await fireEvent.press(box(2));
+        await fireEvent.changeText(field(), "129456");
+
+        expect(drawn()).toEqual(["1", "2", "9", "4", "5", "6"]);
+        expect(field().props.selection).toEqual({ start: 3, end: 4 });
+      });
+
+      it("removes that character on backspace, keeping the rest", async () => {
+        await render(<Harness initial="123456" />);
+
+        await fireEvent.press(box(2));
+        await fireEvent.changeText(field(), "12456");
+
+        expect(drawn()).toEqual(["1", "2", "4", "5", "6", ""]);
+        expect(field().props.selection).toEqual({ start: 2, end: 3 });
+      });
+
+      it("goes to the end from an empty box", async () => {
+        await render(<Harness initial="12" />);
+
+        await fireEvent.press(box(4));
+
+        expect(field().props.selection).toEqual({ start: 2, end: 2 });
+      });
+
+      it("focuses the field from a box", async () => {
+        const ref = createRef<TextInput>();
+        await render(
+          <Component ref={ref} label="Code" value="12" onChange={() => {}} />,
+        );
+        await waitFor(() => {
+          expect(ref.current).toBeTruthy();
+        });
+        const focus = jest.spyOn(ref.current as TextInput, "focus");
+
+        await fireEvent.press(box(1));
+
+        expect(focus).toHaveBeenCalled();
+      });
+    });
+
     it("releases the caret once the code is full", async () => {
       await render(
         <Component label="Code" value="123456" onChange={() => {}} />,
@@ -246,5 +310,30 @@ describe(`${Component.displayName} smoke test`, () => {
       expect(ref.current).toBeTruthy();
     });
     expect(() => ref.current?.focus()).not.toThrow();
+  });
+});
+
+describe("caretAfter", () => {
+  it("follows a character typed at the end", () => {
+    expect(caretAfter("12", "123")).toBe(3);
+  });
+
+  it("goes to the end after a pasted or autofilled code", () => {
+    expect(caretAfter("", "123456")).toBe(6);
+    expect(caretAfter("111111", "123456")).toBe(6);
+  });
+
+  it("moves past a replaced character", () => {
+    expect(caretAfter("123456", "129456", 2)).toBe(3);
+  });
+
+  it("stays where a character was removed", () => {
+    expect(caretAfter("123456", "12456", 2)).toBe(2);
+  });
+
+  // Comparing the values alone can't say which `1` went.
+  it("trusts the selected box in a run of the same character", () => {
+    expect(caretAfter("1111", "111", 1)).toBe(1);
+    expect(caretAfter("1111", "1211", 1)).toBe(2);
   });
 });

@@ -1,4 +1,4 @@
-[Docs](../index.md) › [Security plan](../plans/security.md) › Exceptions
+[Docs](../index.md) › [Security plan](plan.md) › Exceptions
 
 # Severity policy and exception register
 
@@ -35,4 +35,4 @@ Medium findings from the first scan (2026-10-19), tracked under the policy rathe
 
 ---
 
-[Security plan](../plans/security.md) · [Docs index](../index.md)
+[Security plan](plan.md) · [Docs index](../index.md)

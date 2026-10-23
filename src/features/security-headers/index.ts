@@ -1,3 +1,4 @@
+import brand from "@/constants/brand";
 import env from "@/constants/env";
 
 /**
@@ -31,8 +32,8 @@ export function contentSecurityPolicy(): string {
   const connect = new Set([
     "'self'",
     ...originOf(env.apiUrl),
-    ...originOf(env.mapTilesUrl ?? DEFAULT_MAP_ORIGIN),
-    ...originOf(env.mapGlyphsUrl ?? DEFAULT_MAP_ORIGIN),
+    ...originOf(brand.mapTilesUrl ?? DEFAULT_MAP_ORIGIN),
+    ...originOf(brand.mapGlyphsUrl ?? DEFAULT_MAP_ORIGIN),
   ]);
 
   return [

@@ -144,13 +144,82 @@ export function bridgeScript(initialCss?: string): string {
 })();`;
 }
 
+/** The `<style>` element that turns off touch zoom; see `zoomLockScript`. */
+const ZOOM_STYLE_ELEMENT_ID = "app-web-view-zoom";
+
+/**
+ * Turns off pinch and double-tap zoom inside the page, for a view whose
+ * `zoomable` is false.
+ *
+ * Neither platform has a switch for this that works on both: WKWebView has
+ * no zoom prop at all and honours only the page's viewport, and Android's
+ * `setBuiltInZoomControls` stops a pinch but not a double tap. So the page
+ * is told, in the two ways browsers listen: a viewport that can't scale,
+ * and `touch-action` that leaves only panning to the touch.
+ *
+ * The page's own viewport is kept apart from its scale limits, so a page
+ * that lays itself out at some width still does. One with no viewport at
+ * all is given `width=device-width`: a desktop-width layout that can't be
+ * zoomed would be unreadable. It runs again once the page has parsed, which
+ * is when a `<meta>` of its own can have arrived to overrule this one.
+ */
+export function zoomLockScript(): string {
+  return `(function () {
+  var STYLE_ID = ${jsLiteral(ZOOM_STYLE_ELEMENT_ID)};
+  var LIMITS = /^\\s*(initial-scale|minimum-scale|maximum-scale|user-scalable)\\s*=/i;
+
+  function locked(content) {
+    var kept = [];
+    var parts = (content || "width=device-width").split(",");
+    for (var i = 0; i < parts.length; i++) {
+      var part = parts[i].replace(/^\\s+|\\s+$/g, "");
+      if (part && !LIMITS.test(part)) kept.push(part);
+    }
+    return kept
+      .concat("initial-scale=1", "maximum-scale=1", "user-scalable=no")
+      .join(", ");
+  }
+
+  function lock() {
+    var root = document.head || document.documentElement;
+    if (!root) return;
+
+    var metas = document.querySelectorAll('meta[name="viewport"]');
+    if (metas.length === 0) {
+      var meta = document.createElement("meta");
+      meta.setAttribute("name", "viewport");
+      root.appendChild(meta);
+      metas = [meta];
+    }
+    for (var i = 0; i < metas.length; i++) {
+      metas[i].setAttribute("content", locked(metas[i].getAttribute("content")));
+    }
+
+    if (!document.getElementById(STYLE_ID)) {
+      var style = document.createElement("style");
+      style.id = STYLE_ID;
+      style.textContent = "html { touch-action: pan-x pan-y; }";
+      root.appendChild(style);
+    }
+  }
+
+  lock();
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", lock);
+  }
+})();`;
+}
+
 /**
  * The same script wrapped for `injectedJavaScript*`, which on iOS treats a
  * non-`true` completion value as a reason to warn — see the library's own
  * guide. The trailing `true;` is not decoration.
  */
-export function nativeInjection(initialCss?: string): string {
-  return `${bridgeScript(initialCss)}\ntrue;`;
+export function nativeInjection(
+  initialCss?: string,
+  { lockZoom = false }: { lockZoom?: boolean } = {},
+): string {
+  return `${lockZoom ? `${zoomLockScript()}\n` : ""}${bridgeScript(initialCss)}\ntrue;`;
 }
 
 /**
@@ -177,8 +246,13 @@ export function deliverInjection(encoded: string): string {
  * from `injectedJavaScriptBeforeContentLoaded`, so both platforms give a
  * page the same guarantee — `AppBridge` exists before your first line runs.
  */
-export function htmlWithBridge(html: string, initialCss?: string): string {
-  const tag = `<script>${bridgeScript(initialCss)}</script>`;
+export function htmlWithBridge(
+  html: string,
+  initialCss?: string,
+  { lockZoom = false }: { lockZoom?: boolean } = {},
+): string {
+  const zoom = lockZoom ? `<script>${zoomLockScript()}</script>` : "";
+  const tag = `${zoom}<script>${bridgeScript(initialCss)}</script>`;
   const head = /<head[^>]*>/i.exec(html);
   if (head !== null) {
     const at = head.index + head[0].length;

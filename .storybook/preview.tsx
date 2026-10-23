@@ -9,7 +9,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { deepLinks } from "@/features/deep-links";
 import { useTheme } from "@/features/theme";
-import { Providers } from "@/root";
+import Providers from "@/root/providers";
 
 /**
  * A story has no navigator, so <DeepLinks> never opens the built-in `ready`

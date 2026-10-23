@@ -5,18 +5,17 @@ import sharp from "sharp";
 
 import { HEX } from "./color.ts";
 
+/**
+ * How the app looks: colours, palette overrides, map provider and the logo.
+ * Nothing that identifies it — name, ids, scheme, link domains — which
+ * differs per environment and comes from the env files (src/constants/env).
+ */
 export type Brand = {
   /** assets/brand — the brand's source files. */
   dir: string;
   logoPath: string;
-  name: string;
-  slug: string;
-  scheme: string;
-  bundleId: string;
-  easProjectId: string;
-  appLinkDomains: string[];
-  /** The backend the request client talks to; empty when there's none yet. */
-  apiUrl: string;
+  /** Optional public OpenMapTiles provider; unset uses OpenFreeMap. */
+  maps?: { tilesUrl?: string; glyphsUrl?: string };
   colors: {
     primary: string;
     iconBackground: string;
@@ -27,10 +26,6 @@ export type Brand = {
 };
 
 export class BrandError extends Error {}
-
-const BUNDLE_ID = /^[a-z][a-z0-9]*(\.[a-z][a-z0-9_]*)+$/i;
-const SCHEME = /^[a-z][a-z0-9+.-]*$/;
-const SLUG = /^[a-z0-9-]+$/;
 
 /**
  * Reads and checks the brand in `dir`. Every problem is collected and
@@ -54,31 +49,6 @@ export async function loadBrand(dir: string): Promise<Brand> {
   }
 
   const problems: string[] = [];
-  const text = (key: keyof Brand, pattern?: RegExp, hint?: string) => {
-    const value = raw[key];
-    if (typeof value !== "string" || value.trim() === "") {
-      problems.push(`"${key}" is required`);
-    } else if (pattern && !pattern.test(value)) {
-      problems.push(`"${key}" ${hint}, got "${value}"`);
-    }
-  };
-
-  text("name");
-  text("slug", SLUG, "must be lowercase letters, digits and dashes");
-  text("scheme", SCHEME, "must be a lowercase URL scheme");
-  text("bundleId", BUNDLE_ID, "must be reverse-DNS, like com.acme.app");
-
-  if (
-    raw.apiUrl !== undefined &&
-    raw.apiUrl !== "" &&
-    !/^https:\/\/\S+$|^http:\/\/(localhost|127\.0\.0\.1|10\.0\.2\.2)(:\d+)?(\/\S*)?$/.test(
-      raw.apiUrl,
-    )
-  ) {
-    problems.push(
-      `"apiUrl" must be an https:// URL (plain http only for localhost), got "${raw.apiUrl}"`,
-    );
-  }
 
   const colors = (raw.colors ?? {}) as Partial<Brand["colors"]>;
   for (const key of [
@@ -135,12 +105,5 @@ export async function loadBrand(dir: string): Promise<Brand> {
     throw new BrandError(`${label} has problems:\n  ${problems.join("\n  ")}`);
   }
 
-  return {
-    ...(raw as Brand),
-    dir,
-    logoPath: logoPath!,
-    easProjectId: raw.easProjectId ?? "",
-    appLinkDomains: raw.appLinkDomains ?? [],
-    apiUrl: raw.apiUrl ?? "",
-  };
+  return { ...(raw as Brand), dir, logoPath: logoPath! };
 }

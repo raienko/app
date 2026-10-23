@@ -24,4 +24,4 @@ The iOS, Android and web apps built from this repository, its API routes (`src/a
 
 ## How security is handled here
 
-The controls, where the codebase stands against them and the open work are in [docs/plans/security.md](docs/plans/security.md). The [data inventory](docs/security/data-inventory.md), [threat model](docs/security/threat-model.md) and [exception register](docs/security/exceptions.md) are in `docs/security`.
+The controls, where the codebase stands against them and the open work are in [docs/security/plan.md](docs/security/plan.md). The [data inventory](docs/security/data-inventory.md), [threat model](docs/security/threat-model.md) and [exception register](docs/security/exceptions.md) are in `docs/security`.

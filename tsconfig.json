@@ -2,7 +2,7 @@
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
     "strict": true,
-    "types": ["jest"],
+    "types": ["jest", "node"],
     // `@/assets/*` is listed first on purpose. TypeScript matches the
     // longest prefix whatever the order, but jest-expo turns these into a
     // `moduleNameMapper` in this order and Jest takes the first regex that

@@ -19,14 +19,47 @@ const MAX_E164_DIGITS = 15;
 
 function analyze(raw: string, country?: CountryCode): PhoneAnalysis {
   const formatter = new AsYouType(country);
-  const text = formatter.input(raw);
-  const parsed = parsePhoneNumberFromString(text, country);
+  const formatted = formatter.input(raw);
+  const parsed = parsePhoneNumberFromString(formatted, country);
+  const text =
+    country && !raw.trimStart().startsWith("+")
+      ? groupAfterCallingCode(formatted, country)
+      : formatted;
 
   return {
     text,
     value: parsed?.isValid() ? parsed.number : null,
     detectedCountry: formatter.getCountry() ?? parsed?.country,
   };
+}
+
+/** `+380 66 588 9189` → `66 588 9189`, or null if it doesn't start that way. */
+function withoutCallingCode(
+  international: string,
+  country: CountryCode,
+): string | null {
+  const prefix = `+${getCountryCallingCode(country)}`;
+  return international.startsWith(prefix)
+    ? international.slice(prefix.length).trimStart()
+    : null;
+}
+
+/**
+ * `AsYouType` groups national input only the way it's dialled at home. In a
+ * plan with a trunk prefix (Ukraine's or Britain's `0`) digits typed without
+ * it come back as one ungrouped run, because its national patterns expect
+ * the prefix. Those are the digits that follow the calling code the picker
+ * already shows, so they're grouped the way they follow it internationally.
+ * Anything it did group, such as `(213) 373-4253`, is left as it is.
+ */
+function groupAfterCallingCode(text: string, country: CountryCode): string {
+  if (!/^\d+$/.test(text)) return text;
+
+  const international = new AsYouType(country).input(
+    `+${getCountryCallingCode(country)}${text}`,
+  );
+  const grouped = withoutCallingCode(international, country);
+  return grouped !== null && parseDigits(grouped) === text ? grouped : text;
 }
 
 function countryOf(value: string | null): CountryCode | undefined {
@@ -36,17 +69,25 @@ function countryOf(value: string | null): CountryCode | undefined {
 /**
  * How a finished number is shown: grouped the local way when it belongs to
  * `country`, and with its dialling code when it doesn't — which is the only
- * way a number from elsewhere is unambiguous. National grouping here matches
- * what `AsYouType` produces, so re-displaying a value doesn't reshuffle what
- * was just typed.
+ * way a number from elsewhere is unambiguous.
+ *
+ * The local way never includes a trunk prefix. The picker already shows the
+ * calling code, so `066 588 9189` beside `+380` reads as `+380 066…`, which
+ * isn't a number; the field shows `66 588 9189`, the digits that actually
+ * follow the code. Grouping matches `analyze`, so re-displaying a value
+ * doesn't reshuffle what was just typed.
  */
 function display(value: string, country?: CountryCode): string {
   const parsed = parsePhoneNumberFromString(value, country);
   if (!parsed) return analyze(value, country).text;
 
-  return country && parsed.countryCallingCode === getCountryCallingCode(country)
-    ? parsed.formatNational()
-    : parsed.formatInternational();
+  if (!country || parsed.countryCallingCode !== getCountryCallingCode(country))
+    return parsed.formatInternational();
+
+  const national = parsed.formatNational();
+  if (parseDigits(national) === parsed.nationalNumber) return national;
+
+  return withoutCallingCode(parsed.formatInternational(), country) ?? national;
 }
 
 function toE164(text: string, country?: CountryCode): string | null {

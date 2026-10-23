@@ -11,7 +11,7 @@ This is an **application boilerplate**: fork or copy it for one product. Compone
 ## Project structure
 
 ```
-app.config.ts          Expo config — reads name/slug/scheme/bundleId/brand colours from src/constants/env
+app.config.ts          Expo config — identity from the env files (src/constants/env), colours from assets/brand
 metro.config.js         Wraps Metro with Storybook's entry-swap (see Storybook below)
 src/
   app/                   Routing only (Expo Router) — each route file re-exports a screen
@@ -27,7 +27,7 @@ assets/
   images/                 What a screen draws, reached through `@/assets/images/...`
 ```
 
-**The two colours the OS paints for us live in `.env`, not in the theme.** `brandIconBackground` (the plate an Android adaptive icon's foreground sits on) and `brandSplashBackground` (behind the launch image) are baked into the native projects at prebuild — the app is not running when they are on screen, so `theme/palette.json` is the wrong home for them and nothing in the app ever draws them. Like everything else that identifies a brand, they come from `assets/brand/brand.json` — see [Brand](../assets/brand/README.md). They are validated as 3- or 6-digit hex on load: eight-digit is refused outright, because `#RRGGBBAA` on the web and `#AARRGGBB` on Android would make the same string two different colours. A malformed one otherwise fails much later, in Gradle or Xcode, complaining about something else.
+**The colours the OS paints for us live in `assets/brand/brand.json`.** `colors.iconBackground` (the plate an Android adaptive icon's foreground sits on), `colors.splashBackground` (behind the launch image) and optional `colors.splashBackgroundDark` are baked into the native projects at prebuild — the app is not running when they are on screen, so `theme/palette.json` is the wrong home for them and nothing in the app ever draws them. Like the rest of how the app looks, they come from `assets/brand/brand.json` — see [Brand](../assets/brand/README.md); who the app is (name, ids, scheme, link domains) comes from the env files instead. They are validated as 3- or 6-digit hex on load: eight-digit is refused outright, because `#RRGGBBAA` on the web and `#AARRGGBB` on Android would make the same string two different colours. A malformed one otherwise fails much later, in Gradle or Xcode, complaining about something else.
 
 **`assets/brand` and `assets/images` are split by who reads them, not by file type.** Everything under `brand/` is read by Expo at config time and baked into the native projects; nothing there is imported by the app at runtime. Everything under `images/` goes through Metro and is `require()`d by a component. The practical payoff is that a rebrand is replacing `assets/brand` — a `brand.json` and a logo — and running `yarn brand`, which generates every icon and the splash into the gitignored `assets/brand/generated/` without ever touching a file a screen draws. `app.config.ts` reaches them through a `brandAsset()` helper, so the directory name appears once — and a typo in a path Expo only reads at prebuild time otherwise surfaces as a missing icon on a build machine.
 

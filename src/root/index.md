@@ -16,10 +16,11 @@ src/root/
 `Root` wraps `Providers` and is the single place for:
 
 - context providers every screen needs — add a new one to `providers.tsx` only, alongside the two app-lifetime services that live there (`Permissions`, `DeepLinks`)
+- deciding when the app is ready to show: the splash screen is held as soon as this file loads, and `SplashScreenGate` hides it once everything the first screen needs is in place — see [Splash screen](../features/splash-screen/index.md)
 - global overlay UI rendered above the current screen (toasts, modals, ...)
 - global listeners/services that should run for the app's lifetime (analytics init, push notification listeners, app-state listeners, ...) — wire these up here via `useEffect` once there's a concrete one to add
 
-**Providers are centralized on purpose.** Both Storybook preview configs (`.storybook/preview.tsx`, `.rnstorybook/preview.tsx`) decorate every story with `<Providers>`, and every component test imports `render`/`screen`/etc. from `@/root/testing` instead of `@testing-library/react-native` directly:
+**Providers are centralized on purpose.** Both Storybook preview configs (`.storybook/preview.tsx`, `.rnstorybook/preview.tsx`) decorate every story with `<Providers>` — imported from `@/root/providers`, so loading a story never holds the splash screen the way loading `Root` does — and every component test imports `render`/`screen`/etc. from `@/root/testing` instead of `@testing-library/react-native` directly:
 
 ```tsx
 import { render, screen } from "@/root/testing";

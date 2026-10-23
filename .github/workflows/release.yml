@@ -1,299 +1,145 @@
-name: Release
+name: App build
 
-# Ships the app: a new build for the team, the testing tracks or the stores,
-# or an over-the-air update to builds already installed. One form for every
-# case:
-#
-#   Release type   Build (new binary) · Update (JavaScript only, to builds
-#                  already installed — no store review, no native changes)
-#   Platform       All · Native (iOS + Android) · iOS · Android · Web
-#   Environment    development · staging · production — backend, config and
-#                  secrets; each is a GitHub Environment (see below)
-#   Distribution   Internal (install link / web preview) · Testing
-#                  (TestFlight, Play internal) · Store (review / live site)
-#   Version        empty = the app config's version
-
-# PLACEHOLDER: the form, checks, jobs and summaries are real; the Build,
-# Distribute and Publish update steps only say what they would run. They
-# will call EAS (eas build / submit / update / deploy) — the commands are in
-# each step. Nothing is built or uploaded yet.
-#
-# Environments: each job runs in the GitHub Environment named by the
-# `environment` input, so its secrets (EXPO_TOKEN, store keys) are scoped to
-# it and the run shows as a deployment. Give `production` required reviewers
-# (Settings → Environments) and every production job waits for an approval.
-#
-# Manual, and staying that way for store releases. Internal builds could
-# later run on a push to main.
+# Verify, then one Build job per platform, side by side: the run page shows
+# "Build iOS" and "Build Android" on their own, each with its own log,
+# summary and re-run, and one platform failing leaves the other running.
+# Every job writes its summary through .github/actions/summary, so the
+# blocks read the same as other workflows'.
 on:
   workflow_dispatch:
-    # GitHub shows only the input id under a field, so each option explains
-    # itself; the Plan job reads the first word ("Build — …" → build).
     inputs:
-      type:
-        description: Release type
-        type: choice
-        options:
-          - Build — new app binary, required for native changes
-          - Update — over-the-air JavaScript update to installed builds
-        default: Build — new app binary, required for native changes
       platform:
         description: Platform
         type: choice
-        options:
-          - All platforms
-          - Native — iOS and Android
-          - iOS
-          - Android
-          - Web
-        default: All platforms
+        options: [all, ios, android]
+        default: all
       environment:
-        description: Environment
-        type: choice
-        options: [development, staging, production]
-        default: staging
-      distribution:
-        description: Distribution (builds only)
-        type: choice
-        options:
-          - Internal — install link for the team, web preview
-          - Testing — TestFlight and Google Play internal testing
-          - Store — App Store and Google Play review, live website
-        default: Internal — install link for the team, web preview
-      version:
-        description: Version (optional, builds only) — e.g. 1.4.0; defaults to the current app version
-        type: string
-        default: ""
-      notes:
-        description: Release notes (optional) — shown to testers and in the run summary
-        type: string
-        default: ""
-      checks:
-        description: Run quality checks before release
+        description: Environment to use for GitHub credentials and Expo app settings
+        type: environment
+        required: true
+      submit:
+        description: Submit this build to TestFlight / Play internal testing
         type: boolean
         default: true
+      wait:
+        description: Wait for the EAS builds to finish (off — free-tier queues can take hours; the summary links the queued builds)
+        type: boolean
+        default: false
 
-run-name: >-
-  ${{ startsWith(inputs.type, 'Update')
-    && format('Update · {0}', inputs.environment)
-    || format('Release {0} · {1} · {2}', inputs.version || 'current version', inputs.environment,
-      startsWith(inputs.distribution, 'Store') && 'store'
-      || startsWith(inputs.distribution, 'Testing') && 'testing' || 'internal') }}
+run-name: App build · ${{ inputs.environment }} · ${{ inputs.platform }}
 
 permissions:
   contents: read
 
-# One release per environment at a time, and a running one is never cut off
-# halfway — a second run waits for the first.
 concurrency:
-  group: release-${{ inputs.environment }}
+  group: app-build-${{ inputs.environment }}
   cancel-in-progress: false
 
+env:
+  TARGET_ENVIRONMENT: ${{ inputs.environment }}
+  SUBMIT: ${{ inputs.submit }}
+  WAIT: ${{ inputs.wait }}
+
 jobs:
-  plan:
-    name: Plan
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    outputs:
-      type: ${{ steps.plan.outputs.type }}
-      distribution: ${{ steps.plan.outputs.distribution }}
-      version: ${{ steps.plan.outputs.version }}
-      ios: ${{ steps.plan.outputs.ios }}
-      android: ${{ steps.plan.outputs.android }}
-      web: ${{ steps.plan.outputs.web }}
-      ios-destination: ${{ steps.plan.outputs.ios_destination }}
-      android-destination: ${{ steps.plan.outputs.android_destination }}
-      web-destination: ${{ steps.plan.outputs.web_destination }}
-    steps:
-      - name: Check out
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up project
-        uses: ./.github/actions/setup
-      # Fails here, in seconds, on a combination that can't ship (a store
-      # release from staging, an update to web, a version that isn't semver).
-      - name: Check the choices and resolve the version
-        id: plan
-        run: node scripts/ci/release-plan.mjs
-        env:
-          TYPE: ${{ inputs.type }}
-          PLATFORM: ${{ inputs.platform }}
-          ENVIRONMENT: ${{ inputs.environment }}
-          DISTRIBUTION: ${{ inputs.distribution }}
-          VERSION: ${{ inputs.version }}
-          NOTES: ${{ inputs.notes }}
-
-  code-quality:
-    name: Code quality
-    needs: plan
-    if: inputs.checks
-    uses: ./.github/workflows/code-quality.yml
-    # A called workflow can't have more than its caller grants: CodeQL
-    # (inside Code quality) uploads its results as security events.
-    permissions:
-      contents: read
-      actions: read
-      security-events: write
-
-  ios:
-    name: iOS · ${{ needs.plan.outputs.type }}
-    needs: [plan, code-quality]
-    # Runs when Code quality passed or was skipped — not when it failed.
-    if: >-
-      !cancelled() && needs.plan.result == 'success' && needs.plan.outputs.ios == 'true'
-      && contains(fromJSON('["success","skipped"]'), needs.code-quality.result)
+  verify:
+    name: Verify
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    environment:
-      name: ${{ inputs.environment }}
+    environment: ${{ inputs.environment }}
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EXPO_PUBLIC_EAS_PROJECT_ID: ${{ secrets.EXPO_PUBLIC_EAS_PROJECT_ID }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Validate inputs and account setup
+        run: |
+          test -n "$EXPO_TOKEN" || { echo "Missing EXPO_TOKEN secret"; exit 1; }
+          test -n "$EXPO_PUBLIC_EAS_PROJECT_ID" || { echo "Missing EXPO_PUBLIC_EAS_PROJECT_ID secret"; exit 1; }
+          case "$TARGET_ENVIRONMENT" in
+            development|preview|production) ;;
+            *) echo "Select development, preview or production"; exit 1 ;;
+          esac
+      - name: Set up project
+        uses: ./.github/actions/setup
+      - name: Pull app configuration from Expo
+        run: yarn env:pull --environment "$TARGET_ENVIRONMENT"
+      - name: Validate iOS submission destination
+        if: inputs.submit && inputs.platform != 'android'
+        run: test -n "$APP_STORE_CONNECT_ID" || { echo "Set APP_STORE_CONNECT_ID (the app's Apple ID from App Store Connect) in the selected Expo environment"; exit 1; }
+      - name: Lint
+        run: yarn lint
+      - name: Check types
+        run: yarn typecheck
+      - name: Test build config
+        run: yarn test:build-config
+      - name: Run unit tests
+        run: yarn test --runInBand
+      - name: Resolve app config
+        run: npx expo config --type public > /dev/null
+      - name: Write summary
+        if: always()
+        uses: ./.github/actions/summary
+        with:
+          title: App build · ${{ inputs.environment }}
+          status: ${{ job.status }}
+          fields: |
+            Platforms: ${{ inputs.platform == 'all' && 'iOS, Android' || inputs.platform == 'ios' && 'iOS' || 'Android' }}
+            Submission: ${{ inputs.submit && 'TestFlight / Google Play internal testing' || 'Off' }}
+            Wait for builds: ${{ inputs.wait && 'Yes' || 'No' }}
+            Commit: ${{ github.sha }}
+
+  build:
+    name: Build ${{ matrix.platform == 'ios' && 'iOS' || 'Android' }}
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    environment: ${{ inputs.environment }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ${{ fromJSON(inputs.platform == 'all' && '["ios","android"]' || format('["{0}"]', inputs.platform)) }}
+    env:
+      EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+      EXPO_PUBLIC_EAS_PROJECT_ID: ${{ secrets.EXPO_PUBLIC_EAS_PROJECT_ID }}
+      PLATFORM: ${{ matrix.platform }}
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Set up project
         uses: ./.github/actions/setup
-      - name: Build
-        if: needs.plan.outputs.type == 'build'
-        env:
-          PROFILE: ${{ inputs.environment }}-${{ needs.plan.outputs.distribution }}
-          VERSION: ${{ needs.plan.outputs.version }}
+      - name: Pull app configuration from Expo
+        run: yarn env:pull --environment "$TARGET_ENVIRONMENT"
+      # eas-cli reads ascAppId only from the eas.json submit profile, and asks
+      # for it unless it's there. Each environment is a different store app,
+      # so it's written in here from that environment's APP_STORE_CONNECT_ID
+      # rather than committed.
+      - name: Point iOS submission at this environment's app
+        if: inputs.submit && matrix.platform == 'ios'
         run: |
-          echo "::notice title=Placeholder · iOS build::Would build $VERSION for $PROFILE"
-          echo "eas build --platform ios --profile $PROFILE --non-interactive"
-      - name: Distribute
-        if: needs.plan.outputs.type == 'build'
-        env:
-          DISTRIBUTION: ${{ needs.plan.outputs.distribution }}
-          DESTINATION: ${{ needs.plan.outputs.ios-destination }}
+          node -e '
+            const fs = require("node:fs");
+            const config = JSON.parse(fs.readFileSync("eas.json", "utf8"));
+            const profile = config.submit[process.env.TARGET_ENVIRONMENT];
+            profile.ios = { ...profile.ios, ascAppId: process.env.APP_STORE_CONNECT_ID };
+            fs.writeFileSync("eas.json", JSON.stringify(config, null, 2) + "\n");
+          '
+      - name: Start EAS build
         run: |
-          echo "::notice title=Placeholder · iOS distribute::Would send it to: $DESTINATION"
-          case "$DISTRIBUTION" in
-            internal) echo "(the build's install link is the distribution — nothing to submit)" ;;
-            testing)  echo "eas submit --platform ios --latest   # → TestFlight" ;;
-            store)    echo "eas submit --platform ios --latest   # → App Store review" ;;
-          esac
-      - name: Publish update
-        if: needs.plan.outputs.type == 'update'
-        env:
-          CHANNEL: ${{ inputs.environment }}
-          NOTES: ${{ inputs.notes }}
-        run: |
-          echo "::notice title=Placeholder · iOS update::Would publish to the $CHANNEL channel"
-          echo "eas update --platform ios --channel $CHANNEL --message \"${NOTES:-Update}\" --non-interactive"
-
-  android:
-    name: Android · ${{ needs.plan.outputs.type }}
-    needs: [plan, code-quality]
-    if: >-
-      !cancelled() && needs.plan.result == 'success' && needs.plan.outputs.android == 'true'
-      && contains(fromJSON('["success","skipped"]'), needs.code-quality.result)
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
-    environment:
-      name: ${{ inputs.environment }}
-    steps:
-      - name: Check out
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up project
-        uses: ./.github/actions/setup
-      - name: Build
-        if: needs.plan.outputs.type == 'build'
-        env:
-          PROFILE: ${{ inputs.environment }}-${{ needs.plan.outputs.distribution }}
-          VERSION: ${{ needs.plan.outputs.version }}
-        run: |
-          echo "::notice title=Placeholder · Android build::Would build $VERSION for $PROFILE"
-          echo "eas build --platform android --profile $PROFILE --non-interactive"
-      - name: Distribute
-        if: needs.plan.outputs.type == 'build'
-        env:
-          DISTRIBUTION: ${{ needs.plan.outputs.distribution }}
-          DESTINATION: ${{ needs.plan.outputs.android-destination }}
-        run: |
-          echo "::notice title=Placeholder · Android distribute::Would send it to: $DESTINATION"
-          case "$DISTRIBUTION" in
-            internal) echo "(the build's install link is the distribution — nothing to submit)" ;;
-            testing)  echo "eas submit --platform android --latest   # → Play internal testing" ;;
-            store)    echo "eas submit --platform android --latest   # → Google Play review" ;;
-          esac
-      - name: Publish update
-        if: needs.plan.outputs.type == 'update'
-        env:
-          CHANNEL: ${{ inputs.environment }}
-          NOTES: ${{ inputs.notes }}
-        run: |
-          echo "::notice title=Placeholder · Android update::Would publish to the $CHANNEL channel"
-          echo "eas update --platform android --channel $CHANNEL --message \"${NOTES:-Update}\" --non-interactive"
-
-  web:
-    name: Web · ${{ needs.plan.outputs.type }}
-    needs: [plan, code-quality]
-    if: >-
-      !cancelled() && needs.plan.result == 'success' && needs.plan.outputs.web == 'true'
-      && contains(fromJSON('["success","skipped"]'), needs.code-quality.result)
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    environment:
-      name: ${{ inputs.environment }}
-    steps:
-      - name: Check out
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: Set up project
-        uses: ./.github/actions/setup
-      - name: Build
-        env:
-          VERSION: ${{ needs.plan.outputs.version }}
-        run: |
-          echo "::notice title=Placeholder · Web build::Would export $VERSION"
-          echo "yarn web:build"
-      - name: Distribute
-        env:
-          DISTRIBUTION: ${{ needs.plan.outputs.distribution }}
-          DESTINATION: ${{ needs.plan.outputs.web-destination }}
-        run: |
-          echo "::notice title=Placeholder · Web distribute::Would send it to: $DESTINATION"
-          case "$DISTRIBUTION" in
-            internal) echo "eas deploy                # → preview URL" ;;
-            store)    echo "eas deploy --prod         # → live site" ;;
-          esac
-
-  summary:
-    name: Summary
-    needs: [plan, code-quality, ios, android, web]
-    if: always()
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Write the release summary
-        env:
-          PLAN: ${{ needs.plan.result }}
-          CHECKS: ${{ needs.code-quality.result }}
-          IOS: ${{ needs.ios.result }}
-          ANDROID: ${{ needs.android.result }}
-          WEB: ${{ needs.web.result }}
-          IOS_TO: ${{ needs.plan.outputs.ios-destination }}
-          ANDROID_TO: ${{ needs.plan.outputs.android-destination }}
-          WEB_TO: ${{ needs.plan.outputs.web-destination }}
-        run: |
-          icon() {
-            case "$1" in
-              success) echo "✅ done" ;; failure) echo "❌ failed" ;;
-              cancelled) echo "⏹ cancelled" ;; *) echo "— skipped" ;;
-            esac
-          }
-          {
-            echo "### Result"
-            echo
-            echo "| Step | Result | Destination |"
-            echo "| --- | --- | --- |"
-            echo "| Plan | $(icon "$PLAN") | |"
-            echo "| Code quality | $(icon "$CHECKS") | |"
-            echo "| iOS | $(icon "$IOS") | ${IOS_TO:-—} |"
-            echo "| Android | $(icon "$ANDROID") | ${ANDROID_TO:-—} |"
-            echo "| Web | $(icon "$WEB") | ${WEB_TO:-—} |"
-            echo
-            echo "> **Placeholder** — nothing was built or uploaded; the steps show the commands they will run."
-          } >> "$GITHUB_STEP_SUMMARY"
-          # The run fails if anything that ran failed.
-          for result in "$PLAN" "$CHECKS" "$IOS" "$ANDROID" "$WEB"; do
-            [ "$result" = failure ] && exit 1
-          done
-          exit 0
+          flags=(--platform "$PLATFORM" --profile "$TARGET_ENVIRONMENT" --non-interactive --json)
+          if [ "$WAIT" = true ]; then flags+=(--wait); else flags+=(--no-wait); fi
+          # EAS submits the build with the submit profile of the same name
+          # once it succeeds, whether or not this job is still waiting.
+          if [ "$SUBMIT" = true ]; then flags+=(--auto-submit); fi
+          npx --yes eas-cli@18.4.0 build "${flags[@]}" > "$RUNNER_TEMP/eas-build.json"
+      - name: Read build result
+        id: result
+        run: node scripts/ci/build-result.mjs "$RUNNER_TEMP/eas-build.json"
+      - name: Write summary
+        if: always()
+        uses: ./.github/actions/summary
+        with:
+          title: ${{ matrix.platform == 'ios' && 'iOS' || 'Android' }} build · ${{ inputs.environment }}
+          status: ${{ steps.result.outputs.state || job.status }}
+          fields: "${{ steps.result.outputs.fields || 'Build: not started, see this job''s log' }}"
+          notes: ${{ steps.result.outputs.notes }}
