@@ -1,30 +1,29 @@
 /**
- * Turns Jest's coverage/coverage-summary.json into a Markdown table on the
- * GitHub job summary (or stdout locally). Reports only — no threshold gate
- * yet; that comes once there's a baseline worth holding.
+ * Reads Jest's coverage/coverage-summary.json and hands the Unit tests job's
+ * summary its rows as the `fields` step output, rendered by the `summary`
+ * action (.github/actions/summary); stdout locally. Reports only — no
+ * threshold gate yet; that comes once there's a baseline worth holding.
  */
+import { randomUUID } from "node:crypto";
 import { appendFileSync, readFileSync } from "node:fs";
 
 const { total } = JSON.parse(
   readFileSync("coverage/coverage-summary.json", "utf8"),
 );
 
-const rows = ["lines", "statements", "functions", "branches"].map((metric) => {
-  const { covered, total: all, pct } = total[metric];
-  return `| ${metric[0].toUpperCase()}${metric.slice(1)} | ${pct}% | ${covered} / ${all} |`;
-});
+const fields = ["lines", "statements", "functions", "branches"]
+  .map((metric) => {
+    const { covered, total: all, pct } = total[metric];
+    return `${metric[0].toUpperCase()}${metric.slice(1)}: ${pct}% · ${covered} / ${all}`;
+  })
+  .join("\n");
 
-const markdown = [
-  "### Test coverage",
-  "",
-  "| Metric | Coverage | Covered |",
-  "| --- | ---: | ---: |",
-  ...rows,
-  "",
-].join("\n");
-
-if (process.env.GITHUB_STEP_SUMMARY) {
-  appendFileSync(process.env.GITHUB_STEP_SUMMARY, markdown);
+if (process.env.GITHUB_OUTPUT) {
+  const delimiter = randomUUID();
+  appendFileSync(
+    process.env.GITHUB_OUTPUT,
+    `fields<<${delimiter}\n${fields}\n${delimiter}\n`,
+  );
 } else {
-  console.log(markdown);
+  console.log(fields);
 }

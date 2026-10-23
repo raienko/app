@@ -54,6 +54,21 @@ export type WebViewProps = {
    * follows a scheme change. Defaults to `true`.
    */
   injectTheme?: boolean;
+  /**
+   * Whether the page can be pinch- or double-tap-zoomed. Defaults to
+   * `false`: an embedded page stands in for part of the app's own screen,
+   * and a stray double tap that blows it up past the frame (with nothing to
+   * say how to get back) reads as a broken screen rather than a feature.
+   *
+   * Turn it on for anything people may need to read closely — a document,
+   * small print, a page that isn't laid out for a phone. Pinch is how
+   * someone with low vision gets there, and this takes it away.
+   *
+   * Native only, plus an `html` or same-origin page on the web. A browser
+   * zooms the whole page around a cross-origin frame, and that is the
+   * browser's to decide.
+   */
+  zoomable?: boolean;
   /** Fires once the page's bridge is listening — the point `post` starts working. */
   onReady?: () => void;
   onLoad?: () => void;

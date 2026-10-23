@@ -100,6 +100,7 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
     onMessage,
     css,
     injectTheme = true,
+    zoomable = false,
     onReady,
     onLoad,
     onError,
@@ -152,10 +153,12 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
       "html" in source && typeof source.html === "string"
         ? {
             ...source,
-            html: htmlWithBridge(source.html, bridge.initialStylesheet),
+            html: htmlWithBridge(source.html, bridge.initialStylesheet, {
+              lockZoom: !zoomable,
+            }),
           }
         : source,
-    [source, bridge.initialStylesheet],
+    [source, bridge.initialStylesheet, zoomable],
   );
 
   function handleMessage(event: WebViewMessageEvent) {
@@ -226,7 +229,11 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
         // first paint rather than after a flash of the page's own.
         injectedJavaScriptBeforeContentLoaded={nativeInjection(
           bridge.initialStylesheet,
+          { lockZoom: !zoomable },
         )}
+        // Android's pinch; the injected viewport covers its double tap and
+        // all of iOS, which has no prop for either. See `zoomLockScript`.
+        setBuiltInZoomControls={zoomable}
         onMessage={handleMessage}
         onNavigationStateChange={handleNavigation}
         onLoadEnd={onLoad}

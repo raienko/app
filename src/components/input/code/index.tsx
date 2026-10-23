@@ -53,6 +53,12 @@ const OTP_AUTOCOMPLETE = Platform.select({
  * into the first box and loses the feature. Here the real input is stretched
  * invisibly across the row and the boxes only draw what it holds.
  *
+ * Tapping a filled box selects its character in that input, so the next one
+ * typed replaces it and backspace removes it — a single digit can be fixed
+ * without deleting everything after it. The input never sees the tap itself
+ * (it can't be hit-tested reliably at zero opacity), so the caret is this
+ * component's state rather than the platform's.
+ *
  * @example <Input type="code" value={code} onChange={setCode} onComplete={verify} />
  * @example <Input type="code" charset="alphanumeric" value={code} onChange={setCode} />
  */
@@ -90,20 +96,47 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
     [ref],
   );
 
+  // Where the next character goes: a filled box's index while one is being
+  // corrected, otherwise the end. Clamped on read, so a value shortened from
+  // outside (a reset) can't leave it pointing past the code.
+  const [caret, setCaret] = useState(value.length);
+  const position = Math.min(caret, value.length);
+
   const rules = CHARSET[charset];
   const characters = Array.from({ length }, (_, index) => value[index] ?? "");
   const complete = value.length >= length;
   // Clamped, so a full code highlights its last box rather than one that
   // doesn't exist.
-  const cursor = Math.min(value.length, length - 1);
+  const cursor = Math.min(position, length - 1);
+
+  function focusAt(index: number) {
+    setCaret(Math.min(index, value.length));
+    inputRef.current?.focus();
+  }
 
   function handleChangeText(next: string) {
     const cleaned = next.replace(rules.strip, "").slice(0, length);
-    if (cleaned === value) return;
+    if (cleaned === value) {
+      // The selected character retyped as itself: still a step forward.
+      if (next === value) setCaret(position + 1);
+      return;
+    }
 
+    setCaret(caretAfter(value, cleaned, position));
     onChange(cleaned);
     if (cleaned.length === length) onComplete?.(cleaned);
   }
+
+  // A filled box is selected, so typing replaces it and backspace removes
+  // it. At the end the caret is pinned there, since a tap lands somewhere in
+  // the invisible field and takes the real caret with it. A full code at the
+  // end is released, so it can still be selected and cleared.
+  const selection =
+    position < value.length
+      ? { start: position, end: position + 1 }
+      : complete
+        ? undefined
+        : { start: value.length, end: value.length };
 
   return (
     <FormField
@@ -113,11 +146,12 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
       required={required}
       style={style}
     >
-      {/* The invisible input would mostly catch the tap itself, but that
-          leaves focus depending on hit-testing a zero-opacity view. */}
+      {/* A tap on a box puts the caret there; one between the boxes
+          carries on from the end. The invisible input takes no taps at
+          all, so focus never depends on hit-testing a zero-opacity view. */}
       <Pressable
         testID={testId(testID, "row")}
-        onPress={() => inputRef.current?.focus()}
+        onPress={() => focusAt(value.length)}
         disabled={disabled}
         // Left accessible, a Pressable wrapping a TextInput gives a screen
         // reader two competing stops for one field.
@@ -132,6 +166,7 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
             character={character}
             active={focused && !disabled && index === cursor}
             invalid={error !== undefined}
+            onPress={disabled ? undefined : () => focusAt(index)}
           />
         ))}
 
@@ -147,12 +182,7 @@ const CodeInput = forwardRef<RNTextInputInstance, Props>(function CodeInput(
           autoCapitalize={rules.autoCapitalize}
           autoCorrect={false}
           maxLength={length}
-          // A tap moves the real caret, which would then disagree with the
-          // box drawn as active. Released once full so the code can still be
-          // selected and cleared.
-          selection={
-            complete ? undefined : { start: value.length, end: value.length }
-          }
+          selection={selection}
           autoComplete={OTP_AUTOCOMPLETE}
           // iOS reads this rather than `autoComplete`; it's what puts the
           // code on the QuickType bar.
@@ -189,6 +219,9 @@ const useStyles = createStyles(({ spacing }) => ({
     opacity: 0.5,
   },
   input: {
+    // Taps belong to the boxes, which know which character they mean; the
+    // field only ever needs focus, and gets it from them.
+    pointerEvents: "none",
     position: "absolute",
     top: 0,
     right: 0,
@@ -199,3 +232,45 @@ const useStyles = createStyles(({ spacing }) => ({
     opacity: 0,
   },
 }));
+
+/**
+ * Where the caret belongs after an edit: just past what changed.
+ *
+ * With a box selected the edit is almost always to that box — its character
+ * replaced or removed — and is checked for first, because in a run of the
+ * same digit (`1111`) comparing the values alone can't tell which one went.
+ * Otherwise everything the two values share at the start and the end is
+ * untouched and what lies between is the edit: a character typed at the
+ * end, or a whole pasted or autofilled code, which leaves it at the end.
+ */
+export function caretAfter(
+  previous: string,
+  next: string,
+  position: number = previous.length,
+): number {
+  if (position < previous.length) {
+    const before = previous.slice(0, position);
+    const after = previous.slice(position + 1);
+    if (next === before + after) return position;
+    if (
+      next.length === previous.length &&
+      next.startsWith(before) &&
+      next.endsWith(after)
+    )
+      return position + 1;
+  }
+
+  const shortest = Math.min(previous.length, next.length);
+
+  let start = 0;
+  while (start < shortest && previous[start] === next[start]) start += 1;
+
+  let end = 0;
+  while (
+    end < shortest - start &&
+    previous[previous.length - 1 - end] === next[next.length - 1 - end]
+  )
+    end += 1;
+
+  return next.length - end;
+}

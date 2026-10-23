@@ -56,7 +56,7 @@ const BaseInput = forwardRef<RNTextInputInstance, BaseInputProps>(
       style,
       keyboardType = "default",
       secureTextEntry,
-      autoComplete,
+      autoComplete = "off",
       importantForAutofill,
       autoCapitalize = "none",
       autoCorrect = false,

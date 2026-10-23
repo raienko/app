@@ -1,4 +1,4 @@
-[Docs](../index.md) › [Security plan](../plans/security.md) › Data inventory
+[Docs](../index.md) › [Security plan](plan.md) › Data inventory
 
 # Data inventory
 
@@ -52,4 +52,4 @@ No advertising id, contacts, background location, microphone audio, health data 
 
 ---
 
-[Security plan](../plans/security.md) · [Threat model](threat-model.md) · [Docs index](../index.md)
+[Security plan](plan.md) · [Threat model](threat-model.md) · [Docs index](../index.md)

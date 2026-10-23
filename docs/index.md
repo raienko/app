@@ -6,14 +6,16 @@
 
 ## Guides
 
-| Guide                                     | What you'll find                                                                                                                                                                                |
-| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [**Getting started**](getting-started.md) | Install, `.env` setup, running on web / iOS / Android, every script, Storybook and git hooks                                                                                                    |
-| [**Product guide**](product-guide.md)     | From this boilerplate to a shipped product: decisions, accounts, hardware, credentials, and the steps to the App Store, Google Play and the web                                                 |
-| [**Architecture**](architecture.md)       | Repository layout, the one-folder-per-unit rule, custom vs `@expo/ui` implementations, and where documentation lives                                                                            |
-| [**Decisions**](adr/README.md)            | Architecture decision records: application boilerplate role, component reuse and contracts, deferred work, and the web chart renderer                                                           |
-| [**Plans**](plans)                        | Reference plans behind the roadmap: [security](plans/security.md), [CI and EAS](plans/ci-and-eas.md), [agents](plans/agents.md), [tooling](plans/tooling.md), [references](plans/references.md) |
-| [**Security**](security)                  | [Data inventory](security/data-inventory.md), [threat model](security/threat-model.md), [severity policy and exceptions](security/exceptions.md); reporting in [SECURITY.md](../SECURITY.md)    |
+| Guide                                         | What you'll find                                                                                                                                                                                                                |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [**Getting started**](getting-started.md)     | Install, `.env` setup, running on web / iOS / Android, every script, Storybook and git hooks                                                                                                                                    |
+| [**Product guide**](product-guide.md)         | From this boilerplate to a shipped product: decisions, accounts, hardware, credentials, and the steps to the App Store, Google Play and the web                                                                                 |
+| [**App builds**](development-builds.md)       | EAS environments, pulling them into `.env.local`, and the App build workflow that builds and submits                                                                                                                            |
+| [**Store credentials**](store-credentials.md) | Where to get each store credential, step by step: App Store Connect API key, certificates and profiles, keystore, Play service account, first uploads                                                                           |
+| [**Architecture**](architecture.md)           | Repository layout, the one-folder-per-unit rule, custom vs `@expo/ui` implementations, and where documentation lives                                                                                                            |
+| [**Decisions**](adr/README.md)                | Architecture decision records: application boilerplate role, component reuse and contracts, deferred work, and the web chart renderer                                                                                           |
+| [**Plans**](plans)                            | Reference plans behind the roadmap: [CI and EAS](plans/ci-and-eas.md), [agents](plans/agents.md), [tooling](plans/tooling.md), [references](plans/references.md)                                                                |
+| [**Security**](security)                      | [Security plan](security/plan.md), [data inventory](security/data-inventory.md), [threat model](security/threat-model.md), [severity policy and exceptions](security/exceptions.md); reporting in [SECURITY.md](../SECURITY.md) |
 
 ## Catalogues
 

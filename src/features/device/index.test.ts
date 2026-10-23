@@ -1,3 +1,5 @@
+import env from "@/constants/env";
+
 import { device, deviceHeaders, installId, timezone, userAgent } from "./index";
 
 describe("device", () => {
@@ -16,7 +18,7 @@ describe("device", () => {
 
   it("names the app, build, OS and model in its user agent", () => {
     expect(userAgent()).toBe(
-      `app/${device.appVersion} (${device.buildNumber}; ${device.osName} ${device.osVersion}; ${device.model})`,
+      `${env.appSlug}/${device.appVersion} (${device.buildNumber}; ${device.osName} ${device.osVersion}; ${device.model})`,
     );
   });
 

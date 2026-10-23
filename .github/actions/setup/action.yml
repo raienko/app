@@ -1,8 +1,7 @@
 name: Set up project
 description: >
   Node from .nvmrc, the Yarn cache, and a frozen-lockfile install. The
-  install's postinstall applies assets/brand (writes .env, the generated
-  assets and the palette), so nothing else needs setting up.
+  install's postinstall generates visual assets and the palette. App identity comes from the selected environment.
 
 runs:
   using: composite

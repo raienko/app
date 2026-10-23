@@ -13,7 +13,7 @@ import { createStyles } from "@/features/responsive";
 import { useTheme } from "@/features/theme";
 
 import { OPAQUE_ORIGIN, postTargets } from "./bridge";
-import { bridgeScript, htmlWithBridge } from "./injection";
+import { bridgeScript, htmlWithBridge, zoomLockScript } from "./injection";
 import type { WebViewHandle, WebViewProps } from "./types";
 import { useBridge } from "./use-bridge";
 
@@ -53,6 +53,7 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
     onMessage,
     css,
     injectTheme = true,
+    zoomable = false,
     onReady,
     onLoad,
     onError,
@@ -126,7 +127,7 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
     // Only reaches a same-origin `uri` frame — an `html` source already has
     // the shim in front of its own scripts, and the shim declines to
     // install itself twice.
-    injectShim(frame.current, bridge.initialStylesheet);
+    injectShim(frame.current, bridge.initialStylesheet, !zoomable);
     onLoad?.();
   }
 
@@ -142,7 +143,9 @@ const WebView = forwardRef<WebViewHandle, WebViewProps>(function WebView(
         {...("uri" in source
           ? { src: source.uri }
           : {
-              srcDoc: htmlWithBridge(source.html, bridge.initialStylesheet),
+              srcDoc: htmlWithBridge(source.html, bridge.initialStylesheet, {
+                lockZoom: !zoomable,
+              }),
             })}
         onLoad={handleLoad}
         onError={() => {
@@ -200,7 +203,11 @@ function webLocalOrigins(): readonly string[] {
  * case, so a log here would fire on every correctly-configured third-party
  * embed.
  */
-function injectShim(frame: HTMLIFrameElement | null, css: string) {
+function injectShim(
+  frame: HTMLIFrameElement | null,
+  css: string,
+  lockZoom: boolean,
+) {
   if (frame === null) return;
 
   try {
@@ -208,7 +215,7 @@ function injectShim(frame: HTMLIFrameElement | null, css: string) {
     if (!document) return;
 
     const script = document.createElement("script");
-    script.textContent = bridgeScript(css);
+    script.textContent = `${lockZoom ? zoomLockScript() : ""}\n${bridgeScript(css)}`;
     (document.head || document.documentElement).appendChild(script);
   } catch {
     // Cross-origin. Expected — see above.

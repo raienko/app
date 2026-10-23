@@ -1,5 +1,5 @@
 # Changes to these paths need a review from their owner once branch
-# protection requires code-owner reviews (docs/plans/security.md, SEC-16).
+# protection requires code-owner reviews (docs/security/plan.md, SEC-16).
 # They're where a mistake becomes a security problem: credentials and
 # storage, network and auth, incoming links, server routes and headers, the
 # CI/CD pipeline, and the native app configuration.

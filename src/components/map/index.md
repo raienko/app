@@ -29,7 +29,7 @@ const [selected, setSelected] = useState<string>();
 - **The camera fits what's on it.** Without `center`, it frames every marker and the user's position (a single point is centred at street level instead of fitted), and moves again when those change. With `center`, it goes there at `zoom` (default 14).
 - **The card never hides a place.** It reports its measured height, and while a place is selected the camera adds that to its bottom padding and re-fits, so every marker stays above the card.
 - **Pressing the map itself** clears the selection (`onSelectMarker(undefined)`).
-- **Tiles** come from OpenFreeMap — free, no key — unless `EXPO_PUBLIC_MAP_TILES_URL` / `EXPO_PUBLIC_MAP_GLYPHS_URL` point at another OpenMapTiles-schema provider; see `.env.example`. Attribution stays on, as OpenStreetMap's licence requires.
+- **Tiles** come from OpenFreeMap — free, no key — unless `maps.tilesUrl` / `maps.glyphsUrl` in `assets/brand/brand.json` point at another OpenMapTiles-schema provider. Attribution stays on, as OpenStreetMap's licence requires.
 - **Native needs a dev-client rebuild** — MapLibre is a native module with an Expo config plugin (registered in `app.config.ts`), so it doesn't run in Expo Go.
 - **Offline** isn't wired yet. MapLibre's `OfflineManager` can download a region later without changing this component's API.
 

@@ -78,9 +78,17 @@ jobs:
           restore-keys: jest-${{ runner.os }}-${{ hashFiles('yarn.lock') }}-
       - name: Run unit tests with coverage
         run: yarn test:coverage --cacheDirectory .jest-cache
-      - name: Publish coverage summary
+      - name: Read coverage
+        id: coverage
         if: always()
         run: node scripts/ci/coverage-summary.mjs
+      - name: Publish coverage summary
+        if: always()
+        uses: ./.github/actions/summary
+        with:
+          title: Test coverage
+          status: ${{ job.status }}
+          fields: ${{ steps.coverage.outputs.fields }}
 
   secret-scan:
     name: Secret scan

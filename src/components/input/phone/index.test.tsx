@@ -265,7 +265,7 @@ describe(`${Component.displayName} smoke test`, () => {
     expect(
       screen.getByRole("button", { name: "Country calling code" }),
     ).toHaveAccessibilityValue({ text: "Ukraine, +380" });
-    expect(field()).toHaveDisplayValue("044 123 4567");
+    expect(field()).toHaveDisplayValue("44 123 4567");
   });
 
   it("distinguishes countries that share the +1 calling code", async () => {

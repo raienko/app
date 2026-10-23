@@ -199,6 +199,31 @@ describe("WebView smoke test", () => {
   // The app wrote the document, so there is no third-party origin to name
   // — and neither platform gives one. Both report an opaque origin, which
   // is what `resolveOrigins` names for an `html` source.
+  // A double tap blew the showcase page up past its frame on iOS.
+  describe("zoom", () => {
+    it("is off unless asked for", async () => {
+      const view = await render(
+        <Component label="Checkout" source={{ uri: URI }} />,
+      );
+
+      expect(web(view).setBuiltInZoomControls).toBe(false);
+      expect(web(view).injectedJavaScriptBeforeContentLoaded).toContain(
+        "user-scalable=no",
+      );
+    });
+
+    it("is left to the page when zoomable", async () => {
+      const view = await render(
+        <Component label="Checkout" source={{ uri: URI }} zoomable />,
+      );
+
+      expect(web(view).setBuiltInZoomControls).toBe(true);
+      expect(web(view).injectedJavaScriptBeforeContentLoaded).not.toContain(
+        "user-scalable=no",
+      );
+    });
+  });
+
   describe("an html source", () => {
     // Android can run injectedJavaScriptBeforeContentLoaded after the
     // document's inline scripts, so a page registering AppBridge.on() while
